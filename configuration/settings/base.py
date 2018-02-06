@@ -67,10 +67,11 @@ LOCAL_APPS = (
     'app_dir.api',
     'app_dir.core',
     'app_dir.modules.room',
+    'app_dir.modules.users',
 )
 
 INSTALLED_APPS = LOCAL_APPS + DEFAULT_APPS + THIRD_PARTY_APPS
-
+AUTH_USER_MODEL = 'users.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
