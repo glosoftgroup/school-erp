@@ -1,0 +1,21 @@
+{% load staticfiles %}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static "rest_framework/css/bootstrap.min.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "health/css/styling.css" %}" />
+    <title>{{ service_name }} Health Check</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">{{ service_name }} Health Check</h1>
+    <div class="row">
+        {% for plugin in plugins %}
+            <div class="col-md-6 tile-box status_{{ plugin.status }}">
+                <div class="tile-header">{{ plugin.identifier }}</div>
+                <div class="tile-content-wrapper">{{ plugin.prettify_status }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

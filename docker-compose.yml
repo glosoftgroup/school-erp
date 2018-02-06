@@ -1,0 +1,69 @@
+version: '2'
+services:
+  db:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_DB=basecode
+      - POSTGRES_PASSWORD=basecode
+      - POSTGRES_USER=basecode
+    ports:
+      - 5560:5432
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./:/usr/src/app
+    links:
+      - db
+    ports:
+      - 8094:80
+    environment:
+      - DJANGO_SETTINGS_MODULE=configuration.settings.docker.development
+      - VIRTUAL_HOST=http://*/*
+      - C_FORCE_ROOT=true
+      - DEV_LOGIN_USERNAME=admin
+      - DEV_LOGIN_PASSWORD=admin
+      - DEV_LOGIN_EMAIL=admin@example.com
+
+  rabbitmq:
+    image: gonkulatorlabs/rabbitmq:3.6.1
+    ports:
+      - 15690:15672
+      - 5675:5671
+      - 5676:5672
+
+  worker:
+    build:
+      context: .
+    depends_on:
+      - db
+      - rabbitmq
+    command: ./devops/docker_devops/worker_server.sh
+    volumes:
+      - ./:/usr/src/app
+    links:
+      - db
+      - rabbitmq
+    environment:
+      -  C_FORCE_ROOT=true
+      - DJANGO_SETTINGS_MODULE=configuration.settings.docker.development
+    ports:
+      - 5555:5555
+
+  js-assistant:
+    build:
+      context: .
+      dockerfile: JsAssistantDockerfile
+    volumes:
+      - ./:/usr/src/app
+
+  sass-assistant:
+    build:
+      context: .
+      dockerfile: SassAssistantDockerfile
+    volumes:
+      - ./:/usr/src/app

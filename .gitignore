@@ -1,0 +1,109 @@
+# Compiled Python modules
+*.pyo
+*.pyc
+
+# SQLite
+*.db
+*.s3db
+*.sqlite3
+
+# Emacs save files
+*~
+\#*
+.\#*
+
+# Vim n co
+*.swp
+
+# cached files
+configuration/__pycache__/
+app_dir/__pycache__/
+app_dir/api/__pycache__/
+loglib/__pycache__/
+utilities/__pycache__/
+*/__pycache__/*
+
+package-lock.json
+webpack-stats.json
+
+# Vagrant private files
+.vagrant/*
+log
+celerybeat-schedule
+celerybeat.pid
+erl_crash.dump
+build/
+node
+node-*
+node_modules/
+.idea/
+.idea/workspace.xml
+.DS_Store
+
+# Static files in Vagrant environment
+/static
+/django_extensions
+/debug_toolbar
+/admin
+
+*.*.swp
+.directory
+local_development.py
+local_manage.py
+*.kate-swp
+*.swo
+
+celerybeat.pid
+.kateproject
+.kateproject.d/
+
+# ignore virtualenv
+.venv
+.elasticbeanstalk/config.yml
+log
+*.pyc
+__pycache__/
+*.cpython-36.pyc
+.sass-cache/*
+.sass-cache
+
+# Elastic Beanstalk Files
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+.env
+update-env.py
+/venv
+
+#eclipse project files
+.project
+.pydevproject
+#.elasticbeanstalk/config.yml
+
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/dev_configs/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+!.elasticbeanstalk/dev_configs/staging_config.yml
+!.elasticbeanstalk/dev_configs/production_config.yml
+
+#selenium
+ghostdriver.log
+*.log
+*.retry
+#Coverage
+.coverage
+
+#vscode ide
+.vscode
+ansible.cfg
+
+# auto-generated docker-stack files
+docker-stack-*.yml
+.ebextensions/log_deployment.json
+log_deployment.json
+webpack-bundle.json
+
+/app_dir/*/migrations/*
+!/app_dir/*/migrations/__init__.py

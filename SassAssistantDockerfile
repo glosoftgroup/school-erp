@@ -1,0 +1,9 @@
+FROM ruby:2.2
+
+RUN gem install sass
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY . /usr/src/app
+
+ENTRYPOINT ["sass", "--watch", "app_dir/static/scss"]

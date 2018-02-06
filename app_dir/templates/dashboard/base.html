@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% load static i18n %}
+{% load render_bundle from webpack_loader %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+      {% block title %}
+        {% trans "Dashboard - Glosoft" context "Dashboard default page title" %}
+      {% endblock %}
+    </title>
+
+    <!--meta block-->
+    {% block meta %}
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    {% endblock meta %}
+    <!--./meta-->
+    <link href="{% static 'css/icons/icomoon/styles.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/colors.css' %}" rel="stylesheet" type="text/css">
+    <style>
+    .content{padding-top:66px important!;}
+`</style>
+    <!--custom css-->
+     {% block custom_css %}
+     {% endblock %}
+    <!--./custom -->
+
+
+    <!-- Core JS files -->
+    <script type="text/javascript" src="{% static 'js/plugins/loaders/pace.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/core/libraries/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/core/libraries/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/loaders/blockui.min.js' %}"></script>
+    <!-- /core JS files -->
+
+    <!-- Theme JS files -->
+    <script type="text/javascript" src="{% static 'js/core/app.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/ui/ripple.min.js' %}"></script>
+    <!-- /theme JS files -->
+
+</head>
+<body class="navbar-top pace-done">
+
+	<!-- Main navbar -->
+     {% include "dashboard/partials/main_navbar.html" %}
+	<!-- /main navbar -->
+
+
+	<!-- Page container -->
+	<div class="page-container">
+
+		<!-- Page content -->
+		<div class="page-content">
+
+			<!-- Main sidebar -->
+			{% include "dashboard/partials/main_sidebar.html" %}
+			<!-- /main sidebar -->
+
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+                    <!--breadcrumb-->
+                    <div class="breadcrumb-line fix-breadcrumb" style="position: fixed;width: 100%;top:50px;z-index:2">
+                        <ul class="breadcrumb">
+                           <li><a href="#"><span class="icon-home">
+
+                           <span data-popup="tooltip" tite='Edit product' data-placement="bottom" data-original-title="Back to dashboard"> Home</span></a></li>
+                           {% block breadcrumbs %}
+                          <li class="active">{% trans "Home" context "Dashboard homepage" %}</li>
+                           {% endblock %}
+                        </ul>
+                        <ul class="breadcrumb-elements">
+                          {% block header_extra %}
+                          {% endblock %}
+                        </ul>
+                        <!--  -->
+                      <a class="breadcrumb-elements-toggle"><i class="icon-menu-open"></i></a>
+                    </div>
+                    <!--/breadcrumb-->
+				<!-- Content area -->
+				<div class="content" style="padding: 60px 20px 60px;">
+
+					{% block content %}{% endblock %}
+					<!-- Footer -->
+					<div class="footer text-muted">
+						&copy; 2018. <a href="#">Glosoft Group</a>
+					</div>
+					<!-- /footer -->
+
+				</div>
+				<!-- /content area -->
+
+			</div>
+			<!-- /main content -->
+
+		</div>
+		<!-- /page content -->
+
+	</div>
+	<!-- /page container -->
+    {% render_bundle 'dashboard' 'js' %}
+</body>
+</html>

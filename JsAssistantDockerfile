@@ -1,0 +1,9 @@
+FROM node:8.4
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY . /usr/src/app
+
+# Install dependencies
+RUN yarn
+
+CMD ["node", "./node_modules/webpack/bin/webpack.js", "--watch"]

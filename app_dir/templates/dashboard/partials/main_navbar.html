@@ -1,0 +1,55 @@
+{% load static i18n %}
+<div class="navbar navbar-default header-highlight navbar-fixed-top">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#"><img src="{% static 'images/logo_light.png' %}" alt="Logo"></a>
+
+			<ul class="nav navbar-nav visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+				<li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+			</ul>
+		</div>
+
+		<div class="navbar-collapse collapse" id="navbar-mobile">
+			<ul class="nav navbar-nav">
+				<li><a class="sidebar-control sidebar-main-toggle hidden-xs"><i class="icon-paragraph-justify3"></i></a></li>
+
+			</ul>
+
+			<div class="navbar-right">
+
+				<ul class="nav navbar-nav">
+                     <li>
+                           {% if request.user.image %}
+                              <img src="{{request.user.image.url }}" alt="" class="img-circle img-sm" style="width: 20px;height: 20px;margin-top: 7px;" />
+                           {% else %}
+                              <img src="{% static 'images/users/default.png' %}" alt="" class="img-circle img-sm" style="width: 20px;height: 20px;margin-top: 7px;">
+                           {% endif %}
+                    </li>
+					<li class="dropdown">
+						  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+
+						  {% if request.user.name %}
+							  {{ request.user.name|title }}as
+						  {% else %}
+							  {{ request.user }}
+						  {% endif %}
+							  <span class="caret"></span></a>
+						  <ul class="dropdown-menu">
+							 <li>
+								<a href="#">
+								 <i class="icon-user-plus"></i> My profile
+								</a>
+							 </li>
+							<li role="separator" class="divider"></li>
+							<li>
+								<a href="" class="waves-effect waves-teal">
+								<i class="icon-switch"></i>
+								  {% trans "Log out" context "Dashboard top navigation action" %}
+								</a>
+							</li>
+						  </ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>

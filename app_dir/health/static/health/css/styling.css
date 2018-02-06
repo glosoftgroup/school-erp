@@ -1,0 +1,37 @@
+.tile-box {
+    line-height: inherit;
+    display: block;
+    position: relative;
+    padding: 0;
+    text-align: center;
+    border: 1px solid;
+    margin-right: 10px;
+    width: 40%;
+    min-height: 150px;
+}
+
+.tile-header {
+    font-size: 24px;
+    padding: 5px 10px;
+    text-align: center;
+    border: 0 !important;
+    background: rgba(255, 255, 255, .2);
+}
+
+.tile-content-wrapper {
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.status_1 {
+    color: #fff;
+    border-color: #29b765;
+    background: #2ecc71;
+}
+
+.status_0 {
+    color: #fff;
+    border-color: #cf4436;
+    background: #e74c3c;
+}
