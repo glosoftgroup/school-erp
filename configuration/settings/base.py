@@ -50,6 +50,7 @@ DEFAULT_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -68,6 +69,7 @@ LOCAL_APPS = (
     'app_dir.core',
     'app_dir.modules.room',
     'app_dir.modules.users',
+    'app_dir.modules.site',
 )
 
 INSTALLED_APPS = LOCAL_APPS + DEFAULT_APPS + THIRD_PARTY_APPS
@@ -87,7 +89,10 @@ ROOT_URLCONF = 'configuration.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(PROJECT_DIR+'/app_dir/', 'templates')],
+        'DIRS': [
+                os.path.join(PROJECT_DIR+'/app_dir/', 'templates'),
+                os.path.join(PROJECT_DIR+'/app_dir/modules/site/', 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
