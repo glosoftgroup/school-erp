@@ -60,7 +60,7 @@ celerybeat.pid
 # ignore virtualenv
 .venv
 .elasticbeanstalk/config.yml
-log
+log/*
 *.pyc
 __pycache__/
 *.cpython-36.pyc
