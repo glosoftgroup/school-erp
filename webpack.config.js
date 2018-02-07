@@ -4,7 +4,8 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
     entry: {
-        'dashboard': './app_dir/static/js/'
+        'dashboard': './app_dir/static/js/',
+        'site': './app_dir/static/js/site/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),

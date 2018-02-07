@@ -1,13 +1,23 @@
 from rest_framework import generics
+from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .pagination import PostLimitOffsetPagination
+from ...site.models import SiteSettings
 from .serializers import (
-    TableListSerializer,
+    SiteSettingSerializer,
      )
-from ..models import SiteSettings as Table
+
+User = get_user_model()
 
 
-class SettingsListAPIView(generics.ListAPIView):
-    serializer_class = TableListSerializer
-    pagination_class = PostLimitOffsetPagination
-    queryset = Table.objects.all()
+class SiteSettingListAPIView(generics.ListAPIView):
+    """
+        list site settings details
+        GET /api/setting/
+    """
+    serializer_class = SiteSettingSerializer
+    pagination_class = None
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = SiteSettings.objects.all()
+
+

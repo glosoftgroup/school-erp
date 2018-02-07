@@ -1,10 +1,18 @@
+# site settings rest api serializers
+
 from rest_framework import serializers
+from ...site.models import SiteSettings
 
-from ..models import SiteSettings as Table
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
-class TableListSerializer(serializers.ModelSerializer):
-
+class SiteSettingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Table
-        fields = ('id', 'name')
+        model = SiteSettings
+        fields = ('id',
+                  'name',
+                  'email',
+                  'image',
+                 )
+

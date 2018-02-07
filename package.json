@@ -10,6 +10,7 @@
     "build": "webpack"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "countries-and-timezones": "^1.0.0",
@@ -20,6 +21,7 @@
     "moment-timezone": "^0.5.13",
     "path": "^0.12.7",
     "pdfjs-dist": "^1.9.622",
+    "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-date-range": "^0.9.4",
     "react-dom": "^15.6.1",
@@ -40,6 +42,7 @@
     "node-sass": "^4.7.2",
     "react-addons-test-utils": "^15.6.0",
     "sass-loader": "^6.0.6",
+    "service-worker-loader": "^2.0.0",
     "sinon": "^3.3.0",
     "style-loader": "^0.20.1",
     "webpack-bundle-tracker": "^0.2.1"

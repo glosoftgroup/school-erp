@@ -1,6 +1,9 @@
 {% extends 'dashboard/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load render_bundle from webpack_loader %}
+
+
 {% block title %}
   {% if site.pk %}
     {{ site.name }}
@@ -46,19 +49,22 @@
                     <div class="tab-content" style="margin-bottom:0px;">
                       <div class="tab-pane fade in active" id="basic">
                        <!--  basic settings -->
-                        {% include "_basic_config.html" with form=form %}
+                        {% include "site/_basic_config.html" with form=form %}
                         <!-- ./end bsettings -->
                       </div>
 
                       <div class="tab-pane fade" id="sms">
+                          <!--  basic settings -->
+                        {% include "site/_basic_config.html" with form=form %}
+                        <!-- ./end bsettings -->
                        <!--  products -->
-                       {% include "_sms_config.html" with form=form %}
+                       {% include "site/_sms_config.html" with form=form %}
                         <!-- ./products -->
                       </div>
 
                       <div class="tab-pane fade" id="db">
                        <!--  products -->
-                       {% include "_db.html" with form=form %}
+                       {% include "site/_db.html" with form=form %}
                         <!-- ./products -->
                       </div>
 
@@ -73,16 +79,20 @@
     <div class="col m12 l3 help-box"></div>
   </div>
 <!-- page usrls -->
-<input type="hidden" class="pageUrls" data-updateurl="#update-url" name="">
+<input type="hidden" id="pageUrls" class="pageUrls"
+       data-listurl="#update-url"
+       data-updateurl="#update-url" name="">
 <input type="hidden" class="redirectUrls" data-redirecturl="#redirect" name="">
 {% endblock %}
 
 {% block custom_js %}
-
+<script>
+    var listUrl = "{% url 'site:api-list' %}";
+</script>
+{% render_bundle 'site' 'js' %}
 <script type="text/javascript" src="{% static 'js/plugins/forms/styling/uniform.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/pages/form_inputs.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/site-settings.js' %}"></script>
-<script type="text/javascript">
 
-</script>
+
+
 {% endblock %}
