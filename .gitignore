@@ -107,3 +107,5 @@ webpack-bundle.json
 
 /app_dir/*/migrations/*
 !/app_dir/*/migrations/__init__.py
+
+/htmlcov

@@ -1,6 +1,9 @@
 {% extends "dashboard/base.html" %}
 
 {% block content %}
+{% for i in users %}
+	name = {{i.username}}
+{% endfor %}
 <div class="">
 
 					<!-- Main charts -->
