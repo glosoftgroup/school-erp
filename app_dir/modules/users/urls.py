@@ -1,11 +1,11 @@
 from django.conf.urls import url
-from django.views.generic import TemplateView
-
-from .api.views import RoomListAPIView
+from django.contrib.auth.decorators import permission_required
+from . import views
 
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name="list.html")),
-    url(r'^api/list/$', RoomListAPIView.as_view()),
+    # url(r'^$', permission_required('users.view_user', login_url='/')
+    #             (users), name='users'),
+    url(r'^$', views.users, name='view-users'),
 ]
 
