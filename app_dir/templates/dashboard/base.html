@@ -22,9 +22,7 @@
     <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/colors.css' %}" rel="stylesheet" type="text/css">
-    <style>
-    .content{padding-top:66px important!;}
-`</style>
+
     <!--custom css-->
      {% block custom_css %}
      {% endblock %}
@@ -105,5 +103,7 @@
 	</div>
 	<!-- /page container -->
     {% render_bundle 'dashboard' 'js' %}
+    {% block custom_js %}
+    {% endblock %}
 </body>
 </html>
