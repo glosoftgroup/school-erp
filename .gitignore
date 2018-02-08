@@ -109,3 +109,4 @@ webpack-bundle.json
 !/app_dir/*/migrations/__init__.py
 
 /htmlcov
+/configuration/media/

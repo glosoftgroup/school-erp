@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 227);
+/******/ 	return __webpack_require__(__webpack_require__.s = 229);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -24830,7 +24830,9 @@ module.exports = function spread(callback) {
 /***/ }),
 /* 225 */,
 /* 226 */,
-/* 227 */
+/* 227 */,
+/* 228 */,
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24844,16 +24846,16 @@ var _reactDom = __webpack_require__(99);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _InstitutionDetails = __webpack_require__(228);
+var _addUserForm = __webpack_require__(230);
 
-var _InstitutionDetails2 = _interopRequireDefault(_InstitutionDetails);
+var _addUserForm2 = _interopRequireDefault(_addUserForm);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom2.default.render(_react2.default.createElement(_InstitutionDetails2.default, null), document.getElementById('basic'));
+_reactDom2.default.render(_react2.default.createElement(_addUserForm2.default, null), document.getElementById('formComponent'));
 
 /***/ }),
-/* 228 */
+/* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24883,94 +24885,95 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var InstitutionDetails = function (_React$Component) {
-  _inherits(InstitutionDetails, _React$Component);
+var AddUserForm = function (_Component) {
+  _inherits(AddUserForm, _Component);
 
-  function InstitutionDetails(props) {
-    _classCallCheck(this, InstitutionDetails);
+  function AddUserForm(props) {
+    _classCallCheck(this, AddUserForm);
 
-    var _this = _possibleConstructorReturn(this, (InstitutionDetails.__proto__ || Object.getPrototypeOf(InstitutionDetails)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (AddUserForm.__proto__ || Object.getPrototypeOf(AddUserForm)).call(this, props));
 
-    _this.state = {
-      name: true,
-      listUrl: '',
-      address: '',
-      email: '',
-      mobile: '',
-      code: '',
-      logo: ''
+    _this.onInputChange = function (e) {
+      _this.setState(_defineProperty({}, e.target.name, e.target.value));
     };
 
-    _this.handleInputChange = _this.handleInputChange.bind(_this);
-    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.onSubmit = function (e) {
+      e.preventDefault();
+
+      var selectOptions = document.getElementById('multiple').options;
+      var raw_groups = [];
+
+      for (var i = 0, l = selectOptions.length; i < l; i++) {
+        if (selectOptions[i].selected) {
+          raw_groups.push(selectOptions[i].value);
+          console.log(selectOptions[i].value);
+        }
+      }
+
+      var formData = new FormData(e.target);
+      for (var i = 0; i < raw_groups.length; i++) {
+        formData.append('groups[]', raw_groups[i]);
+      }
+
+      _axios2.default.post(addUserUrl, formData);
+    };
+
+    _this._handleImageChange = function (e) {
+      e.preventDefault();
+
+      var reader = new FileReader();
+      var file = e.target.files[0];
+
+      reader.onloadend = function () {
+        _this.setState({
+          image: file,
+          imagePreviewUrl: reader.result
+        });
+      };
+      reader.readAsDataURL(file);
+    };
+
+    _this.state = {
+      fullname: '',
+      username: '',
+      nationalId: '',
+      password: '',
+      email: '',
+      mobile: '',
+      jobTitle: '',
+      passwordConfirmation: '',
+      image: '',
+      imagePreviewUrl: '/static/images/users/default.png '
+    };
     return _this;
   }
 
-  // load site settings on mount
-  //____________________________
-
-
-  _createClass(InstitutionDetails, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      console.log('mounted,,oo..');
-      console.log(listUrl);
-      _axios2.default.post(listUrl).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        console.log(error);
-      });
-    }
-  }, {
-    key: 'handleInputChange',
-    value: function handleInputChange(event) {
-      var target = event.target;
-      var value = target.type === 'checkbox' ? target.checked : target.value;
-      var name = target.name;
-
-      this.setState(_defineProperty({}, name, value));
-    }
-  }, {
-    key: 'handleSubmit',
-    value: function handleSubmit(event) {
-      event.preventDefault();
-
-      var formToJSON = function formToJSON(elements) {
-        return [].reduce.call(elements, function (data, element) {
-
-          data[element.name] = element.value;
-          return data;
-        }, {});
-      };
-      var data = formToJSON(event.target);
-
-      // const data = new FormData(event.target);
-      _axios2.default.post('/user', data).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        console.log(error);
-      });
-      // fetch('/api/form-submit-url', {
-      //   method: 'POST',
-      //   body: data,
-      // });
-    }
-  }, {
+  _createClass(AddUserForm, [{
     key: 'render',
     value: function render() {
+      var optionsArray = ["Sales", "Accounts", "Security", "Admin"];
+      var options = optionsArray.map(function (value, key) {
+        return _react2.default.createElement(
+          'option',
+          { key: key, value: value },
+          ' ',
+          value,
+          ' '
+        );
+      });
       return _react2.default.createElement(
         'form',
-        { onSubmit: this.handleSubmit },
+        { onSubmit: this.onSubmit, className: 'form', encType: 'multipart/form-data', id: 'user-details', name: 'user-details' },
         _react2.default.createElement(
           'div',
-          { className: 'col-md-12' },
+          { className: 'row' },
           _react2.default.createElement(
             'div',
             { className: 'col-md-4' },
             _react2.default.createElement(
               'label',
-              { className: 'text-center' },
-              'Business Logo'
+              { htmlFor: 'exampleInputEmail1' },
+              'User Image'
             ),
             _react2.default.createElement(
               'div',
@@ -24980,34 +24983,66 @@ var InstitutionDetails = function (_React$Component) {
                 { className: 'fileinput fileinput-new', 'data-provides': 'fileinput' },
                 _react2.default.createElement(
                   'div',
-                  { className: 'fileinput-new thumbnail' },
-                  _react2.default.createElement('img', { 'data-src': 'holder.js/100%x100%', alt: '...', src: '/static/images/users/default.png ' })
+                  { className: 'fileinput-new thumbnail', style: { width: 200, height: 150 } },
+                  _react2.default.createElement('img', { alt: '...', src: this.state.imagePreviewUrl })
                 ),
-                _react2.default.createElement('div', { className: 'fileinput-preview fileinput-exists thumbnail' }),
+                _react2.default.createElement('div', { className: 'fileinput-preview fileinput-exists thumbnail', style: { maxWidth: 200, maxHeight: 150 } }),
                 _react2.default.createElement(
                   'div',
-                  null,
+                  { style: { textAlign: 'center' } },
                   _react2.default.createElement(
                     'span',
-                    { className: 'btn btn-warning btn-file legitRipple' },
+                    { className: 'btn btn-warning btn-file' },
                     _react2.default.createElement(
                       'span',
                       { className: 'fileinput-new' },
-                      'Select Logo '
+                      'Select'
                     ),
                     _react2.default.createElement(
                       'span',
                       { className: 'fileinput-exists' },
                       'Change'
                     ),
-                    _react2.default.createElement('input', { onChange: this.handleInputChange, name: 'image', id: 'image', type: 'file' })
+                    _react2.default.createElement('input', { type: 'file', name: 'image', id: 'image',
+                      onChange: this._handleImageChange
+                    })
                   ),
                   _react2.default.createElement(
                     'a',
-                    { href: '#', className: 'btn btn-default fileinput-exists legitRipple', 'data-dismiss': 'fileinput' },
+                    { href: '#', className: 'btn btn-default fileinput-exists', 'data-dismiss': 'fileinput' },
                     'Remove'
                   )
                 )
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-10' },
+              _react2.default.createElement(
+                'div',
+                { className: 'form-group' },
+                _react2.default.createElement(
+                  'label',
+                  { htmlFor: 'exampleInputPassword1' },
+                  'Select Permissions Group:'
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'multi-select-full' },
+                  _react2.default.createElement(
+                    'select',
+                    { className: 'multiselect-full-featured', multiple: 'multiple', style: { display: 'none' }, name: 'groups', id: 'multiple', placeholder: 'select a group...',
+                      value: this.state.group,
+                      onChange: this.onInputChange },
+                    _react2.default.createElement(
+                      'option',
+                      { value: '' },
+                      'Choose your Group'
+                    ),
+                    options
+                  )
+                ),
+                _react2.default.createElement('label', { id: 'group_name_error', className: 'select-error', htmlFor: 'user_select' })
               )
             )
           ),
@@ -25016,118 +25051,154 @@ var InstitutionDetails = function (_React$Component) {
             { className: 'col-md-8' },
             _react2.default.createElement(
               'div',
-              { className: 'form-group col-md-6' },
-              _react2.default.createElement(
-                'label',
-                { htmlFor: 'company_name' },
-                'Business Name'
-              ),
-              _react2.default.createElement('input', { onChange: this.handleInputChange, className: 'form-control', name: 'company_name', id: 'company_name', placeholder: 'Company Name', value: ' ', type: 'text' })
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'form-group col-md-6' },
-              _react2.default.createElement(
-                'label',
-                null,
-                'Business Email'
-              ),
-              _react2.default.createElement('input', { onChange: this.handleInputChange, className: 'form-control', name: 'company_email', id: 'company_email', placeholder: 'Company Email', value: ' ', type: 'text' })
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'col-md-12' },
-              ' ',
-              _react2.default.createElement(
-                'h6',
-                null,
-                'Sales Settings'
-              )
-            ),
-            _react2.default.createElement(
-              'div',
               { className: 'row' },
               _react2.default.createElement(
                 'div',
-                { className: 'col-md-12' },
+                { className: 'col-md-6' },
                 _react2.default.createElement(
                   'div',
-                  { className: 'form-group col-md-4' },
+                  { className: 'form-group' },
                   _react2.default.createElement(
                     'label',
-                    null,
-                    'Points equivalent to 1'
+                    { htmlFor: 'name' },
+                    'Full Names'
                   ),
-                  _react2.default.createElement('input', { onChange: this.handleInputChange, className: 'form-control', name: 'loyalty_point_equiv', id: 'loyalty_point_equiv', min: '0', placeholder: ' 0 ', type: 'text' }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'help-block' },
-                    'e.g 100 loyalty points is equal to 1'
-                  )
+                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'fullname', id: 'fullname', placeholder: 'Full Names',
+                    value: this.state.fullname,
+                    onChange: this.onInputChange
+                  })
                 ),
                 _react2.default.createElement(
                   'div',
-                  { className: 'col-md-4' },
+                  { className: 'form-group' },
                   _react2.default.createElement(
                     'label',
-                    null,
-                    'Max Credit Expiration(days)  '
+                    { htmlFor: 'name' },
+                    'Name'
                   ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'help-block' },
-                    'Maximum days before which credit sale should be paid'
-                  )
+                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'username',
+                    id: 'username', placeholder: 'Name',
+                    value: this.state.username,
+                    onChange: this.onInputChange
+                  })
                 ),
                 _react2.default.createElement(
                   'div',
-                  { className: 'col-md-4' },
+                  { className: 'form-group' },
                   _react2.default.createElement(
                     'label',
-                    null,
-                    'Show transferred Sales'
+                    { htmlFor: 'password' },
+                    'Password'
                   ),
+                  _react2.default.createElement('input', { type: 'password', className: 'form-control', name: 'password', id: 'password', placeholder: 'Password',
+                    value: this.state.password,
+                    onChange: this.onInputChange
+                  })
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'form-group' },
                   _react2.default.createElement(
-                    'span',
-                    { className: 'help-block' },
-                    'If checked transferred stock sales will be visible on reports'
-                  )
+                    'label',
+                    { htmlFor: 'nationalId' },
+                    'National ID No:'
+                  ),
+                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'nationalId', id: 'nid', placeholder: 'Id No',
+                    value: this.state.nationalId,
+                    onChange: this.onInputChange
+                  })
+                )
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'col-md-6' },
+                _react2.default.createElement(
+                  'div',
+                  { className: 'form-group' },
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'email' },
+                    'Email address'
+                  ),
+                  _react2.default.createElement('input', { type: 'email', className: 'form-control', name: 'email', id: 'email', placeholder: 'Email',
+                    value: this.state.email,
+                    onChange: this.onInputChange
+                  })
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'form-group' },
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'mobile' },
+                    'Phone'
+                  ),
+                  _react2.default.createElement('input', { type: 'text', 'data-mask': '(+254)-999-999-999', className: 'form-control', name: 'mobile', id: 'mobile', placeholder: 'Mobile',
+                    value: this.state.mobile,
+                    onChange: this.onInputChange
+                  })
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'form-group' },
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'passwordConfirmation' },
+                    'Confirm Password'
+                  ),
+                  _react2.default.createElement('input', { type: 'password', className: 'form-control', name: 'passwordConfirmation', id: 'confirm_password', placeholder: 'Confirm Password',
+                    value: this.state.passwordConfirmation,
+                    onChange: this.onInputChange
+                  })
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: 'form-group' },
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'jobTitle' },
+                    'Job Title'
+                  ),
+                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'jobTitle', id: 'id_job_title', placeholder: 'Job title (e.g Cashier)',
+                    value: this.state.jobTitle,
+                    onChange: this.onInputChange
+                  })
                 )
               )
             )
           )
         ),
         _react2.default.createElement(
-          'label',
-          { htmlFor: 'username' },
-          'Enter name'
-        ),
-        _react2.default.createElement('input', { id: 'username', onChange: this.handleInputChange, name: 'name', type: 'text' }),
-        _react2.default.createElement(
-          'label',
-          { htmlFor: 'email' },
-          'Enter your email'
-        ),
-        _react2.default.createElement('input', { onChange: this.handleInputChange, id: 'email', name: 'email', type: 'email' }),
-        _react2.default.createElement(
-          'label',
-          { htmlFor: 'birthdate' },
-          'Enter your birth date'
-        ),
-        _react2.default.createElement('input', { onChange: this.handleInputChange, id: 'birthdate', name: 'birthdate', type: 'text' }),
-        _react2.default.createElement(
-          'button',
-          null,
-          'Send data!'
+          'div',
+          { className: 'row' },
+          _react2.default.createElement(
+            'div',
+            { className: 'col-md-12' },
+            _react2.default.createElement(
+              'div',
+              { className: 'pull-right', style: { marginTop: 40 } },
+              _react2.default.createElement(
+                'a',
+                { href: '#', className: 'btn btn-default waves-effect waves-light' },
+                'Cancel'
+              ),
+              _react2.default.createElement(
+                'button',
+                { className: 'btn btn-primary waves-effect waves-light', id: 'submit', type: 'submit' },
+                'Create User ',
+                _react2.default.createElement('i', { className: 'icon-arrow-right14 position-right' })
+              )
+            )
+          )
         )
       );
     }
   }]);
 
-  return InstitutionDetails;
-}(_react2.default.Component);
+  return AddUserForm;
+}(_react.Component);
 
-exports.default = InstitutionDetails;
+exports.default = AddUserForm;
 
 /***/ })
 /******/ ]);
