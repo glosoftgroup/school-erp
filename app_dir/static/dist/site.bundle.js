@@ -24848,9 +24848,17 @@ var _InstitutionDetails = __webpack_require__(228);
 
 var _InstitutionDetails2 = _interopRequireDefault(_InstitutionDetails);
 
+var _SmsSettings = __webpack_require__(231);
+
+var _SmsSettings2 = _interopRequireDefault(_SmsSettings);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// basic settings
 _reactDom2.default.render(_react2.default.createElement(_InstitutionDetails2.default, null), document.getElementById('basic'));
+
+// sms settings
+_reactDom2.default.render(_react2.default.createElement(_SmsSettings2.default, null), document.getElementById('sms'));
 
 /***/ }),
 /* 228 */
@@ -24891,48 +24899,31 @@ var InstitutionDetails = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (InstitutionDetails.__proto__ || Object.getPrototypeOf(InstitutionDetails)).call(this, props));
 
-    _this.state = {
-      name: true,
-      listUrl: '',
-      address: '',
-      email: '',
-      mobile: '',
-      code: '',
-      logo: ''
-    };
-
-    _this.handleInputChange = _this.handleInputChange.bind(_this);
-    _this.handleSubmit = _this.handleSubmit.bind(_this);
-    return _this;
-  }
-
-  // load site settings on mount
-  //____________________________
-
-
-  _createClass(InstitutionDetails, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      console.log('mounted,,oo..');
-      console.log(listUrl);
-      _axios2.default.post(listUrl).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        console.log(error);
-      });
-    }
-  }, {
-    key: 'handleInputChange',
-    value: function handleInputChange(event) {
+    _this.handleInputChange = function (event) {
       var target = event.target;
       var value = target.type === 'checkbox' ? target.checked : target.value;
       var name = target.name;
 
-      this.setState(_defineProperty({}, name, value));
-    }
-  }, {
-    key: 'handleSubmit',
-    value: function handleSubmit(event) {
+      _this.setState(_defineProperty({}, name, value));
+    };
+
+    _this._handleImageChange = function (e) {
+      e.preventDefault();
+
+      var reader = new FileReader();
+      var file = e.target.files[0];
+
+      reader.onloadend = function () {
+        _this.setState({
+          image: file,
+          imagePreviewUrl: reader.result
+        });
+      };
+
+      reader.readAsDataURL(file);
+    };
+
+    _this.handleSubmit = function (event) {
       event.preventDefault();
 
       var formToJSON = function formToJSON(elements) {
@@ -24942,25 +24933,71 @@ var InstitutionDetails = function (_React$Component) {
           return data;
         }, {});
       };
-      var data = formToJSON(event.target);
+      // const data = formToJSON(event.target);
 
-      // const data = new FormData(event.target);
-      _axios2.default.post('/user', data).then(function (response) {
+      var data = new FormData(event.target);
+
+      _axios2.default.put(updateUrl, data).then(function (response) {
+        alertUser('Data sent successfully');
         console.log(response);
       }).catch(function (error) {
         console.log(error);
       });
-      // fetch('/api/form-submit-url', {
-      //   method: 'POST',
-      //   body: data,
-      // });
+    };
+
+    _this.state = {
+      name: '',
+      listUrl: '',
+      address: '',
+      email: '',
+      mobile: '',
+      code: '',
+      image: '',
+      imagePreviewUrl: '/static/images/users/default.png ',
+      postal_code: '',
+      city: ''
+    };
+
+    return _this;
+  }
+
+  // load site settings on mount
+  // update state data
+  //____________________________
+
+
+  _createClass(InstitutionDetails, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var self = this;
+      _axios2.default.get(listUrl).then(function (response) {
+        response = response.data;
+        self.setState({
+          email: response[0].email,
+          name: response[0].name,
+          mobile: response[0].mobile,
+          code: response[0].code,
+          postal_code: response[0].postal_code,
+          city: response[0].city,
+          image: response[0].image,
+          imagePreviewUrl: response[0].image,
+          address: response[0].address
+        });
+        console.log(self.state);
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
+
+    // image preview
+
   }, {
     key: 'render',
     value: function render() {
+
       return _react2.default.createElement(
         'form',
-        { onSubmit: this.handleSubmit },
+        { encType: 'multipart/form-data', onSubmit: this.handleSubmit },
         _react2.default.createElement(
           'div',
           { className: 'col-md-12' },
@@ -24970,7 +25007,7 @@ var InstitutionDetails = function (_React$Component) {
             _react2.default.createElement(
               'label',
               { className: 'text-center' },
-              'Business Logo'
+              'School Logo'
             ),
             _react2.default.createElement(
               'div',
@@ -24980,8 +25017,8 @@ var InstitutionDetails = function (_React$Component) {
                 { className: 'fileinput fileinput-new', 'data-provides': 'fileinput' },
                 _react2.default.createElement(
                   'div',
-                  { className: 'fileinput-new thumbnail' },
-                  _react2.default.createElement('img', { 'data-src': 'holder.js/100%x100%', alt: '...', src: '/static/images/users/default.png ' })
+                  { className: 'fileinput-new thumbnail', style: { width: 200, height: 150 } },
+                  _react2.default.createElement('img', { alt: '...', src: this.state.imagePreviewUrl })
                 ),
                 _react2.default.createElement('div', { className: 'fileinput-preview fileinput-exists thumbnail' }),
                 _react2.default.createElement(
@@ -25000,12 +25037,7 @@ var InstitutionDetails = function (_React$Component) {
                       { className: 'fileinput-exists' },
                       'Change'
                     ),
-                    _react2.default.createElement('input', { onChange: this.handleInputChange, name: 'image', id: 'image', type: 'file' })
-                  ),
-                  _react2.default.createElement(
-                    'a',
-                    { href: '#', className: 'btn btn-default fileinput-exists legitRipple', 'data-dismiss': 'fileinput' },
-                    'Remove'
+                    _react2.default.createElement('input', { onChange: this._handleImageChange, name: 'image', id: 'image', type: 'file' })
                   )
                 )
               )
@@ -25019,10 +25051,10 @@ var InstitutionDetails = function (_React$Component) {
               { className: 'form-group col-md-6' },
               _react2.default.createElement(
                 'label',
-                { htmlFor: 'company_name' },
-                'Business Name'
+                { htmlFor: 'school_name' },
+                'School Name'
               ),
-              _react2.default.createElement('input', { onChange: this.handleInputChange, className: 'form-control', name: 'company_name', id: 'company_name', placeholder: 'Company Name', value: ' ', type: 'text' })
+              _react2.default.createElement('input', { value: this.state.name, onChange: this.handleInputChange, className: 'form-control', name: 'name', id: 'school_name', placeholder: 'School Name', type: 'text' })
             ),
             _react2.default.createElement(
               'div',
@@ -25030,95 +25062,78 @@ var InstitutionDetails = function (_React$Component) {
               _react2.default.createElement(
                 'label',
                 null,
-                'Business Email'
+                'School Code'
               ),
-              _react2.default.createElement('input', { onChange: this.handleInputChange, className: 'form-control', name: 'company_email', id: 'company_email', placeholder: 'Company Email', value: ' ', type: 'text' })
+              _react2.default.createElement('input', { value: this.state.code, onChange: this.handleInputChange, className: 'form-control', name: 'code', id: 'school_code', placeholder: 'School Code', type: 'text' })
             ),
             _react2.default.createElement(
               'div',
-              { className: 'col-md-12' },
-              ' ',
+              { className: 'form-group col-md-6' },
               _react2.default.createElement(
-                'h6',
+                'label',
+                { htmlFor: 'school_mobile' },
+                'Phone No.'
+              ),
+              _react2.default.createElement('input', { value: this.state.mobile, onChange: this.handleInputChange, className: 'form-control', name: 'mobile', id: 'school_mobile', placeholder: 'School phone No.', type: 'text' })
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'form-group col-md-6' },
+              _react2.default.createElement(
+                'label',
                 null,
-                'Sales Settings'
+                'School Email'
+              ),
+              _react2.default.createElement('input', { value: this.state.email, onChange: this.handleInputChange, className: 'form-control', name: 'email', id: 'school_email', placeholder: 'School Email', type: 'text' })
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-3' },
+              _react2.default.createElement(
+                'div',
+                { className: 'form-group' },
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  'Postal code:'
+                ),
+                _react2.default.createElement('input', { value: this.state.postal_code, onChange: this.handleInputChange, name: 'postal_code', placeholder: '00200', className: 'form-control', type: 'text' })
               )
             ),
             _react2.default.createElement(
               'div',
-              { className: 'row' },
+              { className: 'col-md-3' },
               _react2.default.createElement(
                 'div',
-                { className: 'col-md-12' },
+                { className: 'form-group' },
                 _react2.default.createElement(
-                  'div',
-                  { className: 'form-group col-md-4' },
-                  _react2.default.createElement(
-                    'label',
-                    null,
-                    'Points equivalent to 1'
-                  ),
-                  _react2.default.createElement('input', { onChange: this.handleInputChange, className: 'form-control', name: 'loyalty_point_equiv', id: 'loyalty_point_equiv', min: '0', placeholder: ' 0 ', type: 'text' }),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'help-block' },
-                    'e.g 100 loyalty points is equal to 1'
-                  )
+                  'label',
+                  null,
+                  'City:'
                 ),
+                _react2.default.createElement('input', { value: this.state.city, onChange: this.handleInputChange, name: 'city', placeholder: 'Nairobi', className: 'form-control', type: 'text' })
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-6' },
+              _react2.default.createElement(
+                'div',
+                { className: 'form-group' },
                 _react2.default.createElement(
-                  'div',
-                  { className: 'col-md-4' },
-                  _react2.default.createElement(
-                    'label',
-                    null,
-                    'Max Credit Expiration(days)  '
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'help-block' },
-                    'Maximum days before which credit sale should be paid'
-                  )
+                  'label',
+                  null,
+                  'Address:'
                 ),
-                _react2.default.createElement(
-                  'div',
-                  { className: 'col-md-4' },
-                  _react2.default.createElement(
-                    'label',
-                    null,
-                    'Show transferred Sales'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'help-block' },
-                    'If checked transferred stock sales will be visible on reports'
-                  )
-                )
+                _react2.default.createElement('input', { value: this.state.address, onChange: this.handleInputChange, name: 'address', placeholder: 'Ring road 12', className: 'form-control', type: 'text' })
               )
             )
           )
         ),
         _react2.default.createElement(
-          'label',
-          { htmlFor: 'username' },
-          'Enter name'
-        ),
-        _react2.default.createElement('input', { id: 'username', onChange: this.handleInputChange, name: 'name', type: 'text' }),
-        _react2.default.createElement(
-          'label',
-          { htmlFor: 'email' },
-          'Enter your email'
-        ),
-        _react2.default.createElement('input', { onChange: this.handleInputChange, id: 'email', name: 'email', type: 'email' }),
-        _react2.default.createElement(
-          'label',
-          { htmlFor: 'birthdate' },
-          'Enter your birth date'
-        ),
-        _react2.default.createElement('input', { onChange: this.handleInputChange, id: 'birthdate', name: 'birthdate', type: 'text' }),
-        _react2.default.createElement(
           'button',
-          null,
-          'Send data!'
+          { className: 'btn btn-primary btn-block' },
+          'Send data'
         )
       );
     }
@@ -25128,6 +25143,164 @@ var InstitutionDetails = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = InstitutionDetails;
+
+/***/ }),
+/* 229 */,
+/* 230 */,
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(49);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _axios = __webpack_require__(196);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SmsSettings = function (_React$Component) {
+  _inherits(SmsSettings, _React$Component);
+
+  function SmsSettings(props) {
+    _classCallCheck(this, SmsSettings);
+
+    var _this = _possibleConstructorReturn(this, (SmsSettings.__proto__ || Object.getPrototypeOf(SmsSettings)).call(this, props));
+
+    _this.handleInputChange = function (event) {
+      var target = event.target;
+      var value = target.type === 'checkbox' ? target.checked : target.value;
+      var name = target.name;
+
+      _this.setState(_defineProperty({}, name, value));
+    };
+
+    _this.handleSubmit = function (event) {
+      event.preventDefault();
+
+      var data = new FormData(event.target);
+
+      _axios2.default.put(updateUrl, data).then(function (response) {
+        alertUser('Data sent successfully');
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
+    };
+
+    _this.state = {
+      name: '',
+      username: '',
+      api_key: ''
+    };
+
+    return _this;
+  }
+
+  // load site settings on mount
+  // update state data
+  //____________________________
+
+
+  _createClass(SmsSettings, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var self = this;
+      _axios2.default.get(listUrl).then(function (response) {
+        response = response.data;
+        self.setState({
+          username: response[0].username,
+          api_key: response[0].api_key
+
+        });
+        console.log(self.state);
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      return _react2.default.createElement(
+        'form',
+        { encType: 'multipart/form-data', onSubmit: this.handleSubmit },
+        _react2.default.createElement(
+          'div',
+          { className: 'row' },
+          _react2.default.createElement(
+            'div',
+            { className: 'panel-body' },
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-12' },
+              _react2.default.createElement(
+                'h5',
+                { className: 'text-bold' },
+                ' SMS gateway login credentials'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-4' },
+              _react2.default.createElement(
+                'div',
+                { className: 'form-group' },
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  'Username'
+                ),
+                _react2.default.createElement('input', { type: 'text', value: this.state.username, onChange: this.handleInputChange, placeholder: 'Username', className: 'form-control', id: 'api_username', name: 'username' })
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-4' },
+              _react2.default.createElement(
+                'div',
+                { className: 'form-group' },
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  'API key'
+                ),
+                _react2.default.createElement('input', { type: 'text', value: this.state.api_key, onChange: this.handleInputChange, placeholder: 'API Key', className: 'form-control', id: 'api_key', name: 'api_key' })
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'button',
+          { className: 'btn btn-primary btn-block' },
+          'Send data'
+        )
+      );
+    }
+  }]);
+
+  return SmsSettings;
+}(_react2.default.Component);
+
+exports.default = SmsSettings;
 
 /***/ })
 /******/ ]);
