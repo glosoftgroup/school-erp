@@ -24848,7 +24848,7 @@ var _InstitutionDetails = __webpack_require__(228);
 
 var _InstitutionDetails2 = _interopRequireDefault(_InstitutionDetails);
 
-var _SmsSettings = __webpack_require__(231);
+var _SmsSettings = __webpack_require__(229);
 
 var _SmsSettings2 = _interopRequireDefault(_SmsSettings);
 
@@ -25145,9 +25145,7 @@ var InstitutionDetails = function (_React$Component) {
 exports.default = InstitutionDetails;
 
 /***/ }),
-/* 229 */,
-/* 230 */,
-/* 231 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
