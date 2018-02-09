@@ -5,11 +5,17 @@ from rest_framework.serializers import (
     ListField, CharField,
     SerializerMethodField
 )
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 User = get_user_model()
 
+class GroupListSerializer(ModelSerializer):
+    class Meta:
+        model = Group
+        field = ('id',
+                 'name',
+                 )
 
 class UsersListSerializer(ModelSerializer):
     class Meta:
@@ -18,7 +24,7 @@ class UsersListSerializer(ModelSerializer):
                   'username',
                   'email',
                   'image',
-                  'job_title',
+                  'jobTitle',
                   'nationalId',
                   'mobile'
                  )
@@ -31,7 +37,7 @@ class UsersCreateSerializer(ModelSerializer):
                   'password',
                   'fullname',
                   'mobile',
-                  'job_title',
+                  'jobTitle',
                   'nationalId',
                   'image'
                  )
