@@ -2,9 +2,7 @@
 
 from rest_framework import serializers
 from ...site.models import SiteSettings as Table
-
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from ...site.models import SmsSettings as Sms
 
 
 class UpdateSiteSettingsSerializer(serializers.ModelSerializer):
@@ -50,3 +48,28 @@ class SiteSettingSerializer(serializers.ModelSerializer):
                   'address'
                  )
 
+
+# sms settings serializers
+class SmsSettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sms
+        fields = ('id',
+                  'username',
+                  'api_key'
+                  )
+
+
+class UpdateSmsSettingsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Sms
+        fields = ('id',
+                  'username',
+                  'api_key'
+                  )
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.api_key = validated_data.get('api_key', instance.api_key)
+        instance.save()
+        return instance
