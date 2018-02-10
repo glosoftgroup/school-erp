@@ -1,11 +1,20 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import permission_required
-from . import views
-
+from .api.views import (
+    UserListAPIView,
+    UserCreateAPIView,
+    )
+from .views import (
+    users,
+    add_user
+)
 
 urlpatterns = [
-    # url(r'^$', permission_required('users.view_user', login_url='/')
-    #             (users), name='users'),
-    url(r'^$', views.users, name='view-users'),
+    url(r'^$', users, name='users'),
+    url(r'^create/$', add_user, name='user-create'),
+    url(r'^api/list/$', UserListAPIView.as_view(), name='user-list'),
+    url(r'^api/create/$', UserCreateAPIView.as_view(),name='user-api-create'),
+    url(r'^process/create/$', UserListAPIView.as_view(), name='user-process-create'),
+    url(r'^assign/permissions/$', UserListAPIView.as_view(), name='user-assign-permission'),
 ]
 

@@ -20,6 +20,7 @@ configuration/__pycache__/
 app_dir/__pycache__/
 app_dir/api/__pycache__/
 loglib/__pycache__/
+dist
 utilities/__pycache__/
 */__pycache__/*
 
@@ -105,7 +106,8 @@ docker-stack-*.yml
 log_deployment.json
 webpack-bundle.json
 
-/app_dir/*/migrations/*
-!/app_dir/*/migrations/__init__.py
+/app_dir/modules/*/migrations/*
+!/app_dir/modules/*/migrations/__init__.py
 
 /htmlcov
+/configuration/media/
