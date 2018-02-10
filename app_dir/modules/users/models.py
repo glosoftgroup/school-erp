@@ -30,8 +30,8 @@ class UserManager(BaseUserManager):
 @python_2_unicode_compatible
 class User(PermissionsMixin, AbstractBaseUser):
     email = models.EmailField(pgettext_lazy('User field', 'email'), unique=True)
-    fullname = models.CharField(pgettext_lazy('User field', 'name'), unique=True, max_length=100, null=True, blank=True)
-    username = models.CharField(pgettext_lazy('User field', 'name'), unique=True, max_length=100, null=True, blank=True)
+    fullname = models.CharField(pgettext_lazy('User field', 'fullname'), max_length=100, null=True, blank=True)
+    username = models.CharField(pgettext_lazy('User field', 'username'), unique=True, max_length=100, null=True, blank=True)
     is_staff = models.BooleanField(
         pgettext_lazy('User field', 'employee status'),
         default=False)

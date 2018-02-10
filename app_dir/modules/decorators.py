@@ -55,8 +55,10 @@ class EmailOrUsernameModelBackend(object):
 		except get_user_model().DoesNotExist:
 			return None
 
+
 def friendly_csrf_failure_view(request, reason="SuspiciousOperation", template_name="403_csrf.html"):
 	return HttpResponseForbidden('Not Authorized. Please contact your Administrator.')
+
 
 def staff_member_required(f):
 	return _staff_member_required(f, login_url='home')

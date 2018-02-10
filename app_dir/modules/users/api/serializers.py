@@ -5,7 +5,7 @@ from rest_framework.serializers import (
     ListField, CharField,
     SerializerMethodField
 )
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 User = get_user_model()
@@ -18,16 +18,25 @@ class GroupListSerializer(ModelSerializer):
                  )
 
 class UsersListSerializer(ModelSerializer):
+    permissions = SerializerMethodField()
     class Meta:
         model = User
         fields = ('id',
                   'username',
+                  'fullname',
                   'email',
                   'image',
                   'jobTitle',
                   'nationalId',
-                  'mobile'
+                  'mobile',
+                  'permissions'
                  )
+    def get_permissions(self, ob):
+        userPermissions = Permission.objects.filter(user=ob)
+        permissionNames = []
+        for perm in userPermissions:
+            permissionNames.append(perm.name)
+        return permissionNames
 
 class UsersCreateSerializer(ModelSerializer):
     class Meta:
