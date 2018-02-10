@@ -14,7 +14,7 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, is_staff=False,
                     is_active=True, username='', **extra_fields):
-        'Creates a User with the given username, email and password'
+        """Creates a User with the given username, email and password"""
         email = UserManager.normalize_email(email)
         user = self.model(email=email, is_active=is_active,
                           is_staff=is_staff, **extra_fields)
@@ -41,7 +41,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     send_mail = models.BooleanField(
         pgettext_lazy('User field', 'send mail'),
         default=True)
-    job_title = models.CharField(max_length=100, default='', blank=True, null=True,
+    jobTitle = models.CharField(max_length=100, default='', blank=True, null=True,
         verbose_name=pgettext_lazy('User field', 'job title'))
     nationalId = models.CharField(max_length=100, null=True,blank=True)
     mobile = models.CharField(max_length=100, null=True, blank=True)

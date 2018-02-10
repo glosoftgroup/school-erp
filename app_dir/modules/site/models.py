@@ -12,30 +12,25 @@ import datetime as t
 
 @python_2_unicode_compatible
 class SiteSettings(models.Model):
-    domain = models.CharField(
-        pgettext_lazy('Site field', 'domain'), max_length=100,
-        validators=[_simple_domain_name_validator], blank=True, null=True, default='')
     name = models.CharField(pgettext_lazy('Site field', 'name'),
                             max_length=50, blank=True, null=True)
+    code = models.CharField(pgettext_lazy('Site field', 'code'),
+                            max_length=50, blank=True, null=True)
+    city = models.CharField(pgettext_lazy('Site field', 'city'),
+                            max_length=50, blank=True, null=True)
+    address = models.CharField(pgettext_lazy('Site field', 'address'),
+                               max_length=150, blank=True, null=True)
+    postal_code = models.CharField(pgettext_lazy('Site field', 'postal code'),
+                                   max_length=70, blank=True, null=True)
     email = models.EmailField(pgettext_lazy('Site field', 'email'),
+                              max_length=50, blank=True, null=True)
+    mobile = models.CharField(pgettext_lazy('Site field', 'mobile'),
                               max_length=50, blank=True, null=True)
     header_text = models.CharField(
         pgettext_lazy('Site field', 'header text'), max_length=200, blank=True)
     description = models.CharField(
         pgettext_lazy('Site field', 'site description'), max_length=500,
         blank=True)
-    loyalty_point_equiv = models.IntegerField(pgettext_lazy('Site field', 'loyalty points equivalency'),
-                                              validators=[MinValueValidator(0)], default=Decimal(0))
-    floors = models.IntegerField(pgettext_lazy('Site field', 'floors'),
-                                 validators=[MinValueValidator(0)], default=Decimal(6))
-
-    max_credit_date = models.IntegerField(pgettext_lazy('Site field', 'Maximum credit sale expiration in days'),
-                                          validators=[MinValueValidator(0)], unique=True, default=Decimal(0))
-
-    opening_time = models.TimeField(pgettext_lazy('Site field', 'opening time'),
-                                    default=t.time(6, 00))
-    closing_time = models.TimeField(pgettext_lazy('Site field', 'closing time'),
-                                    default=t.time(21, 00))
     sms_gateway_username = models.CharField(
         pgettext_lazy('Site field', 'sms gateway username'), max_length=500,
         blank=True)
@@ -54,6 +49,24 @@ class SiteSettings(models.Model):
 
     def available_backends(self):
         return self.authorizationkey_set.values_list('name', flat=True)
+
+
+@python_2_unicode_compatible
+class SmsSettings(models.Model):
+    username = models.CharField(
+        pgettext_lazy('Sms field', 'sms gateway username'), max_length=500,
+        blank=True)
+    api_key = models.CharField(
+        pgettext_lazy('Sms field', 'sms gateway api key'), max_length=500,
+        blank=True)
+
+    class Meta:
+        app_label = 'site'
+        verbose_name = pgettext_lazy('SmsSetting model', 'site')
+        verbose_name_plural = pgettext_lazy('SmsSettings model', 'site')
+
+    def __str__(self):
+        return self.name
 
 
 @python_2_unicode_compatible

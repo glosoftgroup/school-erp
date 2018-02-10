@@ -301,3 +301,5 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(PROJECT_DIR, 'webpack-stats.json'),
     }
 }
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = '/'
