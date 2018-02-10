@@ -157,9 +157,12 @@ class InstitutionDetails extends React.Component {
                     </div>
                 </div>
               </div>
+              <div className="col-md-6 text-center">
+                <button className="btn btn-primary">Update Settings</button>
+              </div>
             </div>
         
-        <button className="btn btn-primary btn-block">Send data</button>
+        
       </form>
       );
     }
