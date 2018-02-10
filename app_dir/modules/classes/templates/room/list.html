@@ -3,11 +3,11 @@
 {% load i18n %}
 
 {% block title %}
-  Rooms
+  Classrooms
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a>Rooms </a></li>
+     <li class="active"><a >Classrooms </a></li>
  {% endblock %}
 
 
@@ -111,15 +111,18 @@
       <div class="panel panel-flat" id="printme">
         <div class="panel-body">
             <div class="col-md-12">
-                <h5 class="text-center text-bold">Rooms</h5>
+                <h5 class="text-center text-bold">Class Rooms</h5>
             </div>
         <div class="">
           <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
                 <thead>
                   <tr class="bg-primary">
-                    <th>Name</th>
-                    <th>Max Capacity</th>
-                    <th></th>
+                    <th>Date</th>
+                    <th>Supplier</th>
+                    <th>Purchases</th>
+                    <th>Quantity</th>
+                    <th>Credit</th>
+                    <th>Total Purchase</th>
                   </tr>
                 </thead>
                 <tbody id="tb">
@@ -141,26 +144,16 @@
                 </template>
                 <!--listing template-->
                 <template v-for="item in items">
-                    <tr class="td animated fadeIn" @click="goTo(item.single_url)">
+                    <tr class="td animated fadeIn" @click="carTranfers(item.single_url)">
                         <td>
-                            ${item.name}
+                            ${item.date}
                         </td>
-                        <td>${item.max_capacity}</td>
+                        <td>${item.supplier_name}</td>
+                        <td>${item.total_purchases}</td>
+                        <td>${item.total_quantity}</td>
+                        <td>${item.total_credit}</td>
+                        <td>${item.total_cost}</td>
 
-                        <td class="text-center">
-                            <ul class="icons-list">
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="icon-menu7"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a href="#"><i class="icon-file-stats"></i> View statement</a></li>
-                                        <li><a href="#"><i class="icon-file-text2"></i> Edit campaign</a></li>
-                                        <li><a href="#"><i class="icon-file-locked"></i> Disable campaign</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#"><i class="icon-gear"></i> Settings</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </td>
                     </tr>
                 </template>
 
