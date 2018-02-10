@@ -74,19 +74,17 @@
         </div>
     <div class="col m12 l3 help-box"></div>
   </div>
-<!-- page usrls -->
-<input type="hidden" id="pageUrls" class="pageUrls"
-       data-listurl="#update-url"
-       data-updateurl="#update-url" name="">
+
 <input type="hidden" class="redirectUrls" data-redirecturl="#redirect" name="">
 {% endblock %}
 
 {% block custom_js %}
-<script type="text/javascript" src="{% static 'js/plugins/notifications/jgrowl.min.js' %}"></script>
 
 <script>
     var listUrl = "{% url 'site:api-list' %}";
+    var listSmsUrl = "{% url 'site:api-list-sms' %}";
     var updateUrl = "{% url 'site:api-update' pk=1 %}";
+    var updateSmsUrl = "{% url 'site:api-update-sms' pk=1 %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }

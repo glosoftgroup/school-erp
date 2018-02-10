@@ -6,7 +6,8 @@ module.exports = {
     entry: {
         'dashboard': './app_dir/static/js/',
         'site': './app_dir/static/js/site/',
-        'users': './app_dir/static/js/users/'
+        'users': './app_dir/static/js/users/',
+        'room': './app_dir/static/js/room/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),

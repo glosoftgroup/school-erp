@@ -20,6 +20,7 @@ configuration/__pycache__/
 app_dir/__pycache__/
 app_dir/api/__pycache__/
 loglib/__pycache__/
+/app_dir/static/dist/*
 utilities/__pycache__/
 */__pycache__/*
 

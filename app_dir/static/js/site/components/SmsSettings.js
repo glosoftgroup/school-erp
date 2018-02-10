@@ -18,7 +18,7 @@ class SmsSettings extends React.Component {
     //____________________________
     componentWillMount() {
         var self = this;
-        axios.get(listUrl)
+        axios.get(listSmsUrl)
           .then(function (response) {
             response = response.data;
             self.setState({
@@ -49,7 +49,7 @@ class SmsSettings extends React.Component {
 
       const data = new FormData(event.target);
 
-      axios.put(updateUrl,data)
+      axios.put(updateSmsUrl,data)
       .then(function (response) {
         alertUser('Data sent successfully');
         console.log(response);
@@ -83,10 +83,12 @@ class SmsSettings extends React.Component {
                         </div>               
                     </div>                          
                 </div>       
-            
+               <div className="col-md-12 text-center">
+                 <button className="btn btn-primary">Update settings</button>
+               </div>
             </div>       
         
-        <button className="btn btn-primary btn-block">Send data</button>
+        
       </form>
       );
     }
