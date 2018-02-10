@@ -1,6 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 
+import Select from 'react-select';
+import SiteUsers from './SiteUsers';
+
 
 class RoomForm extends React.Component {
     constructor(props) {
@@ -9,7 +12,7 @@ class RoomForm extends React.Component {
           name: '',
           name: '',
           description:'',
-          maximum_capacity: 0,
+          max_capacity: 0,
           current_capacity:0,
       };
 
@@ -38,10 +41,10 @@ class RoomForm extends React.Component {
 
       const data = new FormData(event.target);
 
-      axios.put(addUrl,data)
+      axios.post(createUrl,data)
       .then(function (response) {
         alertUser('Data sent successfully');
-        console.log(response);
+        window.location.href = redirectUrl;
       })
       .catch(function (error) {
         console.log(error);
@@ -57,13 +60,13 @@ class RoomForm extends React.Component {
                 <div className="form-group">
                     <div className="row">
                         <div className="col-md-6">
-                            <label>Class Name:<span className="text-danger">*</span></label>
+                            <label className="text-bold">Class Name:<span className="text-danger">*</span></label>
                             <input value={this.state.name} onChange={this.handleInputChange} required className="form-control" name="name" id="name" placeholder="Room Name" type="text"/>
                             <span className="help-block text-warning"></span>
                         </div>
-                        <div className="col-md-3" id="parent-div">
+                        <div className="col-md-3 hidden" id="parent-div">
                             <label>Floor:<span className="text-danger">*</span></label>
-                            <select className="bootstrap-select floor">
+                            <select value={this.state.name} onChange={this.handleInputChange}  className="bootstrap-select floor">
                                 
 
                             </select>
@@ -77,7 +80,7 @@ class RoomForm extends React.Component {
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label className="text-bold">Maximum Capacity:</label>
-                                <input value={this.state.maximum_capacity} onChange={this.handleInputChange} name="maximum_capacity" id="maximum_capacity" placeholder="Maximum Capacity" className="form-control" type="number"  required="required" />
+                                <input value={this.state.maximum_capacity} onChange={this.handleInputChange} name="max_capacity" id="max_capacity" placeholder="Maximum Capacity" className="form-control" type="number"  required="required" />
                                 <span className="help-block text-warning"></span>
                             </div>
                         </div>
@@ -92,10 +95,11 @@ class RoomForm extends React.Component {
                     </div>
                 </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6">                
                 <div className="form-group">
-                    <label>Room Description:</label>
-                    <textarea value={this.state.description} onChange={this.handleInputChange} rows="5" cols="5" className="form-control" id="description" name="description" placeholder="Enter room description here"></textarea>
+                    <label className="text-bold">Room Description:</label>
+                    <textarea value={this.state.description} onChange={this.handleInputChange} rows="5" cols="5" className="form-control" id="description" name="description" placeholder="Enter room description here" />
+                    
                     <span className="help-block text-warning"></span>
                 </div>
             </div>

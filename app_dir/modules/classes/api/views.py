@@ -14,11 +14,6 @@ from .serializers import (
 User = get_user_model()
 
 
-class CreateAPIView(generics.CreateAPIView):
-    queryset = Table.objects.all()
-    serializer_class = TableListSerializer
-
-
 class ListAPIView(generics.ListAPIView):
     """
         list site settings details

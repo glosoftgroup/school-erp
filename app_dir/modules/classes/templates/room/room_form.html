@@ -4,11 +4,11 @@
 {% load render_bundle from webpack_loader %}
 
 {% block title %}
-  Add room
+  Add Classroom
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a href="{% url 'room:index' %}" >Rooms </a></li>
+     <li class="active"><a >Classrooms </a></li>
  {% endblock %}
 
 
@@ -40,16 +40,16 @@
 </script>
 <script>
 var options = [
-  { value: '1', label: 'One' },
-  { value: '2', label: 'Two' }
+  { id: 'one', login: 'One' },
+  { id: 'two', login: 'Two' }
 ];
 
 function logChange(val) {
   console.log("Selected: " + val);
 }
 
-    var createUrl = "{% url 'room:api-create-room' %}";
-    var redirectUrl = "{% url 'room:index' %}";
+    var listUsers = "{% url 'room:api-list-users' %}";
+    var addUrl = "{% url 'site:api-update-sms' pk=1 %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
