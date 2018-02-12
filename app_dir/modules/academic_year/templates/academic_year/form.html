@@ -8,7 +8,7 @@
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a href="{% url 'room:index' %}" >Rooms</a></li>
+     <li class="active"><a href="{% url 'academic_year:index' %}" >Academic year</a></li>
  {% endblock %}
 
 
@@ -16,6 +16,8 @@
 
 {% block custom_css %}
 <link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+{% render_bundle 'academic_year' 'css' %}
+<link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
 {% endblock %}
 {% block content %}
  <!--room details-->
@@ -23,7 +25,7 @@
 <div class="panel panel-flat animated fadeIn" id="vue-app">
     <div class="panel-body">
         <div class="row">
-           <div id="room">
+           <div id="app-root">
            </div>
         </div>
     </div>
@@ -33,9 +35,35 @@
 
 {% block custom_js %}
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     $('.bootstrap-select').selectpicker();
+
+    // datepicker
+    $('.datepicker').daterangepicker({
+        singleDatePicker: true,
+        locale:{format: 'YYYY-MM-DD'},
+        showDropdowns:true,
+        autoUpdateInput:false
+    },function(chosen_date) {
+        parent.date = chosen_date.format('YYYY-MM-DD');
+        $('.datepicker').val(chosen_date.format('YYYY-MM-DD'));
+
+    });
+
+    // pikcer2
+    $('.datepicker2').daterangepicker({
+        singleDatePicker: true,
+        locale:{format: 'YYYY-MM-DD'},
+        showDropdowns:true,
+        autoUpdateInput:false,
+        minDate: new Date()
+    },function(chosen_date) {
+        parent.date = chosen_date.format('YYYY-MM-DD');
+        $('.datepicker2').val(chosen_date.format('YYYY-MM-DD'));
+
+    });
   });
 </script>
 <script>
@@ -49,15 +77,15 @@ function logChange(val) {
 }
     {% if pk %}
     var pk = "{{pk}}";
-    var updateUrl = "{% url 'room:api-update' pk=pk %}";
+    var updateUrl = "{% url 'academic_year:api-update' pk=pk %}";
     {% else %}
     var pk= false;
     {% endif %}
-    var createUrl = "{% url 'room:api-create-room' %}";
-    var redirectUrl = "{% url 'room:index' %}";
+    var createUrl = "{% url 'academic_year:api-create' %}";
+    var redirectUrl = "{% url 'academic_year:index' %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
 </script>
-{% render_bundle 'room' 'js' %}
+{% render_bundle 'academic_year' 'js' %}
 {% endblock %}

@@ -7,43 +7,13 @@
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a>Rooms </a></li>
+     <li class="active"><a>Academic Year </a></li>
  {% endblock %}
 
 
 {% block menu_classroom_class %}active{% endblock %}
  {% block custom_css %}
-   <style type="text/css">
-      .theme_xbox .pace_activity, .theme_xbox .pace_activity::after, .theme_xbox .pace_activity::before, .theme_xbox_sm .pace_activity, .theme_xbox_sm .pace_activity::after, .theme_xbox_sm .pace_activity::before, .theme_xbox_xs .pace_activity, .theme_xbox_xs .pace_activity::after, .theme_xbox_xs .pace_activity::before {
-        border-radius: 50%;
-        border: 1px solid transparent;
-            border-top-width: 1px;
-            border-right-width: 1px;
-            border-bottom-width: 1px;
-            border-left-width: 1px;
-            border-top-color: transparent;
-        border-top-color: #1649fc;
-    }
-    .pace-demo {
-        background-color:#fff;
-    }
-    @media print {
-       #printBtn {
-          display: none;
-       }
-       #addPayment {
-          display: none;
-       }
-       .media-none {
-          display: none;
-       }
-       #media-none {
-          display: none;
-       }
-    }
 
-    .td { cursor:pointer }
-   </style>
  {% endblock %}
 
 {% block content %}
@@ -56,7 +26,7 @@
             <div class="col-md-2">
               <label style="visibility: hidden;"> add</label>
               <div class="form-group">
-                    <a id="toggle-add-form" href="{% url 'room:add-room' %}" class="btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light">
+                    <a id="toggle-add-form" href="{% url 'academic_year:add' %}" class="btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light">
                         <i class="icon-plus2 position-left"></i>Add
                     </a>
               </div>
@@ -112,14 +82,15 @@
       <div class="panel panel-flat" id="printme">
         <div class="panel-body">
             <div class="col-md-12">
-                <h5 class="text-center text-bold">Rooms</h5>
+                <h5 class="text-center text-bold">Academic Year</h5>
             </div>
         <div class="">
           <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
                 <thead>
                   <tr class="bg-primary">
                     <th>Name</th>
-                    <th>Max Capacity</th>
+                    <th>Start</th>
+                    <th>End</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -146,7 +117,8 @@
                         <td>
                             ${item.name}
                         </td>
-                        <td>${item.max_capacity}</td>
+                        <td>${item.start_date}</td>
+                        <td>${item.end_date}</td>
 
                         <td class="text-center">
                             <ul class="icons-list">
@@ -236,7 +208,7 @@
  </div>
 
 <input type="hidden" class="pageUrls"
-  data-listurl="{% url 'room:api-list-rooms' %}"
+  data-listurl="{% url 'academic_year:api-list' %}"
 >
 {% endblock%}
 {% block custom_js %}

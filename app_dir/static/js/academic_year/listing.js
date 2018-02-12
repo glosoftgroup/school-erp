@@ -57,13 +57,6 @@ var parent = new Vue({
             // ___________________
             // var deleteUrl = this.deleteUrl;
             var self = this;
-            if(url){
-                $('#modal_delete').modal();
-                self.deleteUrl = url;
-                self.deleteId = id;
-                return;
-            }
-
             if(!self.deleteUrl){
                 $('#modal_delete').modal();
                 self.deleteUrl = url;
