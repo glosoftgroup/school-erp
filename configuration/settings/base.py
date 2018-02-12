@@ -70,6 +70,7 @@ LOCAL_APPS = (
     'app_dir.modules.room',
     'app_dir.modules.users',
     'app_dir.modules.site',
+    'app_dir.modules.academic_year',
 )
 
 INSTALLED_APPS = LOCAL_APPS + DEFAULT_APPS + THIRD_PARTY_APPS
