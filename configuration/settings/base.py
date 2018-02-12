@@ -59,7 +59,8 @@ DEFAULT_APPS = (
 
 THIRD_PARTY_APPS = (
     'gunicorn',
-    'webpack_loader'
+    'webpack_loader',
+    'bootstrap3',
 )
 
 LOCAL_APPS = (
@@ -120,7 +121,10 @@ DATABASES = {
     }
 }
 
-
+AUTHENTICATION_BACKENDS = [
+    'app_dir.modules.decorators.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -303,3 +307,34 @@ WEBPACK_LOADER = {
 }
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = '/'
+
+
+''' demo for email ** to be changed for real environment '''
+EMAIL_URL = os.environ.get('EMAIL_URL')
+SENDGRID_USERNAME = os.environ.get('SENDGRID_USERNAME')
+SENDGRID_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
+if not EMAIL_URL and SENDGRID_USERNAME and SENDGRID_PASSWORD:
+    EMAIL_URL = 'smtp://%s:%s@smtp.sendgrid.net:587/?tls=True' % (
+        SENDGRID_USERNAME, SENDGRID_PASSWORD)
+
+# EMAIL_FILE_PATH = email_config['EMAIL_FILE_PATH']
+# EMAIL_HOST_USER = email_config['EMAIL_HOST_USER']
+# EMAIL_HOST_PASSWORD = email_config['EMAIL_HOST_PASSWORD']
+# EMAIL_HOST = email_config['EMAIL_HOST']
+# EMAIL_PORT = email_config['EMAIL_PORT']
+# EMAIL_BACKEND = email_config['EMAIL_BACKEND']
+# EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
+# EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
+
+EMAIL_HOST_USER = 'alexkiburu@gmail.com'
+EMAIL_HOST_PASSWORD = 'unicorn5469'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'alexkiburu@gmail.com'
+
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+ORDER_FROM_EMAIL = os.getenv('ORDER_FROM_EMAIL', DEFAULT_FROM_EMAIL)
+''' for email to work  '''
+SITE_ID = 1

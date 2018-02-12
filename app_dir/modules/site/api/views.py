@@ -50,7 +50,8 @@ class SmsSettingListAPIView(generics.ListAPIView):
     try:
         Sms.objects.get(pk=1)
     except Exception as e:
-        Sms.objects.create(username="sandbox", api_key='')
+        pass
+        #Sms.objects.create(username="sandbox", api_key='')
     queryset = Sms.objects.all()
 
 

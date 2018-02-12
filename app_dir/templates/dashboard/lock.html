@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+{% load staticfiles i18n %}
+{% load render_bundle from webpack_loader %}
+{% load version %}
+
+<html lang="{{ LANGUAGE_CODE }}" class="no-js">
+  <head>
+    <title>
+      {% block title %}
+        {% trans "Locked" context "Dashboard default page title" %}
+      {% endblock %}
+    </title>
+    {% block meta %}
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    {% endblock meta %}
+
+    {% include 'favicon.html' %}
+    
+    
+   
+    
+
+    <!-- Global stylesheets -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/icons/icomoon/styles.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/icons/fontawesome/styles.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+
+  <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/colors.css' %}" rel="stylesheet" type="text/css">
+   <link href="{% static 'css/extras/animate.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'js/plugins/ladda/ladda-themeless.min.css' %}" rel="stylesheet" type="text/css">
+  
+  <!-- /global stylesheets -->
+
+    {% block custom_css %}
+       <style type="text/css">
+       </style>
+    {% endblock %}
+  </head>
+
+  <body class="{% block body_class %}{% endblock %} login-container">
+    
+     <!-- Page container -->
+  <div class="page-container">
+    <!-- Page content -->
+    <div class="page-content">
+      <!-- Main content -->
+      <div class="content-wrapper">
+        <!-- Content area -->
+        <div class="content">
+
+          <!-- Simple login form -->
+          <form name="loginForm" id="loginForm">
+            {% csrf_token %} 
+            <div class="panel panel-body login-form animated bounceIn">
+              <div class="text-center">
+                {% if request.user.image %}
+                <img src="{{request.user.image.url }}" alt="" class="img-circle" style="width: 150px;height: 150px;margin-top: 7px;" />
+                {% else %}
+                  <img src="/static/images/users/default.png" alt="" class="img-circle img-sm" style="width: 20px;height: 20px;margin-top: 7px;">
+                {% endif %}
+                 <h6 class="content-group text-center text-semibold no-margin-top">{{ request.user.username }} <small class="display-block">Unlock your account</small></h6>
+                 <h6></h6>
+              </div>
+              <div id="status" class="alert bg-danger animated slideInUp" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+                <span class="status_text">Oops! Wrong Password.</span>
+              </div>
+
+              <div class="form-group has-feedback has-feedback-left">
+                <input type="password" name="password" class="form-control password" placeholder="Password">
+                <div class="form-control-feedback">
+                  <i class="icon-user-lock text-muted"></i>
+                </div>
+              </div>
+              <input type="hidden" name="email" value="{{request.user.email}}">
+              <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+              <div class="form-group">
+                <button type="submit" class="btn bg-pink-400 btn-block login_btn ladda-button" data-style="expand-right" id="login_btn">Sign in <i class="icon-circle-right2 position-right"></i><br><i class="fa fa-spinner fa-spin fa-2x fa-fw position-right spinner" style="display: none;"></i></button>
+              </div>
+              <div class="text-center">
+                <a class="link--styled" href="{% url 'account_reset_password' %}">
+                  {% trans "Forgot password?" context "Login form secondary link" %}
+                </a><br>
+                <a class="link--styled" href="{% url 'account_logout' %}">
+                  {% trans "Log Out" context "Login Out" %}
+                </a>
+              </div>
+            </div>
+          </form>
+          <!-- /simple login form -->
+
+        </div>
+        <!-- /content area -->
+      </div>
+      <!-- /main content -->
+    </div>
+    <!-- /page content -->
+  </div>
+  <!-- /page container -->
+
+   
+ 
+  <!-- Core JS files -->
+  <script type="text/javascript" src="{% static 'js/core/libraries/jquery.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/core/libraries/bootstrap.min.js' %}"></script>
+  <!-- /core JS files -->
+  <script type="text/javascript" src="{% static 'js/plugins/ui/jquery-validation/jquery.validate.js' %} "></script>
+  <!-- Theme JS files -->
+  <script type="text/javascript" src="{% static 'js/plugins/ui/ripple.min.js' %}"></script>
+  <!-- /theme JS files -->
+  <script type="text/javascript" src="{% static 'js/plugins/notifications/jgrowl.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/plugins/ladda/spin.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/plugins/ladda/ladda.min.js' %}"></script>
+
+    {% block custom_js %}{% endblock %}
+    <script type="text/javascript">
+         $("#loginForm").submit(function(e)
+          {
+             e.preventDefault();
+
+              var l = Ladda.create(document.querySelector('#login_btn'));
+              l.start();
+              // $('.spinner').show();
+              var postData = $(this).serializeArray();
+              var formURL = "{% url 'core:lock_process' %}";
+
+              $.ajax(
+              {
+                  url : formURL,
+                  type: "POST",
+                  crossDomain: true,
+                  data : postData,
+                  success:function(data, textStatus, jqXHR) 
+                  {
+                       if(data == 'error login' || data == 'wrong credentials'){
+                          l.stop();
+                          alertNotification('Wrong Credentials!', 'Authentication Error', 'danger')
+                       }
+                       else{
+                          l.stop();
+                          alertNotification('Authenticated', 'Success!', 'success')
+                          window.location = data;
+                          $('.email').val('');
+                          $('.password').val('');
+                       }
+
+                  },
+                  error: function(data) 
+                  {
+                    l.stop();
+                    alertNotification('Wrong Credentials!', 'Authenticatin Error', 'danger')
+                  }
+              });
+               return false;
+              e.preventDefault(); //STOP default action
+          });
+         function alertNotification(message, header, theme){
+            $.jGrowl(message, {
+                header: header,
+                theme: 'bg-'+theme
+            });
+        }
+
+        
+       // });
+    </script>
+   </div>
+  </body>
+</html>
