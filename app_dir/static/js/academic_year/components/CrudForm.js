@@ -1,18 +1,20 @@
 import React from 'react';
 import axios from 'axios';
 
-import Select from 'react-select';
-import SiteUsers from './SiteUsers';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
 
-class RoomForm extends React.Component {
+class CrudForm extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
           name: '',
           description:'',
-          max_capacity: 0,
-          current_capacity:0,
+          start_date: moment(new Date()).format("YYYY-MM-DD"),
+          end_date: moment(new Date()).format("YYYY-MM-DD"),
+          startDate:moment(),
+          buttonText:'Add'
       };
 
     }
@@ -33,8 +35,9 @@ class RoomForm extends React.Component {
                 self.setState({
                             name: response.name,
                             description: response.description,
-                            max_capacity: response.max_capacity,
-                            current_capacity: response.current_capacity,
+                            start_date: response.start_date,
+                            end_date: response.end_date,
+                            buttonText:'Edit'
                             });
                 console.log(self.state);
             })
@@ -92,8 +95,8 @@ class RoomForm extends React.Component {
                 <div className="form-group">
                     <div className="row">
                         <div className="col-md-6">
-                            <label className="text-bold">Class Name:<span className="text-danger">*</span></label>
-                            <input value={this.state.name} onChange={this.handleInputChange} required className="form-control" name="name" id="name" placeholder="Room Name" type="text"/>
+                            <label className="text-bold">Academic Year Name:<span className="text-danger">*</span></label>
+                            <input value={this.state.name} onChange={this.handleInputChange} required className="form-control" name="name" id="name" placeholder="Name" type="text"/>
                             <span className="help-block text-warning"></span>
                         </div>
                         <div className="col-md-3 hidden" id="parent-div">
@@ -111,16 +114,16 @@ class RoomForm extends React.Component {
                     <div className="row">
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label className="text-bold">Maximum Capacity:</label>
-                                <input value={this.state.max_capacity} onChange={this.handleInputChange} name="max_capacity" id="max_capacity" placeholder="Maximum Capacity" className="form-control" type="number"  required="required" />
-                                <span className="help-block text-warning"></span>
+                                <label className="text-bold">Start Date:</label>
+                                <input value={this.state.start_date} onChange={this.handleInputChange} name="start_date"  id="end_date" placeholder="eg 2018/12/12" className="form-control datepicker2" type="text"  required="required" />
+                               <span className="help-block text-warning"></span>
                             </div>
                         </div>
 
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label className="text-bold">Current Capacity:</label>
-                                <input value={this.state.current_capacity} onChange={this.handleInputChange} name="current_capacity"  id="current_capacity" placeholder="eg 17" className="form-control packages" type="number"  required="required" />
+                                <input value={this.state.end_date} onChange={this.handleInputChange} name="end_date"  id="end_date" placeholder="eg 2018/12/12" className="form-control datepicker" type="text"  required="required" />
                                 <span className="help-block text-warning"></span>
                             </div>
                         </div>
@@ -137,7 +140,7 @@ class RoomForm extends React.Component {
             </div>
             <div className="text-right col-md-12">
                 <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
-                Add Room <i className="icon-arrow-right14 position-right"></i>
+                {this.buttonText}<i className="icon-arrow-right14 position-right"></i>
                 </button>
             </div> 
       </form>
@@ -146,4 +149,4 @@ class RoomForm extends React.Component {
   }
 
 
-  export default RoomForm;
+  export default CrudForm;

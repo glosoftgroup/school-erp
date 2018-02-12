@@ -7,7 +7,8 @@ module.exports = {
         'dashboard': './app_dir/static/js/',
         'site': './app_dir/static/js/site/',
         'users': './app_dir/static/js/users/',
-        'room': './app_dir/static/js/room/'
+        'room': './app_dir/static/js/room/',
+        'academic_year': './app_dir/static/js/academic_year/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),
@@ -17,7 +18,7 @@ module.exports = {
         loaders: [
             { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
             { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
-            { test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader'}
+            { test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader'},
         ]
     },
     plugins: [
