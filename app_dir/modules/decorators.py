@@ -6,21 +6,17 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.contrib.admin.views.decorators import \
     staff_member_required as _staff_member_required
-import logging
-
-debug_logger = logging.getLogger('debug_logger')
-info_logger = logging.getLogger('info_logger')
-error_logger = logging.getLogger('error_logger')
-
+from structlog import get_logger
+logger = get_logger(__name__)
 
 def permission_decorator(argument):
 	def permitted_users_only(function):
 		def wrap(request, *args, **kwargs):
 			if request.user.has_perm(argument):
-				info_logger.info('status: 200, '+ str(argument)+' permission granted for '+str(request.user))
+				logger.info('status: 200, '+ str(argument)+' permission granted for '+str(request.user))
 				return function(request, *args, **kwargs)
 			else:
-				debug_logger.debug('status: 403, '+ str(argument)+' permission denied for '+str(request.user))
+				logger.debug('status: 403, '+ str(argument)+' permission denied for '+str(request.user))
 				raise PermissionDenied()
 		return wrap
 	return permitted_users_only
@@ -41,7 +37,7 @@ class EmailOrUsernameModelBackend(object):
 		if '@' in username:
 			kwargs = {'email': username}
 		else:
-			kwargs = {'name': username}
+			kwargs = {'username': username}
 		try:
 			user = get_user_model().objects.get(**kwargs)
 			if user.check_password(password):

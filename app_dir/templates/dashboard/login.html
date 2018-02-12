@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+{% load staticfiles i18n %}
+{% load render_bundle from webpack_loader %}
+
+<html lang="{{ LANGUAGE_CODE }}" class="no-js">
+  <head>
+    <title>
+      {% block title %}
+        {% trans "Log In" context "Dashboard default page title" %}
+      {% endblock %}
+    </title>
+    {% block meta %}
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    {% endblock meta %}
+
+    {% include 'favicon.html' %}
+    
+    
+   
+    
+
+    <!-- Global stylesheets -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/icons/icomoon/styles.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/icons/fontawesome/styles.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+
+  <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/colors.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/extras/animate.min.css' %}" resl="stylesheet" type="text/css">
+  <link href="{% static 'js/plugins/ladda/ladda-themeless.min.css' %}" rel="stylesheet" type="text/css">
+  
+  
+  <!-- /global stylesheets -->
+
+    {% block custom_css %}
+
+    {% endblock %}
+  </head>
+
+  <body class="{% block body_class %}{% endblock %} login-container">
+     <!-- Page container -->
+  <div class="page-container">
+    <!-- Page content -->
+    <div class="page-content">
+      <!-- Main content -->
+      <div class="content-wrapper">
+        <!-- Content area -->
+        <div class="content">
+
+          <!-- Simple login form -->
+          <form name="loginForm" id="loginForm">
+            {% csrf_token %} 
+            <div class="panel panel-body login-form animated bounceIn">
+              <div class="text-center">
+                <img src="/static/images/users/default.png" style="max-height:100px;width:auto;"/>
+
+
+                <h5 class="content-group">Login to your account <small class="display-block">Enter your credentials below</small></h5>
+              </div>
+              <div id="status" class="alert bg-danger animated slideInUp" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+                <span class="status_text">Oops! Wrong credentials.</span>
+              </div>
+
+              <div class="form-group has-feedback has-feedback-left">
+                <input type="text" class="form-control email" name="email" placeholder="Username or Email">
+                <div class="form-control-feedback">
+                  <i class="icon-user text-muted"></i>
+                </div>
+              </div>
+
+              <div class="form-group has-feedback has-feedback-left">
+                <input type="password" name="password" class="form-control password" placeholder="Password">
+                <div class="form-control-feedback">
+                  <i class="icon-lock2 text-muted"></i>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn bg-pink-400 btn-block login_btn ladda-button" data-style="expand-right" id="login_btn">Sign in <i class="icon-circle-right2 position-right"></i></button>
+              </div>
+              <div class="text-center">
+                <a class="link--styled" href="{% url 'core:account_reset_password' %}">
+                  {% trans "Forgot password?" context "Login form secondary link" %}
+                </a>
+              </div>
+            </div>
+          </form>
+          <!-- /simple login form -->
+
+        </div>
+        <!-- /content area -->
+      </div>
+      <!-- /main content -->
+    </div>
+    <!-- /page content -->
+  </div>
+  <!-- /page container -->
+
+   
+ 
+  <!-- Core JS files -->
+  <script type="text/javascript" src="{% static 'js/core/libraries/jquery.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/core/libraries/bootstrap.min.js' %}"></script>
+  <!-- /core JS files -->
+  <script type="text/javascript" src="{% static 'js/core/libraries/jquery.validate.min.js' %} "></script>
+  <!-- Theme JS files -->
+  <script type="text/javascript" src="{% static 'js/plugins/ui/ripple.min.js' %}"></script>
+  <!-- /theme JS files -->
+  <script type="text/javascript" src="{% static 'js/plugins/notifications/jgrowl.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/plugins/ladda/spin.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/plugins/ladda/ladda.min.js' %}"></script>
+  <script type="text/javascript" src="{#{% static 'js/plugins/js-cookie/src/js.cookie.js' %}#}"></script>
+  <script type="text/javascript" src="{#{% static 'js/test-cookie.js' %}#}"></script>
+    <script type="text/javascript">
+         $("#loginForm").submit(function(e)
+          {
+              e.preventDefault();
+
+              var l = Ladda.create(document.querySelector('#login_btn'));
+              l.start();
+              var postData = $(this).serializeArray();
+              var formURL = "{% url 'core:account_login' %}";
+
+              $.ajax(
+              {
+                  url : formURL,
+                  type: "POST",
+                  crossDomain: true,
+                  data : postData,
+                  success:function(data, textStatus, jqXHR) 
+                  {
+                      // $('#status').remove();
+                      if(data == 'success'){ 
+                        l.stop();
+                        alertNotificatio('Authenticated', 'Success!', 'success')
+                         window.location = "{% url 'core:index' %}";
+                         $('.email').val('');
+                         $('.password').val('');
+                       }
+                       else{
+                          l.stop();
+                          alertNotificatio('Wrong Credentials!', 'Authentication Error', 'danger')
+                       }
+                  },
+                  error: function(jqXHR, textStatus, errorThrown) 
+                  {
+                      l.stop();
+                      alertNotificatio('Wrong Credentials!', 'Authenticatin Error', 'danger')
+                  }
+              });
+              return false;
+              e.preventDefault(); //STOP default action
+          });
+
+        function alertNotificatio(message, header, theme){
+            $.jGrowl(message, {
+                header: header,
+                theme: 'bg-'+theme
+            });
+        }
+       // });
+    </script>
+   </div>
+  </body>
+</html>

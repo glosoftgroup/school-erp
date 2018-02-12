@@ -69,6 +69,26 @@
                                 <li class=""><a href="#"><i class="icon-home4"></i> <span>Dashboard</span></a></li>
                                 <!--/main-->
 
+                                <!-- users -->
+                                <li>
+                                  <a href="javascript:;">
+                                    <i class="icon-users"></i>
+                                    <span>System Users</span>
+                                  </a>
+                                  <ul>
+                                    <li class="{% block menu_users_class %}{% endblock %}">
+                                      <a href="{% url 'users:user-list' %}"><i class='icon-users2'></i>Users</a>
+                                    </li>
+                                    <li class="{% block menu_perm_class %}{% endblock %}">
+                                      <a href="{% url 'users:groups' %}"><i class='icon-users4'></i>Groups</a>
+                                    </li>
+                                      <li class="{% block menu_trail_class %}{% endblock %}">
+                                      <a href="{% url 'users:user_trail' %}"><i class='icon-history'></i>User Trail</a>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <!-- ./users -->
+
                                 <!--settings-->
                                 <li>
                                   <a href="javascript:;">
@@ -77,7 +97,7 @@
                                   </a>
                                     <ul>
                                         <li class="{% block menu_settings_class %}{% endblock %}">
-                                          <a href="{% url 'site:index' %}"></>Institution Settings</a>
+                                          <a href="{% url 'site:index' %}">Institution Settings</a>
                                         </li>
                                     </ul>
                                 </li>
