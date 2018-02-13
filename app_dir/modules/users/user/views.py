@@ -7,7 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, PageNotAnInteger, InvalidPage, EmptyPage
-from ..decorators import permission_decorator, user_trail, staff_member_required
+from ...decorators import permission_decorator, user_trail, staff_member_required
 import csv
 import random
 from django.utils.encoding import smart_str
@@ -17,7 +17,7 @@ from structlog import get_logger
 
 logger = get_logger(__name__)
 # @staff_member_required
-# @permission_decorator('users.view_user')
+# @permission_decorator('user.view_user')
 def users(request):
     try:
         users = User.objects.all().order_by('-id')
@@ -42,7 +42,7 @@ def users(request):
 
 
 # @staff_member_required
-# @permission_decorator('users.add_user')
+# @permission_decorator('user.add_user')
 def add_user(request):
     try:
         permissions = Permission.objects.all()
@@ -108,7 +108,7 @@ def user_process(request):
 
 
 # @staff_member_required
-# @permission_decorator('users.delete_user')
+# @permission_decorator('user.delete_user')
 def user_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
@@ -118,7 +118,7 @@ def user_delete(request, pk):
 
 
 # @staff_member_required
-# @permission_decorator('users.change_user')
+# @permission_decorator('user.change_user')
 def user_edit(request, pk):
     user = get_object_or_404(User, pk=pk)
     permissions = Permission.objects.all()
@@ -182,7 +182,7 @@ def user_assign_permission(request):
 
 
 # @staff_member_required
-# @permission_decorator('users.change_user')
+# @permission_decorator('user.change_user')
 def user_detail(request, pk):
     user = get_object_or_404(User, pk=pk)
     user_permissions = Permission.objects.filter(user=user)

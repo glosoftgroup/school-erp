@@ -1,6 +1,12 @@
 import React, { Component} from 'react';
 import axios from 'axios';
+//import Validator form 'validator';
+//import isEmpty from 'lodash/isEmpty';
+//import classnames from 'classnames';
+//import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 
+//npm install --save lodash, validator, classnames
+//npm install --save react-ladda (incluse css style in the header of html)
 
 class AddUserForm extends Component {
     constructor(props) {
@@ -15,10 +21,38 @@ class AddUserForm extends Component {
         jobTitle:'',
         passwordConfirmation:'',
         image:'',
-        imagePreviewUrl: '/static/images/users/default.png '
+        imagePreviewUrl: '/static/images/users/default.png ',
+        errors:{},
+        isLoading:false
       }
     }
 
+    /*validateInput = (data) =  {
+        let formerrors = {};
+        if(Validator.isNull(data.username)){
+            formerrors.username = "This field is required";
+        }
+        if(Validator.isNull(data.email)){
+            formerrors.email = "This field is required";
+        }
+        if(!Validator.isEmail(data.email)){
+            formerrors.email = "Email is invalid";
+        }
+        if(Validator.isNull(data.password)){
+            formerrors.password = "This field is required";
+        }
+        if(Validator.isNull(data.passwordConfirmation)){
+            formerrors.passwordConfirmation = "This field is required";
+        }
+        if(!Validator.equals(data.password, data.passwordConfirmation)){
+            formerrors.passwordConfirmation = "passwords must match";
+        }
+
+        return {
+            formerrors,
+            isValid: isEmpty(errors)
+        }
+    }*/
 
 
     onInputChange = e => {
@@ -26,23 +60,29 @@ class AddUserForm extends Component {
     }
 
     onSubmit = e => {
+        this.setState({errors: {}, isLoading:true });
         e.preventDefault();
 
         let selectOptions = document.getElementById('multiple').options;
         const raw_groups = [];
-
         for (var i = 0, l = selectOptions.length; i < l; i++) {
             if (selectOptions[i].selected) {
               raw_groups.push(selectOptions[i].value);
               console.log(selectOptions[i].value);
             }
           }
-
-
         let formData = new FormData(e.target);
         for (var i = 0; i < raw_groups.length; i++) {
             formData.append('groups[]', raw_groups[i]);
          }
+
+//        const { errors, isValid } = validateInput(this.state);
+//
+//        if(isValid){
+//            axios.post(addUserUrl, formData);
+//        }else{
+//            this.setState({errors: errors, isLoading: false });
+//        }
 
         axios.post(addUserUrl, formData);
     }
@@ -65,6 +105,7 @@ class AddUserForm extends Component {
 
 
     render() {
+      const { errors } = this.state;
       const optionsArray = ["Sales", "Accounts", "Security", "Admin"];
       let options = optionsArray.map((value, key) => {
             return(
@@ -124,13 +165,14 @@ class AddUserForm extends Component {
                                     onChange={this.onInputChange}
                                     />
                           </div>
-                          <div className="form-group">
+                          <div className={classnames("form-group", {"has-error": errors.username} )}>
                             <label htmlFor="name">Name</label>
                             <input type="text" className="form-control" name="username"
                                     id="username" placeholder="Name"
                                     value={this.state.username}
                                     onChange={this.onInputChange}
                                     />
+                                    {errors.username && <span className="help-block">{errors.username }</span>}
                           </div>
                           <div className="form-group">
                             <label htmlFor="password">Password</label>
@@ -188,6 +230,18 @@ class AddUserForm extends Component {
                      <div className="pull-right" style={{marginTop:40}}>
                       <a href="#" className="btn btn-default waves-effect waves-light">Cancel</a>
                       <button className="btn btn-primary waves-effect waves-light" id="submit" type="submit">Create User <i className="icon-arrow-right14 position-right"></i></button>
+                      /* <LaddaButton
+                            loading={this.state.isLoading}
+                            onClick={this.toggle}
+                            data-color="#eee"
+                            data-size={XL}
+                            data-style={SLIDE_UP}
+                            data-spinner-size={30}
+                            data-spinner-color="#ddd"
+                            data-spinner-lines={12}
+                            type="submit">
+                            Click Here!
+                          </LaddaButton> */
                      </div>
                     </div>
                   </div>
