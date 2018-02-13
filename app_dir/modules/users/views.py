@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group, Permission
 from django.db import IntegrityError
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.http import HttpResponse, JsonResponse
@@ -7,6 +8,9 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator, PageNotAnInteger, InvalidPage, EmptyPage
 from ..decorators import permission_decorator, user_trail, staff_member_required
+import csv
+import random
+from django.utils.encoding import smart_str
 
 from .models import *
 from structlog import get_logger
@@ -30,7 +34,7 @@ def users(request):
             users = paginator.page(paginator.num_pages)
         user_trail(request.user.username, 'accessed users list page', 'view')
         logger.info('User: ' + str(request.user.username) + ' accessed the view users page')
-        return TemplateResponse(request, 'users/list.html',
+        return TemplateResponse(request, 'users/users.html',
                                 {'groups': groups, 'users': users, 'pn': paginator.num_pages})
     except TypeError as e:
         logger.error(e)
@@ -273,5 +277,285 @@ def user_update(request, pk):
             return HttpResponse("success without image")
 
 
+def user_trails(request):
+    try:
+        users = UserTrail.objects.all().order_by('-now')
+        paginator = Paginator(users, 10)
+        page = request.GET.get('page', 1)
+        user_trail(request.user.username, 'accessed user trail page', 'view')
+        logger.info('User: '+str(request.user.username)+' accessed the user trail page')
+
+        try:
+            users = paginator.page(page)
+        except PageNotAnInteger:
+            users = paginator.page(1)
+        except InvalidPage:
+            users = paginator.page(1)
+        except EmptyPage:
+            users = paginator.page(paginator.num_pages)
+
+        return TemplateResponse(request, 'users/trail.html', {'users':users, 'pn':paginator.num_pages})
+    except TypeError as e:
+        logger.error(e)
+        return HttpResponse('error accessing users')
+
+# @staff_member_required
+def usertrail_paginate(request):
+    page = int(request.GET.get('page', 1))
+    list_sz = request.GET.get('size')
+    date = request.GET.get('date')
+    action = request.GET.get('action')
+    p2_sz = request.GET.get('psize')
+    select_sz = request.GET.get('select_size')
+    gid = request.GET.get('gid')
+    users = UserTrail.objects.all().order_by('-now')
+    if request.GET.get('sth'):
+
+        if date:
+            try:
+                users = UserTrail.objects.filter(date=date).order_by('-now')
+                if p2_sz and gid:
+                    paginator = Paginator(users, int(p2_sz))
+                    users = paginator.page(page)
+                    return TemplateResponse(request,'users/trail/paginate.html',{'users':users, 'gid':date})
+
+                paginator = Paginator(users, 10)
+                users = paginator.page(page)
+                return TemplateResponse(request,'users/trail/p2.html',{'users':users, 'pn':paginator.num_pages,'sz':10,'gid':date})
+
+            except ValueError as e:
+                return HttpResponse(e)
+
+        if action:
+            try:
+                users = UserTrail.objects.filter(crud=action).order_by('-now')
+                if p2_sz and gid:
+                    paginator = Paginator(users, int(p2_sz))
+                    users = paginator.page(page)
+                    return TemplateResponse(request,'users/trail/paginate.html',{'users':users, 'gid':action})
+
+                paginator = Paginator(users, 10)
+                users = paginator.page(page)
+                return TemplateResponse(request,'users/trail/p2.html',{'users':users, 'pn':paginator.num_pages,'sz':10,'gid':action})
+
+            except ValueError as e:
+                return HttpResponse(e)
+    else:
+
+        if list_sz:
+            paginator = Paginator(users, int(list_sz))
+            users = paginator.page(page)
+            return TemplateResponse(request,'users/trail/p2.html',{'users':users, 'pn':paginator.num_pages,'sz':list_sz, 'gid':0})
+        else:
+            paginator = Paginator(users, 10)
+        if p2_sz:
+            paginator = Paginator(users, int(p2_sz))
+            users = paginator.page(page)
+            return TemplateResponse(request,'users/trail/paginate.html',{'users':users})
+
+        if date:
+            try:
+                users = UserTrail.objects.filter(date=date).order_by('-now')
+                if p2_sz:
+                    paginator = Paginator(users, int(p2_sz))
+                    users = paginator.page(page)
+                    return TemplateResponse(request,'users/trail/paginate.html',{'users':users, 'gid':date})
+
+                paginator = Paginator(users, 10)
+                users = paginator.page(page)
+                return TemplateResponse(request,'users/trail/p2.html',{'users':users, 'pn':paginator.num_pages,'sz':10,'gid':date})
+
+            except ValueError as e:
+                return HttpResponse(e)
+
+        if action:
+            try:
+                users = UserTrail.objects.filter(crud=action).order_by('-now')
+                if p2_sz:
+                    paginator = Paginator(users, int(p2_sz))
+                    users = paginator.page(page)
+                    return TemplateResponse(request,'users/trail/paginate.html',{'users':users, 'gid':action})
+
+                paginator = Paginator(users, 10)
+                users = paginator.page(page)
+                return TemplateResponse(request,'users/trail/p2.html',{'users':users, 'pn':paginator.num_pages,'sz':10,'gid':action})
+
+            except ValueError as e:
+                return HttpResponse(e)
 
 
+        try:
+            users = paginator.page(page)
+        except PageNotAnInteger:
+            users = paginator.page(1)
+        except InvalidPage:
+            groups = paginator.page(1)
+        except EmptyPage:
+            users = paginator.page(paginator.num_pages)
+        return TemplateResponse(request,'users/trail/paginate.html',{'users':users})
+
+
+# @staff_member_required
+def user_paginate(request):
+    page = int(request.GET.get('page', 1))
+    list_sz = request.GET.get('size')
+    p2_sz = request.GET.get('psize')
+    select_sz = request.GET.get('select_size')
+
+    if request.GET.get('gid'):
+        users = User.objects.filter(groups__id=request.GET.get('gid'))
+        if p2_sz:
+            paginator = Paginator(users, int(p2_sz))
+            users = paginator.page(page)
+            return TemplateResponse(request,'users/paginate.html',{'users':users})
+
+        if list_sz:
+            paginator = Paginator(users, int(list_sz))
+            users = paginator.page(page)
+            return TemplateResponse(request,'users/p2.html',{'users':users, 'pn':paginator.num_pages,'sz':list_sz, 'gid':request.GET.get('gid')})
+
+        paginator = Paginator(users, 10)
+        users = paginator.page(page)
+        return TemplateResponse(request,'users/p2.html',{'users':users, 'pn':paginator.num_pages,'sz':10,'gid':request.GET.get('gid')})
+
+    else:
+        users = User.objects.all().order_by('-id')
+        if list_sz:
+            paginator = Paginator(users, int(list_sz))
+            users = paginator.page(page)
+            return TemplateResponse(request,'users/p2.html',{'users':users, 'pn':paginator.num_pages,'sz':list_sz, 'gid':0})
+        else:
+            paginator = Paginator(users, 10)
+        if p2_sz:
+            paginator = Paginator(users, int(p2_sz))
+            users = paginator.page(page)
+            return TemplateResponse(request,'users/paginate.html',{'users':users})
+
+        try:
+            users = paginator.page(page)
+        except PageNotAnInteger:
+            users = paginator.page(1)
+        except InvalidPage:
+            groups = paginator.page(1)
+        except EmptyPage:
+            users = paginator.page(paginator.num_pages)
+        return TemplateResponse(request,'users/paginate.html',{'users':users})
+
+@staff_member_required
+def user_search( request ):
+
+    if request.is_ajax():
+        page = request.GET.get('page', 1)
+        list_sz = request.GET.get('size')
+        p2_sz = request.GET.get('psize')
+        q = request.GET.get( 'q' )
+        if list_sz == 0 or list_sz is None:
+            sz = 10
+        else:
+            sz = list_sz
+
+
+        if q is not None:
+            users = User.objects.filter(
+                Q( username__icontains = q ) |
+                Q( fullname__icontains = q ) |
+                Q( email__icontains = q ) | Q( mobile__icontains = q ) ).order_by('-id' )
+
+            if request.GET.get('gid'):
+                users = users.filter(groups__id=request.GET.get('gid'))
+                if p2_sz:
+                    paginator = Paginator(users, int(p2_sz))
+                    users = paginator.page(page)
+                    return TemplateResponse(request, 'users/paginate.html', {'users': users})
+
+                if list_sz:
+                    paginator = Paginator(users, int(list_sz))
+                    users = paginator.page(page)
+                    return TemplateResponse(request, 'users/search.html',
+                                            {'users': users, 'pn': paginator.num_pages, 'sz': list_sz, 'gid':request.GET.get('gid'),'q':q})
+
+                paginator = Paginator(users, 10)
+                users = paginator.page(page)
+                return TemplateResponse(request, 'users/search.html',
+                                        {'users': users, 'pn': paginator.num_pages, 'sz': sz,
+                                         'gid': request.GET.get('gid')})
+
+            else:
+                if list_sz:
+                    paginator = Paginator(users, int(list_sz))
+                    users = paginator.page(page)
+                    return TemplateResponse(request, 'users/search.html',
+                                            {'users': users, 'pn': paginator.num_pages, 'sz': list_sz, 'gid': 0,'q':q})
+
+                if p2_sz:
+                    paginator = Paginator(users, int(p2_sz))
+                    users = paginator.page(page)
+                    return TemplateResponse(request, 'users/paginate.html', {'users': users})
+
+                paginator = Paginator(users, 10)
+                try:
+                    users = paginator.page(page)
+                except PageNotAnInteger:
+                    users = paginator.page(1)
+                except InvalidPage:
+                    users = paginator.page(1)
+                except EmptyPage:
+                    users = paginator.page(paginator.num_pages)
+                return TemplateResponse(request, 'users/search.html', {'users':users, 'pn':paginator.num_pages,'sz':sz,'q':q})
+
+@staff_member_required
+def usertrail_search( request ):
+
+    if request.is_ajax():
+        page = request.GET.get('page', 1)
+        list_sz = request.GET.get('size',10)
+        p2_sz = request.GET.get('psize')
+        q = request.GET.get( 'q' )
+        if list_sz is None:
+            sz = 10
+        else:
+            sz = list_sz
+
+        if q is not None:
+            users = UserTrail.objects.filter(
+                Q( name__icontains = q ) |
+                Q( action__icontains = q ) | Q( date__icontains = q ) ).order_by( '-now' )
+            paginator = Paginator(users, 10)
+            try:
+                users = paginator.page(page)
+            except PageNotAnInteger:
+                users = paginator.page(1)
+            except InvalidPage:
+                users = paginator.page(1)
+            except EmptyPage:
+                users = paginator.page(paginator.num_pages)
+            if p2_sz:
+                users = paginator.page(page)
+                return TemplateResponse(request,'users/trail/paginate.html',{'users':users})
+
+            return TemplateResponse(request, 'users/trail/search.html', {'users':users, 'pn':paginator.num_pages,'sz':sz,'q':q})
+
+
+
+@staff_member_required
+def users_export_csv(request):
+    pdfname = 'users'+str(random.random())
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="'+pdfname+'.csv"'
+    qs = User.objects.all()
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
+    writer.writerow([
+        smart_str(u"ID"),
+        smart_str(u"Name"),
+        smart_str(u"Email"),
+        smart_str(u"Job Title"),
+    ])
+    for obj in qs:
+        writer.writerow([
+            smart_str(obj.pk),
+            smart_str(obj.username),
+            smart_str(obj.email),
+            smart_str(obj.jobTitle),
+        ])
+    return response
