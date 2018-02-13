@@ -7,12 +7,11 @@ from django.template.loader import render_to_string
 from django.db.models import Q
 from django.db import IntegrityError
 import simplejson
-from ..decorators import permission_decorator, user_trail, staff_member_required
+from ...decorators import permission_decorator, user_trail, staff_member_required
 from django.core.paginator import Paginator
-from ..utils import image64
+from ...utils import image64
 
 from .models import User
-from ..decorators import permission_decorator, user_trail
 from structlog import get_logger
 
 logger = get_logger(__name__)

@@ -8,7 +8,8 @@ module.exports = {
         'site': './app_dir/static/js/site/',
         'users': './app_dir/static/js/users/',
         'room': './app_dir/static/js/room/',
-        'academic_year': './app_dir/static/js/academic_year/'
+        'academic_year': './app_dir/static/js/academic_year/',
+        'stream': './app_dir/static/js/academics/stream/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),

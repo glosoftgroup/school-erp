@@ -1,0 +1,66 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+  Add room
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class="active"><a href="{% url 'stream:index' %}" >Stream</a></li>
+ {% endblock %}
+
+
+{% block menu_classroom_class %}active{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+<link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
+{% endblock %}
+{% block content %}
+ <!--room details-->
+
+<div class="panel panel-flat animated fadeIn" id="vue-app">
+    <div class="panel-body">
+        <div class="row">
+           <div id="app-root">
+           </div>
+        </div>
+    </div>
+</div>
+
+<!--./room details-->
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.bootstrap-select').selectpicker();
+  });
+</script>
+<script>
+var options = [
+  { value: '1', label: 'One' },
+  { value: '2', label: 'Two' }
+];
+
+function logChange(val) {
+  console.log("Selected: " + val);
+}
+    {% if pk %}
+    var pk = "{{pk}}";
+    var updateUrl = "{% url 'stream:api-update' pk=pk %}";
+    {% else %}
+    var pk= false;
+    {% endif %}
+    var createUrl = "{% url 'stream:api-create' %}";
+    var redirectUrl = "{% url 'stream:index' %}";
+    // alertUser
+    function alertUser(msg,status='bg-success',header='Well done!')
+    { $.jGrowl(msg,{header: header,theme: status}); }
+
+</script>
+{% render_bundle 'stream' 'js' %}
+{% endblock %}

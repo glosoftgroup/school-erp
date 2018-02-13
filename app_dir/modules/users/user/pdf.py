@@ -1,10 +1,10 @@
 from django.contrib.auth.models import Group
 from django.db.models import Q
 from django.http import HttpResponse
-from ..decorators import permission_decorator, user_trail, staff_member_required
+from ...decorators import permission_decorator, user_trail, staff_member_required
 from .models import User
 from datetime import date
-from ..utils import render_to_pdf, default_logo
+from ...utils import render_to_pdf, default_logo
 
 
 @staff_member_required

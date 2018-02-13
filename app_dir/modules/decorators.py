@@ -1,5 +1,5 @@
 from django.http import HttpResponseForbidden
-from .users.models import UserTrail
+from .users.user.models import UserTrail
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import date
 from django.contrib.auth import get_user_model

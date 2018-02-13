@@ -69,14 +69,15 @@ LOCAL_APPS = (
     'app_dir.api',
     'app_dir.core',
     'app_dir.modules.room',
-    'app_dir.modules.users',
+    'app_dir.modules.users.user',
     'app_dir.modules.site',
     'app_dir.modules.academic_year',
+    'app_dir.modules.academics.stream',
 )
 
 INSTALLED_APPS = LOCAL_APPS + DEFAULT_APPS + THIRD_PARTY_APPS
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'user.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,10 +123,6 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = [
-    'app_dir.modules.decorators.EmailOrUsernameModelBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -339,3 +336,8 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 ORDER_FROM_EMAIL = os.getenv('ORDER_FROM_EMAIL', DEFAULT_FROM_EMAIL)
 ''' for email to work  '''
 SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'app_dir.modules.decorators.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
