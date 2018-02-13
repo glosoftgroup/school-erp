@@ -8,11 +8,11 @@
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a href="{% url 'stream:index' %}" >Stream</a></li>
+     <li class="active"><a href="{% url 'classes:index' %}" >class</a></li>
  {% endblock %}
 
 
-{% block menu_stream_class %}active{% endblock %}
+{% block menu_classes_class %}active{% endblock %}
 
 {% block custom_css %}
 <link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
@@ -51,16 +51,16 @@ function logChange(val) {
 }
     {% if pk %}
     var pk = "{{pk}}";
-    var updateUrl = "{% url 'stream:api-update' pk=pk %}";
+    var updateUrl = "{% url 'classes:api-update' pk=pk %}";
     {% else %}
     var pk= false;
     {% endif %}
-    var createUrl = "{% url 'stream:api-create' %}";
-    var redirectUrl = "{% url 'stream:index' %}";
+    var createUrl = "{% url 'classes:api-create' %}";
+    var redirectUrl = "{% url 'classes:index' %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
 
 </script>
-{% render_bundle 'stream' 'js' %}
+{% render_bundle 'classes' 'js' %}
 {% endblock %}

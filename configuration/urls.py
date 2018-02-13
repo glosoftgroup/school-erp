@@ -10,8 +10,8 @@ from app_dir.modules.site.urls import urlpatterns as site_urls
 from app_dir.modules.users.user.urls import urlpatterns as users_urls
 from app_dir.modules.academic_year.urls import urlpatterns as academic_year_urls
 from app_dir.modules.academics.stream.urls import urlpatterns as stream_urls
+from app_dir.modules.academics.classes.urls import urlpatterns as class_urls
 from app_dir.modules.term.urls import urlpatterns as term_urls
-from app_dir.modules.users.urls import urlpatterns as users_urls
 
 urlpatterns = [
     url(r'^', include(core_urls, namespace='core')),
@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^term/', include(term_urls, namespace='term')),
     url(r'^test_celery', test_celery, name='test_celery'),
     url(r'^stream/', include(stream_urls, namespace='stream')),
+    url(r'^class/', include(class_urls, namespace='classes')),
 ]
