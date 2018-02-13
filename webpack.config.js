@@ -8,6 +8,7 @@ module.exports = {
         'site': './app_dir/static/js/site/',
         'users': './app_dir/static/js/users/',
         'room': './app_dir/static/js/room/',
+        'term': './app_dir/static/js/term/',
         'academic_year': './app_dir/static/js/academic_year/'
     },
     output: {

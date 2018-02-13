@@ -4,22 +4,23 @@
 {% load render_bundle from webpack_loader %}
 
 {% block title %}
-  {% if object.name %}
+ {% if object.name %}
    Edit {{object.name}}
   {% else %}
-    Add room
+    Add Term
   {% endif %}
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class=""><a href="{% url 'room:index' %}" >Rooms</a></li>
-     <li class="active"><a >
+     <li class=""><a href="{% url 'term:index' %}" >Term </a></li>
+    <li class="active"><a >
          {% if object.name %}
            Edit {{object.name}}
          {% else %}
-            Add room
+            Add term
          {% endif %}
      </a></li>
+
  {% endblock %}
 
 
@@ -27,6 +28,8 @@
 
 {% block custom_css %}
 <link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+
+<link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
 {% endblock %}
 {% block content %}
  <!--room details-->
@@ -34,7 +37,7 @@
 <div class="panel panel-flat animated fadeIn" id="vue-app">
     <div class="panel-body">
         <div class="row">
-           <div id="room">
+           <div id="app-root">
            </div>
         </div>
     </div>
@@ -44,6 +47,7 @@
 
 {% block custom_js %}
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     $('.bootstrap-select').selectpicker();
@@ -60,15 +64,15 @@ function logChange(val) {
 }
     {% if object.id %}
     var pk = "{{object.id}}";
-    var updateUrl = "{% url 'room:api-update' pk=object.id %}";
+    var updateUrl = "{% url 'term:api-update' pk=object.id %}";
     {% else %}
     var pk= false;
     {% endif %}
-    var createUrl = "{% url 'room:api-create-room' %}";
-    var redirectUrl = "{% url 'room:index' %}";
+    var createUrl = "{% url 'term:api-create' %}";
+    var redirectUrl = "{% url 'term:index' %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
 </script>
-{% render_bundle 'room' 'js' %}
+{% render_bundle 'term' 'js' %}
 {% endblock %}

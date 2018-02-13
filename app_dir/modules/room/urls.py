@@ -1,8 +1,9 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
+from django.views.generic.edit import UpdateView
 
 from .api.views import *
-
+from .models import Room as Table
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="room/list.html"), name="index"),
@@ -12,6 +13,8 @@ urlpatterns = [
     url(r'^api/update/(?P<pk>[0-9]+)/$', UpdateAPIView.as_view(), name='api-update'),
     url(r'^api/users/$', UserListAPIView.as_view(), name='api-list-users'),
     url(r'^add/$', TemplateView.as_view(template_name="room/room_form.html"), name='add-room'),
-    url(r'^update/(?P<pk>[0-9]+)/$', TemplateView.as_view(template_name="room/room_form.html"), name='update-room'),
+    url(r'^update/(?P<pk>[0-9]+)/$',
+        UpdateView.as_view(template_name="room/room_form.html", model=Table, fields=['id', 'name']),
+        name='update-room'),
 ]
 
