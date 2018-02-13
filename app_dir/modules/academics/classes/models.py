@@ -20,7 +20,7 @@ class Class(models.Model):
 
 
     class Meta:
-        app_label = 'class'
+        app_label = 'classes'
 
     def __str__(self):
         return self.name

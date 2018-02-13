@@ -73,6 +73,11 @@ class CrudForm extends React.Component {
     
     handleSubmit = event =>{
         event.preventDefault();
+
+        this.setState({
+          loading: !this.state.loading,
+          progress: 0.5,
+        });
     
 
         const { errs, isValid } = this.validateInput(this.state);

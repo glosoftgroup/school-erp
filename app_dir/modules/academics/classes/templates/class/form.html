@@ -4,7 +4,7 @@
 {% load render_bundle from webpack_loader %}
 
 {% block title %}
-  Add room
+  Add Class
 {% endblock %}
 
  {% block breadcrumbs %}
@@ -57,6 +57,7 @@ function logChange(val) {
     {% endif %}
     var createUrl = "{% url 'classes:api-create' %}";
     var redirectUrl = "{% url 'classes:index' %}";
+    var streamUrl = "{% url 'stream:api-list' %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
