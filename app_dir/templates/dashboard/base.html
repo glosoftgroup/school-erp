@@ -22,6 +22,7 @@
     <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/colors.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/extras/ladda.min.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <!--custom css-->
      {% block custom_css %}
@@ -119,6 +120,10 @@
                                         </li>
                                           <li class="{% block menu_stream_class %}{% endblock %}">
                                           <a href="{% url 'stream:index' %}"><i class='icon-history'></i>Stream</a>
+                                        </li>
+                                        </li>
+                                        <li class="{% block menu_classes_class %}{% endblock %}">
+                                          <a href="{% url 'classes:index' %}"><i class='icon-history'></i>Classes</a>
                                         </li>
 
                                     </ul>

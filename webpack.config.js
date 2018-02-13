@@ -9,7 +9,8 @@ module.exports = {
         'users': './app_dir/static/js/users/',
         'room': './app_dir/static/js/room/',
         'academic_year': './app_dir/static/js/academic_year/',
-        'stream': './app_dir/static/js/academics/stream/'
+        'stream': './app_dir/static/js/academics/stream/',
+        'classes': './app_dir/static/js/academics/classes/',
         'term': './app_dir/static/js/term/',
         'academic_year': './app_dir/static/js/academic_year/'
     },
