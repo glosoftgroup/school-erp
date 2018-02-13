@@ -4,11 +4,12 @@
 {% load render_bundle from webpack_loader %}
 
 {% block title %}
-  Add room
+  Edit {{object.name}} - Academic year
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a href="{% url 'academic_year:index' %}" >Academic year</a></li>
+     <li class=""><a href="{% url 'academic_year:index' %}" >Academic year</a></li>
+     <li class="active">{{form.name.value}}</li>
  {% endblock %}
 
 
@@ -75,9 +76,9 @@ var options = [
 function logChange(val) {
   console.log("Selected: " + val);
 }
-    {% if pk %}
-    var pk = "{{pk}}";
-    var updateUrl = "{% url 'academic_year:api-update' pk=pk %}";
+    {% if object.id %}
+    var pk = "{{object.id}}";
+    var updateUrl = "{% url 'academic_year:api-update' pk=object.id %}";
     {% else %}
     var pk= false;
     {% endif %}

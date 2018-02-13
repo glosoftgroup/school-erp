@@ -73,6 +73,7 @@ LOCAL_APPS = (
     'app_dir.modules.site',
     'app_dir.modules.academic_year',
     'app_dir.modules.academics.stream',
+    'app_dir.modules.term',
 )
 
 INSTALLED_APPS = LOCAL_APPS + DEFAULT_APPS + THIRD_PARTY_APPS

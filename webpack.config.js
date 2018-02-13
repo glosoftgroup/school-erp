@@ -10,6 +10,8 @@ module.exports = {
         'room': './app_dir/static/js/room/',
         'academic_year': './app_dir/static/js/academic_year/',
         'stream': './app_dir/static/js/academics/stream/'
+        'term': './app_dir/static/js/term/',
+        'academic_year': './app_dir/static/js/academic_year/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),

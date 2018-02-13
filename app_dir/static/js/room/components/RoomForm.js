@@ -13,6 +13,7 @@ class RoomForm extends React.Component {
           description:'',
           max_capacity: 0,
           current_capacity:0,
+          buttonText:'Add'
       };
 
     }
@@ -35,8 +36,8 @@ class RoomForm extends React.Component {
                             description: response.description,
                             max_capacity: response.max_capacity,
                             current_capacity: response.current_capacity,
+                            buttonText:'Edit'
                             });
-                console.log(self.state);
             })
             .catch(function (error) {
                 console.log(error);
@@ -137,7 +138,7 @@ class RoomForm extends React.Component {
             </div>
             <div className="text-right col-md-12">
                 <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
-                Add Room <i className="icon-arrow-right14 position-right"></i>
+                {this.state.buttonText} <i className="icon-arrow-right14 position-right"></i>
                 </button>
             </div> 
       </form>
