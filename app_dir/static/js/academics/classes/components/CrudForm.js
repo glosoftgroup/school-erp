@@ -51,13 +51,17 @@ class CrudForm extends React.Component {
         let initialStreams = [];
         axios.get(streamUrl)
             .then(response => {
-                initialStreams = response.data.results.map((stream) => {
-                    return stream
+                var result = response.data.results;
+                var arrTen = [];
+                for (var k = 0; k < result.length; k++) {
+//                    arrTen.push(result[k].name)
+                    arrTen.push(<option value={result[k].id}> {result[k].name} </option>);
+                    document.getElementById('reactStreams').selectpicker('refresh');
+                }
+                this.setState({
+                  streams: arrTen
                 });
-
-                let d = [{"id":1, "name":"alex"}, {"id":2, "name":"james"}, {"id":3, "name":"jaen"}];
-                self.setState({streams:d});
-                console.log(self.state.streams);
+                console.log(arrTen);
             })
             .catch(function (error) {
                 console.log("error fetching "+ error);
@@ -137,7 +141,7 @@ class CrudForm extends React.Component {
     render() {
       const { errors } = this.state;
       const options = map(this.state.streams, (val, key) =>
-        <option key={key} value={val.id}>{val.name}</option>
+        <option value={val}>{val}</option>
       );
 
       return (
@@ -159,11 +163,11 @@ class CrudForm extends React.Component {
                 <div className="row">
                     <div className="col-md-12">
                     <label className="text-bold">Stream Name:<span className="text-danger">*</span></label>
-                        <select name="stream" className="bootstrap-select" style={{display:"none"}} data-width="100%" tabIndex="-98"
-                        onChange={this.handleInputChange} value={this.state.stream}>
+                        <select name="stream" className="form-select bootstrap-select" style={{display:"nones"}}
+                        onChange={this.handleInputChange} value={this.state.stream} id="reactStreams">
                             <option value="">select stream</option>
-                            <option value="2">2012-2013</option>
-                            <option value="2">2012-2013</option>
+                            <option value="20">2012-2013</option>
+                            {this.state.streams}
                         </select>
                         {errors.stream && <span className="help-block">{errors.stream }</span>}
                     </div>

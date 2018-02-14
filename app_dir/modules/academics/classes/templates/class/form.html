@@ -24,28 +24,104 @@
 <div class="panel panel-flat animated fadeIn" id="vue-app">
     <div class="panel-body">
         <div class="row">
-           <div id="app-root">
-           </div>
+           <form enc-type="multipart/form-data" id="addForm">
+               {% csrf_token %}
+              <div class="col-md-12">
+               <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="text-bold">Class Name:<span class="text-danger">*</span></label>
+                                <input value="" class="form-control" name="name" id="name" placeholder="Name" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <label class="text-bold">Stream Name:<span class="text-danger">*</span></label>
+                                <select name="stream" id="stream" class="bootstrap-select" style="display:none">
+                                    <option value="">select stream</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class=form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <label class="text-bold">Academic Year:<span class="text-danger">*</span></label>
+                                <select name="academic_year" id="academic_year" class="bootstrap-select" style="display:none" data-width="100%" tabIndex="-98">
+                                    <option value="">select academic year</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="col-md-12">
+               <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="text-bold">Class Teacher:<span class="text-danger">*</span></label>
+                                <input class="form-control" name="class_teacher" id="class_teacher" placeholder="Name" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="text-bold">No of Students:<span class="text-danger">*</span></label>
+                                <input class="form-control" name="no_of_students" id="no_of_students" placeholder="Name" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <label class="text-bold">Room:<span class="text-danger">*</span></label>
+                                <select name="room" class="bootstrap-select" id="room" style="display:none" data-width="100%" tabIndex="-98">
+                                    <option value="">select room</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="text-left col-md-12">
+                    <button id="add-room-btn" type="submit" class="btn btn-primary legitRipple">
+                    add<i class="icon-arrow-right14 position-right"></i>
+                    </button>
+                </div>
+              </form>
         </div>
     </div>
 </div>
 
 <!--./room details-->
+<input type="hidden" id="createUrl" value="{% url 'classes:api-create' %}">
+<input type="hidden" id="redirectUrl" value="{% url 'classes:index' %}">
+<input type="hidden" id="streamUrl" value="{% url 'stream:api-list' %}">
+<input type="hidden" id="roomUrl" value="{% url 'room:api-list-rooms' %}">
+<input type="hidden" id="academicYearUrl" value="{% url 'academic_year:api-list' %}">
+<input type="hidden" id="csrftoken" value="{{ csrf_token }}">
 {% endblock %}
 
 {% block custom_js %}
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('.bootstrap-select').selectpicker();
-  });
-</script>
+<script type="text/javascript" src="{% static 'js/core/libraries/jquery.validate.min.js' %} "></script>
+<script type="text/javascript" src="{% static 'js/academics/classes/add.js' %}"></script>
 <script>
-var options = [
-  { value: '1', label: 'One' },
-  { value: '2', label: 'Two' }
-];
-
 function logChange(val) {
   console.log("Selected: " + val);
 }
@@ -63,5 +139,4 @@ function logChange(val) {
     { $.jGrowl(msg,{header: header,theme: status}); }
 
 </script>
-{% render_bundle 'classes' 'js' %}
 {% endblock %}
