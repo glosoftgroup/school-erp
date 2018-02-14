@@ -26,6 +26,7 @@
 <div class="panel panel-flat animated fadeIn" id="vue-app">
     <div class="panel-body">
         <div class="row">
+            {% csrf_token %}
            <div id="app-root">
            </div>
         </div>
@@ -76,6 +77,8 @@ var options = [
 function logChange(val) {
   console.log("Selected: " + val);
 }
+    var csrfmiddlewaretoken  = jQuery("[name=csrfmiddlewaretoken]").val();
+
     {% if object.id %}
     var pk = "{{object.id}}";
     var updateUrl = "{% url 'academic_year:api-update' pk=object.id %}";

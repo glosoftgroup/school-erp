@@ -58,6 +58,8 @@ class CrudForm extends React.Component {
       event.preventDefault();
 
       const data = new FormData(event.target);
+      axios.defaults.xsrfHeaderName = "X-CSRFToken"
+      axios.defaults.xsrfCookieName = 'csrftoken'
     
       // check if pk is set and update details 
       if(pk){
@@ -94,6 +96,15 @@ class CrudForm extends React.Component {
                             <input value={this.state.name} onChange={this.handleInputChange} required className="form-control" name="name" id="name" placeholder="Name" type="text"/>
                             <span className="help-block text-warning"></span>
                         </div>
+                        <div className="col-md-12">                
+                            <div className="form-group">
+                                <label className="text-bold">
+                                Description:</label>
+                                <textarea value={this.state.description} onChange={this.handleInputChange} rows="5" cols="5" className="form-control" id="description" name="description" placeholder="Enter room description here" />
+                                
+                                <span className="help-block text-warning"></span>
+                            </div>
+                        </div>
                         
                     </div>
                 </div>
@@ -104,15 +115,7 @@ class CrudForm extends React.Component {
                     </div>
                 </div>
             </div>
-            <div className="col-md-6">                
-                <div className="form-group">
-                    <label className="text-bold">
-                    Description:</label>
-                    <textarea value={this.state.description} onChange={this.handleInputChange} rows="5" cols="5" className="form-control" id="description" name="description" placeholder="Enter room description here" />
-                    
-                    <span className="help-block text-warning"></span>
-                </div>
-            </div>
+            
             <div className="text-right col-md-12">
                 <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
                   {this.state.buttonText}
