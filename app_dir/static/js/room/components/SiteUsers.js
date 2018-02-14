@@ -94,7 +94,7 @@ class SiteUsers extends React.Component {
 		);
 	}
 
-	// ./function
+	// ./function <SiteUser/>
 }
 
 

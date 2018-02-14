@@ -28,6 +28,7 @@
     "pdfjs-dist": "^1.9.622",
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
+    "react-bootstrap-select": "^0.14.0",
     "react-date-range": "^0.9.4",
     "react-datepicker": "^1.1.0",
     "react-dom": "^15.6.1",
