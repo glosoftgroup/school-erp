@@ -61,7 +61,8 @@ class RoomForm extends React.Component {
       event.preventDefault();
 
       const data = new FormData(event.target);
-    
+      data.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
+          
       // check if pk is set and update details 
       if(pk){
             axios.put(updateUrl,data)
