@@ -74,6 +74,8 @@ LOCAL_APPS = (
     'app_dir.modules.academic_year',
     'app_dir.modules.academics.stream',
     'app_dir.modules.academics.classes',
+    'app_dir.modules.academics.curriculum',
+    'app_dir.modules.academics.subject',
     'app_dir.modules.term',
 )
 

@@ -4,11 +4,20 @@
 {% load render_bundle from webpack_loader %}
 
 {% block title %}
-  Add Class
+    {% if object.id %}
+        Edit Class
+    {% else %}
+       Add Class
+    {% endif %}
 {% endblock %}
 
  {% block breadcrumbs %}
      <li class="active"><a href="{% url 'classes:index' %}" >class</a></li>
+    {% if object.id %}
+        <li class="active"><a href="{% url 'classes:update' pk=object.id %}" >update {{object.name}}</a></li>
+    {% else %}
+       <li class="active"><a href="{% url 'classes:add' %}" >add class</a></li>
+    {% endif %}
  {% endblock %}
 
 
@@ -19,7 +28,6 @@
 <link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
 {% endblock %}
 {% block content %}
- <!--room details-->
 
 <div class="panel panel-flat animated fadeIn" id="vue-app">
     <div class="panel-body">
@@ -32,7 +40,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="text-bold">Class Name:<span class="text-danger">*</span></label>
-                                <input value="" class="form-control" name="name" id="name" placeholder="Name" type="text"/>
+                                <input value="{% if object.name %} {{object.name}} {% endif %}"
+                                       class="form-control" name="name" id="name" placeholder="Name" type="text"/>
                             </div>
                         </div>
                     </div>
@@ -44,6 +53,9 @@
                             <label class="text-bold">Stream Name:<span class="text-danger">*</span></label>
                                 <select name="stream" id="stream" class="bootstrap-select" style="display:none">
                                     <option value="">select stream</option>
+                                    {% if object.stream.name %}
+                                    <option value="{{object.stream.id}}" selected>{{object.stream.name}}</option>
+                                    {% endif %}
                                 </select>
                             </div>
                         </div>
@@ -56,6 +68,9 @@
                             <label class="text-bold">Academic Year:<span class="text-danger">*</span></label>
                                 <select name="academic_year" id="academic_year" class="bootstrap-select" style="display:none" data-width="100%" tabIndex="-98">
                                     <option value="">select academic year</option>
+                                    {% if object.academic_year.name %}
+                                    <option value="{{object.academic_year.id}}" selected>{{object.academic_year.name}}</option>
+                                    {% endif %}
                                 </select>
                             </div>
                         </div>
@@ -69,7 +84,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="text-bold">Class Teacher:<span class="text-danger">*</span></label>
-                                <input class="form-control" name="class_teacher" id="class_teacher" placeholder="Name" type="text"/>
+                                <input value="{% if object.class_teacher %} {{object.class_teacher}} {% endif %}" class="form-control" name="class_teacher" id="class_teacher" placeholder="Name" type="text"/>
                             </div>
                         </div>
                     </div>
@@ -79,7 +94,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="text-bold">No of Students:<span class="text-danger">*</span></label>
-                                <input class="form-control" name="no_of_students" id="no_of_students" placeholder="Name" type="text"/>
+                                <input value="{% if object.no_of_students %} {{object.no_of_students}} {% endif %}" class="form-control" name="no_of_students" id="no_of_students" placeholder="Name" type="text"/>
                             </div>
                         </div>
                     </div>
@@ -91,6 +106,9 @@
                             <label class="text-bold">Room:<span class="text-danger">*</span></label>
                                 <select name="room" class="bootstrap-select" id="room" style="display:none" data-width="100%" tabIndex="-98">
                                     <option value="">select room</option>
+                                    {% if object.room.name %}
+                                    <option value="{{object.room.id}}" selected>{{object.room.name}}</option>
+                                    {% endif %}
                                 </select>
                             </div>
                         </div>
@@ -100,7 +118,8 @@
 
                 <div class="text-left col-md-12">
                     <button id="add-room-btn" type="submit" class="btn btn-primary legitRipple">
-                    add<i class="icon-arrow-right14 position-right"></i>
+                        {% if object.id %} Update {% else %} Add {% endif %}
+                        <i class="icon-arrow-right14 position-right"></i>
                     </button>
                 </div>
               </form>
@@ -108,8 +127,17 @@
     </div>
 </div>
 
-<!--./room details-->
-<input type="hidden" id="createUrl" value="{% url 'classes:api-create' %}">
+{% if object.id %}
+    <input type="hidden" id="postUrl" value="{% url 'classes:api-update' pk=object.pk %}">
+    <input type="hidden" id="postMethod" value="PUT">
+    <input type="hidden" id="pk" value="{{object.pk}}">
+{% else %}
+    <input type="hidden" id="postUrl" value="{% url 'classes:api-create' %}">
+    <input type="hidden" id="postMethod" value="POST">
+    <input type="hidden" id="pk" value="none">
+{% endif %}
+
+<!-- to populate select elements -->
 <input type="hidden" id="redirectUrl" value="{% url 'classes:index' %}">
 <input type="hidden" id="streamUrl" value="{% url 'stream:api-list' %}">
 <input type="hidden" id="roomUrl" value="{% url 'room:api-list-rooms' %}">
@@ -121,22 +149,4 @@
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/core/libraries/jquery.validate.min.js' %} "></script>
 <script type="text/javascript" src="{% static 'js/academics/classes/add.js' %}"></script>
-<script>
-function logChange(val) {
-  console.log("Selected: " + val);
-}
-    {% if pk %}
-    var pk = "{{pk}}";
-    var updateUrl = "{% url 'classes:api-update' pk=pk %}";
-    {% else %}
-    var pk= false;
-    {% endif %}
-    var createUrl = "{% url 'classes:api-create' %}";
-    var redirectUrl = "{% url 'classes:index' %}";
-    var streamUrl = "{% url 'stream:api-list' %}";
-    // alertUser
-    function alertUser(msg,status='bg-success',header='Well done!')
-    { $.jGrowl(msg,{header: header,theme: status}); }
-
-</script>
 {% endblock %}

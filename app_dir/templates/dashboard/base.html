@@ -34,6 +34,7 @@
     <!-- Core JS files -->
     <script type="text/javascript" src="{% static 'js/plugins/loaders/pace.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/core/libraries/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/vue/axios.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/core/libraries/bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/plugins/loaders/blockui.min.js' %}"></script>
     <!-- /core JS files -->
@@ -73,23 +74,31 @@
                                 <!--/main-->
 
                                 <!-- users -->
+                                {% if perms.user.view_user or perms.user.view_group or perms.user.view_usertrail %}
                                 <li>
                                   <a href="javascript:;">
                                     <i class="icon-users"></i>
                                     <span>System Users</span>
                                   </a>
                                   <ul>
+                                    {% if perms.user.view_user %}
                                     <li class="{% block menu_users_class %}{% endblock %}">
                                       <a href="{% url 'users:user-list' %}"><i class='icon-users2'></i>Users</a>
                                     </li>
+                                    {% endif %}
+                                    {% if perms.user.view_group %}
                                     <li class="{% block menu_perm_class %}{% endblock %}">
                                       <a href="{% url 'users:groups' %}"><i class='icon-users4'></i>Groups</a>
                                     </li>
-                                      <li class="{% block menu_trail_class %}{% endblock %}">
+                                    {% endif %}
+                                    {% if perms.user.view_usertrail %}
+                                    <li class="{% block menu_trail_class %}{% endblock %}">
                                       <a href="{% url 'users:user_trail' %}"><i class='icon-history'></i>User Trail</a>
                                     </li>
+                                    {% endif %}
                                   </ul>
                                 </li>
+                                {% endif %}
                                 <!-- ./users -->
 
                                 <!--settings-->
@@ -107,6 +116,7 @@
                                 <!--./settings-->
 
                                 <!--academics-->
+                                {% if perms.stream.view_stream or perms.classes.view_class %}
                                 <li class="">
                                     <a href="#" class="has-ul"><i class="icon-users4"></i><span>Academic</span></a>
                                     <ul>
@@ -118,18 +128,32 @@
                                                 <li><a href="">Class teacher Allocation</a></li>
                                             </ul>
                                         </li>
+                                        {% if perms.stream.view_stream %}
                                         </li>
                                           <li class="{% block menu_stream_class %}{% endblock %}">
                                           <a href="{% url 'stream:index' %}"><i class='icon-history'></i>Stream</a>
                                         </li>
                                         </li>
+                                        {% endif %}
+                                        {% if perms.classes.view_class %}
                                         <li class="{% block menu_classes_class %}{% endblock %}">
                                           <a href="{% url 'classes:index' %}"><i class='icon-history'></i>Classes</a>
                                         </li>
+                                        {% endif %}
+                                        {% if perms.subject.view_subject %}
+                                        <li class="{% block menu_subject_class %}{% endblock %}">
+                                          <a href="{% url 'subject:index' %}"><i class='icon-history'></i>Subjects</a>
+                                        </li>
+                                        {% endif %}
+                                        {% if perms.curriculum.view_curriculum %}
+                                        <li class="{% block menu_curriculum_class %}{% endblock %}">
+                                          <a href="{% url 'curriculum:index' %}"><i class='icon-history'></i>Curriculum</a>
+                                        </li>
+                                        {% endif %}
 
                                     </ul>
                                 </li>
-
+                                {% endif %}
                                 <!--/academics -->
                             </ul>
                         </div>
