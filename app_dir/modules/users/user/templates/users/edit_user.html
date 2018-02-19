@@ -301,6 +301,99 @@
                   </div>
             </div>
             <!-- end user-->
+
+            <!-- academics -->
+                <div class="row">
+                    <div class="col-md-12">
+                      <h5>Academics</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="display-block text-semibold">Academic Year</label>
+                          {% for permission in permissions %}
+                           {% if permission.content_type.model ==  'academicyear' %}
+                                {% if permission in user_permissions %}
+                                    <div class="checkbox">
+                                      <label>
+                                        <input class="styled check"  checked="checked" type="checkbox" value="{{permission.id}}">
+                                        {{permission.name}}
+                                      </label>
+                                      <span class="granted text-success">(granted)</span>
+                                    </div>
+                                {% else %}
+                                   <div class="checkbox">
+                                   <label>
+                                       <input class="styled check" type="checkbox"
+                                      value="{{permission.id}}">
+                                       {{permission.name}}
+                                   </label>
+                                   <span class="granted text-success"></span>
+                                   </div>
+                                {% endif %}
+                            {% else %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                      </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="display-block text-semibold">Classes</label>
+                          {% for permission in permissions %}
+                           {% if permission.content_type.model ==  'class' %}
+                                {% if permission in user_permissions %}
+                                    <div class="checkbox">
+                                      <label>
+                                        <input class="styled check" checked="checked" type="checkbox" value="{{permission.id}}">
+                                        {{permission.name}}
+                                      </label>
+                                      <span class="granted text-success">(granted)</span>
+                                    </div>
+                                {% else %}
+                                   <div class="checkbox">
+                                   <label>
+                                       <input class="styled check" type="checkbox"
+                                      value="{{permission.id}}">
+                                       {{permission.name}}
+                                   </label>
+                                   <span class="granted text-success"></span>
+                                   </div>
+                                {% endif %}
+                            {% else %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="display-block text-semibold">Streams</label>
+                          {% for permission in permissions %}
+                           {% if permission.content_type.model ==  'stream' %}
+                                {% if permission in user_permissions %}
+                                    <div class="checkbox">
+                                      <label>
+                                        <input class="styled check"  checked="checked" type="checkbox" value="{{permission.id}}">
+                                        {{permission.name}}
+                                      </label>
+                                      <span class="granted text-success">(granted)</span>
+                                    </div>
+                                {% else %}
+                                   <div class="checkbox">
+                                   <label>
+                                       <input class="styled check" type="checkbox"
+                                      value="{{permission.id}}">
+                                       {{permission.name}}
+                                   </label>
+                                   <span class="granted text-success"></span>
+                                   </div>
+                                {% endif %}
+                            {% else %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                      </div>
+
+                </div>
+            <!-- end academics -->
             <div class="row">
               <div class="col-md-12">
                 <button class="btn btn-primary" id="permission-btn">Update Permissions</button>

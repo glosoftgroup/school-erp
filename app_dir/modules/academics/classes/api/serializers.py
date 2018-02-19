@@ -5,8 +5,11 @@ from ...classes.models import Class as Table
 
 
 class TableListSerializer(serializers.ModelSerializer):
-    update_url = serializers.HyperlinkedIdentityField(view_name='stream:update')
-    delete_url = serializers.HyperlinkedIdentityField(view_name='stream:api-delete')
+    update_url = serializers.HyperlinkedIdentityField(view_name='classes:update')
+    delete_url = serializers.HyperlinkedIdentityField(view_name='classes:api-delete')
+    room = serializers.SerializerMethodField()
+    academic_year = serializers.SerializerMethodField()
+    stream = serializers.SerializerMethodField()
 
     class Meta:
         model = Table
@@ -20,6 +23,14 @@ class TableListSerializer(serializers.ModelSerializer):
                   'update_url',
                   'delete_url'
                  )
+    def get_room(self, obj):
+        return obj.room.name
+
+    def get_academic_year(self, obj):
+        return obj.academic_year.name
+
+    def get_stream(self, obj):
+        return obj.stream.name
 
 
 class CreateListSerializer(serializers.ModelSerializer):

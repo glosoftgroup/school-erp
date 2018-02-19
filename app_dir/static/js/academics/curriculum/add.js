@@ -14,24 +14,20 @@ File           : add/update.js
         el:{
             /** form field ids */
             addForm          :  $('#addForm'),
-            name             :  $("#name"),
-            stream           :  $("#stream"),
-            no_of_students   :  $("#no_of_students"),
-            class_teacher    :  $("#class_teacher"),
-            room             :  $("#room"),
-            academic_year    :  $("#academic_year"),
+            subject          :  $("#subject"),
+            topic            :  $("#topic"),
+            subtopic         :  $("#subtopic"),
+            period           :  $("#period"),
+            objective        :  $("#objective"),
+            competencies     :  $("#competencies"),
+            values           :  $("#values"),
 
             //elements
-            streamSelect     :  $("#stream"),
-            roomSelect       :  $("#room"),
-            academicSelect   :  $("#academic_year"),
+            subjectSelect    :  $("#subject"),
 
             //urls
-            streamUrl        :  $("#streamUrl").val(),
-            roomUrl          :  $("#roomUrl").val(),
-            academicYearUrl  :  $("#academicYearUrl").val(),
+            subjectUrl       :  $("#subjectUrl").val(),
             redirectUrl      :  $("#redirectUrl").val(),
-
             postUrl          :  $('#postUrl').val(),
             postMethod       :  $('#postMethod').val(),
 
@@ -39,34 +35,16 @@ File           : add/update.js
         },
         populateData:{
             init:function (){
-                $.get(allFunctions.el.streamUrl, function (response){
+                $.get(allFunctions.el.subjectUrl, function (response){
                     var streamOptions = response.results;
+                    console.log(response);
                     if(streamOptions != ""){
                         $.each(streamOptions,function(key, value){
-                            allFunctions.el.streamSelect.append('<option value=' + value['id'] + '>' + value['name'] + '</option>');
+                            allFunctions.el.subjectSelect.append('<option value=' + value['id'] + '>' + value['name'] + '</option>');
                         });
-                        allFunctions.el.streamSelect.selectpicker('refresh');
+                        allFunctions.el.subjectSelect.selectpicker('refresh');
                     }
-                });
 
-                $.get(allFunctions.el.roomUrl, function (response){
-                    var roomOptions = response.results;
-                    if(roomOptions != ""){
-                        $.each(roomOptions,function(key, value){
-                            allFunctions.el.roomSelect.append('<option value=' + value['id'] + '>' + value['name'] + '</option>');
-                        });
-                        allFunctions.el.roomSelect.selectpicker('refresh');
-                    }
-                });
-
-                $.get(allFunctions.el.academicYearUrl, function (response){
-                    var yearOptions = response.results;
-                    if(yearOptions != ""){
-                        $.each(yearOptions,function(key, value){
-                            allFunctions.el.academicSelect.append('<option value=' + value['id'] + '>' + value['name'] + '</option>');
-                        });
-                        allFunctions.el.academicSelect.selectpicker('refresh');
-                    }
                 });
             }
         },
@@ -86,13 +64,13 @@ File           : add/update.js
                 allFunctions.el.addForm.validate({
                     onkeyup: function(element) {$(element).valid()},
                     rules:{
-                        stream: {required:true},
-                        name: {required:true},
-                        no_of_students:{required: true},
-                        class_teacher:{required:true},
-                        room:{required:true},
-                        academic_year:{required:true}
-
+                        topic: {required:true},
+                        subtopic: {required:true},
+                        competencies:{required: true},
+                        period:{required:true},
+                        subject:{required:true},
+                        objective:{required:true},
+                        values:{required:true}
                     },
                     submitHandler: function() {
                       var f = document.getElementById('addForm'),

@@ -11,6 +11,8 @@ from app_dir.modules.users.user.urls import urlpatterns as users_urls
 from app_dir.modules.academic_year.urls import urlpatterns as academic_year_urls
 from app_dir.modules.academics.stream.urls import urlpatterns as stream_urls
 from app_dir.modules.academics.classes.urls import urlpatterns as class_urls
+from app_dir.modules.academics.curriculum.urls import urlpatterns as curriculum_urls
+from app_dir.modules.academics.subject.urls import urlpatterns as subject_urls
 from app_dir.modules.term.urls import urlpatterns as term_urls
 
 urlpatterns = [
@@ -24,4 +26,6 @@ urlpatterns = [
     url(r'^test_celery', test_celery, name='test_celery'),
     url(r'^stream/', include(stream_urls, namespace='stream')),
     url(r'^class/', include(class_urls, namespace='classes')),
+    url(r'^curriculum/', include(curriculum_urls, namespace='curriculum')),
+    url(r'^subject/', include(subject_urls, namespace='subject')),
 ]
