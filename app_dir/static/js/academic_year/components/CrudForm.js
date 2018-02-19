@@ -1,6 +1,7 @@
 import React from 'react';
-import axios from 'axios';
+import ReactDOM from 'react-dom';
 
+import axios from 'axios';
 import moment from 'moment';
 
 class CrudForm extends React.Component {
@@ -13,14 +14,17 @@ class CrudForm extends React.Component {
           end_date: moment(new Date()).format("YYYY-MM-DD"),
           startDate:moment(),
           buttonText:'Add'
-      };
+      };      
 
     }
 
     // load site settings on mount
     // update state data
     //____________________________
-    componentWillMount() {
+    componentDidMount() { 
+        this.refs.start_date.value = moment(new Date()).format("YYYY-MM-DD");
+        this.refs.end_date.value = moment(new Date()).format("YYYY-MM-DD");       
+        
         var self = this; 
         // check if pk checked and populate update details 
         if(pk){
@@ -30,6 +34,8 @@ class CrudForm extends React.Component {
                 if(response.description == null){
                     response.description = '';
                 }
+                self.refs.start_date.value = response.start_date;
+                self.refs.end_date.value = response.end_date;
                 self.setState({
                             name: response.name,
                             description: response.description,
@@ -37,7 +43,6 @@ class CrudForm extends React.Component {
                             end_date: response.end_date,
                             buttonText:'Edit'
                             });
-                console.log(self.state);
             })
             .catch(function (error) {
                 console.log(error);
@@ -46,24 +51,28 @@ class CrudForm extends React.Component {
         }
     }
 
-    handleInputChange = event =>{
+    handleInputChange = event =>{        
+        this.setState({
+            end_date: this.refs.date.value
+          });
+        
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-
+        const name = target.name;        
+                
         this.setState({
           [name]: value
         });
-    }
-
+       
+    }  
     
     handleSubmit = event =>{
       event.preventDefault();
-
       const data = new FormData(event.target);
       data.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
       
-    
+      axios.defaults.xsrfHeaderName = "X-CSRFToken"
+      axios.defaults.xsrfCookieName = 'csrftoken'
       // check if pk is set and update details 
       if(pk){
             axios.put(updateUrl,data)
@@ -115,15 +124,15 @@ class CrudForm extends React.Component {
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label className="text-bold">Start Date:</label>
-                                <input value={this.state.start_date} onChange={this.handleInputChange} name="start_date"  id="end_date" placeholder="eg 2018/12/12" className="form-control datepicker2" type="text"  required="required" />
+                                <input ref="start_date" onChange={this.handleInputChange} name="start_date"  id="end_date" placeholder="eg 2018/12/12" className="form-control datepicker2" type="text"  required="required" />
                                <span className="help-block text-warning"></span>
                             </div>
                         </div>
 
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label className="text-bold">Current Capacity:</label>
-                                <input value={this.state.end_date} onChange={this.handleInputChange} name="end_date"  id="end_date" placeholder="eg 2018/12/12" className="form-control datepicker" type="text"  required="required" />
+                                <label className="text-bold">End Date:</label>
+                                <input ref="end_date" onChange={this.handleInputChange} name="end_date"  id="end_date" placeholder="eg 2018/12/12" className="form-control datepicker" type="text"  required="required" />
                                 <span className="help-block text-warning"></span>
                             </div>
                         </div>
@@ -132,7 +141,7 @@ class CrudForm extends React.Component {
             </div>
             <div className="col-md-6">                
                 <div className="form-group">
-                    <label className="text-bold">Room Description:</label>
+                    <label className="text-bold"> Description:</label>
                     <textarea value={this.state.description} onChange={this.handleInputChange} rows="5" cols="5" className="form-control" id="description" name="description" placeholder="Enter room description here" />
                     
                     <span className="help-block text-warning"></span>
