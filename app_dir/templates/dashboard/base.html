@@ -102,6 +102,12 @@
                                         <li class="{% block menu_settings_class %}{% endblock %}">
                                           <a href="{% url 'site:index' %}">Institution Settings</a>
                                         </li>
+                                        <li class="{% block menu_settings_year %}{% endblock %}">
+                                          <a href="{% url 'academic_year:index' %}"> Academic Year</a>
+                                        </li>
+                                        <li class="{% block menu_term %}{% endblock %}">
+                                          <a href="{% url 'term:index' %}"> Term</a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <!--./settings-->
@@ -113,9 +119,9 @@
                                         <li class="">
                                             <a href="#" class="has-ul">Classrooms &amp; Batch</a>
                                             <ul style="display: none;">
-                                                <li class=""><a href="" class="active">Rooms</a></li>
-                                                <li><a href="">Batch</a></li>
-                                                <li><a href="">Class teacher Allocation</a></li>
+                                                <li class="{% block menu_room %}{% endblock %}">
+                                                    <a href="{% url 'room:index' %}" class="active">Rooms</a></li>
+                                                <li><a href="{% url 'stream:index' %}">Stream</a></li>
                                             </ul>
                                         </li>
                                         </li>
