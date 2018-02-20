@@ -1,0 +1,300 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+    {% if not object.id %}
+        Add student
+    {% else %}
+        Edit {{object.name}} - Student
+    {% endif %}
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class=""><a href="{% url 'student:index' %}" >Student</a></li>
+     <li class="active">{{form.name.value}}</li>
+ {% endblock %}
+
+
+{% block menu_settings_year %}active{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+<link rel="stylesheet" href="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.min.css">
+{% endblock %}
+{% block content %}
+ <!--room details-->
+
+<div class="panel panel-flat animated fadeIn" id="vue-app">
+    <div class="panel-body">
+        <div class="row">
+            {% csrf_token %}
+           <div id="app-root">
+               <template>
+                  <form-wizard @on-complete="onComplete"
+                                       shape="tab"
+                                       @on-validate="handleValidation"
+                                       color="#9b59b6"
+                                       title="Student Admission Form"
+                                       subtitle=""
+                  >
+                     <!--offical details -->
+                     <tab-content title="Official details"
+                                  icon="icon-office" :before-change="validateAsync">
+
+                         <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input" class="req">Academic Year</label>
+                                <select class="form-control" name="Student[academicid]" id="Student_academicid">
+                                    <option value="">Select Academic Year</option>
+                                    <option value="1">2018 - 2019</option>
+                                    <option value="2">2025 - 2026</option>
+                                    <option value="3">2027 - 2028</option>
+                                    <option value="4">2015 - 2017</option>
+                                    <option value="5">2019 - 2020</option>
+                                    <option value="6">2017 - 2018</option>
+                                    <option value="7">2009 - 2027</option>
+                                    <option value="8">2020 - 2021</option>
+                                </select>
+                                <div class="school_val_error" id="Student_academicid_em_" style="display:none"></div>                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input_name" class="req">Register Number</label>
+                                <input class="form-control" name="Student[student_admissionno]" id="Student_student_admissionno" maxlength="45" type="text">                                <div class="school_val_error" id="Student_student_admissionno_em_" style="display:none"></div>                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input_name" class="req">Joining Date</label>
+                                <div data-date-format="yyyy-M-d" class="input-group date">
+                                    <input placeholder="Joining Date" class="form-control pickadate picker__input" value="2018-02-20" name="Student[student_admissiondate]" id="Student_student_admissiondate" readonly="" aria-haspopup="true" aria-expanded="false" aria-readonly="false" aria-owns="Student_student_admissiondate_root" type="text"><div class="picker" id="Student_student_admissiondate_root" aria-hidden="true"><div class="picker__holder"><div class="picker__frame"><div class="picker__wrap"><div class="picker__box"><div class="picker__header"><select class="picker__select--year" disabled="" aria-controls="Student_student_admissiondate_table" title="Pick a year from the dropdown"><option value="1968">1968</option><option value="1969">1969</option><option value="1970">1970</option><option value="1971">1971</option><option value="1972">1972</option><option value="1973">1973</option><option value="1974">1974</option><option value="1975">1975</option><option value="1976">1976</option><option value="1977">1977</option><option value="1978">1978</option><option value="1979">1979</option><option value="1980">1980</option><option value="1981">1981</option><option value="1982">1982</option><option value="1983">1983</option><option value="1984">1984</option><option value="1985">1985</option><option value="1986">1986</option><option value="1987">1987</option><option value="1988">1988</option><option value="1989">1989</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018" selected="">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option><option value="2031">2031</option><option value="2032">2032</option><option value="2033">2033</option><option value="2034">2034</option><option value="2035">2035</option><option value="2036">2036</option><option value="2037">2037</option><option value="2038">2038</option><option value="2039">2039</option><option value="2040">2040</option><option value="2041">2041</option><option value="2042">2042</option><option value="2043">2043</option><option value="2044">2044</option><option value="2045">2045</option><option value="2046">2046</option><option value="2047">2047</option><option value="2048">2048</option><option value="2049">2049</option><option value="2050">2050</option><option value="2051">2051</option><option value="2052">2052</option><option value="2053">2053</option><option value="2054">2054</option><option value="2055">2055</option><option value="2056">2056</option><option value="2057">2057</option><option value="2058">2058</option><option value="2059">2059</option><option value="2060">2060</option><option value="2061">2061</option><option value="2062">2062</option><option value="2063">2063</option><option value="2064">2064</option><option value="2065">2065</option><option value="2066">2066</option><option value="2067">2067</option><option value="2068">2068</option></select><select class="picker__select--month" disabled="" aria-controls="Student_student_admissiondate_table" title="Pick a month from the dropdown"><option value="0">January</option><option value="1" selected="">February</option><option value="2">March</option><option value="3">April</option><option value="4">May</option><option value="5">June</option><option value="6">July</option><option value="7">August</option><option value="8">September</option><option value="9">October</option><option value="10">November</option><option value="11">December</option></select><div class="picker__nav--prev" data-nav="-1" role="button" aria-controls="Student_student_admissiondate_table" title="Go to the previous month"> </div><div class="picker__nav--next" data-nav="1" role="button" aria-controls="Student_student_admissiondate_table" title="Go to the next month"> </div></div><table class="picker__table" id="Student_student_admissiondate_table" role="grid" aria-controls="Student_student_admissiondate" aria-readonly="true"><thead><tr><th class="picker__weekday" scope="col" title="Sunday">Sun</th><th class="picker__weekday" scope="col" title="Monday">Mon</th><th class="picker__weekday" scope="col" title="Tuesday">Tue</th><th class="picker__weekday" scope="col" title="Wednesday">Wed</th><th class="picker__weekday" scope="col" title="Thursday">Thu</th><th class="picker__weekday" scope="col" title="Friday">Fri</th><th class="picker__weekday" scope="col" title="Saturday">Sat</th></tr></thead><tbody><tr><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1517086800000" role="gridcell">28</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1517173200000" role="gridcell">29</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1517259600000" role="gridcell">30</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1517346000000" role="gridcell">31</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517432400000" role="gridcell">1</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517518800000" role="gridcell">2</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517605200000" role="gridcell">3</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517691600000" role="gridcell">4</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517778000000" role="gridcell">5</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517864400000" role="gridcell">6</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517950800000" role="gridcell">7</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518037200000" role="gridcell">8</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518123600000" role="gridcell">9</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518210000000" role="gridcell">10</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518296400000" role="gridcell">11</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518382800000" role="gridcell">12</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518469200000" role="gridcell">13</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518555600000" role="gridcell">14</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518642000000" role="gridcell">15</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518728400000" role="gridcell">16</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518814800000" role="gridcell">17</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518901200000" role="gridcell">18</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518987600000" role="gridcell">19</div></td><td role="presentation"><div class="picker__day picker__day--infocus picker__day--today picker__day--selected picker__day--highlighted" data-pick="1519074000000" role="gridcell" aria-activedescendant="true">20</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519160400000" role="gridcell">21</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519246800000" role="gridcell">22</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519333200000" role="gridcell">23</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519419600000" role="gridcell">24</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519506000000" role="gridcell">25</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519592400000" role="gridcell">26</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519678800000" role="gridcell">27</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519765200000" role="gridcell">28</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1519851600000" role="gridcell">1</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1519938000000" role="gridcell">2</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520024400000" role="gridcell">3</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520110800000" role="gridcell">4</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520197200000" role="gridcell">5</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520283600000" role="gridcell">6</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520370000000" role="gridcell">7</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520456400000" role="gridcell">8</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520542800000" role="gridcell">9</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520629200000" role="gridcell">10</div></td></tr></tbody></table><div class="picker__footer"><button class="picker__button--today" type="button" data-pick="1519074000000" disabled="" aria-controls="Student_student_admissiondate">Today</button><button class="picker__button--clear" type="button" data-clear="1" disabled="" aria-controls="Student_student_admissiondate">Clear</button><button class="picker__button--close" type="button" data-close="true" disabled="" aria-controls="Student_student_admissiondate">Close</button></div></div></div></div></div></div><div class="school_val_error" id="Student_student_admissiondate_em_" style="display:none"></div>                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                         </div>
+                         <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input" class="req">Course</label>
+                                <select class="form-control" name="Student[courseid]" id="Student_courseid">
+                                    <option value="">Select Course</option>
+                                    <option value="1">STD I</option>
+                                </select>
+                                <div class="school_val_error" id="Student_courseid_em_" style="display:none">
+
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input" class="req">Batch</label>
+                                <select class="form-control" name="Student[batchid]" id="Student_batchid">
+                                 <option value="">Select Batch</option>
+                                </select>
+                                <div class="school_val_error" id="Student_batchid_em_" style="display:none">
+
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input_name">Roll No.</label>
+                                <input class="form-control" name="Student[student_rollno]" id="Student_student_rollno" maxlength="60" type="text"><div class="school_val_error" id="Student_student_rollno_em_" style="display:none"></div>
+                            </div>
+                        </div>
+                     </tab-content>
+                      <!--./official-->
+
+                      <!--Personal details-->
+                     <tab-content title="Personal details"
+                                  icon="icon-user" :before-change="validateAsync">
+                       <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label class="req">First Name: </label>
+                                <input class="form-control" v-model="first_name" name="Student" id="first_name" maxlength="45" type="text">
+                                <div class="school_val_error" id="first_name_err" style="display:none"></div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label >Middle Name: </label>
+                                <input class="form-control" v-model="middle_name" name="middle name" id="middle_name" maxlength="45" type="text">
+                                <div class="school_val_error" id="middle_name_err" style="display:none"></div>                            </div>
+                            <div class="form-group col-sm-4">
+                                <label>Last Name:</label>
+                                <input class="form-control" v-model="last_name" name="last_name" id="last_name" maxlength="45" type="text">
+                                <div class="school_val_error" id="last_name_err" style="display:none"></div>
+                            </div>
+                        </div>
+                       <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input_name" class="req">Date of Birth</label>
+                                <div data-date-format="yyyy-M-d" class="input-group date">
+                                    <input class="form-control pickadate picker__input" name="Student[student_dob]" id="Student_student_dob" maxlength="45" readonly="" aria-haspopup="true" aria-expanded="false" aria-readonly="false" aria-owns="Student_student_dob_root" type="text"><div class="picker" id="Student_student_dob_root" aria-hidden="true"><div class="picker__holder"><div class="picker__frame"><div class="picker__wrap"><div class="picker__box"><div class="picker__header"><select class="picker__select--year" disabled="" aria-controls="Student_student_dob_table" title="Pick a year from the dropdown"><option value="1968">1968</option><option value="1969">1969</option><option value="1970">1970</option><option value="1971">1971</option><option value="1972">1972</option><option value="1973">1973</option><option value="1974">1974</option><option value="1975">1975</option><option value="1976">1976</option><option value="1977">1977</option><option value="1978">1978</option><option value="1979">1979</option><option value="1980">1980</option><option value="1981">1981</option><option value="1982">1982</option><option value="1983">1983</option><option value="1984">1984</option><option value="1985">1985</option><option value="1986">1986</option><option value="1987">1987</option><option value="1988">1988</option><option value="1989">1989</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018" selected="">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option><option value="2031">2031</option><option value="2032">2032</option><option value="2033">2033</option><option value="2034">2034</option><option value="2035">2035</option><option value="2036">2036</option><option value="2037">2037</option><option value="2038">2038</option><option value="2039">2039</option><option value="2040">2040</option><option value="2041">2041</option><option value="2042">2042</option><option value="2043">2043</option><option value="2044">2044</option><option value="2045">2045</option><option value="2046">2046</option><option value="2047">2047</option><option value="2048">2048</option><option value="2049">2049</option><option value="2050">2050</option><option value="2051">2051</option><option value="2052">2052</option><option value="2053">2053</option><option value="2054">2054</option><option value="2055">2055</option><option value="2056">2056</option><option value="2057">2057</option><option value="2058">2058</option><option value="2059">2059</option><option value="2060">2060</option><option value="2061">2061</option><option value="2062">2062</option><option value="2063">2063</option><option value="2064">2064</option><option value="2065">2065</option><option value="2066">2066</option><option value="2067">2067</option><option value="2068">2068</option></select><select class="picker__select--month" disabled="" aria-controls="Student_student_dob_table" title="Pick a month from the dropdown"><option value="0">January</option><option value="1" selected="">February</option><option value="2">March</option><option value="3">April</option><option value="4">May</option><option value="5">June</option><option value="6">July</option><option value="7">August</option><option value="8">September</option><option value="9">October</option><option value="10">November</option><option value="11">December</option></select><div class="picker__nav--prev" data-nav="-1" role="button" aria-controls="Student_student_dob_table" title="Go to the previous month"> </div><div class="picker__nav--next" data-nav="1" role="button" aria-controls="Student_student_dob_table" title="Go to the next month"> </div></div><table class="picker__table" id="Student_student_dob_table" role="grid" aria-controls="Student_student_dob" aria-readonly="true"><thead><tr><th class="picker__weekday" scope="col" title="Sunday">Sun</th><th class="picker__weekday" scope="col" title="Monday">Mon</th><th class="picker__weekday" scope="col" title="Tuesday">Tue</th><th class="picker__weekday" scope="col" title="Wednesday">Wed</th><th class="picker__weekday" scope="col" title="Thursday">Thu</th><th class="picker__weekday" scope="col" title="Friday">Fri</th><th class="picker__weekday" scope="col" title="Saturday">Sat</th></tr></thead><tbody><tr><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1517086800000" role="gridcell">28</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1517173200000" role="gridcell">29</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1517259600000" role="gridcell">30</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1517346000000" role="gridcell">31</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517432400000" role="gridcell">1</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517518800000" role="gridcell">2</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517605200000" role="gridcell">3</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517691600000" role="gridcell">4</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517778000000" role="gridcell">5</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517864400000" role="gridcell">6</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1517950800000" role="gridcell">7</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518037200000" role="gridcell">8</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518123600000" role="gridcell">9</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518210000000" role="gridcell">10</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518296400000" role="gridcell">11</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518382800000" role="gridcell">12</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518469200000" role="gridcell">13</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518555600000" role="gridcell">14</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518642000000" role="gridcell">15</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518728400000" role="gridcell">16</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518814800000" role="gridcell">17</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518901200000" role="gridcell">18</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1518987600000" role="gridcell">19</div></td><td role="presentation"><div class="picker__day picker__day--infocus picker__day--today picker__day--highlighted" data-pick="1519074000000" role="gridcell" aria-activedescendant="true">20</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519160400000" role="gridcell">21</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519246800000" role="gridcell">22</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519333200000" role="gridcell">23</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519419600000" role="gridcell">24</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519506000000" role="gridcell">25</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519592400000" role="gridcell">26</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519678800000" role="gridcell">27</div></td><td role="presentation"><div class="picker__day picker__day--infocus" data-pick="1519765200000" role="gridcell">28</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1519851600000" role="gridcell">1</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1519938000000" role="gridcell">2</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520024400000" role="gridcell">3</div></td></tr><tr><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520110800000" role="gridcell">4</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520197200000" role="gridcell">5</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520283600000" role="gridcell">6</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520370000000" role="gridcell">7</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520456400000" role="gridcell">8</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520542800000" role="gridcell">9</div></td><td role="presentation"><div class="picker__day picker__day--outfocus" data-pick="1520629200000" role="gridcell">10</div></td></tr></tbody></table><div class="picker__footer"><button class="picker__button--today" type="button" data-pick="1519074000000" disabled="" aria-controls="Student_student_dob">Today</button><button class="picker__button--clear" type="button" data-clear="1" disabled="" aria-controls="Student_student_dob">Clear</button><button class="picker__button--close" type="button" data-close="true" disabled="" aria-controls="Student_student_dob">Close</button></div></div></div></div></div></div><div class="school_val_error" id="Student_student_dob_em_" style="display:none"></div>                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="Gender">Gender</label>
+                                <select class="form-control" data-required="true" name="Student[student_gender]" id="Student_student_gender">
+                                    <option value="prompt">Please Select</option>
+                                    <option value="1">Male</option>
+                                    <option value="2">Female</option>
+                                </select>
+                                <div class="school_val_error" id="Student_student_gender_em_" style="display:none"></div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="Blood_Group">Blood Group</label>
+                                <select class="form-control" name="Student[student_bloodgroup]" id="Student_student_bloodgroup">
+                                    <option value="prompt">Please Select</option>
+                                    <option value="1">A+</option>
+                                    <option value="2">A-</option>
+                                    <option value="3">B+</option>
+                                    <option value="4">B-</option>
+                                    <option value="5">O+</option>
+                                    <option value="6">O-</option>
+                                    <option value="7">AB+</option>
+                                    <option value="8">AB-</option>
+                                </select>
+                                <div class="school_val_error" id="Student_student_bloodgroup_em_" style="display:none"></div>                            </div>
+                       </div>
+                         <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input_name">Birth Place</label>
+                                <input maxlength="45" class="form-control" name="Student[student_birthplace]" id="Student_student_birthplace" type="text"><div class="school_val_error" id="Student_student_birthplace_em_" style="display:none"></div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="Country">Nationality</label>
+                                <select class="form-control" name="Student[student_nationality]" id="Student_student_nationality">
+                                    <option value="">Select Country</option><option value="Afghanistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="American Samoa">American Samoa</option><option value="Angola">Angola</option><option value="Anguilla">Anguilla</option><option value="Antartica">Antartica</option><option value="Antigua and Barbuda">Antigua and Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Aruba">Aruba</option><option value="Ashmore and Cartier Island">Ashmore and Cartier Island</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bermuda">Bermuda</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="British Virgin Islands">British Virgin Islands</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burma">Burma</option><option value="Burundi">Burundi</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Cape Verde">Cape Verde</option><option value="Cayman Islands">Cayman Islands</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Chile">Chile</option><option value="China">China</option><option value="Christmas Island">Christmas Island</option><option value="Clipperton Island">Clipperton Island</option><option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Congo, Democratic Republic of the">Congo, Democratic Republic of the</option><option value="Congo, Republic of the">Congo, Republic of the</option><option value="Cook Islands">Cook Islands</option><option value="Costa Rica">Costa Rica</option><option value="Cote d'Ivoire">Cote d'Ivoire</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Cyprus">Cyprus</option><option value="Czeck Republic">Czeck Republic</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Ethiopia">Ethiopia</option><option value="Europa Island">Europa Island</option><option value="Falkland Islands (Islas Malvinas)">Falkland Islands (Islas Malvinas)</option><option value="Faroe Islands">Faroe Islands</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="French Guiana">French Guiana</option><option value="French Polynesia">French Polynesia</option><option value="French Southern and Antarctic Lands">French Southern and Antarctic Lands</option><option value="Gabon">Gabon</option><option value="Gambia, The">Gambia, The</option><option value="Gaza Strip">Gaza Strip</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Gibraltar">Gibraltar</option><option value="Glorioso Islands">Glorioso Islands</option><option value="Greece">Greece</option><option value="Greenland">Greenland</option><option value="Grenada">Grenada</option><option value="Guadeloupe">Guadeloupe</option><option value="Guam">Guam</option><option value="Guatemala">Guatemala</option><option value="Guernsey">Guernsey</option><option value="Guinea">Guinea</option><option value="Guinea-Bissau">Guinea-Bissau</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Heard Island and McDonald Islands">Heard Island and McDonald Islands</option><option value="Holy See (Vatican City)">Holy See (Vatican City)</option><option value="Honduras">Honduras</option><option value="Hong Kong">Hong Kong</option><option value="Howland Island">Howland Island</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Ireland, Northern">Ireland, Northern</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Jamaica">Jamaica</option><option value="Jan Mayen">Jan Mayen</option><option value="Japan">Japan</option><option value="Jarvis Island">Jarvis Island</option><option value="Jersey">Jersey</option><option value="Johnston Atoll">Johnston Atoll</option><option value="Jordan">Jordan</option><option value="Juan de Nova Island">Juan de Nova Island</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Korea, North">Korea, North</option><option value="Korea, South">Korea, South</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Macau">Macau</option><option value="Macedonia, Former Yugoslav Republic of">Macedonia, Former Yugoslav Republic of</option><option value="Madagascar">Madagascar</option><option value="Malawi">Malawi</option><option value="Malaysia">Malaysia</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Man, Isle of">Man, Isle of</option><option value="Marshall Islands">Marshall Islands</option><option value="Martinique">Martinique</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mayotte">Mayotte</option><option value="Mexico">Mexico</option><option value="Micronesia, Federated States of">Micronesia, Federated States of</option><option value="Midway Islands">Midway Islands</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montserrat">Montserrat</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Namibia">Namibia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherlands">Netherlands</option><option value="Netherlands Antilles">Netherlands Antilles</option><option value="New Caledonia">New Caledonia</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="Niue">Niue</option><option value="Norfolk Island">Norfolk Island</option><option value="Northern Mariana Islands">Northern Mariana Islands</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau">Palau</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Philippines">Philippines</option><option value="Pitcaim Islands">Pitcaim Islands</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Puerto Rico">Puerto Rico</option><option value="Qatar">Qatar</option><option value="Reunion">Reunion</option><option value="Romainia">Romainia</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="Saint Helena">Saint Helena</option><option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option><option value="Saint Lucia">Saint Lucia</option><option value="Saint Pierre and Miquelon">Saint Pierre and Miquelon</option><option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option><option value="Samoa">Samoa</option><option value="San Marino">San Marino</option><option value="Sao Tome and Principe">Sao Tome and Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Scotland">Scotland</option><option value="Senegal">Senegal</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="South Georgia and South Sandwich Islands">South Georgia and South Sandwich Islands</option><option value="Spain">Spain</option><option value="Spratly Islands">Spratly Islands</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Svalbard">Svalbard</option><option value="Swaziland">Swaziland</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Tobago">Tobago</option><option value="Toga">Toga</option><option value="Tokelau">Tokelau</option><option value="Tonga">Tonga</option><option value="Trinidad">Trinidad</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Emirates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="Uruguay">Uruguay</option><option value="USA">USA</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Virgin Islands">Virgin Islands</option><option value="Wales">Wales</option><option value="Wallis and Futuna">Wallis and Futuna</option><option value="West Bank">West Bank</option><option value="Western Sahara">Western Sahara</option><option value="Yemen">Yemen</option><option value="Yugoslavia">Yugoslavia</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select><div class="school_val_error" id="Student_student_nationality_em_" style="display:none"></div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input_name">Mother Tongue</label>
+                                <datepicker :minimumView="'month'" :maximumView="'year'" :initialView="'year'"></datepicker>
+                                <input maxlength="45" class="form-control" name="Student[student_mothertoung]" id="Student_student_mothertoung" type="text"><div class="school_val_error" id="Student_student_mothertoung_em_" style="display:none"></div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input" class="req">Category</label>
+                                <select class="form-control" name="Student[studentcategoryid]" id="Student_studentcategoryid">
+                                    <option value="">Select Category</option>
+                                    <option value="15">Special Needs</option>
+                                    <option value="16">Kindergarten</option>
+                                    <option value="19">Secondary</option>
+                                </select>
+                                <div class="school_val_error" id="Student_studentcategoryid_em_" style="display:none"></div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input">Religion</label>
+                                    <select class="form-control" name="Student[student_religion]" id="Student_student_religion">
+                                    <option value="">Select Religion</option>
+                                    <option value="hindu">hindu</option>
+                                    <option value="Christian">Christian</option>
+                                    <option value="muslim">muslim</option>
+                                    <option value="sikh">sikh</option>
+                                </select>
+                                <div class="school_val_error" id="Student_student_religion_em_" style="display:none"></div>
+                            </div>
+                        </div>
+                     </tab-content>
+                      <!--./Personal details-->
+
+                      <!--Contact Info-->
+                     <tab-content title="Contact Info"
+                                  icon=" icon-cog52">
+                      <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="reg_input_name">Permanent Address</label>
+                                <textarea class="form-control" name="Student[student_address2]" id="Student_student_address2"></textarea><div class="school_val_error" id="Student_student_address2_em_" style="display:none"></div>
+                            </div>
+                            <div class="form_group col-sm-6">
+                                <label for="reg_input_name" class="req">Present Address</label>
+                                <textarea class="form-control" name="Student[student_address1]" id="Student_student_address1"></textarea><div class="school_val_error" id="Student_student_address1_em_" style="display:none"></div>
+                            </div>
+                      </div>
+                      <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label for="Country">State</label>
+                                <select class="form-control" name="Student[student_state]" id="Student_student_state">
+<option value="" selected="selected">Please Select</option>
+</select><div class="school_val_error" id="Student_student_state_em_" style="display:none"></div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input_currency">Phone</label>
+                                <input class="form-control" name="Student[student_phone]" id="Student_student_phone" maxlength="45" type="text">
+                                <div class="school_val_error" id="Student_student_phone_em_" style="display:none"></div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="reg_input_currency">Mobile</label>
+                                <input class="form-control" name="Student[student_mobile]" id="Student_student_mobile" maxlength="45" type="text">
+                                <div class="school_val_error" id="Student_student_mobile_em_" style="display:none"></div>
+                            </div>
+                     </div>
+
+                     </tab-content>
+                      <!--./Contact Info-->
+
+                     <tab-content title="Last step"
+                                  icon="icon-checkmark4">
+                       Yuhuuu! This seems pretty damn simple
+                     </tab-content>
+                 </form-wizard>
+
+                </template>
+           </div>
+        </div>
+    </div>
+</div>
+<!--./room details-->
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/plugins/vue/vue.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/plugins/vue/vue-form-wizard.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'js/student/crud_app.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.bootstrap-select').selectpicker();
+
+    // datepicker
+    $('.datepicker').daterangepicker({
+        singleDatePicker: true,
+        locale:{format: 'YYYY-MM-DD'},
+        showDropdowns:true,
+        autoUpdateInput:false
+    },function(chosen_date) {
+        parent.date = chosen_date.format('YYYY-MM-DD');
+        $('.datepicker').val(chosen_date.format('YYYY-MM-DD'));
+
+    });
+
+    // pikcer2
+    $('.datepicker2').daterangepicker({
+        singleDatePicker: true,
+        locale:{format: 'YYYY-MM-DD'},
+        showDropdowns:true,
+        autoUpdateInput:false,
+        minDate: new Date()
+    },function(chosen_date) {
+        parent.date = chosen_date.format('YYYY-MM-DD');
+        $('.datepicker2').val(chosen_date.format('YYYY-MM-DD'));
+
+    });
+  });
+</script>
+<script>
+var options = [
+  { value: '1', label: 'One' },
+  { value: '2', label: 'Two' }
+];
+
+function logChange(val) {
+  console.log("Selected: " + val);
+}
+    var csrfmiddlewaretoken  = jQuery("[name=csrfmiddlewaretoken]").val();
+
+    {% if object.id %}
+    var pk = "{{object.id}}";
+    var updateUrl = "{% url 'academic_year:api-update' pk=object.id %}";
+    {% else %}
+    var pk= false;
+    {% endif %}
+    var createUrl = "{% url 'academic_year:api-create' %}";
+    var redirectUrl = "{% url 'academic_year:index' %}";
+    // alertUser
+    function alertUser(msg,status='bg-success',header='Well done!')
+    { $.jGrowl(msg,{header: header,theme: status}); }
+</script>
+
+{% endblock %}
