@@ -39,13 +39,29 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-12">
-                            <label class="text-bold">Subject Name:<span class="text-danger">*</span></label>
-                                <select name="subject" id="subject" class="bootstrap-select" style="display:none">
-                                    <option value="">select subject</option>
-                                    {% if object.subject.name %}
-                                    <option value="{{object.subject.id}}" selected>{{object.subject.name}}</option>
-                                    {% endif %}
-                                </select>
+                                <label class="text-bold">Subject Name:<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="btn-group bootstrap-select input-group-btn" id="subjects" style="width: 100%;">
+                                        <select name="subject" id="subject" class="bootstrap-select sel" style="display:none">
+                                            <option value="">select subject</option>
+                                            {% if object.subject.name %}
+                                            <option value="{{object.subject.id}}" selected>{{object.subject.name}}</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
+
+                                                data-ta="#subject_modal_instance"
+                                                data-title="Add New Subject"
+                                                data-select="#subjects"
+                                                data-href="{% url 'subject:api-create' %}"
+                                                data-cat="name" data-label="Subject Name:">
+                                            <i class="icon-plus-circle2"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -131,8 +147,11 @@
     </div>
 </div>
 
+
+<input type="hidden" id="subjectPk" value="{{object.subject.pk}}">
+<input type="hidden" id="subjectStatus" value="false">
 {% if object.id %}
-    <input type="hidden" id="postUrl" value="{% url 'curriculum:api-update' pk=object.pk %}">
+<input type="hidden" id="postUrl" value="{% url 'curriculum:api-update' pk=object.pk %}">
     <input type="hidden" id="postMethod" value="PUT">
     <input type="hidden" id="pk" value="{{object.pk}}">
 {% else %}
@@ -145,6 +164,8 @@
 <input type="hidden" id="redirectUrl" value="{% url 'curriculum:index' %}">
 <input type="hidden" id="subjectUrl" value="{% url 'subject:api-list' %}">
 <input type="hidden" id="csrftoken" value="{{ csrf_token }}">
+
+{% include "curriculum/modals/subject_modal.html" %}
 {% endblock %}
 
 {% block custom_js %}

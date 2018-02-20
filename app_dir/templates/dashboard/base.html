@@ -19,6 +19,7 @@
     {% endblock meta %}
     <!--./meta-->
     <link href="{% static 'css/icons/icomoon/styles.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/icons/fontawesome/styles.min.css' %}" rel="stylesheet" type="text/css">
 	<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/core.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/components.css' %}" rel="stylesheet" type="text/css">
@@ -124,36 +125,36 @@
                                 <!--academics-->
                                 {% if perms.stream.view_stream or perms.classes.view_class %}
                                 <li class="">
-                                    <a href="#" class="has-ul"><i class="icon-users4"></i><span>Academic</span></a>
+                                    <a href="#" class="has-ul"><i class="icon-menu2"></i><span>Academics</span></a>
                                     <ul>
                                         <li class="">
                                             <a href="#" class="has-ul">Classrooms &amp; Batch</a>
                                             <ul style="display: none;">
                                                 <li class="{% block menu_room %}{% endblock %}">
-                                                    <a href="{% url 'room:index' %}" class="active">Rooms</a></li>
-                                                <li><a href="{% url 'stream:index' %}">Stream</a></li>
+                                                    <a href="{% url 'room:index' %}" class="active"><i class='icon-home7'></i> Rooms</a></li>
+                                                <li><a href="{% url 'stream:index' %}"><i class='icon-list-numbered'></i> Stream</a></li>
                                             </ul>
                                         </li>
                                         {% if perms.stream.view_stream %}
                                         </li>
                                           <li class="{% block menu_stream_class %}{% endblock %}">
-                                          <a href="{% url 'stream:index' %}"><i class='icon-history'></i>Stream</a>
+                                          <a href="{% url 'stream:index' %}"><i class='icon-list-numbered'></i> Stream</a>
                                         </li>
                                         </li>
                                         {% endif %}
                                         {% if perms.classes.view_class %}
                                         <li class="{% block menu_classes_class %}{% endblock %}">
-                                          <a href="{% url 'classes:index' %}"><i class='icon-history'></i>Classes</a>
+                                          <a href="{% url 'classes:index' %}"><i class='icon-list'></i> Classes</a>
                                         </li>
                                         {% endif %}
                                         {% if perms.subject.view_subject %}
                                         <li class="{% block menu_subject_class %}{% endblock %}">
-                                          <a href="{% url 'subject:index' %}"><i class='icon-history'></i>Subjects</a>
+                                          <a href="{% url 'subject:index' %}"><i class='icon-list2'></i> Subjects</a>
                                         </li>
                                         {% endif %}
                                         {% if perms.curriculum.view_curriculum %}
                                         <li class="{% block menu_curriculum_class %}{% endblock %}">
-                                          <a href="{% url 'curriculum:index' %}"><i class='icon-history'></i>Curriculum</a>
+                                          <a href="{% url 'curriculum:index' %}"><i class='icon-clipboard5'></i>Curriculum</a>
                                         </li>
                                         {% endif %}
 
