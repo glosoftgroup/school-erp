@@ -71,7 +71,7 @@ LOCAL_APPS = (
     'app_dir.modules.room',
     'app_dir.modules.users.user',
     'app_dir.modules.site',
-    'app_dir.modules.academic_year',
+    'app_dir.modules.academics.academic_year',
     'app_dir.modules.academics.stream',
     'app_dir.modules.academics.classes',
     'app_dir.modules.student',

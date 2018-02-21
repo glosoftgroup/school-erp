@@ -12,7 +12,8 @@ module.exports = {
         'stream': './app_dir/static/js/academics/stream/',
         'classes': './app_dir/static/js/academics/classes/',
         'term': './app_dir/static/js/term/',
-        'academic_year': './app_dir/static/js/academic_year/'
+        'academic_year': './app_dir/static/js/academic_year/',
+        'student': './app_dir/static/js/student/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),

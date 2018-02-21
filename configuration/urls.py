@@ -3,12 +3,11 @@ from django.contrib import admin
 
 from app_dir.core.views import test_celery
 from app_dir.core.views import index, home
-from app_dir.modules.academic_year.urls import urlpatterns as academic_year_urls
+from app_dir.modules.academics.academic_year.urls import urlpatterns as academic_year_urls
 from app_dir.core.urls import urlpatterns as core_urls
 from app_dir.modules.room.urls import urlpatterns as room_urls
 from app_dir.modules.site.urls import urlpatterns as site_urls
 from app_dir.modules.users.user.urls import urlpatterns as users_urls
-from app_dir.modules.academic_year.urls import urlpatterns as academic_year_urls
 from app_dir.modules.academics.stream.urls import urlpatterns as stream_urls
 from app_dir.modules.academics.classes.urls import urlpatterns as class_urls
 from app_dir.modules.student.urls import urlpatterns as student_urls
