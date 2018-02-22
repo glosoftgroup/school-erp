@@ -7,12 +7,12 @@ from .api.views import (
 from . import views, pdf, groups
 
 urlpatterns = [
-    url(r'^$', views.users, name='user-list'),
-    url(r'^create/$', views.add_user, name='user-create'),
+    url(r'^$', permission_required('user.view_user', login_url='core:not_found')(views.users), name='user-list'),
+    url(r'^create/$', permission_required('user.add_user', login_url='core:not_found')(views.add_user), name='user-create'),
     url(r'^process/create/$', views.user_process, name='user-process-create'),
     url(r'^assign/permissions/$', views.user_assign_permission, name='user-assign-permission'),
     url(r'^detail/(?P<pk>[0-9]+)/$', views.user_detail, name='user-detail'),
-    url(r'^edit/(?P<pk>[0-9]+)/$', views.user_edit, name='user-edit'),
+    url(r'^edit/(?P<pk>[0-9]+)/$', permission_required('user.change_user', login_url='core:not_found')(views.user_edit), name='user-edit'),
     url(r'^update/(?P<pk>[0-9]+)/$', views.user_update, name='user-update'),
     url(r'^delete/(?P<pk>[0-9]+)/$', views.user_delete, name='user-delete'),
     url(r'^payload/pdf/$', pdf.pdf, name='users_pdf'),

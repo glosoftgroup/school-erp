@@ -15,21 +15,8 @@ File           : add/update.js
             /** form field ids */
             addForm          :  $('#addForm'),
             name             :  $("#name"),
-            stream           :  $("#stream"),
-            no_of_students   :  $("#no_of_students"),
-            class_teacher    :  $("#class_teacher"),
-            room             :  $("#room"),
-            academic_year    :  $("#academic_year"),
-
-            //elements
-            streamSelect     :  $("#stream"),
-            roomSelect       :  $("#room"),
-            academicSelect   :  $("#academic_year"),
 
             //urls
-            streamUrl        :  $("#streamUrl").val(),
-            roomUrl          :  $("#roomUrl").val(),
-            academicYearUrl  :  $("#academicYearUrl").val(),
             redirectUrl      :  $("#redirectUrl").val(),
 
             postUrl          :  $('#postUrl').val(),
@@ -39,35 +26,6 @@ File           : add/update.js
         },
         populateData:{
             init:function (){
-                $.get(allFunctions.el.streamUrl, function (response){
-                    var streamOptions = response.results;
-                    if(streamOptions != ""){
-                        $.each(streamOptions,function(key, value){
-                            allFunctions.el.streamSelect.append('<option value=' + value['id'] + '>' + value['name'] + '</option>');
-                        });
-                        allFunctions.el.streamSelect.selectpicker('refresh');
-                    }
-                });
-
-                $.get(allFunctions.el.roomUrl, function (response){
-                    var roomOptions = response.results;
-                    if(roomOptions != ""){
-                        $.each(roomOptions,function(key, value){
-                            allFunctions.el.roomSelect.append('<option value=' + value['id'] + '>' + value['name'] + '</option>');
-                        });
-                        allFunctions.el.roomSelect.selectpicker('refresh');
-                    }
-                });
-
-                $.get(allFunctions.el.academicYearUrl, function (response){
-                    var yearOptions = response.results;
-                    if(yearOptions != ""){
-                        $.each(yearOptions,function(key, value){
-                            allFunctions.el.academicSelect.append('<option value=' + value['id'] + '>' + value['name'] + '</option>');
-                        });
-                        allFunctions.el.academicSelect.selectpicker('refresh');
-                    }
-                });
             }
         },
         notification:function(status, message , header){
@@ -86,13 +44,7 @@ File           : add/update.js
                 allFunctions.el.addForm.validate({
                     onkeyup: function(element) {$(element).valid()},
                     rules:{
-                        stream: {required:true},
                         name: {required:true},
-                        no_of_students:{required: true},
-                        class_teacher:{required:true},
-                        room:{required:true},
-                        academic_year:{required:true}
-
                     },
                     submitHandler: function() {
                       var f = document.getElementById('addForm'),

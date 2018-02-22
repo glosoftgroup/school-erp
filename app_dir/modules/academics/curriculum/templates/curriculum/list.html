@@ -3,15 +3,15 @@
 {% load i18n %}
 
 {% block title %}
-  Classes
+  Curriculum
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a>Classes </a></li>
+     <li class="active"><a href="{% url 'curriculum:index' %}">Curriculum</a></li>
  {% endblock %}
 
 
-{% block menu_classes_class %}active{% endblock %}
+{% block menu_curriculum_class %}active{% endblock %}
  {% block custom_css %}
 
  {% endblock %}
@@ -25,9 +25,9 @@
         <div class="panel-body  search-panel" style="padding:5px;">
             <div class="col-md-2">
               <label style="visibility: hidden;"> add</label>
-              {% if perms.classes.add_class %}
+              {% if perms.curriculum.add_curriculum %}
               <div class="form-group">
-                    <a id="toggle-add-form" href="{% url 'classes:add' %}" class="btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light">
+                    <a id="toggle-add-form" href="{% url 'curriculum:add' %}" class="btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light">
                         <i class="icon-plus2 position-left"></i>Add
                     </a>
               </div>
@@ -74,17 +74,15 @@
       <div class="panel panel-flat" id="printme">
         <div class="panel-body">
             <div class="col-md-12">
-                <h5 class="text-center text-bold">classes</h5>
+                <h5 class="text-center text-bold">curriculums</h5>
             </div>
         <div class="">
           <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
                 <thead>
                   <tr class="bg-primary">
-                    <th>Name</th>
-                    <th>Class Teacher</th>
-                    <th>Room</th>
-                    <th>Academic Year</th>
-                      {% if perms.classes.change_class or perms.classes.delete_class %}
+                    <th>Subject</th>
+                    <th>Period</th>
+                      {% if perms.curriculum.change_curriculum or perms.curriculum.delete_curriculum %}
                     <th></th>
                       {% endif %}
                   </tr>
@@ -110,18 +108,12 @@
                 <template v-for="item in items">
                     <tr class="td animated fadeIn" :id="item.id">
                         <td>
-                            ${item.name} ${item.stream}
+                            ${item.subject}
                         </td>
                         <td>
-                            ${item.class_teacher}
+                            ${item.period}
                         </td>
-                        <td>
-                            ${item.room}
-                        </td>
-                        <td>
-                            ${item.academic_year}
-                        </td>
-                        {% if perms.classes.change_class or perms.classes.delete_class %}
+                        {% if perms.curriculum.change_curriculum or perms.curriculum.delete_curriculum %}
                         <td class="text-center">
                             <ul class="icons-list">
                                 <li class="dropdown">
@@ -129,10 +121,10 @@
                                         Actions<span class="caret"></span></button>
 
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        {% if perms.classes.change_class %}
+                                        {% if perms.curriculum.change_curriculum %}
                                         <li><a @click="goTo(item.update_url)" href="javascript:;"><i class="icon-pencil"></i> Edit</a></li>
                                         {% endif %}
-                                        {% if perms.classes.delete_class %}
+                                        {% if perms.curriculum.delete_curriculum %}
                                         <li><a @click="deleteInstance(item.delete_url,item.id)" href="javascript:;"><i class=" icon-trash-alt"></i> Delete</a></li>
                                         {% endif %}
                                     </ul>
@@ -215,7 +207,7 @@
  </div>
 
 <input type="hidden" class="pageUrls"
-  data-listurl="{% url 'classes:api-list' %}"
+  data-listurl="{% url 'curriculum:api-list' %}"
 >
 {% endblock%}
 {% block custom_js %}
