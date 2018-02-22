@@ -4,7 +4,11 @@
 {% load render_bundle from webpack_loader %}
 
 {% block title %}
-  Edit {{object.name}} - Academic year
+    {% if not object.id %}
+        Add academic year
+    {% else %}
+        Edit {{object.name}} - Academic year
+    {% endif %}
 {% endblock %}
 
  {% block breadcrumbs %}
