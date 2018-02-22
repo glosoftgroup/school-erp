@@ -33,6 +33,14 @@ class SiteSettingsUpdateAPIView(generics.RetrieveUpdateAPIView):
         PUT /api/site/update-site/
         payload Json: /payload/update_site-settings.json
     """
+    # create pk 1 if none
+    try:
+        Table.objects.get(pk=1)
+    except Exception as e:
+        try:
+            Table.objects.create(name="Glosoft Group", email='admin@example.com')
+        except:
+            pass
     queryset = Table.objects.all()
     serializer_class = UpdateSiteSettingsSerializer
 

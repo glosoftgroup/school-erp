@@ -85,6 +85,8 @@ class InstitutionDetails extends React.Component {
       // const data = formToJSON(event.target);
 
       const data = new FormData(event.target);
+      axios.defaults.xsrfHeaderName = "X-CSRFToken"
+      axios.defaults.xsrfCookieName = 'csrftoken'
 
       axios.put(updateUrl,data)
       .then(function (response) {

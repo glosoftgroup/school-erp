@@ -20,8 +20,7 @@ Edit {{object.name}} - Student
 {% block menu_settings_year %}active{% endblock %}
 
 {% block custom_css %}
-<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
-<link rel="stylesheet" href="{% static 'js/plugins/vue/vue-form-wizard.min.css' %}">
+{% render_bundle 'student' 'css' %}
 {% endblock %}
 {% block content %}
 <!--room details-->
@@ -30,6 +29,7 @@ Edit {{object.name}} - Student
     <div class="panel-body">
         <div class="row">
             {% csrf_token %}
+            <div id="app"></div>
             <div id="app-root">
                 <template>
                     <form-wizard @on-complete="onComplete"
@@ -1428,7 +1428,7 @@ Edit {{object.name}} - Student
     </script>
     
     <script type="text/x-template" id="datepicker-template">
-        <input>
+        <input class="form-control">
     </script>
     <!--./templates-->
 </div>
@@ -1439,13 +1439,13 @@ Edit {{object.name}} - Student
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/plugins/vue/vue.min.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/plugins/vue/vue.min.js' %}"></script>-->
 
-<script type="text/javascript" src="{% static 'js/plugins/vue/vue-form-wizard.js' %}"></script>
-<script type="text/javascript" src="https://unpkg.com/vue-select@latest"></script>
-<script type="text/javascript" src="https://unpkg.com/lodash@latest/lodash.min.js"></script>
-
-<script type="text/javascript" src="{% static 'js/student/crud_app.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/plugins/vue/vue-form-wizard.js' %}"></script>-->
+<!--<script type="text/javascript" src="https://unpkg.com/vue-select@latest"></script>-->
+<!--<script type="text/javascript" src="https://unpkg.com/lodash@latest/lodash.min.js"></script>-->
+{% render_bundle 'student' 'js' %}
+<!--<script type="text/javascript" src="{% static 'js/student/crud_app.js' %}"></script>-->
 <script type="text/javascript">
   $(document).ready(function() {
     $('.bootstrap-select').selectpicker();
