@@ -1,5 +1,5 @@
 <template>
- <select>
+ <select data>
     <slot></slot>
  </select>
 </template>
@@ -13,7 +13,7 @@ export default {
     var vm = this
     $(this.$el)
       // init select2
-      .select2({ data: this.options })
+      .select2({ data: this.options, width:'100%' })
       .val(this.value)
       .trigger('change')
       // emit event on change.

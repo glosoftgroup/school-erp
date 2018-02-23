@@ -13,7 +13,7 @@ class InstitutionDetails extends React.Component {
           mobile: '',
           code: '',
           image: '',
-          imagePreviewUrl: '/static/images/users/default.png ',
+          imagePreviewUrl: '/static/images/users/default.png',
           postal_code: '',
           city: ''
       };

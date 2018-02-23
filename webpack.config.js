@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 const path = require('path');
 var BundleTracker = require('webpack-bundle-tracker');
+const nodeExternals = require('webpack-node-externals')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -56,7 +57,9 @@ module.exports = {
             new BundleTracker({filename: './webpack-stats.json'}),
             new ExtractTextPlugin("styles.css"),
         ],
-     target: 'node'
+     target: 'node',
+//     externals: [nodeExternals()],
+//     devtool: 'inline-cheap-module-source-map'
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -79,3 +82,10 @@ if (process.env.NODE_ENV === 'production') {
     })
   ])
 }
+
+//if (process.env.NODE_ENV === 'test') {
+//  // exclude NPM deps from test bundle
+//  module.exports.externals = [require('webpack-node-externals')()]
+//  // use inline source map so that it works with mocha-webpack
+//  module.exports.devtool = 'inline-cheap-module-source-map'
+// }
