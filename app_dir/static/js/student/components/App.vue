@@ -35,77 +35,63 @@
               <div class="form-group col-sm-4">
                   <label class="req">First Name: </label>
                   <input class="form-control" v-model="first_name" name="Student" id="first_name"
-                          maxlength="45" type="text">                
+                          maxlength="45" type="text" placeholder="First name"/> 
+                  <span class="text-warning" v-if="!$v.first_name.required">Field is required</span>
+                  <span class="text-warning" v-if="!$v.first_name.minLength">Name must have at least {{$v.first_name.$params.minLength.min}} letters.</span>              
               </div>
               <!-- middle name -->
               <div class="form-group col-sm-4">
                   <label>Middle Name: </label>
                   <input class="form-control" v-model="middle_name" name="middle name"
-                          id="middle_name" maxlength="45" type="text">
+                          id="middle_name" maxlength="45" type="text" placeholder="Middle name">
                   <div class="school_val_error" id="middle_name_err" style="display:none"></div>
               </div>
               <!-- last name -->
               <div class="form-group col-sm-4">
                   <label>Last Name:</label>
                   <input class="form-control" v-model="last_name" name="last_name" id="last_name"
-                          maxlength="45" type="text">
+                          maxlength="45" type="text" placeholder="Last name">
                   <div class="school_val_error" id="last_name_err" style="display:none"></div>
               </div>
             </div>
             <div class="row">
+              <!-- dob -->
                 <div class="form-group col-sm-4">
                     <label for="reg_input_name" class="req">Date of Birth</label>                                    
-                     <v-datepicker v-model="dob"></v-datepicker>
+                     <v-datepicker v-model="dob" placeholder="YYYY-MM-DD"></v-datepicker>
                 </div>
+                <!-- ./dob -->
+
+                <!-- gender -->
                 <div class="form-group col-sm-4">
                     <label for="Gender">Gender</label>
-                    <select class="form-control" data-required="true" name="Student[student_gender]"
-                            id="Student_student_gender">
-                        <option value="prompt">Please Select</option>
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
-                    </select>                   
-                </div>                                
-            </div>
-            <div class="row">
+                    <vselect :options="genders" >
+                      <option disabled value="0">Select</option>
+                   </vselect>                  
+                </div>
+                <!-- ./gender   -->
+                <!-- pob -->
                 <div class="form-group col-sm-4">
                     <label for="reg_input_name">Birth Place</label>
-                    <input maxlength="45" class="form-control" name="Student[student_birthplace]"
-                            id="Student_student_birthplace" type="text">
-                    <div class="school_val_error" id="Student_student_birthplace_em_"
-                          style="display:none"></div>
-                </div>
+                    <input maxlength="45" class="form-control" v-model="pob" name="pob"
+                            id="pob" type="text"  placeholder="Birth place"/>
+                    
+                </div> 
+                <!-- ./pob                              -->
+            </div>
+            <div class="row">                
                 <div class="col-sm-4">
                    <label>Nationality</label>
                     <vselect :options="countries" >
                     <option disabled value="0">Select</option>
                    </vselect>
-                </div>
+                </div>                
                 
                 <div class="form-group col-sm-4">
-                    <label for="reg_input" class="req">Category</label>
-                    <select class="form-control" name="Student[studentcategoryid]"
-                            id="Student_studentcategoryid">
-                        <option value="">Select Category</option>
-                        <option value="15">Special Needs</option>
-                        <option value="16">Kindergarten</option>
-                        <option value="19">Secondary</option>
-                    </select>
-                    <div class="school_val_error" id="Student_studentcategoryid_em_"
-                          style="display:none"></div>
-                </div>
-                <div class="form-group col-sm-4">
                     <label for="reg_input">Religion</label>
-                    <select class="form-control" name="Student[student_religion]"
-                            id="Student_student_religion">
-                        <option value="">Select Religion</option>
-                        <option value="hindu">hindu</option>
-                        <option value="Christian">Christian</option>
-                        <option value="muslim">muslim</option>
-                        <option value="sikh">sikh</option>
-                    </select>
-                    <div class="school_val_error" id="Student_student_religion_em_"
-                          style="display:none"></div>
+                    <vselect v-model="religion" :options="religions" :placeholder="religion" >
+                    <option disabled value="0">Select</option>
+                   </vselect>
                 </div>         
                  
           </div>
@@ -133,7 +119,8 @@
   import Vue from 'vue'
   import VueFormWizard from 'vue-form-wizard'
   import 'vue-form-wizard/dist/vue-form-wizard.min.css'  
-  // import Datepicker from 'vuejs-datepicker';
+  import Vuelidate from 'vuelidate'
+  import { required, minLength } from 'vuelidate/lib/validators'
 
   // local component
   import Select from './Select'
@@ -141,9 +128,9 @@
 
   // components
   Vue.use(VueFormWizard)
+  Vue.use(Vuelidate)
   Vue.component('vselect', Select)
   Vue.component('v-datepicker', VueDatePicker)
-  // Vue.component('v-datepicker', Datepicker)
 
   // global variables
   var countries = require("./countries.js");
@@ -156,13 +143,32 @@
         middle_name:'',
         last_name:'',
         dob:'',
+        pob:'',
         language: "en-US",
         result: null,
         countries:countries,        
-        selected:{code:'KE',name:'Kenya'}
+        selected:{code:'KE',name:'Kenya'},
+        gender:'',
+        genders:[
+          { "text": "Male", "id": "male"},
+          { "text": "Female", "id": "female"},
+        ],        
+        religion:'',
+        religions: [
+          { "text": "Christian", "id": "christian"},
+          { "text": "Muslim", "id": "muslim"},
+          { "text": "Others", "id": "others"},
+        ],
+        attemptSubmit: false,
       }       
     },
-     methods: {
+    validations: {
+      first_name: {
+        required,
+        minLength: minLength(2)
+      },
+    },
+    methods: {
       onComplete: function(){
           alert('Yay. Done!');
        },
@@ -170,23 +176,27 @@
          this.imageData = '';
        },
        previewImage: function(event) {
-            // Reference to the DOM input element
-            var input = event.target;
-            // Ensure that you have a file before attempting to read it
-            if (input.files && input.files[0]) {
-                // create a new FileReader to read this image and convert to base64 format
-                var reader = new FileReader();
-                // Define a callback function to run, when FileReader finishes its job
-                reader.onload = (e) => {
-                    // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
-                    // Read image as base64 and set to imageData
-                    this.imageData = e.target.result;
-                }
-                // Start the reader job - read file as a data url (base64 format)
-                reader.readAsDataURL(input.files[0]);
+        // Reference to the DOM input element
+        var input = event.target;
+        // Ensure that you have a file before attempting to read it
+        if (input.files && input.files[0]) {
+            // create a new FileReader to read this image and convert to base64 format
+            var reader = new FileReader();
+            // Define a callback function to run, when FileReader finishes its job
+            reader.onload = (e) => {
+                // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+                // Read image as base64 and set to imageData
+                this.imageData = e.target.result;
             }
+            // Start the reader job - read file as a data url (base64 format)
+            reader.readAsDataURL(input.files[0]);
         }
-      }
+       }
+    },
+    computed: {
+      missingName: function () { return this.first_name === ''; },
+      missingLastName: function () { return this.last_name === ''; },
+    }
   }
 </script>
 

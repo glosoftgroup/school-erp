@@ -5,15 +5,16 @@
 </template>
 
 <script>
-//select2 component
+import select2 from 'select2'
+
 export default {
   name: 'Select',   
-  props: ['options', 'value'],
+  props: ['options', 'value','placeholder'],
   mounted: function () {
     var vm = this
     $(this.$el)
       // init select2
-      .select2({ data: this.options, width:'100%' })
+      .select2({ data: this.options, width:'100%', placeholder:'Select' })
       .val(this.value)
       .trigger('change')
       // emit event on change.

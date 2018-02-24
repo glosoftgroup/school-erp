@@ -1,24 +1,23 @@
 
-import { shallow } from '@vue/test-utils'
+import { shallow, mount } from '@vue/test-utils'
+
 import Counter from '../js/student/components/Counter.vue'
 import Select from '../js/student/components/Select.vue'
 
 
-//describe('Select.vue', () => {
-//  it('Expects to populate a select field', () => {
-//    const options = [{
-//        "text": "Afghanistan",
-//        "id": "AF"
-//    }]
-//    const value = 1
-//    const wrapper = shallow(Select, {
-//      context: { props: { options:options, value:value } }
-//    })
-//    console.log(wrapper.vm)
-//    wrapper.find('option').trigger('click')
-//    expect(wrapper.options.length).toMatch('1')
-//  })
-//})
+describe('Select.vue', () => {
+  it('Expects to populate a select field', () => {
+    const options = [{
+        "text": "Afghanistan",
+        "id": "AF"
+    }]
+
+    const value = "Afghanistan"
+    const wrapper = shallow(Select)
+    wrapper.setProps({options:options, value:value })
+    expect(wrapper.element.options[0].value).toMatch("AF")
+  })
+})
 
 describe('Counter.vue', () => {
   it('increments count when button is clicked', () => {
