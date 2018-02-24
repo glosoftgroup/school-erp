@@ -56,6 +56,12 @@ module.exports = {
             }),
             new BundleTracker({filename: './webpack-stats.json'}),
             new ExtractTextPlugin("styles.css"),
+            new webpack.ProvidePlugin({
+                $: 'jquery',
+                jquery: 'jquery',
+                'window.jQuery': 'jquery',
+                jQuery: 'jquery'
+              })
         ],
      target: 'node',
 //     externals: [nodeExternals()],
