@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils.translation import pgettext_lazy
 from ..subject.models import Subject
+from ..academic_year.models import AcademicYear
+from ..classes.models import Class
 
 
 class Curriculum(models.Model):
