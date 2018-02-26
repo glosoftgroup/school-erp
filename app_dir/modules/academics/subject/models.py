@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import pgettext_lazy
 from ..stream.models import Stream
 from ..academic_year.models import AcademicYear
+from ...academics.academic_year.models import AcademicYear
 from ...room.models import Room
 
 
