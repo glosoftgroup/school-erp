@@ -36,10 +36,12 @@
     "react-select-2": "^2.0.11",
     "select2": "^4.0.6-rc.1",
     "validator": "^9.4.0",
+    "vee-validate": "^2.0.4",
     "vue": "^2.5.13",
+    "vue-axios": "^2.0.2",
     "vue-form-wizard": "^0.8.4",
     "vue-loader": "^13.3.0",
-    "vuelidate": "^0.6.1",
+    "vuetify": "^1.0.3",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.11.1"
   },

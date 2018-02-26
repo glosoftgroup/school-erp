@@ -1,8 +1,13 @@
 <template>
-  <form-wizard @on-complete="onComplete">
-     <tab-content title="Personal details"
-                  icon="ti-user">
+  <form-wizard @on-complete="onComplete" 
+      title="Student Admission Form"
+      subtitle="Please fill all required fields">
+     
        <!-- Personal details -->
+     <tab-content title="Personal details"
+                :before-change="validateAsync"
+                  icon="icon-user"                  
+                  >
        <div class="row">
           <!-- image -->
           <div class="col-md-3">
@@ -33,49 +38,76 @@
             <div class="row">
               <!-- first name -->
               <div class="form-group col-sm-4">
-                  <label class="req">First Name: </label>
-                  <input class="form-control" v-model="first_name" name="Student" id="first_name"
+                  <label class="req">First Name: <span class="text-danger">*</span></label>
+                  <input  v-validate="'required'" :class="{'input': true, 'border-warning': errors.has('first_name') }"  class="form-control" v-model="first_name" name="first_name" id="first_name"
                           maxlength="45" type="text" placeholder="First name"/> 
-                  <span class="text-warning" v-if="!$v.first_name.required">Field is required</span>
-                  <span class="text-warning" v-if="!$v.first_name.minLength">Name must have at least {{$v.first_name.$params.minLength.min}} letters.</span>              
+                  <span v-show="errors.has('first_name')" class="help text-warning">{{ errors.first('first_name') }}</span>
+                  
               </div>
               <!-- middle name -->
               <div class="form-group col-sm-4">
-                  <label>Middle Name: </label>
-                  <input class="form-control" v-model="middle_name" name="middle name"
+                  <label>Middle Name: <span class="text-danger">*</span> </label>
+                  <input v-validate="'required'" :class="{'input': true, 'border-warning': errors.has('middle_name') }" class="form-control" v-model="middle_name" name="middle_name"
                           id="middle_name" maxlength="45" type="text" placeholder="Middle name">
-                  <div class="school_val_error" id="middle_name_err" style="display:none"></div>
+                  <span v-show="errors.has('middle_name')" class="help text-warning">{{ errors.first('middle_name') }}</span>
               </div>
               <!-- last name -->
               <div class="form-group col-sm-4">
-                  <label>Last Name:</label>
-                  <input class="form-control" v-model="last_name" name="last_name" id="last_name"
+                  <label>Last Name: <span class="text-danger">*</span></label>
+                  <input v-validate="'required'" :class="{'input': true, 'border-warning': errors.has('last_name') }" class="form-control" v-model="last_name" name="last_name" id="last_name"
                           maxlength="45" type="text" placeholder="Last name">
-                  <div class="school_val_error" id="last_name_err" style="display:none"></div>
+                  <span v-show="errors.has('last_name')" class="help text-warning">{{ errors.first('last_name') }}</span>
               </div>
             </div>
             <div class="row">
               <!-- dob -->
+               <span v-show="errors.has('dob')" class="help text-warning">{{ errors.first('dob') }}</span>
                 <div class="form-group col-sm-4">
-                    <label for="reg_input_name" class="req">Date of Birth</label>                                    
-                     <v-datepicker v-model="dob" placeholder="YYYY-MM-DD"></v-datepicker>
+                 
+                   <v-app id="">
+                    <v-dialog
+                      ref="dialog"
+                      persistent
+                      v-model="modal"
+                      lazy
+                      full-width
+                      width="290px"
+                      :return-value.sync="dob"
+                    >
+                      <v-text-field
+                        slot="activator"
+                        label="Date of Birth"
+                        v-model="dob"
+                        v-validate="'required'"
+                        prepend-icon="event" 
+                        readonly
+                      ></v-text-field>
+                      <v-date-picker v-model="date" scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
+                        <v-btn flat color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+                      </v-date-picker>
+                    </v-dialog>
+                    </v-app>
+                    
+                    
                 </div>
                 <!-- ./dob -->
 
                 <!-- gender -->
                 <div class="form-group col-sm-4">
                     <label for="Gender">Gender</label>
-                    <vselect :options="genders" >
+                    <vselect :options="genders" v-model="gender" >
                       <option disabled value="0">Select</option>
-                   </vselect>                  
+                   </vselect>                    
                 </div>
                 <!-- ./gender   -->
                 <!-- pob -->
                 <div class="form-group col-sm-4">
-                    <label for="reg_input_name">Birth Place</label>
-                    <input maxlength="45" class="form-control" v-model="pob" name="pob"
+                    <label for="reg_input_name">Birth Place <span class="text-danger">*</span></label>
+                    <input v-validate="'required'" :class="{'input': true, 'border-warning': errors.has('pob') }" maxlength="45" class="form-control" v-model="pob" name="pob"
                             id="pob" type="text"  placeholder="Birth place"/>
-                    
+                    <span v-show="errors.has('pob')" class="help text-warning">{{ errors.first('pob') }}</span>                 
                 </div> 
                 <!-- ./pob                              -->
             </div>
@@ -92,20 +124,38 @@
                     <vselect v-model="religion" :options="religions" :placeholder="religion" >
                     <option disabled value="0">Select</option>
                    </vselect>
-                </div>         
+                </div>  
+                <div class="form-group col-sm-4">
+                 
+                </div>
                  
           </div>
           </div>
-       </div>
-       <!-- ./personal details -->       
-       
-         
-       
+       </div>      
      </tab-content>
-     <tab-content title="Additional Info"
-                  icon="ti-settings">
-       My second tab content
+      <!-- ./personal details -->  
+
+     <!-- official details -->
+     <tab-content title="Official Details"
+                  icon="icon-office">
+      <div class="row">
+         <!-- academic year -->
+          <div class="form-group col-sm-4">
+              <label class="req">Academic Year: <span class="text-danger">*</span></label>
+              <vselect :options="academic_years" v-model="academic_year" >
+                <option disabled value="0">Select</option>
+              </vselect> 
+          </div>
+          <!-- reg number -->
+          <div class="form-group col-sm-4">
+            <label class="req">Admission No: <span class="text-danger">*</span></label>
+            <input :class="{'input': true, 'border-warning': errors.has('adm_no') }"  class="form-control" v-model="adm_no" name="adm_no" id="adm_no"
+                    maxlength="45" type="text" placeholder="Admission No."/> 
+            <span v-show="errors.has('adm_no')" class="help text-warning">{{ errors.first('adm_no') }}</span>
+          </div>            
+      </div>
      </tab-content>
+     <!-- .official details -->
      <tab-content title="Last step"
                   icon="ti-check">
        Yuhuuu! This seems pretty damn simple
@@ -119,63 +169,117 @@
   import Vue from 'vue'
   import VueFormWizard from 'vue-form-wizard'
   import 'vue-form-wizard/dist/vue-form-wizard.min.css'  
-  import Vuelidate from 'vuelidate'
-  import { required, minLength } from 'vuelidate/lib/validators'
+  import Vuetify from 'vuetify'
+  import axios from 'axios'
+  import VueAxios from 'vue-axios'
+  import VeeValidate from 'vee-validate';
 
   // local component
   import Select from './Select'
-  import VueDatePicker from './DatePicker'
+  // import VueDatePicker from './DatePicker'
 
   // components
   Vue.use(VueFormWizard)
-  Vue.use(Vuelidate)
+  Vue.use(Vuetify)
+  Vue.use(VeeValidate);
+  Vue.use(VueAxios, axios)
   Vue.component('vselect', Select)
-  Vue.component('v-datepicker', VueDatePicker)
+  // Vue.component('v-datepicker', VueDatePicker)
 
   // global variables
   var countries = require("./countries.js");
-  export default {    
+  export default { 
+     $_veeValidate: {
+      validator: 'new'
+    }, 
     data: function() {
-      return {
+      return {        
         imageData: "",
+        menu: false,
+        modal: false,
         default_imageData: "/static/images/users/default-avatar.png",
-        first_name:'',
-        middle_name:'',
-        last_name:'',
+        first_name:'Paul',
+        middle_name:'Kinuthia',
+        last_name:'Kuria',
         dob:'',
-        pob:'',
+        pob:'Kiambu',
+        adm_no:'null',
         language: "en-US",
         result: null,
         countries:countries,        
         selected:{code:'KE',name:'Kenya'},
-        gender:'',
+        academic_year:null,
+        academic_years:[
+          { "text": "2018-2019", "id": "1"},
+          { "text": "2017-2018", "id": "2"},
+        ],
+        gender:'male',
         genders:[
           { "text": "Male", "id": "male"},
           { "text": "Female", "id": "female"},
         ],        
-        religion:'',
+        religion:'christian',
         religions: [
           { "text": "Christian", "id": "christian"},
           { "text": "Muslim", "id": "muslim"},
           { "text": "Others", "id": "others"},
         ],
         attemptSubmit: false,
+        dictionary: {
+          custom: {
+            pob: {
+              required: () => 'Place of birth can not be empty',
+              // custom messages
+            },
+            middle_name: {
+              required:() => 'Middle name required'
+            },
+            first_name: {
+              required:() => 'First name required'
+            },
+            last_name: {
+              required:() => 'Last name required'
+            },
+            adm_no: {
+              required:() => 'Admission Number required'
+            }
+          }
+        }
       }       
-    },
-    validations: {
-      first_name: {
-        required,
-        minLength: minLength(2)
-      },
-    },
+    },   
     methods: {
+      validateAsync: function(){   
+        // validate and add new student
+        console.log(this.$data);     
+        return new Promise((resolve, reject) => {
+              
+              this.$validator.validateAll().then((result) => {
+              if (result) {
+                  // eslint-disable-next-line
+                  this.axios.defaults.xsrfHeaderName = "X-CSRFToken"
+                  this.axios.defaults.xsrfCookieName = 'csrftoken'
+                  this.axios.post(createUrl, this.$data)
+                  .then(function(response) {
+                      console.log('submited');
+                  })
+                  .catch(function(err) {
+                      console.log(err);
+                  });
+                  resolve(true)
+                  return;
+                }
+                reject('This is a custom validation error message. Click next again to get rid of the validation')                
+              });                
+           
+          })
+      },
       onComplete: function(){
           alert('Yay. Done!');
-       },
-       removePreviewImage: function(){
+      },
+      removePreviewImage: function(){
          this.imageData = '';
-       },
-       previewImage: function(event) {
+      },
+      previewImage: function(event) {
         // Reference to the DOM input element
         var input = event.target;
         // Ensure that you have a file before attempting to read it
@@ -191,12 +295,11 @@
             // Start the reader job - read file as a data url (base64 format)
             reader.readAsDataURL(input.files[0]);
         }
-       }
+      }
     },
-    computed: {
-      missingName: function () { return this.first_name === ''; },
-      missingLastName: function () { return this.last_name === ''; },
-    }
+     mounted () {
+      this.$validator.localize('en', this.dictionary)
+    },
   }
 </script>
 
@@ -220,7 +323,11 @@
 .fileinput-exists .thumbnail{
   max-width: 200px; max-height: 150px;
 }
-.vue-select1{
-  width:auto;
+.application--wrap{
+  min-height: auto;
+}
+.application.theme--light{
+  background: #fff;
+  margin-top: 16px;
 }
 </style>

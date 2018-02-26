@@ -20,16 +20,20 @@ Edit {{object.name}} - Student
 {% block menu_settings_year %}active{% endblock %}
 
 {% block custom_css %}
+<link href="{% static 'js/plugins/vue/material-css.css' %}" rel="stylesheet">
+<link href="{% static 'js/plugins/vue/vuetify.min.css' %}" rel="stylesheet">
 {% render_bundle 'student' 'css' %}
 {% endblock %}
 {% block content %}
 <!--room details-->
 
-<div class="panel panel-flat animated fadeIn" id="vue-app">
+<div class="panel panel-flat animated fadeIn" style="width: 100%;" id="vueapp">
     <div class="panel-body">
         <div class="row">
             {% csrf_token %}
+            <div class="col-md-12">
             <div id="app"></div>
+            </div>
             <div id="app-root">
                 <template>
                     <form-wizard @on-complete="onComplete"
@@ -1436,72 +1440,24 @@ Edit {{object.name}} - Student
 {% endblock %}
 
 {% block custom_js %}
-<script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
-<!--<script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js' %}"></script>-->
 <script type="text/javascript" src="https://cdn.bootcss.com/select2/4.0.4/js/select2.js"></script>
 
-<!--<script type="text/javascript" src="{% static 'js/plugins/vue/vue.min.js' %}"></script>-->
-
-<!--<script type="text/javascript" src="{% static 'js/plugins/vue/vue-form-wizard.js' %}"></script>-->
-<!--<script type="text/javascript" src="https://unpkg.com/vue-select@latest"></script>-->
-<!--<script type="text/javascript" src="https://unpkg.com/lodash@latest/lodash.min.js"></script>-->
-{% render_bundle 'student' 'js' %}
-<!--<script type="text/javascript" src="{% static 'js/student/crud_app.js' %}"></script>-->
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('.bootstrap-select').selectpicker();
-
-    // datepicker
-    $('.datepicker').daterangepicker({
-        singleDatePicker: true,
-        locale:{format: 'YYYY-MM-DD'},
-        showDropdowns:true,
-        autoUpdateInput:false
-    },function(chosen_date) {
-        parent.date = chosen_date.format('YYYY-MM-DD');
-        $('.datepicker').val(chosen_date.format('YYYY-MM-DD'));
-
-    });
-
-    // pikcer2
-    $('.datepicker2').daterangepicker({
-        singleDatePicker: true,
-        locale:{format: 'YYYY-MM-DD'},
-        showDropdowns:true,
-        autoUpdateInput:false,
-        minDate: new Date()
-    },function(chosen_date) {
-        parent.date = chosen_date.format('YYYY-MM-DD');
-        $('.datepicker2').val(chosen_date.format('YYYY-MM-DD'));
-
-    });
-  });
-
-</script>
 <script>
-var options = [
-  { value: '1', label: 'One' },
-  { value: '2', label: 'Two' }
-];
-
-function logChange(val) {
-  console.log("Selected: " + val);
-}
     var csrfmiddlewaretoken  = jQuery("[name=csrfmiddlewaretoken]").val();
+    var dynamicData = {};
 
     {% if object.id %}
     var pk = "{{object.id}}";
-    var updateUrl = "{% url 'academic_year:api-update' pk=object.id %}";
+    var updateUrl = "{% url 'student:api-update' pk=object.id %}";
     {% else %}
     var pk= false;
     {% endif %}
-    var createUrl = "{% url 'academic_year:api-create' %}";
-    var redirectUrl = "{% url 'academic_year:index' %}";
+    var createUrl = "{% url 'student:api-create' %}";
+    var redirectUrl = "{% url 'student:index' %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
 
 </script>
-
+{% render_bundle 'student' 'js' %}
 {% endblock %}
