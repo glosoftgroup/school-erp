@@ -2,9 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils.translation import pgettext_lazy
-from ..stream.models import Stream
-from ...academics.academic_year.models import AcademicYear
-from ...room.models import Room
+from django.contrib.postgres.fields import ArrayField
 
 
 class Subject(models.Model):
@@ -14,6 +12,21 @@ class Subject(models.Model):
 
     class Meta:
         app_label = 'subject'
+
+    def __str__(self):
+        return self.name
+
+class Topic(models.Model):
+    subject       = models.ForeignKey(Subject, related_name='topics', on_delete=models.CASCADE)
+    name          = models.CharField(null=True, blank=True, max_length=228)
+    period        = models.CharField(null=True, blank=True, max_length=228)
+    objective     = models.CharField(null=True, blank=True, max_length=228)
+    competencies  = models.CharField(null=True, blank=True, max_length=228)
+    subtopics     = ArrayField(models.CharField(max_length=300), blank=True)
+
+
+    class Meta:
+        app_label = 'topic'
 
     def __str__(self):
         return self.name
