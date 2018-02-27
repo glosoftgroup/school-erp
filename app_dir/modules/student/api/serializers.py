@@ -41,7 +41,7 @@ class CreateListSerializer(serializers.ModelSerializer):
         instance.first_name = validated_data.get('first_name')
         instance.middle_name = validated_data.get('middle_name')
         instance.last_name = validated_data.get('last_name')
-        if validated_data.get('adm_no') and validated_data.get('adm_no') != 'null':
+        if validated_data.get('adm_no') != 'null':
             instance.adm_no = validated_data.get('adm_no')
         else:
             # auto generate admission no

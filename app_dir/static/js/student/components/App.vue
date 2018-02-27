@@ -60,10 +60,9 @@
               </div>
             </div>
             <div class="row">
-              <!-- dob -->
-               <span v-show="errors.has('dob')" class="help text-warning">{{ errors.first('dob') }}</span>
-                <div class="form-group col-sm-4">
-                 
+              <!-- dob -->               
+                <div class="form-group col-sm-4"> 
+                  
                    <v-app id="">
                     <v-dialog
                       ref="dialog"
@@ -78,16 +77,18 @@
                         slot="activator"
                         label="Date of Birth"
                         v-model="dob"
+                        name='dob'
                         v-validate="'required'"
-                        prepend-icon="event" 
-                        readonly
+                        prepend-icon="icon-user" 
+                        
                       ></v-text-field>
-                      <v-date-picker v-model="date" scrollable>
+                      <v-date-picker v-model="dob" scrollable>
                         <v-spacer></v-spacer>
                         <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
-                        <v-btn flat color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+                        <v-btn flat color="primary" @click="$refs.dialog.save(dob)">OK</v-btn>
                       </v-date-picker>
                     </v-dialog>
+                    <span v-show="errors.has('dob')" class="help text-warning">{{ errors.first('dob') }}</span>                
                     </v-app>
                     
                     
@@ -247,10 +248,9 @@
         }
       }       
     },   
-    methods: {
-      validateAsync: function(){   
-        // validate and add new student
-        console.log(this.$data);     
+    methods: {      
+      validateAsync: function(){  
+             
         return new Promise((resolve, reject) => {
               
               this.$validator.validateAll().then((result) => {
