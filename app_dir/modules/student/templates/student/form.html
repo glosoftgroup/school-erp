@@ -7,13 +7,13 @@
 {% if not object.id %}
 Add student
 {% else %}
-Edit {{object.name}} - Student
+Edit {{object.first_name}} details - Student
 {% endif %}
 {% endblock %}
 
 {% block breadcrumbs %}
 <li class=""><a href="{% url 'student:index' %}">Student</a></li>
-<li class="active">{{form.name.value}}</li>
+<li class="active">{{form.first_name.value}}</li>
 {% endblock %}
 
 

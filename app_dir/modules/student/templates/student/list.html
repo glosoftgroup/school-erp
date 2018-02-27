@@ -85,12 +85,14 @@
                 <h5 class="text-center text-bold">Students</h5>
             </div>
         <div class="">
-          <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
+          <table class="table table-sm room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
                 <thead>
                   <tr class="bg-primary">
+                    <th>Photo</th>
+                    <th>Admission No.</th>
                     <th>Name</th>
-                    <th>Join Date</th>
-                    <th>Leave Date</th>
+                    <th>Gender</th>
+                    <th>Religion</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -115,18 +117,22 @@
                 <template v-for="item in items">
                     <tr class="td animated fadeIn" :id="item.id">
                         <td>
-                            ${item.first_name} ${item.last_name}
+                            <img :src="item.image.small_square_crop" alt="Image">
                         </td>
-                        <td>${item.join_date}</td>
-                        <td>${item.leave_date}</td>
+                        <td>${item.adm_no}</td>
+                        <td>
+                            ${item.first_name} ${item.middle_name} ${item.last_name}
+                        </td>
+                        <td>${item.gender}</td>
+                        <td>${item.religion}</td>
 
                         <td class="text-center">
                             <ul class="icons-list">
                                 <li class="dropdown">
-                                    <button type="button" class="btn btn-primary dropdown-toggle legitRipple" data-toggle="dropdown" aria-expanded="true">
+                                    <button type="button" class="btn btn-xs btn-primary dropdown-toggle legitRipple" data-toggle="dropdown" aria-expanded="true">
                                         Actions<span class="caret"></span></button>
 
-                                    <ul class="dropdown-menu dropdown-menu-right">
+                                    <ul class="dropdown-menu-xs dropdown-menu">
                                         <li><a @click="goTo(item.update_url)" href="javascript:;"><i class="icon-pencil"></i> Edit</a></li>
                                         <li><a @click="deleteInstance(item.delete_url,item.id)" href="javascript:;"><i class=" icon-trash-alt"></i> Delete</a></li>
                                     </ul>

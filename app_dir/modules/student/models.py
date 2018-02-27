@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from versatileimagefield.fields import VersatileImageField
 from django.utils.translation import pgettext_lazy
 from django.utils.timezone import now
 from . import ReligionChoices
@@ -42,7 +43,25 @@ class Student(models.Model):
         pgettext_lazy('Student field', 'join on'), blank=True, null=True)
     leave_date = models.DateField(
         pgettext_lazy('Student field', 'leave on'), blank=True, null=True)
-
+    # image = models.ImageField(upload_to='student', null=True, blank=True)
+    image = VersatileImageField(
+        'Image',
+        upload_to='images/students/',
+        width_field='width',
+        height_field='height',
+        blank=True,
+        null=True
+    )
+    height = models.PositiveIntegerField(
+        'Image Height',
+        blank=True,
+        null=True
+    )
+    width = models.PositiveIntegerField(
+        'Image Width',
+        blank=True,
+        null=True
+    )
     updated_at = models.DateTimeField(
         pgettext_lazy('Student field', 'updated at'), auto_now=True, null=True)
     created = models.DateTimeField(pgettext_lazy('Student field', 'created'),
