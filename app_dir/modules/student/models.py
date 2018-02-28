@@ -7,14 +7,10 @@ from django.utils.timezone import now
 from . import ReligionChoices
 from . import GenderChoices
 from app_dir.modules.academics.academic_year.models import AcademicYear
+from app_dir.modules.academics.classes.models import Class
 
 
 class Student(models.Model):
-    adm_no = models.CharField(
-        pgettext_lazy('Student field', 'admission number'), default='', unique=True, max_length=128)
-    academic_year = models.ForeignKey(
-        AcademicYear, related_name='student_year', blank=True, null=True,
-        verbose_name=pgettext_lazy('Student field', 'academic year'))
     first_name = models.CharField(
         pgettext_lazy('Student field', 'first name'), default='', max_length=128)
     middle_name = models.CharField(
@@ -39,11 +35,6 @@ class Student(models.Model):
     )
     description = models.TextField(
         verbose_name=pgettext_lazy('Student field', 'description'), blank=True, null=True)
-    join_date = models.DateField(
-        pgettext_lazy('Student field', 'join on'), blank=True, null=True)
-    leave_date = models.DateField(
-        pgettext_lazy('Student field', 'leave on'), blank=True, null=True)
-    # image = models.ImageField(upload_to='student', null=True, blank=True)
     image = VersatileImageField(
         'Image',
         upload_to='images/students/',
@@ -76,5 +67,20 @@ class Student(models.Model):
         return str(self.first_name) + ' to ' + str(self.last_name)
 
 
+class StudentOfficialDetails(models.Model):
+    adm_no = models.CharField(
+        pgettext_lazy('StudentOfficialDetails field', 'admission number'), default='', unique=True, max_length=128)
+    academic_year = models.ForeignKey(
+        AcademicYear, related_name='student_year', blank=True, null=True,
+        verbose_name=pgettext_lazy('StudentOfficialDetails field', 'academic year'))
+    course = models.ForeignKey(
+        Class, related_name='student_class', blank=True, null=True,
+        verbose_name=pgettext_lazy('StudentOfficialDetails field', 'class'))
+    stream = models.ForeignKey(
+        Class, related_name='student_stream', blank=True, null=True,
+        verbose_name=pgettext_lazy('StudentOfficialDetails field', 'stream'))
 
-
+    join_date = models.DateField(
+        pgettext_lazy('Student field', 'join on'), blank=True, null=True)
+    leave_date = models.DateField(
+        pgettext_lazy('Student field', 'leave on'), blank=True, null=True)
