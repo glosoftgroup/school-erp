@@ -27,12 +27,12 @@ class Student(models.Model):
     pob = models.CharField(
         pgettext_lazy('Student field', 'place of birth'), default='', max_length=128)
     gender = models.CharField(
-        max_length=2,
+        max_length=23,
         choices=GenderChoices.CHOICES,
         default=GenderChoices.MALE,
     )
     religion = models.CharField(
-        max_length=2,
+        max_length=45,
         choices=ReligionChoices.CHOICES,
         default=ReligionChoices.CHRISTIAN,
     )
