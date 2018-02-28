@@ -6,15 +6,17 @@ from rest_framework import pagination
 from .pagination import PostLimitOffsetPagination
 from rest_framework.parsers import MultiPartParser, FormParser
 from ...student.models import Student as Table
+from ...student.models import StudentOfficialDetails as OfficialDetail
 from .serializers import (
     CreateListSerializer,
     TableListSerializer,
-    UpdateSerializer
+    UpdateSerializer,
+    CreateOfficialDetailListSerializer
      )
 
 User = get_user_model()
 
-
+# personal details
 class CreateAPIView(generics.CreateAPIView):
     parser_classes = (MultiPartParser, FormParser,)  # Used to parse the Request.
     queryset = Table.objects.all()
@@ -78,3 +80,11 @@ class UpdateAPIView(generics.RetrieveUpdateAPIView):
     """
     queryset = Table.objects.all()
     serializer_class = UpdateSerializer
+
+
+# official detail
+class CreateOfficialDetailsAPIView(generics.CreateAPIView):
+    parser_classes = (MultiPartParser, FormParser,)  # Used to parse the Request.
+    queryset = OfficialDetail.objects.all()
+    serializer_class = CreateOfficialDetailListSerializer
+
