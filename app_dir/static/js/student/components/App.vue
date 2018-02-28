@@ -38,7 +38,7 @@
             <div class="row">
               <!-- first name -->
               <div class="form-group col-sm-4">
-                  <label class="req">First Name: <span class="text-danger">*</span></label>
+                  <label class="req">First Name:<span class="text-danger">*</span></label>
                   <input  v-validate="'required'" :class="{'input': true, 'border-warning': errors.has('first_name') }"  class="form-control" v-model="first_name" name="first_name" id="first_name"
                           maxlength="45" type="text" placeholder="First name"/> 
                   <span v-show="errors.has('first_name')" class="help text-warning">{{ errors.first('first_name') }}</span>
@@ -79,7 +79,7 @@
                         v-model="dob"
                         name='dob'
                         v-validate="'required'"
-                        prepend-icon="icon-user" 
+                        prepend-icon="icon-calendar" 
                         
                       ></v-text-field>
                       <v-date-picker v-model="dob" scrollable>
@@ -115,7 +115,7 @@
             <div class="row">                
                 <div class="col-sm-4">
                    <label>Nationality</label>
-                    <vselect :options="countries" >
+                    <vselect :options="countries" v-model="nationality" >
                     <option disabled value="0">Select</option>
                    </vselect>
                 </div>                
@@ -126,8 +126,8 @@
                     <option disabled value="0">Select</option>
                    </vselect>
                 </div>  
-                <div class="form-group col-sm-4">
-                 
+                <div class="form-group col-sm-12 pull-right">
+                  <button class="btn btn-primary btn-xs pull-right" @click="validateAsync">Save</button>
                 </div>
                  
           </div>
@@ -195,19 +195,21 @@
     }, 
     data: function() {
       return {        
-        imageData: "",
+        image: "",
+        imageData:'',
         menu: false,
         modal: false,
         default_imageData: "/static/images/users/default-avatar.png",
-        first_name:'Paul',
-        middle_name:'Kinuthia',
-        last_name:'Kuria',
+        first_name:'',
+        middle_name:'',
+        last_name:'',
         dob:'',
-        pob:'Kiambu',
+        pob:'',
         adm_no:'null',
         language: "en-US",
         result: null,
-        countries:countries,        
+        countries:countries, 
+        nationality:'KE',
         selected:{code:'KE',name:'Kenya'},
         academic_year:null,
         academic_years:[
@@ -248,23 +250,75 @@
         }
       }       
     },   
-    methods: {      
-      validateAsync: function(){  
-             
+    methods: { 
+      studentDetails(){
+        // add or update student details if pk is provided
+        this.axios.defaults.xsrfHeaderName = "X-CSRFToken"
+        this.axios.defaults.xsrfCookieName = 'csrftoken'
+        // const config = { headers: { 'Content-Type': 'multipart/form-data'} };
+        if(pk){ 
+          var formData = new FormData(); // Currently empty
+          
+          if(document.getElementById("image").value) {
+            this.image = document.getElementById("image").files[0];
+            formData.append('image', this.image);
+          }          
+          
+          formData.append('first_name', this.first_name); 
+          formData.append('middle_name', this.middle_name);
+          formData.append('last_name', this.last_name); 
+          formData.append('pob', this.pob); 
+          formData.append('dob', this.dob);
+          formData.append('adm_no', this.adm_no);
+          formData.append('gender', this.gender); 
+          formData.append('religion', this.religion);
+          formData.append('nationality', this.nationality);          
+
+          this.axios.put(updateUrl, formData)
+          .then(function(response) {
+              console.log('submited');
+          })
+          .catch(function(err) {
+              console.log(err);
+          });
+          // ./update
+        }else{ 
+          
+          var formData = new FormData(); // Currently empty
+          
+          if(document.getElementById("image").value) {
+            this.image = document.getElementById("image").files[0];
+            formData.append('image', this.image);
+          } 
+          formData.append('first_name', this.first_name); 
+          formData.append('middle_name', this.middle_name);
+          formData.append('last_name', this.last_name); 
+          formData.append('pob', this.pob); 
+          formData.append('dob', this.dob);
+          formData.append('adm_no', this.adm_no);
+          formData.append('gender', this.gender); 
+          formData.append('religion', this.religion);
+          formData.append('nationality', this.nationality);
+          formData.append('image', this.image);
+
+          this.axios.post(createUrl, formData)
+          .then(function(response) {
+              response = response.data;
+              pk = response.id;
+          })
+          .catch(function(err) {
+              console.log(err);
+          });
+          // ./create
+        }       
+
+      },    
+      validateAsync: function(){              
         return new Promise((resolve, reject) => {
               
               this.$validator.validateAll().then((result) => {
               if (result) {
-                  // eslint-disable-next-line
-                  this.axios.defaults.xsrfHeaderName = "X-CSRFToken"
-                  this.axios.defaults.xsrfCookieName = 'csrftoken'
-                  this.axios.post(createUrl, this.$data)
-                  .then(function(response) {
-                      console.log('submited');
-                  })
-                  .catch(function(err) {
-                      console.log(err);
-                  });
+                  this.studentDetails()
                   resolve(true)
                   return;
                 }
@@ -295,11 +349,43 @@
             // Start the reader job - read file as a data url (base64 format)
             reader.readAsDataURL(input.files[0]);
         }
+      },
+      getDetails(){
+        if(pk){
+        var self = this;        
+        this.axios.get(updateUrl)
+            .then(function (response) {
+                response = response.data;
+                self.first_name = response.first_name;
+                self.middle_name = response.middle_name;
+                self.last_name = response.last_name;
+                self.dob = response.dob;
+                self.pob = response.pob;
+                self.gender = response.gender;
+                self.gender = response.gender;
+                self.adm_no = response.adm_no;
+                if(response.image){
+                  self.imageData = response.image;
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
       }
     },
-     mounted () {
+    mounted () {
       this.$validator.localize('en', this.dictionary)
+
+      // check pk for editing
+      this.getDetails()
     },
+    watch: {
+    // whenever question changes, this function will run
+    // data: function (newData, oldQuestion) {
+    //   this.data = newData
+    // }
+  },
   }
 </script>
 
@@ -329,5 +415,8 @@
 .application.theme--light{
   background: #fff;
   margin-top: 16px;
+}
+.input-group--text-field input, .input-group--text-field textarea {
+    font-size: 13px;
 }
 </style>

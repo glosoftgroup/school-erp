@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^api/update/(?P<pk>[0-9]+)/$', UpdateAPIView.as_view(), name='api-update'),
     url(r'^add/$', TemplateView.as_view(template_name="student/form.html"), name='add'),
     url(r'^update/(?P<pk>[0-9]+)/$',
-        UpdateView.as_view(template_name="student/form.html", model=Table, fields=['id', 'first_name']),
+        UpdateView.as_view(template_name="student/form.html", model=Table, fields=['id', 'first_name', 'last_name']),
         name='update'),
 ]
 

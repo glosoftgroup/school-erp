@@ -1,20 +1,34 @@
 # site settings rest api serializers
 
 from rest_framework import serializers
+from versatileimagefield.serializers import VersatileImageFieldSerializer
 from ...student.models import Student as Table
 
 
 class TableListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='student:update')
     delete_url = serializers.HyperlinkedIdentityField(view_name='student:api-delete')
+    image = VersatileImageFieldSerializer(
+        sizes=[
+            ('full_size', 'url'),
+            ('thumbnail', 'thumbnail__100x100'),
+            ('medium_square_crop', 'crop__400x400'),
+            ('small_square_crop', 'crop__50x50')
+        ]
+    )
 
     class Meta:
         model = Table
-        fields = ('id',
+        fields = ('adm_no',
                   'first_name',
+                  'middle_name',
                   'last_name',
-                  'join_date',
-                  'leave_date',
+                  'nationality',
+                  'dob',
+                  'pob',
+                  'gender',
+                  'religion',
+                  'image',
                   'update_url',
                   'delete_url'
                  )
@@ -32,7 +46,8 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'dob',
                   'pob',
                   'gender',
-                  'religion'
+                  'religion',
+                  'image'
                  )
 
     def create(self, validated_data):
@@ -41,27 +56,35 @@ class CreateListSerializer(serializers.ModelSerializer):
         instance.first_name = validated_data.get('first_name')
         instance.middle_name = validated_data.get('middle_name')
         instance.last_name = validated_data.get('last_name')
-        if validated_data.get('adm_no') != 'null':
-            instance.adm_no = validated_data.get('adm_no')
-        else:
+
+        def set_adm_no():
             # auto generate admission no
             try:
                 adm_no = Table.objects.latest('id').pk
+                adm_no += 1
             except Exception as e:
-                adm_no = 1
+                adm_no = 2
                 print(e)
             instance.adm_no = adm_no
+        if str(validated_data.get('adm_no')) != 'null':
+            instance.adm_no = validated_data.get('adm_no')
+        elif not validated_data.get('adm_no'):
+            set_adm_no()
+        else:
+            instance.adm_no = 1
 
         if validated_data.get('nationality'):
             instance.nationality = validated_data.get('nationality')
         if validated_data.get('dob'):
-            instance.start_date = validated_data.get('dob')
+            instance.dob = validated_data.get('dob')
         if validated_data.get('gender'):
-            instance.end_date = validated_data.get('gender')
+            instance.gender = validated_data.get('gender')
         if validated_data.get('pob'):
-            instance.end_date = validated_data.get('pob')
+            instance.pob = validated_data.get('pob')
         if validated_data.get('religion'):
-            instance.end_date = validated_data.get('religion')
+            instance.religion = validated_data.get('religion')
+        if validated_data.get('image'):
+            instance.image = validated_data.get('image', instance.image)
         instance.save()
 
         return instance
@@ -71,21 +94,26 @@ class UpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
         fields = ('id',
+                  'adm_no',
                   'first_name',
+                  'middle_name',
                   'last_name',
-                  'join_date',
-                  'leave_date',
+                  'nationality',
+                  'dob',
+                  'pob',
+                  'gender',
+                  'religion',
+                  'image'
                  )
 
     def update(self, instance, validated_data):
-        if validated_data.get('first_name'):
-            instance.name = validated_data.get('first_name', instance.first_name)
-        if validated_data.get('description'):
-            instance.description = validated_data.get('description', instance.description)
-        if validated_data.get('start_date'):
-            instance.start_date = validated_data.get('start_date', instance.start_date)
-        if validated_data.get('end_date'):
-            instance.end_date = validated_data.get('end_date', instance.end_date)
-
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.middle_name = validated_data.get('middle_name', instance.middle_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.gender = validated_data.get('gender', instance.gender)
+        instance.nationality = validated_data.get('nationality', instance.nationality)
+        instance.dob = validated_data.get('dob', instance.dob)
+        instance.pob = validated_data.get('pob', instance.pob)
+        instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance

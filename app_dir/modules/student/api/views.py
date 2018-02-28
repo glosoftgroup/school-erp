@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import pagination
 from .pagination import PostLimitOffsetPagination
-
+from rest_framework.parsers import MultiPartParser, FormParser
 from ...student.models import Student as Table
 from .serializers import (
     CreateListSerializer,
@@ -16,6 +16,7 @@ User = get_user_model()
 
 
 class CreateAPIView(generics.CreateAPIView):
+    parser_classes = (MultiPartParser, FormParser,)  # Used to parse the Request.
     queryset = Table.objects.all()
     serializer_class = CreateListSerializer
 
@@ -58,7 +59,11 @@ class ListAPIView(generics.ListAPIView):
         query = self.request.GET.get('q')
         if query:
             queryset_list = queryset_list.filter(
-                Q(name__icontains=query))
+                Q(first_name__icontains=query) |
+                Q(last_name__icontains=query) |
+                Q(middle_name__icontains=query) |
+                Q(adm_no__icontains=query)
+            )
         return queryset_list.order_by('-id')
 
 
