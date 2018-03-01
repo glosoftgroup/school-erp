@@ -14,10 +14,10 @@ class TableListSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'subject',
                   'topic',
-                  'subtopic',
+                  'subtopics',
                   'period',
-                  'objective',
-                  'competencies',
+                  'objectives',
+                  'expectations',
                   'values',
                   'update_url',
                   'delete_url'
@@ -32,10 +32,10 @@ class CreateListSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'subject',
                   'topic',
-                  'subtopic',
+                  'subtopics',
                   'period',
-                  'objective',
-                  'competencies',
+                  'objectives',
+                  'expectations',
                   'values',
                  )
 
@@ -45,14 +45,14 @@ class CreateListSerializer(serializers.ModelSerializer):
             instance.subject = validated_data.get('subject')
         if validated_data.get('topic'):
             instance.topic = validated_data.get('topic')
-        if validated_data.get('subtopic'):
-            instance.subtopic = validated_data.get('subtopic')
+        if validated_data.get('subtopics'):
+            instance.subtopics = validated_data.get('subtopics')
         if validated_data.get('period'):
             instance.period = validated_data.get('period')
-        if validated_data.get('objective'):
-            instance.objective = validated_data.get('objective')
-        if validated_data.get('competencies'):
-            instance.competencies = validated_data.get('competencies')
+        if validated_data.get('objectives'):
+            instance.objectives = validated_data.get('objectives')
+        if validated_data.get('expectations'):
+            instance.expectations = validated_data.get('expectations')
         if validated_data.get('values'):
             instance.values = validated_data.get('values')
         instance.save()
@@ -66,10 +66,10 @@ class UpdateSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'subject',
                   'topic',
-                  'subtopic',
+                  'subtopics',
                   'period',
-                  'objective',
-                  'competencies',
+                  'objectives',
+                  'expectations',
                   'values',
                  )
 
@@ -78,14 +78,14 @@ class UpdateSerializer(serializers.ModelSerializer):
             instance.subject = validated_data.get('subject', instance.subject)
         if validated_data.get('topic'):
             instance.topic = validated_data.get('topic')
-        if validated_data.get('subtopic'):
-            instance.subtopic = validated_data.get('subtopic')
+        if validated_data.get('subtopics'):
+            instance.subtopics = validated_data.get('subtopics')
         if validated_data.get('period'):
             instance.period = validated_data.get('period')
-        if validated_data.get('objective'):
-            instance.objective = validated_data.get('objective')
-        if validated_data.get('competencies'):
-            instance.competencies = validated_data.get('competencies')
+        if validated_data.get('objectives'):
+            instance.objectives = validated_data.get('objectives')
+        if validated_data.get('expectations'):
+            instance.expectations = validated_data.get('expectations')
         if validated_data.get('values'):
             instance.values = validated_data.get('values')
 

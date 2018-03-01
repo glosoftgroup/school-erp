@@ -10,7 +10,7 @@ from ..classes.models import Class
 class Curriculum(models.Model):
     subject      = models.ForeignKey(Subject , on_delete=models.CASCADE)
     topic        = models.CharField(null=True, blank=True, max_length=128)
-    subtopic     = models.CharField(null=True, blank=True, max_length=128)
+    subtopics    = models.CharField(null=True, blank=True, max_length=128)
     period       = models.CharField(null=True, blank=True, max_length=128)
     objective    = models.CharField(null=True, blank=True, max_length=300)
     competencies = models.CharField(null=True, blank=True, max_length=300)

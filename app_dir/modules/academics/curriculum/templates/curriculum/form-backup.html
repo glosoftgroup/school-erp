@@ -1,0 +1,383 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+    {% if object.id %}
+        Edit Curriculum
+    {% else %}
+       Add Curriculum
+    {% endif %}
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class="active"><a href="{% url 'curriculum:index' %}" >curriculum</a></li>
+    {% if object.id %}
+        <li class="active"><a href="{% url 'curriculum:update' pk=object.id %}" >update {{object.subject.name}}</a></li>
+    {% else %}
+       <li class="active"><a href="{% url 'curriculum:add' %}" >add curriculum</a></li>
+    {% endif %}
+ {% endblock %}
+
+
+{% block menu_curriculum_class %}active{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+<link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
+<style>
+    fieldset.scheduler-border {
+        border: 1px groove #efefef !important;
+        border-radius:5px;
+        padding: 0 1.4em 1.4em 1.4em !important;
+        margin: 0 0 1.5em 0 !important;
+        -webkit-box-shadow:  0px 0px 0px 0px #000;
+                box-shadow:  0px 0px 0px 0px #000;
+    }
+
+    legend.scheduler-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width:auto;
+        padding:0 10px;
+        border-bottom:none;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="panel panel-flat animated fadeIn" id="vue-app">
+    <div class="panel-body">
+        <div class="row">
+           <form enc-type="multipart/form-data" id="addForm">
+               {% csrf_token %}
+              <div class="col-md-12">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="text-bold">Subject Name:<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="btn-group bootstrap-select input-group-btn" id="subjects" style="width: 100%;">
+                                        <select name="subject" id="subject" class="bootstrap-select sel" style="display:none">
+                                            <option value="">select subject</option>
+                                            {% if object.subject.name %}
+                                            <option value="{{object.subject.id}}" selected>{{object.subject.name}}</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
+
+                                                data-ta="#subject_modal_instance"
+                                                data-title="Add New Subject"
+                                                data-select="#subjects"
+                                                data-href="{% url 'subject:api-create' %}"
+                                                data-cat="name" data-label="Subject Name:">
+                                            <i class="icon-plus-circle2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="text-bold">Academic Year:<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="btn-group bootstrap-select input-group-btn" id="subjects" style="width: 100%;">
+                                        <select name="subject" id="subject" class="bootstrap-select sel" style="display:none">
+                                            <option value="">select subject</option>
+                                            {% if object.subject.name %}
+                                            <option value="{{object.subject.id}}" selected>{{object.subject.name}}</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
+
+                                                data-ta="#subject_modal_instance"
+                                                data-title="Add New Subject"
+                                                data-select="#subjects"
+                                                data-href="{% url 'subject:api-create' %}"
+                                                data-cat="name" data-label="Subject Name:">
+                                            <i class="icon-plus-circle2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+               <div class="col-md-12">
+                       <div class="col-md-12">
+                           <a href="javascript:;" id="reveal-topic-btn" class="label border-left-danger label-striped" style="margin-bottom:5px;">Add a Topic</a>
+                       </div>
+               </div>
+               <div class="col-md-12" id="topic-div" style="display:none;">
+                   <fieldset class="scheduler-border">
+                       <legend class="scheduler-border">Topic</legend>
+                       <form enc-type="multipart/form-data" id="addTopicForm">
+                           <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="text-bold">Name:<span class="text-danger">*</span></label>
+                                            <input value="{% if object.topic %} {{object.topic}} {% endif %}"
+                                                   class="form-control" name="topic" id="topic" placeholder="Topic" type="text"/>
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                           <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="text-bold">Period of Compeletion:<span class="text-danger">*</span></label>
+                                            <input value="{% if object.topic %} {{object.topic}} {% endif %}"
+                                                   class="form-control" name="topic" id="topic" placeholder="Topic" type="text"/>
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                           <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="text-bold">Sub-Topics:<span class="text-danger">*</span></label>
+                                            <select multiple="" id="multiple" name="subtopic" class="select-border-color border-warning select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                                <option value="80">Colouring</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                           <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="text-bold">Objectives:<span class="text-danger">*</span></label>
+                                            <select multiple="" id="multiple" name="objectives" class="select-border-color border-warning select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                                <option value="80">Colouring</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                           <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="text-bold">Expected Values:<span class="text-danger">*</span></label>
+                                            <select multiple="" id="multiple" name="expectations" class="select-border-color border-warning select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                                                <option value="80">Colouring</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                           <div class="text-left col-md-12">
+                               <button id="cancel-topic-btn" type="button" class="btn btn-danger legitRipple">
+                                    Cancel
+                                    <i class="icon-cross3 position-right"></i>
+                                </button>
+                                <button id="add-topic-btn" type="submit" class="btn btn-primary legitRipple">
+                                    Add Topic
+                                    <i class="icon-arrow-right14 position-right"></i>
+                                </button>
+                           </div>
+                       </form>
+                   </fieldset>
+               </div>
+              </form>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-flat animated fadeIn" id="vue-app">
+    <div class="panel-body">
+        <div class="row">
+           <form enc-type="multipart/form-data" id="addForm">
+               {% csrf_token %}
+              <div class="col-md-12">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="text-bold">Subject Name:<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="btn-group bootstrap-select input-group-btn" id="subjects" style="width: 100%;">
+                                        <select name="subject" id="subject" class="bootstrap-select sel" style="display:none">
+                                            <option value="">select subject</option>
+                                            {% if object.subject.name %}
+                                            <option value="{{object.subject.id}}" selected>{{object.subject.name}}</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
+
+                                                data-ta="#subject_modal_instance"
+                                                data-title="Add New Subject"
+                                                data-select="#subjects"
+                                                data-href="{% url 'subject:api-create' %}"
+                                                data-cat="name" data-label="Subject Name:">
+                                            <i class="icon-plus-circle2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="text-bold">Topic:<span class="text-danger">*</span></label>
+                                <input value="{% if object.topic %} {{object.topic}} {% endif %}"
+                                       class="form-control" name="topic" id="topic" placeholder="Topic" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="text-bold">Sub-Topic:<span class="text-danger">*</span></label>
+                                <input value="{% if object.subtopic %} {{object.subtopic}} {% endif %}"
+                                       class="form-control" name="subtopic" id="subtopic" placeholder="Sub-Topic" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="col-md-12">
+                   <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="text-bold">Period<span class="text-danger">*</span></label>
+                                    <input value="{% if object.period %} {{object.period}} {% endif %}"
+                                           class="form-control" name="period" id="period" placeholder="Period" type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="text-bold">Objective:<span class="text-danger">*</span></label>
+                                    <input value="{% if object.objective %} {{object.objective}} {% endif %}" class="form-control" name="objective" id="objective" placeholder="Objective" type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                <label class="text-bold">Competencies:<span class="text-danger">*</span></label>
+                                <input value="{% if object.competencies %} {{object.competencies}} {% endif %}" class="form-control" name="competencies" id="competencies" placeholder="Competencies" type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="col-md-12">
+                   <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                <label class="text-bold">Values:<span class="text-danger">*</span></label>
+                                <input value="{% if object.values %} {{object.values}} {% endif %}" class="form-control" name="values" id="values" placeholder="Values" type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+
+                <div class="text-left col-md-12">
+                    <button id="add-room-btn" type="submit" class="btn btn-primary legitRipple">
+                        {% if object.id %} Update {% else %} Add {% endif %}
+                        <i class="icon-arrow-right14 position-right"></i>
+                    </button>
+                </div>
+              </form>
+        </div>
+    </div>
+</div>
+
+
+<input type="hidden" id="subjectPk" value="{{object.subject.pk}}">
+<input type="hidden" id="subjectStatus" value="false">
+{% if object.id %}
+<input type="hidden" id="postUrl" value="{% url 'curriculum:api-update' pk=object.pk %}">
+    <input type="hidden" id="postMethod" value="PUT">
+    <input type="hidden" id="pk" value="{{object.pk}}">
+{% else %}
+    <input type="hidden" id="postUrl" value="{% url 'curriculum:api-create' %}">
+    <input type="hidden" id="postMethod" value="POST">
+    <input type="hidden" id="pk" value="none">
+{% endif %}
+
+<!-- to populate select elements -->
+<input type="hidden" id="redirectUrl" value="{% url 'curriculum:index' %}">
+<input type="hidden" id="subjectUrl" value="{% url 'subject:api-list' %}">
+<input type="hidden" id="csrftoken" value="{{ csrf_token }}">
+
+{% include "curriculum/modals/subject_modal.html" %}
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/core/libraries/jquery.validate.min.js' %} "></script>
+<!--<script type="text/javascript" src="{% static 'js/academics/curriculum/add.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'js/academics/curriculum/dd.js' %}"></script>
+<script>
+    var data = [
+            {
+              "id": 1,
+              "text": "Option 1",
+              "value": "ha 1"
+            },
+            {
+              "id": 2,
+              "text": "Option 2",
+              "value": "ha 2",
+              "selected": true
+            },
+            {
+              "id": 3,
+              "text": "Option 3",
+              "value": "ha 3",
+              "disabled": true
+            }
+        ];
+    $(".select-border-color").select2({
+        dropdownCssClass: 'border-primary',
+        containerCssClass: 'border-primary text-primary-700',
+        tags: true,
+        //tokenSeparators: [',', ' '],
+        data: data
+    });
+
+    $(".select-border-color").on('select2:select', function (e) {
+        var data = e.params.data;
+        console.log(data);
+    });
+</script>
+{% endblock %}
