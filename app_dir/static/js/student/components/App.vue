@@ -129,7 +129,8 @@
                 <div class="form-group col-sm-12 pull-right">
                   <button class="btn btn-primary btn-xs pull-right text-small" @click="validateAsync">
                     <i class="icon-floppy-disk position-left"></i>
-                    Save</button>
+                    Save
+                    </button>
                 </div>
                  
           </div>
@@ -158,6 +159,12 @@
      
      </tab-content>
      <!-- .official details -->
+     
+     <!-- parentals details -->
+     <tab-content title="Official Details"
+                  icon="icon-user-tie">
+     </tab-content>
+     <!-- ./parental -->
      <tab-content title="Last step"
                   icon="ti-check">
        Yuhuuu! This seems pretty damn simple

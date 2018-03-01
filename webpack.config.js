@@ -9,16 +9,17 @@ function resolve (dir) {
 
 module.exports = {
     entry: {
-        'dashboard': './app_dir/static/js/',
-        'site': './app_dir/static/js/site/',
-        'users': './app_dir/static/js/users/',
-        'room': './app_dir/static/js/room/',
         'academic_year': './app_dir/static/js/academic_year/',
-        'stream': './app_dir/static/js/academics/stream/',
+        'academic_year': './app_dir/static/js/academic_year/',
         'classes': './app_dir/static/js/academics/classes/',
+        'dashboard': './app_dir/static/js/',
+        'parent': './app_dir/static/js/parent/',
+        'room': './app_dir/static/js/room/',
+        'site': './app_dir/static/js/site/',
+        'stream': './app_dir/static/js/academics/stream/',
+        'student': './app_dir/static/js/student/',
         'term': './app_dir/static/js/term/',
-        'academic_year': './app_dir/static/js/academic_year/',
-        'student': './app_dir/static/js/student/'
+        'users': './app_dir/static/js/users/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),
