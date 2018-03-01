@@ -17,7 +17,7 @@ Edit {{object.first_name}} details - Student
 {% endblock %}
 
 
-{% block menu_settings_year %}active{% endblock %}
+{% block menu_student %}active{% endblock %}
 
 {% block custom_css %}
 <link href="{% static 'js/plugins/vue/material-css.css' %}" rel="stylesheet">
@@ -1424,31 +1424,25 @@ Edit {{object.first_name}} details - Student
             </div>
         </div>
     </div>
-    <!--templates-->
-    <script type="text/x-template" id="select2-template">
-        <select>
-            <slot></slot>
-        </select>
-    </script>
     
-    <script type="text/x-template" id="datepicker-template">
-        <input class="form-control">
-    </script>
-    <!--./templates-->
 </div>
 <!--./room details-->
 {% endblock %}
 
 {% block custom_js %}
-<script type="text/javascript" src="https://cdn.bootcss.com/select2/4.0.4/js/select2.js"></script>
+<!--<script type="text/javascript" src="https://cdn.bootcss.com/select2/4.0.4/js/select2.js"></script>-->
 
 <script>
     var csrfmiddlewaretoken  = jQuery("[name=csrfmiddlewaretoken]").val();
     var dynamicData = {};
+    var updateUrl = '';
+    var getAcademicYearsUrl = "{% url 'academic_year:api-list' %}";
+    var getCourseUrl = "{% url 'classes:api-list' %}";
+    var getStreamUrl = "{% url 'stream:api-list' %}";
 
     {% if object.id %}
     var pk = "{{object.id}}";
-    var updateUrl = "{% url 'student:api-update' pk=object.id %}";
+    updateUrl = "{% url 'student:api-update' pk=object.id %}";
     {% else %}
     var pk= false;
     {% endif %}

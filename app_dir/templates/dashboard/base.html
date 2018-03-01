@@ -121,7 +121,7 @@
                                     </ul>
                                 </li>
                                 <!--./settings-->
-
+    
                                 <!--academics-->
                                 {% if perms.stream.view_stream or perms.classes.view_class %}
                                 <li class="">
@@ -162,6 +162,19 @@
                                 </li>
                                 {% endif %}
                                 <!--/academics -->
+                                <!--student-->
+                                <li>
+                                  <a href="javascript:;">
+                                    <i class="icon-user"></i>
+                                    <span>Student Management</span>
+                                  </a>
+                                    <ul>
+                                        <li class="{% block menu_student %}{% endblock %}">
+                                          <a href="{% url 'student:index' %}">Students Admission</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!--./student-->
                             </ul>
                         </div>
                     </div>

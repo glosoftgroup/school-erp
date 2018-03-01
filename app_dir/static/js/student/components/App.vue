@@ -89,8 +89,7 @@
                       </v-date-picker>
                     </v-dialog>
                     <span v-show="errors.has('dob')" class="help text-warning">{{ errors.first('dob') }}</span>                
-                    </v-app>
-                    
+                    </v-app>                   
                     
                 </div>
                 <!-- ./dob -->
@@ -98,9 +97,10 @@
                 <!-- gender -->
                 <div class="form-group col-sm-4">
                     <label for="Gender">Gender</label>
-                    <vselect :options="genders" v-model="gender" >
+                    <vselect :options="genders" id="gender" v-model="gender" >
                       <option disabled value="0">Select</option>
-                   </vselect>                    
+                   </vselect> 
+                                     
                 </div>
                 <!-- ./gender   -->
                 <!-- pob -->
@@ -115,46 +115,47 @@
             <div class="row">                
                 <div class="col-sm-4">
                    <label>Nationality</label>
-                    <vselect :options="countries" v-model="nationality" >
+                    <vselect id="nationality" :options="countries" v-model="nationality" >
                     <option disabled value="0">Select</option>
                    </vselect>
                 </div>                
                 
                 <div class="form-group col-sm-4">
                     <label for="reg_input">Religion</label>
-                    <vselect v-model="religion" :options="religions" :placeholder="religion" >
+                    <vselect id="religion" v-model="religion" :options="religions" :placeholder="religion" >
                     <option disabled value="0">Select</option>
                    </vselect>
                 </div>  
                 <div class="form-group col-sm-12 pull-right">
-                  <button class="btn btn-primary btn-xs pull-right" @click="validateAsync">Save</button>
+                  <button class="btn btn-primary btn-xs pull-right text-small" @click="validateAsync">
+                    <i class="icon-floppy-disk position-left"></i>
+                    Save</button>
                 </div>
                  
           </div>
           </div>
-       </div>      
+       </div> 
+       <v-snackbar
+        :timeout="timeout"
+        :top="y === 'top'"
+        :bottom="y === 'bottom'"
+        :right="x === 'right'"
+        :left="x === 'left'"
+        :multi-line="mode === 'multi-line'"
+        :vertical="mode === 'vertical'"
+        v-model="snackbar"
+      >
+        {{ alert_text }}
+        <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
+      </v-snackbar>     
      </tab-content>
       <!-- ./personal details -->  
 
      <!-- official details -->
      <tab-content title="Official Details"
                   icon="icon-office">
-      <div class="row">
-         <!-- academic year -->
-          <div class="form-group col-sm-4">
-              <label class="req">Academic Year: <span class="text-danger">*</span></label>
-              <vselect :options="academic_years" v-model="academic_year" >
-                <option disabled value="0">Select</option>
-              </vselect> 
-          </div>
-          <!-- reg number -->
-          <div class="form-group col-sm-4">
-            <label class="req">Admission No: <span class="text-danger">*</span></label>
-            <input :class="{'input': true, 'border-warning': errors.has('adm_no') }"  class="form-control" v-model="adm_no" name="adm_no" id="adm_no"
-                    maxlength="45" type="text" placeholder="Admission No."/> 
-            <span v-show="errors.has('adm_no')" class="help text-warning">{{ errors.first('adm_no') }}</span>
-          </div>            
-      </div>
+                  <OfficialDetails/>
+     
      </tab-content>
      <!-- .official details -->
      <tab-content title="Last step"
@@ -174,9 +175,11 @@
   import axios from 'axios'
   import VueAxios from 'vue-axios'
   import VeeValidate from 'vee-validate';
+  import select2 from 'select2'
 
   // local component
   import Select from './Select'
+  import OfficialDetails from './OfficialDetails'
   // import VueDatePicker from './DatePicker'
 
   // components
@@ -184,13 +187,15 @@
   Vue.use(Vuetify)
   Vue.use(VeeValidate);
   Vue.use(VueAxios, axios)
+
+  // local components
+  Vue.component('OfficialDetails', OfficialDetails);
   Vue.component('vselect', Select)
-  // Vue.component('v-datepicker', VueDatePicker)
 
   // global variables
   var countries = require("./countries.js");
   export default { 
-     $_veeValidate: {
+    $_veeValidate: {
       validator: 'new'
     }, 
     data: function() {
@@ -199,6 +204,13 @@
         imageData:'',
         menu: false,
         modal: false,
+        a1: null,
+        snackbar: false,
+        y: 'bottom',
+        x: null,
+        mode: '',
+        timeout: 6000,
+        alert_text: 'Hello, I\'m a snackbar',
         default_imageData: "/static/images/users/default-avatar.png",
         first_name:'',
         middle_name:'',
@@ -252,6 +264,7 @@
     },   
     methods: { 
       studentDetails(){
+        var self = this;
         // add or update student details if pk is provided
         this.axios.defaults.xsrfHeaderName = "X-CSRFToken"
         this.axios.defaults.xsrfCookieName = 'csrftoken'
@@ -277,6 +290,8 @@
           this.axios.put(updateUrl, formData)
           .then(function(response) {
               console.log('submited');
+              self.alert_text = 'Data updated successfuly';
+              self.snackbar = true;
           })
           .catch(function(err) {
               console.log(err);
@@ -305,6 +320,9 @@
           .then(function(response) {
               response = response.data;
               pk = response.id;
+              updateUrl = response.update_url;
+              self.alert_text = 'student created successfuly';
+              self.snackbar = true;
           })
           .catch(function(err) {
               console.log(err);
@@ -361,12 +379,17 @@
                 self.last_name = response.last_name;
                 self.dob = response.dob;
                 self.pob = response.pob;
+                self.religion = response.religion;
                 self.gender = response.gender;
-                self.gender = response.gender;
+                self.nationality = response.nationality;
                 self.adm_no = response.adm_no;
                 if(response.image){
                   self.imageData = response.image;
                 }
+                $("#nationality").val(self.nationality).trigger('change');
+                
+                $("#religion").val(self.religion).trigger('change');
+                $("#gender").val(self.gender).trigger('change');
             })
             .catch(function (error) {
                 console.log(error);
@@ -381,11 +404,8 @@
       this.getDetails()
     },
     watch: {
-    // whenever question changes, this function will run
-    // data: function (newData, oldQuestion) {
-    //   this.data = newData
-    // }
-  },
+ 
+    },
   }
 </script>
 
