@@ -16,6 +16,7 @@ module.exports = {
         'academic_year': './app_dir/static/js/academic_year/',
         'stream': './app_dir/static/js/academics/stream/',
         'classes': './app_dir/static/js/academics/classes/',
+        'curriculum': './app_dir/static/js/academics/curriculum/',
         'term': './app_dir/static/js/term/',
         'academic_year': './app_dir/static/js/academic_year/',
         'student': './app_dir/static/js/student/'
