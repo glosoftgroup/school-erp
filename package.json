@@ -18,6 +18,7 @@
     "create-react-class": "^15.6.3",
     "es6-promise": "^4.2.4",
     "highcharts": "^5.0.14",
+    "jgrowl": "^1.4.6",
     "jquery": "^3.3.1",
     "jsdom-global": "^3.0.2",
     "lodash": "^4.17.5",

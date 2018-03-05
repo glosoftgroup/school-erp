@@ -8,6 +8,7 @@ import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import TopicComponent from './Topic';
 import TopicListComponent from './TopicList';
 import select2 from 'select2';
+import {jGrowl} from 'jgrowl';
 
 class CrudForm extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class CrudForm extends React.Component {
                 id:2,
                 name: "English",
                 period: "02-12-2018 - 02-12-2019",
-                subtopics:["Algebra", "Linear Regression", "Probability"],
+                subtopics:["Oral", "Essays", "Probability"],
                 objectives:[
                     "Teach Oral Communication",
                     "Spelling Bee",
@@ -84,6 +85,28 @@ class CrudForm extends React.Component {
 
     slideToggle = () => {
         this.setState({visible:!this.state.visible})
+    }
+
+    addTopicCallBack = (topicFromChild) => {
+        console.log(topicFromChild)
+        let topics = this.state.topics
+        let found = false;
+
+        for(let i = 0; i < topics.length; i++) {
+            if (topics[i].name == topicFromChild.name) {
+                found = true;
+                $.jGrowl('Topic Already Exists', {
+                      theme: 'bg-danger'
+                 });
+                return;
+            }
+        }
+
+        topics.push(topicFromChild)
+        this.setState({topics:topics})
+        $.jGrowl('Topic Added Successfully', {
+                      theme: 'bg-success'
+                 });
     }
 
 
@@ -163,9 +186,12 @@ class CrudForm extends React.Component {
                            </a>
                        </div>
                </div>
-               <TopicComponent status={this.state.visible} slideToggle={this.slideToggle}/>
+                <TopicComponent status={this.state.visible}
+                                slideToggle={this.slideToggle}
+                                topics={this.state.topics}
+                                addTopicCallBack={this.addTopicCallBack}/>
 
-            <TopicListComponent topics={this.state.topics} />
+                <TopicListComponent topics={this.state.topics} />
         </form>
               
       );

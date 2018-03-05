@@ -6,11 +6,16 @@ import map from 'lodash/map';
 import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import select2 from 'select2';
+import { Modal, Button } from 'react-bootstrap';
 
 
 class TopicListComponent extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+          show: false,
+          topicDetail:{}
+        };
     }
 
     componentWillMount() {
@@ -19,8 +24,20 @@ class TopicListComponent extends React.Component {
     componentDidMount(){
     }
 
+    handleClose = () => {
+        this.setState({ show: false });
+    }
+
+    handleShow = () => {
+        this.setState({ show: true });
+    }
+
     showTopicDetails = (topic) => {
-        console.log(topic.name);
+        let tt  = Object.assign({}, topic)
+        this.setState({ show: true, topicDetail: tt });
+        console.log("topic "+topic)
+        console.log("topicDetail "+this.state.topicDetail.subtopics)
+        console.log("tt "+tt.subtopics)
     }
 
 
@@ -50,23 +67,17 @@ class TopicListComponent extends React.Component {
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td>Maths</td>
-                            <td>02/03/2018 - 02/09/2019</td>
-                            <td>edit and delete</td>
-                        </tr>
-
                         {
-                            topics.map(topic => {
+                            topics.map((topic, index) => {
                                 return (
-                                    <tr key={topic.name}>
+                                    <tr key={index}>
                                         <td>{topic.name}</td>
                                         <td>{topic.period}</td>
                                         <td>
-                                            <button className="btn btn-primary"
-                                                onClick={_this.showTopicDetails(topic)}>
+                                            <Button className="btn btn-primary" type="button"
+                                                onClick={()=>this.showTopicDetails(topic)}>
                                                 edit({topic.id})
-                                            </button>
+                                            </Button>
                                         </td>
                                     </tr>
                                 )
@@ -76,6 +87,24 @@ class TopicListComponent extends React.Component {
                         </tbody>
                    </table>
                 </div>
+
+                <Modal show={this.state.show} onHide={this.handleClose}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>{this.state.topicDetail.name}</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <h4>Overflowing text to show scroll behavior</h4>
+                    <p>
+                      Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+                      dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
+                      ac consectetur ac, vestibulum at eros.
+                    </p>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={this.handleClose}>Close</Button>
+                  </Modal.Footer>
+                </Modal>
+
             </div>
       );
     }
