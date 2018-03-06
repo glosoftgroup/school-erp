@@ -18,7 +18,12 @@ class TopicComponent extends React.Component {
             subtopics:[],
             objectives:[],
             expectations:[],
-            errors:{}
+            errors:{},
+            options:[
+                {"id": 1, "text": "Option 1", "value": "ha 1"},
+                {"id": 2, "text": "Option 2", "value": "ha 2", "selected": true},
+                {"id": 3, "text": "Option 3", "value": "ha 3", "disabled": true}
+            ]
 
       }
 
@@ -37,8 +42,7 @@ class TopicComponent extends React.Component {
             ]
         $("#subtopics").select2({
             tags: true,
-            width:"100%",
-            data: data
+            width:"100%"
         }).on('change', function (e) {
             self.handleInputChange(e);
         })
@@ -144,7 +148,7 @@ class TopicComponent extends React.Component {
                        <legend className="scheduler-border">Topic</legend>
                        <div id="addTopicForm">
                            <div className="col-md-6">
-                                <div className={classnames("form-group", {"has-error": errors.name} )}>
+                                <div className={classnames("form-group ", {"has-error": errors.name} )}>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <label className="text-bold">Name:<span className="text-danger">*</span></label>
@@ -159,7 +163,7 @@ class TopicComponent extends React.Component {
                                 </div>
                            </div>
                            <div className="col-md-6">
-                                <div className={classnames("form-group", {"has-error": errors.period} )}>
+                                <div className={classnames("form-group ", {"has-error": errors.period} )}>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <label className="text-bold">Period of Compeletion:<span className="text-danger">*</span></label>
@@ -174,7 +178,7 @@ class TopicComponent extends React.Component {
                                 </div>
                            </div>
                            <div className="col-md-12">
-                                <div className={classnames("form-group", {"has-error": errors.subtopics} )}>
+                                <div className={classnames("form-group ", {"has-error": errors.subtopics} )}>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
@@ -182,9 +186,13 @@ class TopicComponent extends React.Component {
                                                     className="select-subtopics border-primary"
                                                     value={this.state.subtopics}
                                                     onChange={this.handleInputChange}>
-                                                <option value="1">Colouring</option>
-                                                <option value="2">ASDF</option>
-                                                <option value="3">Colsfduring</option>
+                                                    {
+                                                        this.state.options.map((option, index)=>{
+                                                            return (
+                                                                <option key={index}>{option.value}</option>
+                                                            )
+                                                        })
+                                                    }
                                             </select>
                                             {errors.subtopics && <span className="help-block">{errors.subtopics }</span>}
                                         </div>
@@ -192,7 +200,7 @@ class TopicComponent extends React.Component {
                                 </div>
                            </div>
                            <div className="col-md-12">
-                                <div className={classnames("form-group", {"has-error": errors.objectives} )}>
+                                <div className={classnames("form-group ", {"has-error": errors.objectives} )}>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <label className="text-bold">Objectives:<span className="text-danger">*</span></label>
@@ -201,7 +209,6 @@ class TopicComponent extends React.Component {
                                                 tabIndex="-1" aria-hidden="true"
                                                 value={this.state.objectives}
                                                 onChange={this.handleInputChange}>
-                                                <option value="80">Colouring</option>
                                             </select>
                                             {errors.objectives && <span className="help-block">{errors.objectives }</span>}
                                         </div>
@@ -209,7 +216,7 @@ class TopicComponent extends React.Component {
                                 </div>
                            </div>
                            <div className="col-md-12">
-                                <div className={classnames("form-group", {"has-error": errors.expectations} )}>
+                                <div className={classnames("form-group ", {"has-error": errors.expectations} )}>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <label className="text-bold">Expected Values:<span className="text-danger">*</span></label>
@@ -218,7 +225,6 @@ class TopicComponent extends React.Component {
                                                 tabIndex="-1" aria-hidden="true"
                                                 value={this.state.expectations}
                                                 onChange={this.handleInputChange}>
-                                                <option value="80">Colouring</option>
                                             </select>
                                             {errors.expectations && <span className="help-block">{errors.expectations }</span>}
                                         </div>
