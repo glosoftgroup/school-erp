@@ -100,7 +100,8 @@
 
     var createUrl = "{% url 'curriculum:api-create' %}";
     var redirectUrl = "{% url 'curriculum:index' %}";
-    var streamUrl = "{% url 'curriculum:index' %}";
+    var subjectUrl = "{% url 'subject:api-list' %}";
+    var academicYearUrl = "{% url 'academic_year:api-list' %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }

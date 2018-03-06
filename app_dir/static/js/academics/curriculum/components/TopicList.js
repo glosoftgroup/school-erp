@@ -14,7 +14,15 @@ class TopicListComponent extends React.Component {
       super(props);
       this.state = {
           show: false,
-          topicDetail:{}
+          showDelete: false,
+          topicDetail:{
+            id:'',
+            name: '',
+            period:'',
+            subtopics:[],
+            objectives:[],
+            expectations:[]
+          }
         };
     }
 
@@ -25,7 +33,7 @@ class TopicListComponent extends React.Component {
     }
 
     handleClose = () => {
-        this.setState({ show: false });
+        this.setState({ show: false, showDelete:false });
     }
 
     handleShow = () => {
@@ -33,11 +41,27 @@ class TopicListComponent extends React.Component {
     }
 
     showTopicDetails = (topic) => {
-        let tt  = Object.assign({}, topic)
-        this.setState({ show: true, topicDetail: tt });
-        console.log("topic "+topic)
-        console.log("topicDetail "+this.state.topicDetail.subtopics)
-        console.log("tt "+tt.subtopics)
+        this.setState({
+            show: true,
+            topicDetail:{
+                id: topic.id,
+                name: topic.name,
+                period: topic.period,
+                subtopics: topic.subtopics,
+                objectives: topic.objectives,
+                expectations: topic.expectations
+            }
+        })
+    }
+
+    showDeleteTopic = (topic) => {
+        let tt = Object.assign({}, this.state.topicDetail, topic)
+        this.setState({ showDelete: true, topicDetail: tt})
+    }
+
+    deleteTopic = (topic) => {
+        this.props.deleteTopicCallBack(this.state.topicDetail)
+        this.setState({ showDelete: false})
     }
 
 
@@ -68,42 +92,82 @@ class TopicListComponent extends React.Component {
                             </td>
                         </tr>
                         {
-                            topics.map((topic, index) => {
+                            topics.length > 0
+                            ?
+                            (topics.map((topic, index) => {
                                 return (
                                     <tr key={index}>
                                         <td>{topic.name}</td>
                                         <td>{topic.period}</td>
                                         <td>
+
                                             <Button className="btn btn-primary" type="button"
                                                 onClick={()=>this.showTopicDetails(topic)}>
-                                                edit({topic.id})
+                                                EDIT({topic.id})
                                             </Button>
+
+                                            <Button className="btn btn-primary" type="button"
+                                                onClick={()=>this.showDeleteTopic(topic)}>
+                                                DELETE({topic.id})
+                                            </Button>
+
                                         </td>
                                     </tr>
                                 )
-                            })
-                        }
+                            }))
+                            :(
+                                <tr><td colSpan="2" className="text-center">No Topics Available</td></tr>
+                            )
 
+
+                        }
                         </tbody>
                    </table>
                 </div>
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
                   <Modal.Header closeButton>
+
                     <Modal.Title>{this.state.topicDetail.name}</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <h4>Overflowing text to show scroll behavior</h4>
+                    <h4 className="text-center">Topic Details</h4>
                     <p>
-                      Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                      dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-                      ac consectetur ac, vestibulum at eros.
+                      Topic Details below.
                     </p>
+                    <p>
+                        {
+                            this.state.topicDetail.subtopics.map((sub, index) => {
+                                return (
+                                    <li key={index}>{sub}</li>
+                                )
+                            })
+                        }
+                    </p>
+
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={this.handleClose}>Close</Button>
                   </Modal.Footer>
                 </Modal>
+
+                <Modal show={this.state.showDelete} onHide={this.handleClose}>
+                  <Modal.Header closeButton className="bg-primary">
+                    <Modal.Title className="text-center">adsa</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <h4 className="text-center">Delete Topic {this.state.topicDetail.name}</h4>
+                    <p className="text-center">
+                      Are you sure?.
+                    </p>
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button className="pull-left" onClick={this.handleClose}>Close</Button>
+                    <Button bsStyle="danger" className="pull-right" onClick={this.deleteTopic}>OK</Button>
+                  </Modal.Footer>
+                </Modal>
+
 
             </div>
       );

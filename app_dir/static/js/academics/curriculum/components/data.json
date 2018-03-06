@@ -1,0 +1,50 @@
+[
+    {
+        "id":1,
+        "name": "Maths",
+        "period": "02-12-2018 - 02-12-2019",
+        "subtopics":["Algebra", "Linear Regression", "Probability"],
+        "objectives":[
+            "Teach basic math",
+            "Show student linear regression calculation correctly",
+            "Combine with permutations & combinations"
+            ],
+        "expectations":[
+            "The student should be able to understand basic math",
+            "The student should do linear regression correctly",
+            "The student should prophecy mathematically"
+            ]
+    },
+    {
+        "id":2,
+        "name": "English",
+        "period": "02-12-2018 - 02-12-2019",
+        "subtopics":["Oral", "Essays", "Probability"],
+        "objectives":[
+            "Teach Oral Communication",
+            "Spelling Bee",
+            "Essay Writing"
+            ],
+        "expectations":[
+            "The student should be able to communicate fluently",
+            "The student should be able to spell correctly",
+            "Should be able to write essays the correct way"
+            ]
+    },
+    {
+        "id":3,
+        "name": "Physics",
+        "period": "02-12-2018 - 02-12-2019",
+        "subtopics":["Chemicals", "Flying", "Electronics"],
+        "objectives":[
+            "Teach Mixing Chemicals",
+            "Show the students how to fly",
+            "Peleka Kenya Power"
+            ],
+        "expectations":[
+            "Mix masters",
+            "Flying lessons",
+            "Know how Power is generated"
+            ]
+    }
+]

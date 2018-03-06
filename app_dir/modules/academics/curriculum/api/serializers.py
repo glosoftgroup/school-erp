@@ -13,12 +13,8 @@ class TableListSerializer(serializers.ModelSerializer):
         model = Table
         fields = ('id',
                   'subject',
-                  'topic',
-                  'subtopics',
-                  'period',
-                  'objectives',
-                  'expectations',
-                  'values',
+                  'academicyear',
+                  'topics',
                   'update_url',
                   'delete_url'
                  )
@@ -31,30 +27,18 @@ class CreateListSerializer(serializers.ModelSerializer):
         model = Table
         fields = ('id',
                   'subject',
-                  'topic',
-                  'subtopics',
-                  'period',
-                  'objectives',
-                  'expectations',
-                  'values',
+                  'academicyear',
+                  'topics',
                  )
 
     def create(self, validated_data):
         instance = Table()
         if validated_data.get('subject'):
             instance.subject = validated_data.get('subject')
-        if validated_data.get('topic'):
-            instance.topic = validated_data.get('topic')
-        if validated_data.get('subtopics'):
-            instance.subtopics = validated_data.get('subtopics')
-        if validated_data.get('period'):
-            instance.period = validated_data.get('period')
-        if validated_data.get('objectives'):
-            instance.objectives = validated_data.get('objectives')
-        if validated_data.get('expectations'):
-            instance.expectations = validated_data.get('expectations')
-        if validated_data.get('values'):
-            instance.values = validated_data.get('values')
+        if validated_data.get('academicyear'):
+            instance.academicyear = validated_data.get('academicyear')
+        if validated_data.get('topics'):
+            instance.topics = validated_data.get('topics')
         instance.save()
 
         return instance
@@ -65,29 +49,17 @@ class UpdateSerializer(serializers.ModelSerializer):
         model = Table
         fields = ('id',
                   'subject',
-                  'topic',
-                  'subtopics',
-                  'period',
-                  'objectives',
-                  'expectations',
-                  'values',
+                  'academicyear',
+                  'topics',
                  )
 
     def update(self, instance, validated_data):
         if validated_data.get('subject'):
-            instance.subject = validated_data.get('subject', instance.subject)
-        if validated_data.get('topic'):
-            instance.topic = validated_data.get('topic')
-        if validated_data.get('subtopics'):
-            instance.subtopics = validated_data.get('subtopics')
-        if validated_data.get('period'):
-            instance.period = validated_data.get('period')
-        if validated_data.get('objectives'):
-            instance.objectives = validated_data.get('objectives')
-        if validated_data.get('expectations'):
-            instance.expectations = validated_data.get('expectations')
-        if validated_data.get('values'):
-            instance.values = validated_data.get('values')
+            instance.subject = validated_data.get('subject')
+        if validated_data.get('academicyear'):
+            instance.academicyear = validated_data.get('academicyear')
+        if validated_data.get('topics'):
+            instance.topics = validated_data.get('topics')
 
         instance.save()
         return instance
