@@ -17,14 +17,58 @@ class CrudForm extends React.Component {
         visible:false,
         subject:'',
         academicyear:'',
+        academicclass:'',
         errors:{},
         topics:[]
       }
 
     }
 
+    componentWillMount(){
+        if(pk){
+            this.state.topics = objectTopics
+        }
+    }
     componentDidMount(){
         let self = this
+        if(pk){
+            //subject
+            let subjectData = {"id": objectSubjectId, "text": objectSubject}
+            this.state.subject = objectSubjectId
+            let option = new Option(objectSubject, objectSubjectId, true, true)
+            $('#subject').append(option).trigger('change')
+             $('#subject').trigger({
+                type:'select2:select',
+                params:{
+                    data:subjectData
+                }
+             });
+
+             //academic class
+            let classData = {"id": objectClassId, "text": objectClass}
+            this.state.academicclass = objectClassId
+            let option2 = new Option(objectClass, objectClassId, true, true)
+            $('#academicclass').append(option2).trigger('change')
+             $('#subject').trigger({
+                type:'select2:select',
+                params:{
+                    data:classData
+                }
+             });
+
+             //academic year
+            let academicData = {"id": objectAcademicId, "text": objectAcademic}
+            this.state.academicyear = objectAcademicId
+            let option3 = new Option(objectAcademic, objectAcademicId, true, true)
+            $('#academicyear').append(option3).trigger('change')
+             $('#subject').trigger({
+                type:'select2:select',
+                params:{
+                    data:academicData
+                }
+             });
+        }
+
 
         $('#subject').select2({
             width:'100%',
@@ -61,6 +105,34 @@ class CrudForm extends React.Component {
             ajax: {
                 url: function (params) {
                     return academicYearUrl+'?' + params.term;
+                },
+                processResults: function (data) {
+                    data = data.results;
+                    return {
+                        results :
+                            data.map(function(item) {
+                                return {
+                                    id : item.id,
+                                    text : item.name
+                                };
+                            }
+                    )};
+                }
+            },
+            debug: true,
+            delay: 250,
+
+        }).on('change', function (e) {
+            self.handleInputChange(e);
+        });
+
+        $('#academicclass').select2({
+            width:'100%',
+            formatSelection: function(item){return item.name},
+            formatResult: function(item){return item.name},
+            ajax: {
+                url: function (params) {
+                    return academicClassUrl+'?' + params.term;
                 },
                 processResults: function (data) {
                     data = data.results;
@@ -161,6 +233,10 @@ class CrudForm extends React.Component {
             errs.academicyear = "This field is required";
         }
 
+        if(Validator.isEmpty(data.academicclass)){
+            errs.academicclass = "This field is required";
+        }
+
         if(Validator.equals(String(data.topics.length), "0")){
             errs.topics = "This field is required";
         }
@@ -179,17 +255,19 @@ class CrudForm extends React.Component {
             console.log("yes it is valid");
         }else{
             this.setState({errors: errs});
+            return;
         }
 
-//        const data = new FormData(event.target)
         const data = new FormData()
-
         data.append("subject", this.state.subject)
         data.append("academicyear", this.state.academicyear)
+        data.append("academicclass", this.state.academicclass)
         data.append("topics", JSON.stringify(this.state.topics))
 
         axios.defaults.xsrfHeaderName = "X-CSRFToken"
         axios.defaults.xsrfCookieName = 'csrftoken'
+
+
 
         if(pk){
             axios.put(updateUrl,data)
@@ -222,10 +300,10 @@ class CrudForm extends React.Component {
       return (
         <form encType="multipart/form-data" id="addForm" onSubmit={this.handleSubmit}>
               <div className="col-md-12">
-                 <div className="col-md-6">
+                 <div className="col-md-4">
                     <div className={classnames("form-group ", {"has-error": errors.subject} )}>
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-12">
                                 <label className="text-bold">Subject Name:<span className="text-danger">*</span></label>
                                 <div className="input-group">
                                     <div className="btn-group col-md-12" id="subjects">
@@ -254,10 +332,41 @@ class CrudForm extends React.Component {
                     </div>
                 </div>
                 
-                <div className="col-md-6">
+                <div className="col-md-4">
+                    <div className={classnames("form-group ", {"has-error": errors.academicclass} )}>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <label className="text-bold">Academic Class:<span className="text-danger">*</span></label>
+                                <div className="input-group">
+                                    <div className="btn-group col-md-12" id="academicclasss">
+                                        <select name="academicclass" id="academicclass"
+                                            className="sel" value={this.state.academicclass}
+                                                    onChange={this.handleInputChange}>
+                                            <option value="">select academic class</option>
+                                        </select>
+                                    </div>
+                                    {errors.academicclass && <span className="help-block">{errors.academicclass }</span>}
+                                    <div className="input-group-btn">
+                                        <button type="button" className="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
+
+                                                data-ta="#subject_modal_instance"
+                                                data-title="Add New Subject"
+                                                data-select="#academicyears"
+                                                data-href="subject/api/create/url"
+                                                data-cat="name" data-label="Subject Name:">
+                                            <i className="icon-plus-circle2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md-4">
                     <div className={classnames("form-group ", {"has-error": errors.academicyear} )}>
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-12">
                                 <label className="text-bold">Academic Year:<span className="text-danger">*</span></label>
                                 <div className="input-group">
                                     <div className="btn-group col-md-12" id="academicyears">
@@ -284,6 +393,7 @@ class CrudForm extends React.Component {
                         </div>
                     </div>
                 </div>
+
               </div>
                <div className="col-md-12">
                        <div className="col-md-12">

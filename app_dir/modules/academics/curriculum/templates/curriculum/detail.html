@@ -1,0 +1,90 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}
+  Curriculum
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class="actives"><a href="{% url 'curriculum:index' %}">Curriculum</a></li>
+     <li class="active"><a href="{% url 'curriculum:detail' pk=object.id %}" >{{object.subject.name | title}} Details</a></li>
+ {% endblock %}
+
+
+{% block menu_curriculum_class %}active{% endblock %}
+ {% block custom_css %}
+    .heading-divided {
+        text-transform: uppercase;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+ {% endblock %}
+
+{% block content %}
+ <div class="row animated " id="vue-app">
+
+   <div class="col-md-12">
+      <div class="panel panel-flat">
+
+        <div class="panel-body " style="padding:5px;">
+            <div class="col-md-4 col-md-offset-4">
+                <h3 class="heading-divided text-center"> {{object.academicclass.name}} {{object.subject.name}} Curriculum</h3>
+            </div>
+            <div class="col-md-12">
+                <p>Academic Year {{object.academicyear.name}}</p>
+            <p>
+                Topics:
+                {% for i in object.topics %}
+                    Name: {{i.name}}<br>
+                    Subtopics:
+                    <ul>
+                    {% for x in i.subtopics %}
+                    <li> {{x}} </li>
+                    {% endfor %}
+                    </ul>
+                    Objectives:
+                    <ul>
+                    {% for x in i.objectives %}
+                    <li> {{x}} </li>
+                    {% endfor %}
+                    </ul>
+                    Expectations:
+                    <ul>
+                    {% for x in i.expectations %}
+                    <li> {{x}} </li>
+                    {% endfor %}
+                    </ul>
+                {% endfor %}
+            </p>
+            </div>
+        </div>
+       </div>
+   </div>
+ </div>
+
+
+<input type="hidden" class="pageUrls"
+  data-listurl="{% url 'curriculum:api-list' %}"
+>
+{% endblock%}
+{% block custom_js %}
+
+    <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<!-- datepicker -->
+  <script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/plugins/pagination/jquery.twbsPagination.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/loaders/progressbar.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/vue/vue.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/vue/vue-resource.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/room/listing.js' %}"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.bootstrap-select').selectpicker();
+      });
+
+    </script>
+{% endblock %}

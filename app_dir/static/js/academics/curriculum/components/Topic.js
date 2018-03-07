@@ -18,12 +18,7 @@ class TopicComponent extends React.Component {
             subtopics:[],
             objectives:[],
             expectations:[],
-            errors:{},
-            options:[
-                {"id": 1, "text": "Option 1", "value": "ha 1"},
-                {"id": 2, "text": "Option 2", "value": "ha 2", "selected": true},
-                {"id": 3, "text": "Option 3", "value": "ha 3", "disabled": true}
-            ]
+            errors:{}
 
       }
 
@@ -186,13 +181,6 @@ class TopicComponent extends React.Component {
                                                     className="select-subtopics border-primary"
                                                     value={this.state.subtopics}
                                                     onChange={this.handleInputChange}>
-                                                    {
-                                                        this.state.options.map((option, index)=>{
-                                                            return (
-                                                                <option key={index}>{option.value}</option>
-                                                            )
-                                                        })
-                                                    }
                                             </select>
                                             {errors.subtopics && <span className="help-block">{errors.subtopics }</span>}
                                         </div>
