@@ -13,6 +13,8 @@ File           : add/update.js
         $window: $(window),
         el:{
             /** form field ids */
+            revealTopicBtn   :  $("#reveal-topic-btn"),
+            cancelTopicBtn   :  $("#cancel-topic-btn"),
             addForm          :  $('#addForm'),
             subject          :  $("#subject"),
             topic            :  $("#topic"),
@@ -136,6 +138,13 @@ File           : add/update.js
                                       label, url, select,
                                       prompt_text, cat, modal
                                       );
+                });
+
+                allFunctions.el.revealTopicBtn.click(function(){
+                    $("#topic-div").slideToggle( "slow" );
+                });
+                allFunctions.el.cancelTopicBtn.click(function(){
+                    $("#topic-div").slideToggle( "slow" );
                 });
             },
             modaldetails: function(label, url, select, prompt_text, cat, modal){
