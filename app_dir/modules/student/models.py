@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from . import ReligionChoices
 from . import GenderChoices
 from app_dir.modules.academics.academic_year.models import AcademicYear
-from app_dir.modules.academics.classes.models import Class
+from app_dir.modules.academics.classes.models import Class, Stream
 
 
 class Student(models.Model):
@@ -68,6 +68,9 @@ class Student(models.Model):
 
 
 class StudentOfficialDetails(models.Model):
+    student = models.ForeignKey(
+        Student, related_name='student_official', blank=True, null=True,
+        verbose_name=pgettext_lazy('StudentOfficialDetails field', 'student'))
     adm_no = models.CharField(
         pgettext_lazy('StudentOfficialDetails field', 'admission number'), default='', unique=True, max_length=128)
     academic_year = models.ForeignKey(
@@ -77,7 +80,7 @@ class StudentOfficialDetails(models.Model):
         Class, related_name='student_class', blank=True, null=True,
         verbose_name=pgettext_lazy('StudentOfficialDetails field', 'class'))
     stream = models.ForeignKey(
-        Class, related_name='student_stream', blank=True, null=True,
+        Stream, related_name='student_stream', blank=True, null=True,
         verbose_name=pgettext_lazy('StudentOfficialDetails field', 'stream'))
 
     join_date = models.DateField(

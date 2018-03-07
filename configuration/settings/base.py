@@ -78,6 +78,7 @@ LOCAL_APPS = (
     'app_dir.modules.student',
     'app_dir.modules.academics.curriculum',
     'app_dir.modules.academics.subject',
+    'app_dir.modules.parent',
     'app_dir.modules.term',
 )
 
