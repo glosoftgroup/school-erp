@@ -397,9 +397,11 @@ class CrudForm extends React.Component {
               </div>
                <div className="col-md-12">
                        <div className="col-md-12">
-                           <a href="javascript:;" id="reveal-topic-btn" className="label border-left-danger label-striped"
-                           style={{marginBottom:5}} onClick={this.slideToggle}>
-                            Add a Topic
+                           <a href="javascript:;" id="reveal-topic-btn"
+                                className="btn btn-warning border-left-danger"
+                                style={{marginBottom:5}} onClick={this.slideToggle}>
+                               <i className="icon-plus2 position-left"></i>
+                                Add a Topic
                            </a>
                        </div>
                </div>

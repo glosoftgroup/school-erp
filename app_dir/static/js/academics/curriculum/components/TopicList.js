@@ -6,8 +6,12 @@ import map from 'lodash/map';
 import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import select2 from 'select2';
+import 'select2/dist/css/select2.css';
+
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import SelectDropdown from './Select';
+import modal from 'bootstrap';
 import { Modal, Button, FormGroup,  ControlLabel, FormControl} from 'react-bootstrap';
 
 
@@ -37,8 +41,10 @@ class TopicListComponent extends React.Component {
     componentWillMount() {
     }
     componentDidMount(){
+        var self = this
+
         $("#subtopicsdetails").select2({
-            dropdownParent: $('.modal-backdrop'),
+            dropdownParent: $('#testModal'),
             tags: true,
             width:"100%"
         }).on('change', function (e) {
@@ -70,7 +76,7 @@ class TopicListComponent extends React.Component {
 
     showTopicDetails = (topic) => {
         this.setState({
-            show: true,
+            show: false,
             topicDetail:{
                 id: topic.id,
                 name: topic.name,
@@ -80,6 +86,9 @@ class TopicListComponent extends React.Component {
                 expectations: topic.expectations
             }
         })
+
+        $("#testModal").modal()
+
     }
 
     showDeleteTopic = (topic) => {
@@ -119,7 +128,9 @@ class TopicListComponent extends React.Component {
 
     handleOnChange (value) {
         console.log(value)
-//		this.setState({ subtopicsdetails: value });
+		this.setState({
+            subtopicsdetails: value
+         });
     }
 
 
@@ -161,7 +172,8 @@ class TopicListComponent extends React.Component {
                                         <td>
 
                                             <Button className="btn btn-primary" type="button"
-                                                onClick={()=>this.showTopicDetails(topic)}>
+                                                onClick={()=>this.showTopicDetails(topic)}
+                                                style={{marginRight:5}}>
                                                 EDIT
                                             </Button>
 
@@ -225,29 +237,42 @@ class TopicListComponent extends React.Component {
                                 </div>
                            </div>
                            <div className="col-md-12">
+                        <div className="form-group">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
+                                    <select id="subtopicsdetails" name="subtopicsdetails"
+                                            className="select-subtopics border-primary">
+                                            <options value="1">asf</options>
+                                            <options value="2">asf 2</options>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                       </div>
+                           <div className="col-md-12">
                                 <div className={classnames("form-group ", {"has-error": errors.subtopics} )}>
                                     <div className="row">
                                         <div className="col-md-12">
                                             <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
-                                            <select multiple="multiple" id="subtopicsdetails" name="subtopicsdetailss"
-                                                    className="select-subtopicsdetails border-primary">
-                                            </select>
+                                            <Select.Creatable
+                                                name="subtopicsdetails"
+                                                multi={true}
+                                                value={this.state.subtopicsdetails}
+                                                onChange={this.handleOnChange}
+                                                options={[
+                                                  { value: 'one', label: 'One' },
+                                                  { value: 'two', label: 'Two' },
+                                                ]}
+                                              />
                                             {errors.subtopics && <span className="help-block">{errors.subtopics }</span>}
                                         </div>
                                     </div>
                                 </div>
                            </div>
 
-                           <Select.Creatable
-                                name="subtopicsdetails"
-                                multi={true}
-                                value={this.state.subtopicsdetails}
-                                onChange={this.handleOnChange}
-                                options={[
-                                  { value: 'one', label: 'One' },
-                                  { value: 'two', label: 'Two' },
-                                ]}
-                              />
+
 
                        </div>
                    </fieldset>
@@ -273,6 +298,40 @@ class TopicListComponent extends React.Component {
                     <Button bsStyle="danger" className="pull-right" onClick={this.deleteTopic}>OK</Button>
                   </Modal.Footer>
                 </Modal>
+
+                <div id="testModal" className="modal fade"  role="dialog">
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 className="modal-title">Modal title</h4>
+                      </div>
+                      <div className="modal-body">
+                        <p>One fine body&hellip;</p>
+                      </div>
+
+                       <div className="col-md-12">
+                        <div className="form-group">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
+                                    <select multiple="multiple" id="subtopicsdetails" name="subtopicsdetails"
+                                            className=" border-primary">
+                                            <option value="1">asf</option>
+                                            <option value="2">asf 2</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                       </div>
+                      <div className="modal-footer">
+                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
             </div>
       );

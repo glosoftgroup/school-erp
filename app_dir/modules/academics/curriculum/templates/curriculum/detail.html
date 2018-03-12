@@ -1,9 +1,10 @@
 {% extends "dashboard/base.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
 {% block title %}
-  Curriculum
+    {{object.subject.name | title}} Details
 {% endblock %}
 
  {% block breadcrumbs %}
@@ -13,78 +14,79 @@
 
 
 {% block menu_curriculum_class %}active{% endblock %}
- {% block custom_css %}
+
+{% block custom_css %}
+<style>
     .heading-divided {
         text-transform: uppercase;
         padding-bottom: 10px;
         border-bottom: 1px solid #ddd;
     }
- {% endblock %}
-
+</style>
+{% endblock %}
 {% block content %}
- <div class="row animated " id="vue-app">
 
-   <div class="col-md-12">
-      <div class="panel panel-flat">
+<div class="panel panel-flat animated fadeIn" id="vue-app">
+    <div class="panel-body">
+        <div class="row">
+            <div id="app-root">
+                <h3 class="heading-divided text-center"> {{object.academicclass.name}} {{object.subject.name}}</h3>
+                <div class="col-md-12">
+                <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
+                    <thead>
+                      <tr class="bg-primary">
+                        <th>Topic Name</th>
+                        <th>Period</th>
+                        <th>Subtopics</th>
+                        <th>Objectives</th>
+                        <th>Expectations</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tb">
+                    {% for i in object.topics %}
+                        <tr class="animated fadeIn" id="item.id">
+                            <td class="td" data-url="item.detail_url">
+                               {{ forloop.counter }}. {{i.name}}
+                            </td>
+                            <td class="td" data-url="item.detail_url">
+                                {{i.period}}
+                            </td>
 
-        <div class="panel-body " style="padding:5px;">
-            <div class="col-md-4 col-md-offset-4">
-                <h3 class="heading-divided text-center"> {{object.academicclass.name}} {{object.subject.name}} Curriculum</h3>
-            </div>
-            <div class="col-md-12">
-                <p>Academic Year {{object.academicyear.name}}</p>
-            <p>
-                Topics:
-                {% for i in object.topics %}
-                    Name: {{i.name}}<br>
-                    Subtopics:
-                    <ul>
-                    {% for x in i.subtopics %}
-                    <li> {{x}} </li>
+                            <td class="td" data-url="item.detail_url">
+                                <ul>
+                                {% for x in i.subtopics %}
+                                <li> {{x}} </li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+
+                            <td class="td" data-url="item.detail_url">
+                                <ul>
+                                {% for x in i.objectives %}
+                                <li> {{x}} </li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                            <td class="td" data-url="item.detail_url">
+                                <ul>
+                                {% for x in i.expectations %}
+                                <li> {{x}} </li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
                     {% endfor %}
-                    </ul>
-                    Objectives:
-                    <ul>
-                    {% for x in i.objectives %}
-                    <li> {{x}} </li>
-                    {% endfor %}
-                    </ul>
-                    Expectations:
-                    <ul>
-                    {% for x in i.expectations %}
-                    <li> {{x}} </li>
-                    {% endfor %}
-                    </ul>
-                {% endfor %}
-            </p>
+                    </tbody>
+               </table>
+                </div>
             </div>
         </div>
-       </div>
-   </div>
- </div>
+    </div>
+</div>
 
 
-<input type="hidden" class="pageUrls"
-  data-listurl="{% url 'curriculum:api-list' %}"
->
-{% endblock%}
+{% endblock %}
+
 {% block custom_js %}
 
-    <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
-
-    <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
-<!-- datepicker -->
-  <script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
-
-    <script type="text/javascript" src="{% static 'js/plugins/pagination/jquery.twbsPagination.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/loaders/progressbar.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/vue/vue.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/vue/vue-resource.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/room/listing.js' %}"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('.bootstrap-select').selectpicker();
-      });
-
-    </script>
 {% endblock %}

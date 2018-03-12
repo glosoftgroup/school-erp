@@ -25,6 +25,7 @@
 
 {% block custom_css %}
 <link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
 <link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
 <style>
     fieldset.scheduler-border {
@@ -45,8 +46,11 @@
         border-bottom:none;
     }
 
-    #subtopics. span.select2-container {
-        border-bottom: 2px solid red;
+   .select2-container{
+        border-bottom: 1px solid #ddd !important;
+    }
+    .select2-container--focus{
+        border-bottom: 1px solid #26A96A !important;
     }
 </style>
 {% endblock %}
