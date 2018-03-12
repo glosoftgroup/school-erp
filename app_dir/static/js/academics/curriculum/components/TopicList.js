@@ -6,7 +6,13 @@ import map from 'lodash/map';
 import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import select2 from 'select2';
-import { Modal, Button } from 'react-bootstrap';
+import 'select2/dist/css/select2.css';
+
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+import SelectDropdown from './Select';
+import modal from 'bootstrap';
+import { Modal, Button, FormGroup,  ControlLabel, FormControl} from 'react-bootstrap';
 
 
 class TopicListComponent extends React.Component {
@@ -22,14 +28,42 @@ class TopicListComponent extends React.Component {
             subtopics:[],
             objectives:[],
             expectations:[]
-          }
+          },
+          errors:{},
+          namedetails: '',
+          perioddetails:'',
+          subtopicsdetails:[],
+          objectivesdetails:[],
+          expectationsdetails:[],
         };
     }
 
     componentWillMount() {
-
     }
     componentDidMount(){
+        var self = this
+
+        $("#subtopicsdetails").select2({
+            dropdownParent: $('#testModal'),
+            tags: true,
+            width:"100%"
+        }).on('change', function (e) {
+            self.handleInputChange(e);
+        })
+
+        $("#objectivesdetails").select2({
+            tags: true,
+            width:"100%"
+        }).on('change', function (e) {
+            self.handleInputChange(e);
+        })
+
+        $("#expectationsdetails").select2({
+            tags: true,
+            width:"100%"
+        }).on('change', function (e) {
+            self.handleInputChange(e);
+        })
     }
 
     handleClose = () => {
@@ -42,7 +76,7 @@ class TopicListComponent extends React.Component {
 
     showTopicDetails = (topic) => {
         this.setState({
-            show: true,
+            show: false,
             topicDetail:{
                 id: topic.id,
                 name: topic.name,
@@ -52,6 +86,9 @@ class TopicListComponent extends React.Component {
                 expectations: topic.expectations
             }
         })
+
+        $("#testModal").modal()
+
     }
 
     showDeleteTopic = (topic) => {
@@ -64,9 +101,42 @@ class TopicListComponent extends React.Component {
         this.setState({ showDelete: false})
     }
 
+    handleInputChange = event =>{
+        const name   =  event.target.name;
+        let value    =  event.target.value;
+
+        if(isEmpty(value)){
+            this.state.errors[name] = "This field is required";
+        }else{
+            this.state.errors[name] = '';
+            if(name == "subtopicsdetails" || name == "expectationsdetails" || name == "objectivesdetails"){
+                var options = event.target.options;
+                value = [];
+                for (var i = 0, l = options.length; i < l; i++) {
+                    if (options[i].selected) {
+                      value.push(options[i].value);
+                    }
+                }
+            }
+        }
+
+        this.setState({
+          [name]: value
+        });
+
+    }
+
+    handleOnChange (value) {
+        console.log(value)
+		this.setState({
+            subtopicsdetails: value
+         });
+    }
+
 
     render() {
       const { topics } = this.props;
+      const { errors } = this.state;
       let _this = this;
       return (
            <div className="col-md-12">
@@ -102,13 +172,14 @@ class TopicListComponent extends React.Component {
                                         <td>
 
                                             <Button className="btn btn-primary" type="button"
-                                                onClick={()=>this.showTopicDetails(topic)}>
-                                                EDIT({topic.id})
+                                                onClick={()=>this.showTopicDetails(topic)}
+                                                style={{marginRight:5}}>
+                                                EDIT
                                             </Button>
 
                                             <Button className="btn btn-primary" type="button"
                                                 onClick={()=>this.showDeleteTopic(topic)}>
-                                                DELETE({topic.id})
+                                                DELETE
                                             </Button>
 
                                         </td>
@@ -125,26 +196,86 @@ class TopicListComponent extends React.Component {
                    </table>
                 </div>
 
-                <Modal show={this.state.show} onHide={this.handleClose}>
+                <Modal show={this.state.show} onHide={this.handleClose} id="myModal">
                   <Modal.Header closeButton>
-
-                    <Modal.Title>{this.state.topicDetail.name}</Modal.Title>
+                    <Modal.Title></Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <h4 className="text-center">Topic Details</h4>
-                    <p>
-                      Topic Details below.
-                    </p>
-                    <p>
-                        {
-                            this.state.topicDetail.subtopics.map((sub, index) => {
-                                return (
-                                    <li key={index}>{sub}</li>
-                                )
-                            })
-                        }
-                    </p>
+                    <h4 className="text-center">{this.state.topicDetail.name}</h4>
 
+                    <fieldset className="scheduler-border">
+                       <legend className="scheduler-border">Topic</legend>
+                       <div id="addTopicForm">
+                           <div className="col-md-6">
+                                <div className={classnames("form-group ", {"has-error": errors.name} )}>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <label className="text-bold">Name:<span className="text-danger">*</span></label>
+                                            <input className="form-control" name="namedetails" id="namedetails"
+                                                placeholder="Topic Name"
+                                                type="text"
+                                                value={this.state.topicDetail.name}
+                                                onChange={this.handleInputChange}/>
+                                                {errors.name && <span className="help-block">{errors.name }</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                           <div className="col-md-6">
+                                <div className={classnames("form-group ", {"has-error": errors.period} )}>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <label className="text-bold">Period of Compeletion:<span className="text-danger">*</span></label>
+                                            <input className="form-control" name="perioddetails" id="perioddetails"
+                                                placeholder="Period"
+                                                type="text"
+                                                value={this.state.topicDetail.period}
+                                                onChange={this.handleInputChange}/>
+                                                {errors.period && <span className="help-block">{errors.period }</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                           <div className="col-md-12">
+                        <div className="form-group">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
+                                    <select id="subtopicsdetails" name="subtopicsdetails"
+                                            className="select-subtopics border-primary">
+                                            <options value="1">asf</options>
+                                            <options value="2">asf 2</options>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                       </div>
+                           <div className="col-md-12">
+                                <div className={classnames("form-group ", {"has-error": errors.subtopics} )}>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
+                                            <Select.Creatable
+                                                name="subtopicsdetails"
+                                                multi={true}
+                                                value={this.state.subtopicsdetails}
+                                                onChange={this.handleOnChange}
+                                                options={[
+                                                  { value: 'one', label: 'One' },
+                                                  { value: 'two', label: 'Two' },
+                                                ]}
+                                              />
+                                            {errors.subtopics && <span className="help-block">{errors.subtopics }</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+
+
+
+                       </div>
+                   </fieldset>
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={this.handleClose}>Close</Button>
@@ -168,6 +299,39 @@ class TopicListComponent extends React.Component {
                   </Modal.Footer>
                 </Modal>
 
+                <div id="testModal" className="modal fade"  role="dialog">
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 className="modal-title">Modal title</h4>
+                      </div>
+                      <div className="modal-body">
+                        <p>One fine body&hellip;</p>
+                      </div>
+
+                       <div className="col-md-12">
+                        <div className="form-group">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
+                                    <select multiple="multiple" id="subtopicsdetails" name="subtopicsdetails"
+                                            className=" border-primary">
+                                            <option value="1">asf</option>
+                                            <option value="2">asf 2</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                       </div>
+                      <div className="modal-footer">
+                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
             </div>
       );

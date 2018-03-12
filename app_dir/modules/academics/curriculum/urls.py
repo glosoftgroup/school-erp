@@ -20,5 +20,7 @@ urlpatterns = [
     url(r'^add/$', permission_required('curriculum.add_curriculum', login_url='core:not_found')(TemplateView.as_view(template_name="curriculum/form.html")), name='add'),
     url(r'^update/(?P<pk>[0-9]+)/$', permission_required('curriculum.change_curriculum', login_url='core:not_found')(UpdateView.as_view(template_name="curriculum/form.html", model=Table, fields=['id'])),
         name='update'),
+    url(r'^view/(?P<pk>[0-9]+)/$', permission_required('curriculum.view_curriculum', login_url='core:not_found')(UpdateView.as_view(template_name="curriculum/detail.html", model=Table, fields=['id'])),
+        name='detail'),
 ]
 

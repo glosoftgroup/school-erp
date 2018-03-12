@@ -18,12 +18,7 @@ class TopicComponent extends React.Component {
             subtopics:[],
             objectives:[],
             expectations:[],
-            errors:{},
-            options:[
-                {"id": 1, "text": "Option 1", "value": "ha 1"},
-                {"id": 2, "text": "Option 2", "value": "ha 2", "selected": true},
-                {"id": 3, "text": "Option 3", "value": "ha 3", "disabled": true}
-            ]
+            errors:{}
 
       }
 
@@ -35,11 +30,6 @@ class TopicComponent extends React.Component {
     componentDidMount(){
         var self = this;
 
-        let data = [
-            {"id": 1, "text": "Option 1", "value": "ha 1"},
-            {"id": 2, "text": "Option 2", "value": "ha 2", "selected": true},
-            {"id": 3, "text": "Option 3", "value": "ha 3", "disabled": true}
-            ]
         $("#subtopics").select2({
             tags: true,
             width:"100%"
@@ -49,16 +39,14 @@ class TopicComponent extends React.Component {
 
         $("#objectives").select2({
             tags: true,
-            width:"100%",
-            data: data
+            width:"100%"
         }).on('change', function (e) {
             self.handleInputChange(e);
         })
 
         $("#expectations").select2({
             tags: true,
-            width:"100%",
-            data: data
+            width:"100%"
         }).on('change', function (e) {
             self.handleInputChange(e);
         })
@@ -109,11 +97,11 @@ class TopicComponent extends React.Component {
             errs.subtopics = "This field is required";
         }
 
-        if(Validator.isEmpty(String(data.expectations.length), "0")){
+        if(Validator.equals(String(data.expectations.length), "0")){
             errs.expectations = "This field is required";
         }
 
-        if(Validator.isEmpty(String(data.objectives.length), "0")){
+        if(Validator.equals(String(data.objectives.length), "0")){
             errs.objectives = "This field is required";
         }
 
@@ -186,16 +174,12 @@ class TopicComponent extends React.Component {
                                                     className="select-subtopics border-primary"
                                                     value={this.state.subtopics}
                                                     onChange={this.handleInputChange}>
-                                                    {
-                                                        this.state.options.map((option, index)=>{
-                                                            return (
-                                                                <option key={index}>{option.value}</option>
-                                                            )
-                                                        })
-                                                    }
                                             </select>
-                                            {errors.subtopics && <span className="help-block">{errors.subtopics }</span>}
+                                            <div>
+                                                {errors.subtopics && <span className="help-block">{errors.subtopics }</span>}
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                            </div>
@@ -210,7 +194,9 @@ class TopicComponent extends React.Component {
                                                 value={this.state.objectives}
                                                 onChange={this.handleInputChange}>
                                             </select>
-                                            {errors.objectives && <span className="help-block">{errors.objectives }</span>}
+                                            <div>
+                                                {errors.objectives && <span className="help-block">{errors.objectives }</span>}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -226,18 +212,21 @@ class TopicComponent extends React.Component {
                                                 value={this.state.expectations}
                                                 onChange={this.handleInputChange}>
                                             </select>
-                                            {errors.expectations && <span className="help-block">{errors.expectations }</span>}
+                                            <div>
+                                                {errors.expectations && <span className="help-block">{errors.expectations }</span>}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                            </div>
                            <div className="text-left col-md-12">
-                               <button id="cancel-topic-btn" type="button"
-                               className="btn btn-danger legitRipple" onClick={this.resetForm}>
+                               <button id="cancel-topic-btn pull-left" type="button"
+                                    className="btn btn-danger legitRipple" onClick={this.resetForm} style={{marginRight:10}}>
                                     Cancel
-                                    <i className="icon-cross3 position-right"></i>
+                                    <i className="icon-cross3 position-left"></i>
                                 </button>
-                                <button id="add-topic-btn" type="button"
+
+                                <button id="add-topic-btn pull=" type="button"
                                     className="btn btn-primary legitRipple"
                                     onClick={this.addTopic}>
                                     Add Topic

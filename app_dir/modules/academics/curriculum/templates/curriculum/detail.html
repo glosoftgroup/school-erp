@@ -1,0 +1,92 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+    {{object.subject.name | title}} Details
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class="actives"><a href="{% url 'curriculum:index' %}">Curriculum</a></li>
+     <li class="active"><a href="{% url 'curriculum:detail' pk=object.id %}" >{{object.subject.name | title}} Details</a></li>
+ {% endblock %}
+
+
+{% block menu_curriculum_class %}active{% endblock %}
+
+{% block custom_css %}
+<style>
+    .heading-divided {
+        text-transform: uppercase;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="panel panel-flat animated fadeIn" id="vue-app">
+    <div class="panel-body">
+        <div class="row">
+            <div id="app-root">
+                <h3 class="heading-divided text-center"> {{object.academicclass.name}} {{object.subject.name}}</h3>
+                <div class="col-md-12">
+                <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
+                    <thead>
+                      <tr class="bg-primary">
+                        <th>Topic Name</th>
+                        <th>Period</th>
+                        <th>Subtopics</th>
+                        <th>Objectives</th>
+                        <th>Expectations</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tb">
+                    {% for i in object.topics %}
+                        <tr class="animated fadeIn" id="item.id">
+                            <td class="td" data-url="item.detail_url">
+                               {{ forloop.counter }}. {{i.name}}
+                            </td>
+                            <td class="td" data-url="item.detail_url">
+                                {{i.period}}
+                            </td>
+
+                            <td class="td" data-url="item.detail_url">
+                                <ul>
+                                {% for x in i.subtopics %}
+                                <li> {{x}} </li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+
+                            <td class="td" data-url="item.detail_url">
+                                <ul>
+                                {% for x in i.objectives %}
+                                <li> {{x}} </li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                            <td class="td" data-url="item.detail_url">
+                                <ul>
+                                {% for x in i.expectations %}
+                                <li> {{x}} </li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+               </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block custom_js %}
+
+{% endblock %}

@@ -25,6 +25,7 @@
 
 {% block custom_css %}
 <link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
 <link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
 <style>
     fieldset.scheduler-border {
@@ -43,6 +44,13 @@
         width:auto;
         padding:0 10px;
         border-bottom:none;
+    }
+
+   .select2-container{
+        border-bottom: 1px solid #ddd !important;
+    }
+    .select2-container--focus{
+        border-bottom: 1px solid #26A96A !important;
     }
 </style>
 {% endblock %}
@@ -81,30 +89,43 @@
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/core/libraries/jquery.validate.min.js' %} "></script>
-<!--<script type="text/javascript" src="{% static 'js/academics/curriculum/add.js' %}"></script>-->
 <script>
-    <!--$(".select-border-color").select2({-->
-        <!--dropdownCssClass: 'border-primary',-->
-        <!--containerCssClass: 'border-primary text-primary-700',-->
-        <!--tags: true,-->
-        <!--//tokenSeparators: [',', ' '],-->
-    <!--});-->
 
+   {% if object.id %}
+        var pk = "{{object.id}}";
+        var updateUrl = "{% url 'curriculum:api-update' pk=object.id %}";
 
-   {% if pk %}
-        var pk = "{{pk}}";
-        var updateUrl = "{% url 'curriculum:api-update' pk=pk %}";
+        var v = "{{object.get_json_data}}";
+        var objectTopics =JSON.parse(v.replace(/&quot;/g, '"'));
+
+        var objectSubject = "{{object.subject}}";
+        var objectSubjectId = "{{object.subject.id}}";
+
+        var objectClass = "{{object.academicclass.name}}";
+        var objectClassId = "{{object.academicclass.id}}";
+
+        var objectAcademic = "{{object.academicyear.name}}";
+        var objectAcademicId = "{{object.academicyear.id}}";
     {% else %}
         var pk= false;
+        var objectTopics = [];
     {% endif %}
 
     var createUrl = "{% url 'curriculum:api-create' %}";
     var redirectUrl = "{% url 'curriculum:index' %}";
     var subjectUrl = "{% url 'subject:api-list' %}";
     var academicYearUrl = "{% url 'academic_year:api-list' %}";
+    var academicClassUrl = "{% url 'classes:api-list' %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
 </script>
 {% render_bundle 'curriculum' 'js' %}
+<script>
+    $(document).ready(function() {
+  $("#subtopicsdetails").select2({
+    dropdownParent: $("#myModal")
+  });
+});
+</script>
 {% endblock %}
