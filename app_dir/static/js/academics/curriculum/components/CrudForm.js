@@ -7,8 +7,10 @@ import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import TopicComponent from './Topic';
 import TopicListComponent from './TopicList';
+import MiniModal from './Modal';
 import select2 from 'select2';
 import {jGrowl} from 'jgrowl';
+import modal from 'bootstrap';
 
 class CrudForm extends React.Component {
     constructor(props) {
@@ -19,7 +21,8 @@ class CrudForm extends React.Component {
         academicyear:'',
         academicclass:'',
         errors:{},
-        topics:[]
+        topics:[],
+        showModal:false
       }
 
     }
@@ -201,6 +204,7 @@ class CrudForm extends React.Component {
                       theme: 'bg-success'
                  });
     }
+
     deleteTopicCallBack = (topic) => {
 
         let topics = this.state.topics
@@ -221,6 +225,20 @@ class CrudForm extends React.Component {
             }
         }
     }
+
+    handleSubjectCallBack = (subject) => {
+        let subjectData = {"id": subject.id, "text": subject.name}
+        this.state.subject = subject.id
+        let option = new Option(subject.name, subject.id, true, true)
+        $('#subject').append(option).trigger('change')
+         $('#subject').trigger({
+            type:'select2:select',
+            params:{
+                data:subjectData
+            }
+         });
+    }
+
 
     validateInput = (data) =>  {
         let errs = {};
@@ -291,13 +309,24 @@ class CrudForm extends React.Component {
 
     }
 
+    showSubjectModal = () =>{
+        this.setState({showModal:true})
+    }
 
+    handleHideModal = () =>{
+        this.setState({showModal: false})
+    }
+
+    handleShowModal = () =>{
+        this.setState({showModal: true})
+    }
 
     render() {
         let _this = this;
         const { errors } = this.state;
 
       return (
+      <div>
         <form encType="multipart/form-data" id="addForm" onSubmit={this.handleSubmit}>
               <div className="col-md-12">
                  <div className="col-md-4">
@@ -316,13 +345,13 @@ class CrudForm extends React.Component {
                                     {errors.subject && <span className="help-block">{errors.subject }</span>}
 
                                     <div className="input-group-btn">
-                                        <button type="button" className="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
-
+                                        <button type="button" className="btn bg-slate-700 btn-icon legitRipple modal-trigger edit-btn"
                                                 data-ta="#subject_modal_instance"
                                                 data-title="Add New Subject"
                                                 data-select="#academicyears"
                                                 data-href="subject/api/create/url"
-                                                data-cat="name" data-label="Subject Name:">
+                                                data-cat="name" data-label="Subject Name:"
+                                                onClick={this.showSubjectModal}>
                                             <i className="icon-plus-circle2"></i>
                                         </button>
                                     </div>
@@ -347,7 +376,7 @@ class CrudForm extends React.Component {
                                     </div>
                                     {errors.academicclass && <span className="help-block">{errors.academicclass }</span>}
                                     <div className="input-group-btn">
-                                        <button type="button" className="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
+                                        <button type="button" className="btn bg-slate-700 btn-icon legitRipple modal-trigger edit-btn"
 
                                                 data-ta="#subject_modal_instance"
                                                 data-title="Add New Subject"
@@ -378,7 +407,7 @@ class CrudForm extends React.Component {
                                     </div>
                                     {errors.academicyear && <span className="help-block">{errors.academicyear }</span>}
                                     <div className="input-group-btn">
-                                        <button type="button" className="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
+                                        <button type="button" className="btn bg-slate-700 btn-icon legitRipple modal-trigger edit-btn"
 
                                                 data-ta="#subject_modal_instance"
                                                 data-title="Add New Subject"
@@ -426,7 +455,11 @@ class CrudForm extends React.Component {
                     </div>
                 </div>
         </form>
-              
+
+            {this.state.showModal ? <MiniModal handleHideModal={this.handleHideModal} handleSubjectCallBack={this.handleSubjectCallBack}
+                                /> : null}
+
+          </div>
       );
     }
   }

@@ -8,9 +8,6 @@ import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import select2 from 'select2';
 import 'select2/dist/css/select2.css';
 
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
-import SelectDropdown from './Select';
 import modal from 'bootstrap';
 import { Modal, Button, FormGroup,  ControlLabel, FormControl} from 'react-bootstrap';
 
@@ -35,11 +32,10 @@ class TopicListComponent extends React.Component {
           subtopicsdetails:[],
           objectivesdetails:[],
           expectationsdetails:[],
+          topic:{}
         };
     }
 
-    componentWillMount() {
-    }
     componentDidMount(){
         var self = this
 
@@ -84,8 +80,38 @@ class TopicListComponent extends React.Component {
                 subtopics: topic.subtopics,
                 objectives: topic.objectives,
                 expectations: topic.expectations
-            }
+            },
+            namedetails: topic.name,
+            perioddetails: topic.period,
+            subtopicsdetails: topic.subtopics,
+            objectivesdetails: topic.objectives,
+            expectationsdetails: topic.expectations
+
         })
+
+        let data = topic.subtopics
+        let str = ""
+        for(var i=0;i<data.length;i++){
+            str+='<option value="'+data[i]+'" selected="selected">'+data[i]+'</option>'
+        }
+
+        let objdata = topic.objectives
+        let objstr = ""
+        for(var i=0;i<objdata.length;i++){
+            objstr+='<option value="'+objdata[i]+'" selected="selected">'+objdata[i]+'</option>'
+        }
+
+        let expdata = topic.expectations
+        let expstr = ""
+        for(var i=0;i<expdata.length;i++){
+            expstr+='<option value="'+expdata[i]+'" selected="selected">'+expdata[i]+'</option>'
+        }
+
+        this.state.topic = topic
+
+        $('#subtopicsdetails').html(str).change()
+        $('#objectivesdetails').html(objstr).change()
+        $('#expectationsdetails').html(expstr).change()
 
         $("#testModal").modal()
 
@@ -126,11 +152,14 @@ class TopicListComponent extends React.Component {
 
     }
 
-    handleOnChange (value) {
-        console.log(value)
-		this.setState({
-            subtopicsdetails: value
-         });
+    updateTopic = () =>{
+            this.state.topic.name = this.state.namedetails
+            this.state.topic.period = this.state.perioddetails
+            this.state.topic.subtopics = this.state.subtopicsdetails
+            this.state.topic.objectives = this.state.objectivesdetails
+            this.state.topic.expectations = this.state.expectationsdetails
+
+            $("#testModal").modal('hide')
     }
 
 
@@ -196,95 +225,9 @@ class TopicListComponent extends React.Component {
                    </table>
                 </div>
 
-                <Modal show={this.state.show} onHide={this.handleClose} id="myModal">
-                  <Modal.Header closeButton>
-                    <Modal.Title></Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <h4 className="text-center">{this.state.topicDetail.name}</h4>
-
-                    <fieldset className="scheduler-border">
-                       <legend className="scheduler-border">Topic</legend>
-                       <div id="addTopicForm">
-                           <div className="col-md-6">
-                                <div className={classnames("form-group ", {"has-error": errors.name} )}>
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <label className="text-bold">Name:<span className="text-danger">*</span></label>
-                                            <input className="form-control" name="namedetails" id="namedetails"
-                                                placeholder="Topic Name"
-                                                type="text"
-                                                value={this.state.topicDetail.name}
-                                                onChange={this.handleInputChange}/>
-                                                {errors.name && <span className="help-block">{errors.name }</span>}
-                                        </div>
-                                    </div>
-                                </div>
-                           </div>
-                           <div className="col-md-6">
-                                <div className={classnames("form-group ", {"has-error": errors.period} )}>
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <label className="text-bold">Period of Compeletion:<span className="text-danger">*</span></label>
-                                            <input className="form-control" name="perioddetails" id="perioddetails"
-                                                placeholder="Period"
-                                                type="text"
-                                                value={this.state.topicDetail.period}
-                                                onChange={this.handleInputChange}/>
-                                                {errors.period && <span className="help-block">{errors.period }</span>}
-                                        </div>
-                                    </div>
-                                </div>
-                           </div>
-                           <div className="col-md-12">
-                        <div className="form-group">
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
-                                    <select id="subtopicsdetails" name="subtopicsdetails"
-                                            className="select-subtopics border-primary">
-                                            <options value="1">asf</options>
-                                            <options value="2">asf 2</options>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-                       </div>
-                           <div className="col-md-12">
-                                <div className={classnames("form-group ", {"has-error": errors.subtopics} )}>
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
-                                            <Select.Creatable
-                                                name="subtopicsdetails"
-                                                multi={true}
-                                                value={this.state.subtopicsdetails}
-                                                onChange={this.handleOnChange}
-                                                options={[
-                                                  { value: 'one', label: 'One' },
-                                                  { value: 'two', label: 'Two' },
-                                                ]}
-                                              />
-                                            {errors.subtopics && <span className="help-block">{errors.subtopics }</span>}
-                                        </div>
-                                    </div>
-                                </div>
-                           </div>
-
-
-
-                       </div>
-                   </fieldset>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button onClick={this.handleClose}>Close</Button>
-                  </Modal.Footer>
-                </Modal>
-
                 <Modal show={this.state.showDelete} onHide={this.handleClose}>
                   <Modal.Header closeButton className="bg-primary">
-                    <Modal.Title className="text-center">adsa</Modal.Title>
+                    <Modal.Title className="text-center">this.state.topicDetail.name</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
                     <h4 className="text-center">Delete Topic {this.state.topicDetail.name}</h4>
@@ -304,11 +247,40 @@ class TopicListComponent extends React.Component {
                     <div className="modal-content">
                       <div className="modal-header">
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 className="modal-title">Modal title</h4>
+                        <h4 className="modal-title">{this.state.topicDetail.name}</h4>
                       </div>
                       <div className="modal-body">
-                        <p>One fine body&hellip;</p>
-                      </div>
+                        <div id="addTopicForm">
+                           <div className="col-md-6">
+                                <div className={classnames("form-group ", {"has-error": errors.name} )}>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <label className="text-bold">Name:<span className="text-danger">*</span></label>
+                                            <input className="form-control" name="namedetails" id="namedetails"
+                                                placeholder="Topic Name"
+                                                type="text"
+                                                value={this.state.namedetails}
+                                                onChange={this.handleInputChange}/>
+                                                {errors.name && <span className="help-block">{errors.name }</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                           <div className="col-md-6">
+                                <div className={classnames("form-group ", {"has-error": errors.period} )}>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <label className="text-bold">Period of Compeletion:<span className="text-danger">*</span></label>
+                                            <input className="form-control" name="perioddetails" id="perioddetails"
+                                                placeholder="Period"
+                                                type="text"
+                                                value={this.state.perioddetails}
+                                                onChange={this.handleInputChange}/>
+                                                {errors.period && <span className="help-block">{errors.period }</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
 
                        <div className="col-md-12">
                         <div className="form-group">
@@ -316,18 +288,52 @@ class TopicListComponent extends React.Component {
                                 <div className="col-md-12">
                                     <label className="text-bold">Sub-Topics:<span className="text-danger">*</span></label>
                                     <select multiple="multiple" id="subtopicsdetails" name="subtopicsdetails"
-                                            className=" border-primary">
-                                            <option value="1">asf</option>
-                                            <option value="2">asf 2</option>
+                                            className=" border-primary"
+                                            value={this.state.subtopicsdetails}
+                                            onChange={this.handleInputChange}>
                                     </select>
                                 </div>
-
                             </div>
                         </div>
                        </div>
+
+                       <div className="col-md-12">
+                        <div className="form-group">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <label className="text-bold">Objectives:<span className="text-danger">*</span></label>
+                                    <select multiple="multiple" id="objectivesdetails" name="objectivesdetails"
+                                            className=" border-primary"
+                                            value={this.state.objectivesdetails}
+                                            onChange={this.handleInputChange}>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                       </div>
+
+                       <div className="col-md-12">
+                        <div className="form-group">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <label className="text-bold">Expected Values:<span className="text-danger">*</span></label>
+                                    <select multiple="multiple" id="expectationsdetails" name="expectationsdetails"
+                                            className=" border-primary"
+                                            value={this.state.expectationsdetails}
+                                            onChange={this.handleInputChange}>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                       </div>
+
+
+                       </div>
+                      </div>
+
                       <div className="modal-footer">
                         <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary">Save changes</button>
+                        <button type="button" className="btn btn-primary" onClick={this.updateTopic}>Save changes</button>
                       </div>
                     </div>
                   </div>
