@@ -87,7 +87,7 @@
 
 {% block custom_js %}
 <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js' %}"></script>-->
 <script type="text/javascript" src="{% static 'js/core/libraries/jquery.validate.min.js' %} "></script>
 <script>
 
@@ -116,16 +116,12 @@
     var subjectUrl = "{% url 'subject:api-list' %}";
     var academicYearUrl = "{% url 'academic_year:api-list' %}";
     var academicClassUrl = "{% url 'classes:api-list' %}";
+
+    var subjectCreateUrl = "{% url 'subject:api-create' %}";
+
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
 </script>
 {% render_bundle 'curriculum' 'js' %}
-<script>
-    $(document).ready(function() {
-  $("#subtopicsdetails").select2({
-    dropdownParent: $("#myModal")
-  });
-});
-</script>
 {% endblock %}
