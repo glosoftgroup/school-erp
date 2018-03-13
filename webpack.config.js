@@ -18,6 +18,8 @@ module.exports = {
         'site': './app_dir/static/js/site/',
         'stream': './app_dir/static/js/academics/stream/',
         'student': './app_dir/static/js/student/',
+        'classes': './app_dir/static/js/academics/classes/',
+        'curriculum': './app_dir/static/js/academics/curriculum/',
         'term': './app_dir/static/js/term/',
         'users': './app_dir/static/js/users/'
     },

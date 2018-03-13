@@ -20,8 +20,8 @@ class Topic(models.Model):
     subject       = models.ForeignKey(Subject, related_name='topics', on_delete=models.CASCADE)
     name          = models.CharField(null=True, blank=True, max_length=228)
     period        = models.CharField(null=True, blank=True, max_length=228)
-    objective     = models.CharField(null=True, blank=True, max_length=228)
-    competencies  = models.CharField(null=True, blank=True, max_length=228)
+    objectives    = ArrayField(models.CharField(max_length=300), blank=True)
+    expectations  = ArrayField(models.CharField(max_length=300), blank=True)
     subtopics     = ArrayField(models.CharField(max_length=300), blank=True)
 
 

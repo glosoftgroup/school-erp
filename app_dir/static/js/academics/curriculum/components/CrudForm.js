@@ -5,80 +5,164 @@ import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
-
+import TopicComponent from './Topic';
+import TopicListComponent from './TopicList';
+import select2 from 'select2';
+import {jGrowl} from 'jgrowl';
 
 class CrudForm extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-          name: '',
-          stream:'',
-          room:'',
-          no_of_students:'',
-          class_teacher:'',
-          streams:[],
-          errors:{},
-          isLoading:false,
-          academic_year:'',
-          buttonText:'Add',
-      };
+        visible:false,
+        subject:'',
+        academicyear:'',
+        errors:{},
+        topics:[]
+      }
 
     }
-    // update state data
-    //____________________________
-    componentWillMount() {
-        var self = this; 
-        // check if pk checked and populate update details 
-        if(pk){
-            axios.get(updateUrl)
-            .then(function (response) {
-                response = response.data;
-                if(response.description == null){
-                    response.description = '';
-                }
-                self.setState({
-                            name: response.name,
-                            stream:response.stream,
-                            buttonText:'Edit'
-                            });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
 
+    componentDidMount(){
+        let self = this
+
+        $('#subject').select2({
+            width:'100%',
+            formatSelection: function(item){return item.name},
+            formatResult: function(item){return item.name},
+            ajax: {
+                url: function (params) {
+                    return subjectUrl+'?' + params.term;
+                },
+                processResults: function (data) {
+                    data = data.results;
+                    return {
+                        results :
+                            data.map(function(item) {
+                                return {
+                                    id : item.id,
+                                    text : item.name
+                                };
+                            }
+                    )};
+                }
+            },
+            debug: true,
+            delay: 250,
+
+        }).on('change', function (e) {
+            self.handleInputChange(e);
+        });
+
+        $('#academicyear').select2({
+            width:'100%',
+            formatSelection: function(item){return item.name},
+            formatResult: function(item){return item.name},
+            ajax: {
+                url: function (params) {
+                    return academicYearUrl+'?' + params.term;
+                },
+                processResults: function (data) {
+                    data = data.results;
+                    return {
+                        results :
+                            data.map(function(item) {
+                                return {
+                                    id : item.id,
+                                    text : item.name
+                                };
+                            }
+                    )};
+                }
+            },
+            debug: true,
+            delay: 250,
+
+        }).on('change', function (e) {
+            self.handleInputChange(e);
+        });
+
+
+
+    }
+
+    handleInputChange = event =>{
+        const name   =  event.target.name;
+        let value    =  event.target.value;
+
+        if(isEmpty(value)){
+            this.state.errors[name] = "This field is required";
+        }else{
+            this.state.errors[name] = '';
         }
 
-        let initialStreams = [];
-        axios.get(streamUrl)
-            .then(response => {
-                var result = response.data.results;
-                var arrTen = [];
-                for (var k = 0; k < result.length; k++) {
-//                    arrTen.push(result[k].name)
-                    arrTen.push(<option value={result[k].id}> {result[k].name} </option>);
-                    document.getElementById('reactStreams').selectpicker('refresh');
-                }
-                this.setState({
-                  streams: arrTen
-                });
-                console.log(arrTen);
-            })
-            .catch(function (error) {
-                console.log("error fetching "+ error);
-            });
+        this.setState({
+          [name]: value
+        });
 
+    }
+
+    slideToggle = () => {
+        this.setState({visible:!this.state.visible})
+    }
+
+    addTopicCallBack = (topicFromChild) => {
+        let topics = this.state.topics
+        let found = false;
+
+        if(topics.length > 0){
+            for(let i = 0; i < topics.length; i++) {
+                if (topics[i].name == topicFromChild.name) {
+                    found = true;
+                    $.jGrowl('Topic Already Exists', {
+                          theme: 'bg-danger'
+                     });
+                    return;
+                }
+            }
+        }
+
+        topics.push(topicFromChild)
+        this.setState({topics:topics})
+        this.state.errors['topics'] = '';
+        $.jGrowl('Topic Added Successfully', {
+                      theme: 'bg-success'
+                 });
+    }
+    deleteTopicCallBack = (topic) => {
+
+        let topics = this.state.topics
+        let found = false;
+
+        for(let i = 0; i < topics.length; i++) {
+            if (topics[i].name == topic.name) {
+                found = true;
+                topics.splice(topics.indexOf(topics[i]), 1);
+                $.jGrowl('Topic Deleted Successfully', {
+                    theme: 'bg-success'
+                });
+                this.setState({topics:topics})
+                if(this.state.topics.length == 0){
+                    this.state.errors['topics'] = 'This is field is required';
+                }
+                return;
+            }
+        }
     }
 
     validateInput = (data) =>  {
         let errs = {};
-         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                if(isEmpty(data[key]) ){
-                    errs[key] = "This field is required";
-                 }else{
-                    errs[key] = '';
-                 }
-            }
+
+        if(Validator.isEmpty(data.subject)){
+            errs.subject = "This field is required";
+        }
+
+        if(Validator.isEmpty(data.academicyear)){
+            errs.academicyear = "This field is required";
+        }
+
+        if(Validator.equals(String(data.topics.length), "0")){
+            errs.topics = "This field is required";
         }
 
         return {
@@ -87,156 +171,150 @@ class CrudForm extends React.Component {
         }
     }
 
-    handleInputChange = event =>{
-        const value  =  event.target.value;
-        const name   =  event.target.name;
-
-         if(isEmpty(value) ){
-            this.state.errors[name] = "This field is required";
-         }else{
-            this.state.errors[name] = '';
-         }
-
-        this.setState({
-          [name]: value
-        });
-    }
-
-    
     handleSubmit = event =>{
         event.preventDefault();
-    
-
         const { errs, isValid } = this.validateInput(this.state);
 
         if(isValid){
-            const data = new FormData(event.target)
-            axios.defaults.xsrfHeaderName = "X-CSRFToken"
-            axios.defaults.xsrfCookieName = 'csrftoken'
-            if(pk){
-                axios.put(updateUrl,data)
-                .then(function (response) {
-                    alertUser('Data sent successfully');
-                    window.location.href = redirectUrl;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            }else{
-                axios.post(createUrl,data)
-                .then(function (response) {
-                    alertUser('Data sent successfully');
-                    window.location.href = redirectUrl;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            }
+            console.log("yes it is valid");
         }else{
-            this.setState({errors: errs, isLoading: false });
+            this.setState({errors: errs});
+        }
+
+//        const data = new FormData(event.target)
+        const data = new FormData()
+
+        data.append("subject", this.state.subject)
+        data.append("academicyear", this.state.academicyear)
+        data.append("topics", JSON.stringify(this.state.topics))
+
+        axios.defaults.xsrfHeaderName = "X-CSRFToken"
+        axios.defaults.xsrfCookieName = 'csrftoken'
+
+        if(pk){
+            axios.put(updateUrl,data)
+            .then(function (response) {
+                alertUser('Data sent successfully');
+                window.location.href = redirectUrl;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }else{
+            axios.post(createUrl,data)
+            .then(function (response) {
+                alertUser('Data sent successfully');
+                window.location.href = redirectUrl;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         }
 
     }
 
+
+
     render() {
-      const { errors } = this.state;
-      const options = map(this.state.streams, (val, key) =>
-        <option value={val}>{val}</option>
-      );
+        let _this = this;
+        const { errors } = this.state;
 
       return (
-      <form encType="multipart/form-data" onSubmit={this.handleSubmit} id="f">
-      <div className="col-md-12">
-       <div className="col-md-4">
-            <div className={classnames("form-group", {"has-error": errors.name} )}>
-                <div className="row">
-                    <div className="col-md-12">
-                        <label className="text-bold">Class Name:<span className="text-danger">*</span></label>
-                        <input value={this.state.name} onChange={this.handleInputChange} className="form-control" name="name" id="name" placeholder="Name" type="text"/>
-                        {errors.name && <span className="help-block">{errors.name }</span>}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="col-md-4">
-            <div className={classnames("form-group", {"has-error": errors.stream} )}>
-                <div className="row">
-                    <div className="col-md-12">
-                    <label className="text-bold">Stream Name:<span className="text-danger">*</span></label>
-                        <select name="stream" className="form-select bootstrap-select" style={{display:"nones"}}
-                        onChange={this.handleInputChange} value={this.state.stream} id="reactStreams">
-                            <option value="">select stream</option>
-                            <option value="20">2012-2013</option>
-                            {this.state.streams}
-                        </select>
-                        {errors.stream && <span className="help-block">{errors.stream }</span>}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="col-md-4">
-            <div className={classnames("form-group", {"has-error": errors.academic_year} )}>
-                <div className="row">
-                    <div className="col-md-12">
-                    <label className="text-bold">Academic Year:<span className="text-danger">*</span></label>
-                        <select name="academic_year" className="bootstrap-select" style={{display:"none"}} data-width="100%" tabIndex="-98"
-                        onChange={this.handleInputChange} value={this.state.academic_year}>
-                            <option value="">select academic year</option>
-                            <option value="2">2012-2013</option>
-                        </select>
-                        {errors.academic_year && <span className="help-block">{errors.academic_year }</span>}
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
+        <form encType="multipart/form-data" id="addForm" onSubmit={this.handleSubmit}>
+              <div className="col-md-12">
+                 <div className="col-md-6">
+                    <div className={classnames("form-group ", {"has-error": errors.subject} )}>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <label className="text-bold">Subject Name:<span className="text-danger">*</span></label>
+                                <div className="input-group">
+                                    <div className="btn-group col-md-12" id="subjects">
+                                        <select name="subject" id="subject"
+                                            className="sel" value={this.state.subject}
+                                                    onChange={this.handleInputChange}>
+                                            <option value="">select subject</option>
+                                        </select>
+                                    </div>
+                                    {errors.subject && <span className="help-block">{errors.subject }</span>}
 
-        <div className="col-md-12">
-       <div className="col-md-4">
-            <div className={classnames("form-group", {"has-error": errors.class_teacher} )}>
-                <div className="row">
-                    <div className="col-md-12">
-                        <label className="text-bold">Class Teacher:<span className="text-danger">*</span></label>
-                        <input value={this.state.class_teacher} onChange={this.handleInputChange} className="form-control" name="class_teacher" id="name" placeholder="Name" type="text"/>
-                        {errors.class_teacher && <span className="help-block">{errors.class_teacher }</span>}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="col-md-4">
-            <div className={classnames("form-group", {"has-error": errors.no_of_students} )}>
-                <div className="row">
-                    <div className="col-md-12">
-                        <label className="text-bold">No of Students:<span className="text-danger">*</span></label>
-                        <input value={this.state.no_of_students} onChange={this.handleInputChange} className="form-control" name="no_of_students" id="name" placeholder="Name" type="text"/>
-                        {errors.no_of_students && <span className="help-block">{errors.no_of_students }</span>}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="col-md-4">
-            <div className={classnames("form-group", {"has-error": errors.room} )}>
-                <div className="row">
-                    <div className="col-md-12">
-                    <label className="text-bold">Room:<span className="text-danger">*</span></label>
-                        <select name="room" className="bootstrap-select" style={{display:"none"}} data-width="100%" tabIndex="-98"
-                        onChange={this.handleInputChange} value={this.state.room}>
-                            <option value="">select room</option>
-                            <option value="2">2012-2013</option>
-                        </select>
-                        {errors.room && <span className="help-block">{errors.room }</span>}
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
+                                    <div className="input-group-btn">
+                                        <button type="button" className="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
 
-        <div className="text-left col-md-12">
-            <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
-            {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>
-            </button>
-        </div>
-      </form>
+                                                data-ta="#subject_modal_instance"
+                                                data-title="Add New Subject"
+                                                data-select="#academicyears"
+                                                data-href="subject/api/create/url"
+                                                data-cat="name" data-label="Subject Name:">
+                                            <i className="icon-plus-circle2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="col-md-6">
+                    <div className={classnames("form-group ", {"has-error": errors.academicyear} )}>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <label className="text-bold">Academic Year:<span className="text-danger">*</span></label>
+                                <div className="input-group">
+                                    <div className="btn-group col-md-12" id="academicyears">
+                                        <select name="academicyear" id="academicyear"
+                                            className="sel" value={this.state.academicyear}
+                                                    onChange={this.handleInputChange}>
+                                            <option value="">select academic year</option>
+                                        </select>
+                                    </div>
+                                    {errors.academicyear && <span className="help-block">{errors.academicyear }</span>}
+                                    <div className="input-group-btn">
+                                        <button type="button" className="btn bg-indigo btn-icon legitRipple modal-trigger edit-btn"
+
+                                                data-ta="#subject_modal_instance"
+                                                data-title="Add New Subject"
+                                                data-select="#academicyears"
+                                                data-href="subject/api/create/url"
+                                                data-cat="name" data-label="Subject Name:">
+                                            <i className="icon-plus-circle2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+               <div className="col-md-12">
+                       <div className="col-md-12">
+                           <a href="javascript:;" id="reveal-topic-btn" className="label border-left-danger label-striped"
+                           style={{marginBottom:5}} onClick={this.slideToggle}>
+                            Add a Topic
+                           </a>
+                       </div>
+               </div>
+                <TopicComponent status={this.state.visible}
+                                slideToggle={this.slideToggle}
+                                topics={this.state.topics}
+                                addTopicCallBack={this.addTopicCallBack}/>
+
+                <div className={classnames({"has-error": errors.academicyear} )}>
+                    <TopicListComponent topics={this.state.topics}
+                                deleteTopicCallBack={this.deleteTopicCallBack}
+                                />
+                    <div className="col-md-12">
+                        <div className="col-md-12">
+                        {errors.topics && <span className="help-block">{errors.topics }</span>}
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-12" style={{"marginTop":10}}>
+                    <div className="col-md-12">
+                        <button className="btn btn-primary pull-left" type="submit">Submit</button>
+                    </div>
+                </div>
+        </form>
+              
       );
     }
   }
