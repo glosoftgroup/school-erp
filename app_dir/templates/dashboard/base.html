@@ -162,6 +162,23 @@
                                 </li>
                                 {% endif %}
                                 <!--/academics -->
+
+                                <!--workload-->
+                                {% if perms.class_allocation.view_classallocation %}
+                                <li class="">
+                                    <a href="#" class="has-ul"><i class="icon-menu2"></i><span>Workload</span></a>
+                                    <ul>
+                                        {% if perms.class_allocation.view_classallocation %}
+                                        <li class="{% block menu_class_allocation_class %}{% endblock %}">
+                                          <a href="{% url 'class_allocation:index' %}"><i class='icon-clipboard5'></i>Class Allocation</a>
+                                        </li>
+                                        {% endif %}
+
+                                    </ul>
+                                </li>
+                                {% endif %}
+                                <!--/workload -->
+
                                 <!--student-->
                                 <li>
                                   <a href="javascript:;">

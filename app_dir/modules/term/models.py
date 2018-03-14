@@ -10,6 +10,10 @@ class Term(models.Model):
         pgettext_lazy('Term field', 'name'), unique=True, max_length=128)
     description = models.TextField(
         verbose_name=pgettext_lazy('Term field', 'description'), blank=True, null=True)
+    openingDate = models.TextField(
+        verbose_name=pgettext_lazy('Term field', 'openingDate'), blank=True, null=True)
+    closingDate = models.TextField(
+        verbose_name=pgettext_lazy('Term field', 'closingDate'), blank=True, null=True)
     updated_at = models.DateTimeField(
         pgettext_lazy('Term field', 'updated at'), auto_now=True, null=True)
     created = models.DateTimeField(pgettext_lazy('Term field', 'created'),

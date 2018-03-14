@@ -15,6 +15,7 @@ File           : add/update.js
             /** form field ids */
             addForm          :  $('#addForm'),
             name             :  $("#name"),
+            class_group      :  $("#class_group"),
             stream           :  $("#stream"),
             no_of_students   :  $("#no_of_students"),
             class_teacher    :  $("#class_teacher"),
@@ -25,11 +26,13 @@ File           : add/update.js
             streamSelect     :  $("#stream"),
             roomSelect       :  $("#room"),
             academicSelect   :  $("#academic_year"),
+            class_teacher    :  $("#class_teacher"),
 
             //urls
             streamUrl        :  $("#streamUrl").val(),
             roomUrl          :  $("#roomUrl").val(),
             academicYearUrl  :  $("#academicYearUrl").val(),
+            teachersrUrl     :  $("#teachersrUrl").val(),
             redirectUrl      :  $("#redirectUrl").val(),
 
             postUrl          :  $('#postUrl').val(),
@@ -68,6 +71,16 @@ File           : add/update.js
                         allFunctions.el.academicSelect.selectpicker('refresh');
                     }
                 });
+
+                $.get(allFunctions.el.teachersrUrl, function (response){
+                    var yearOptions = response.results;
+                    if(yearOptions != ""){
+                        $.each(yearOptions,function(key, value){
+                            allFunctions.el.class_teacher.append('<option value=' + value['id'] + '>' + value['fullname'] + '</option>');
+                        });
+                        allFunctions.el.class_teacher.selectpicker('refresh');
+                    }
+                });
             }
         },
         notification:function(status, message , header){
@@ -88,6 +101,7 @@ File           : add/update.js
                     rules:{
                         stream: {required:true},
                         name: {required:true},
+                        class_group: {required:true, digits:true},
                         no_of_students:{required: true},
                         class_teacher:{required:true},
                         room:{required:true},

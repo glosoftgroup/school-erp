@@ -75,6 +75,8 @@ File           : addUsers.js
                       for (var i = 0; i < raw_groups.length; i++) {
                           formData.append('groups[]', raw_groups[i]);
                       }
+                       var is_teacher = $('input[name="staff-radio"]:checked').val();
+                      formData.append("is_teacher", is_teacher);
                       allFunctions.ajaxForms.ajaxFormHandle(formData);
 
                     }

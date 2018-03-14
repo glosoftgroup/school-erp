@@ -5,6 +5,7 @@ from .api.views import (
     UserCreateAPIView,
     )
 from . import views, pdf, groups
+from .api.views import *
 
 urlpatterns = [
     url(r'^$', permission_required('user.view_user', login_url='core:not_found')(views.users), name='user-list'),
@@ -51,5 +52,9 @@ urlpatterns = [
             (groups.group_delete), name='group-delete'),
     url(r'^group/paginate/', groups.group_paginate, name='group_paginate'),
     url( r'^group/search/$', groups.group_search, name = 'group_search' ),
+
+    url(r'^api/list/teachers/$', ListClassTeachersAPIView.as_view(), name='api-list-teachers'),
+
+
 ]
 

@@ -49,6 +49,9 @@ class User(PermissionsMixin, AbstractBaseUser):
     date_joined = models.DateTimeField(
         pgettext_lazy('User field', 'date joined'),
         default=timezone.now, editable=False)
+    is_teacher = models.BooleanField(
+        pgettext_lazy('User field', 'isTeacher'),
+        default=False)
 
     USERNAME_FIELD = 'email'
 

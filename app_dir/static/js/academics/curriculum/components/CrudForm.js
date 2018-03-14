@@ -144,7 +144,7 @@ class CrudForm extends React.Component {
                             data.map(function(item) {
                                 return {
                                     id : item.id,
-                                    text : item.name
+                                    text : item.class_group
                                 };
                             }
                     )};
@@ -365,7 +365,7 @@ class CrudForm extends React.Component {
                     <div className={classnames("form-group ", {"has-error": errors.academicclass} )}>
                         <div className="row">
                             <div className="col-md-12">
-                                <label className="text-bold">Academic Class:<span className="text-danger">*</span></label>
+                                <label className="text-bold">Academic Class Group:<span className="text-danger">*</span></label>
                                 <div className="input-group">
                                     <div className="btn-group col-md-12" id="academicclasss">
                                         <select name="academicclass" id="academicclass"

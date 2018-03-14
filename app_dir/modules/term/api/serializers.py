@@ -13,6 +13,8 @@ class TableListSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'name',
                   'description',
+                  'openingDate',
+                  'closingDate',
                   'update_url',
                   'delete_url'
                  )
@@ -24,6 +26,8 @@ class CreateListSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'name',
                   'description',
+                  'openingDate',
+                  'closingDate',
                  )
 
     def create(self, validated_data):
@@ -31,6 +35,10 @@ class CreateListSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name')
         if validated_data.get('description'):
             instance.description = validated_data.get('description')
+        if validated_data.get('openingDate'):
+            instance.openingDate = validated_data.get('openingDate')
+        if validated_data.get('closingDate'):
+            instance.closingDate = validated_data.get('closingDate')
         instance.save()
 
         return instance
@@ -42,6 +50,8 @@ class UpdateSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'name',
                   'description',
+                  'openingDate',
+                  'closingDate',
                  )
 
     def update(self, instance, validated_data):
@@ -49,6 +59,10 @@ class UpdateSerializer(serializers.ModelSerializer):
             instance.name = validated_data.get('name', instance.name)
         if validated_data.get('description'):
             instance.description = validated_data.get('description', instance.description)
+        if validated_data.get('openingDate'):
+            instance.openingDate = validated_data.get('openingDate')
+        if validated_data.get('closingDate'):
+            instance.closingDate = validated_data.get('closingDate')
 
         instance.save()
         return instance
