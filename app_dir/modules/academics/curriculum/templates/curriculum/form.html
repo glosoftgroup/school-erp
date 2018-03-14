@@ -101,7 +101,7 @@
         var objectSubject = "{{object.subject}}";
         var objectSubjectId = "{{object.subject.id}}";
 
-        var objectClass = "{{object.academicclass.name}}";
+        var objectClass = "{{object.academicclass.class_group}}";
         var objectClassId = "{{object.academicclass.id}}";
 
         var objectAcademic = "{{object.academicyear.name}}";
@@ -115,7 +115,7 @@
     var redirectUrl = "{% url 'curriculum:index' %}";
     var subjectUrl = "{% url 'subject:api-list' %}";
     var academicYearUrl = "{% url 'academic_year:api-list' %}";
-    var academicClassUrl = "{% url 'classes:api-list' %}";
+    var academicClassUrl = "{% url 'classes:api-list-groups' %}";
 
     var subjectCreateUrl = "{% url 'subject:api-create' %}";
 

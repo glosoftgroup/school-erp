@@ -1,20 +1,23 @@
 from __future__ import unicode_literals
 
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import pgettext_lazy
 from ..stream.models import Stream
 from ...academics.academic_year.models import AcademicYear
 from ...room.models import Room
 
+User = get_user_model()
+
 
 class Class(models.Model):
     name = models.CharField(
-        pgettext_lazy('Class field', 'name'), unique=True, max_length=128)
+        pgettext_lazy('Class field', 'name'), max_length=128)
     room = models.ForeignKey(Room , on_delete=models.CASCADE)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
-    class_teacher = models.CharField(
-        pgettext_lazy('Class field', 'class_teacher'), max_length=128)
+    class_teacher = models.ForeignKey(User)
+    class_group = models.IntegerField()
     no_of_students = models.CharField(
         pgettext_lazy('Class field', 'no_of_students'), max_length=128)
 

@@ -15,6 +15,7 @@ from app_dir.modules.academics.curriculum.urls import urlpatterns as curriculum_
 from app_dir.modules.academics.subject.urls import urlpatterns as subject_urls
 from app_dir.modules.parent.urls import urlpatterns as parent_urls
 from app_dir.modules.term.urls import urlpatterns as term_urls
+from app_dir.modules.workload.class_allocation.urls import urlpatterns as class_allocation_urls
 
 urlpatterns = [
     url(r'^', include(core_urls, namespace='core')),
@@ -31,6 +32,7 @@ urlpatterns = [
     url(r'^term/', include(term_urls, namespace='term')),
     url(r'^test_celery', test_celery, name='test_celery'),
     url(r'^users/', include(users_urls, namespace='users')),
+    url(r'^class/allocation/', include(class_allocation_urls, namespace='class_allocation')),
 
 
 ]

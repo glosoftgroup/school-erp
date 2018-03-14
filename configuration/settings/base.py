@@ -80,6 +80,7 @@ LOCAL_APPS = (
     'app_dir.modules.academics.subject',
     'app_dir.modules.parent',
     'app_dir.modules.term',
+    'app_dir.modules.workload.class_allocation',
 )
 
 INSTALLED_APPS = LOCAL_APPS + DEFAULT_APPS + THIRD_PARTY_APPS

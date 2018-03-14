@@ -64,6 +64,9 @@ def user_process(request):
         encr_password = make_password(password)
         mobile = request.POST.get('mobile').replace(' ', '').replace('(', '').replace(')', '').replace('-', '')
         groups = request.POST.getlist('groups[]')
+        is_teacher = False
+        if (request.POST.get('staff-radio')).lower() == 'true':
+            is_teacher = True
         new_user = User(
             username=(request.POST.get('name')).lower(),
             fullname=request.POST.get('fullname'),
@@ -73,6 +76,7 @@ def user_process(request):
             mobile=mobile,
             image=request.FILES.get('image'),
             jobTitle=request.POST.get('job_title'),
+            is_teacher=is_teacher
         )
         try:
             new_user.save()
@@ -216,6 +220,9 @@ def user_update(request, pk):
         image= request.FILES.get('image')
         job_title = request.POST.get('job_title')
         groups = request.POST.getlist('groups[]')
+        is_teacher = False
+        if (request.POST.get('is_teacher')).lower() == 'true':
+            is_teacher = True
 
         if password == user.password:
             encr_password = user.password
@@ -230,6 +237,7 @@ def user_update(request, pk):
             user.mobile = mobile
             user.jobTitle = job_title
             user.image = image
+            user.is_teacher = is_teacher
             user.save()
             user_trail(request.user.username, 'updated user: '+ str(user.username),'update')
             logger.info('User: '+str(request.user.username)+' updated user: '+str(user.username))
@@ -256,6 +264,7 @@ def user_update(request, pk):
             user.nationalId = nid
             user.mobile = mobile
             user.jobTitle = job_title
+            user.is_teacher = is_teacher
             user.save()
             user_trail(request.user.username, 'updated user: '+ str(user.username), 'update')
             logger.info('User: '+str(request.user.username)+' updated user: '+str(user.username))

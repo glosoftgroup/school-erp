@@ -38,10 +38,15 @@
                <div class="col-md-4">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-7">
                                 <label class="text-bold">Class Name:<span class="text-danger">*</span></label>
                                 <input value="{% if object.name %} {{object.name}} {% endif %}"
                                        class="form-control" name="name" id="name" placeholder="Name" type="text"/>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="text-bold">Class Group:<span class="text-danger">*</span></label>
+                                <input value="{% if object.class_group %}{{object.class_group}}{% endif %}"
+                                       class="form-control" name="class_group" id="class_group" placeholder="e.g 1 if class 1" type="text"/>
                             </div>
                         </div>
                     </div>
@@ -84,7 +89,12 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="text-bold">Class Teacher:<span class="text-danger">*</span></label>
-                                <input value="{% if object.class_teacher %} {{object.class_teacher}} {% endif %}" class="form-control" name="class_teacher" id="class_teacher" placeholder="Name" type="text"/>
+                                <select name="class_teacher" id="class_teacher" class="bootstrap-select" style="display:none">
+                                    <option value="">select teacher</option>
+                                    {% if object.class_teacher %}
+                                    <option value="{{object.class_teacher.id}}" selected>{{object.class_teacher.fullname}}</option>
+                                    {% endif %}
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -142,6 +152,7 @@
 <input type="hidden" id="streamUrl" value="{% url 'stream:api-list' %}">
 <input type="hidden" id="roomUrl" value="{% url 'room:api-list-rooms' %}">
 <input type="hidden" id="academicYearUrl" value="{% url 'academic_year:api-list' %}">
+<input type="hidden" id="teachersrUrl" value="{% url 'users:api-list-teachers' %}">
 <input type="hidden" id="csrftoken" value="{{ csrf_token }}">
 {% endblock %}
 

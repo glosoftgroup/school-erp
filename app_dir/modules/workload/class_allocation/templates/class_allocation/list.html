@@ -3,15 +3,15 @@
 {% load i18n %}
 
 {% block title %}
-  Classes
+  Class Allocations
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a>Classes </a></li>
+     <li class="active"><a href="{% url 'class_allocation:index' %}"> Class Allocations</a></li>
  {% endblock %}
 
 
-{% block menu_classes_class %}active{% endblock %}
+{% block menu_class_allocation_class %}active{% endblock %}
  {% block custom_css %}
 
  {% endblock %}
@@ -25,13 +25,11 @@
         <div class="panel-body  search-panel" style="padding:5px;">
             <div class="col-md-2">
               <label style="visibility: hidden;"> add</label>
-              {% if perms.classes.add_class %}
               <div class="form-group">
-                    <a id="toggle-add-form" href="{% url 'classes:add' %}" class="btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light">
+                    <a id="toggle-add-form" href="{% url 'class_allocation:add' %}" class="btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light">
                         <i class="icon-plus2 position-left"></i>Add
                     </a>
               </div>
-              {% endif %}
             </div>
             <div class="col-md-4">
              <label>Search </label>
@@ -50,6 +48,16 @@
                     <option value="True">Booked</option>
                     <option value="False">Not Booked</option>
                   </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <label>pick a date</label>
+              <div class="form-group">
+                <div class="input-group">
+                    <span v-datepicker></span>
+                  <input v-model="date" id="date" hello="inputChangeEvent" hi="inputChangeEvent" class="form-control daterange-single" type="text" placeholder="yyyy-mm-dd">
+                  <span class="input-group-addon"><i class="icon-calendar22"></i></span>
+                </div>
               </div>
             </div>
             <div class="col-md-2">
@@ -73,20 +81,17 @@
       <!-- Header and footer fixed -->
       <div class="panel panel-flat" id="printme">
         <div class="panel-body">
-            <div class="col-md-12">
-                <h5 class="text-center text-bold">classes</h5>
-            </div>
+
         <div class="">
           <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
                 <thead>
                   <tr class="bg-primary">
-                    <th>Name</th>
-                    <th>Class Teacher</th>
-                    <th>Room</th>
+                    <th>Teacher</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Term</th>
                     <th>Academic Year</th>
-                      {% if perms.classes.change_class or perms.classes.delete_class %}
                     <th></th>
-                      {% endif %}
                   </tr>
                 </thead>
                 <tbody id="tb">
@@ -110,18 +115,22 @@
                 <template v-for="item in items">
                     <tr class="td animated fadeIn" :id="item.id">
                         <td>
-                            ${item.name} ${item.stream}
+                            ${item.teacher}
                         </td>
                         <td>
-                            ${item.class_teacher_name}
+                            ${item.classTaught}
                         </td>
                         <td>
-                            ${item.room}
+                            ${item.subject}
                         </td>
                         <td>
-                            ${item.academic_year}
+                            ${item.term}
                         </td>
-                        {% if perms.classes.change_class or perms.classes.delete_class %}
+                        <td>
+                            ${item.academicYear}
+                        </td>
+
+
                         <td class="text-center">
                             <ul class="icons-list">
                                 <li class="dropdown">
@@ -129,17 +138,12 @@
                                         Actions<span class="caret"></span></button>
 
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        {% if perms.classes.change_class %}
                                         <li><a @click="goTo(item.update_url)" href="javascript:;"><i class="icon-pencil"></i> Edit</a></li>
-                                        {% endif %}
-                                        {% if perms.classes.delete_class %}
                                         <li><a @click="deleteInstance(item.delete_url,item.id)" href="javascript:;"><i class=" icon-trash-alt"></i> Delete</a></li>
-                                        {% endif %}
                                     </ul>
                                 </li>
                             </ul>
                         </td>
-                        {% endif %}
                     </tr>
                 </template>
 
@@ -215,7 +219,7 @@
  </div>
 
 <input type="hidden" class="pageUrls"
-  data-listurl="{% url 'classes:api-list' %}"
+  data-listurl="{% url 'class_allocation:api-list' %}"
 >
 {% endblock%}
 {% block custom_js %}
@@ -230,7 +234,8 @@
     <script type="text/javascript" src="{% static 'js/plugins/loaders/progressbar.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/plugins/vue/vue.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/plugins/vue/vue-resource.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/room/listing.js' %}"></script>
+    <script src="{% static 'js/plugins/vue/axios.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/common/listing.js' %}"></script>
     <script type="text/javascript">
       $(document).ready(function() {
         $('.bootstrap-select').selectpicker();

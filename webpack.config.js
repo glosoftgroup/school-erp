@@ -10,7 +10,6 @@ function resolve (dir) {
 module.exports = {
     entry: {
         'academic_year': './app_dir/static/js/academic_year/',
-        'academic_year': './app_dir/static/js/academic_year/',
         'classes': './app_dir/static/js/academics/classes/',
         'dashboard': './app_dir/static/js/',
         'parent': './app_dir/static/js/parent/',
@@ -21,7 +20,8 @@ module.exports = {
         'classes': './app_dir/static/js/academics/classes/',
         'curriculum': './app_dir/static/js/academics/curriculum/',
         'term': './app_dir/static/js/term/',
-        'users': './app_dir/static/js/users/'
+        'users': './app_dir/static/js/users/',
+        'class_allocation': './app_dir/static/js/workload/class_allocation/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),

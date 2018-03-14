@@ -1,0 +1,106 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+ {% if object.name %}
+   Edit {{object.name}}
+  {% else %}
+    Allocate Class
+  {% endif %}
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class=""><a href="{% url 'class_allocation:index' %}" >Class Allocations </a></li>
+    <li class="active">
+         {% if object.name %}
+        <a href="{% url 'class_allocation:update pk=object.id' %}">   Edit {{object.name}} </a>
+         {% else %}
+        <a href="{% url 'class_allocation:add' %}"> Allocate Class</a>
+         {% endif %}
+    </li>
+
+ {% endblock %}
+
+
+{% block menu_class_allocation_class %}active{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+
+<link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
+{% endblock %}
+{% block content %}
+ <!--room details-->
+
+<div class="panel panel-flat animated fadeIn" id="vue-app">
+    <div class="panel-body">
+        <div class="row">
+           <div id="app-root">
+           </div>
+        </div>
+    </div>
+</div>
+<!--./room details-->
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.bootstrap-select').selectpicker();
+  });
+</script>
+<script>
+var csrfmiddlewaretoken  = jQuery("[name=csrfmiddlewaretoken]").val();
+var options = [
+  { value: '1', label: 'One' },
+  { value: '2', label: 'Two' }
+];
+
+function logChange(val) {
+  console.log("Selected: " + val);
+}
+    {% if object.id %}
+        var pk = "{{object.id}}";
+        var updateUrl = "{% url 'class_allocation:api-update' pk=object.id %}";
+
+        var objectSubject = "{{object.subject}}";
+        var objectSubjectId = "{{object.subject.id}}";
+
+        var objectClass = "{{object.classTaught.class_group}}";
+        var objectClassId = "{{object.classTaught.id}}";
+
+        var objectAcademic = "{{object.academicYear.name}}";
+        var objectAcademicId = "{{object.academicYear.id}}";
+
+        var objectTeacher = "{{object.teacher.fullname}}";
+        var objectTeacherId = "{{object.teacher.id}}";
+
+        var objectTerm = "{{object.term.name}}";
+        var objectTermId = "{{object.term.id}}";
+
+    {% else %}
+        var pk= false;
+    {% endif %}
+
+    var createUrl = "{% url 'class_allocation:api-create' %}";
+    var redirectUrl = "{% url 'class_allocation:index' %}";
+
+    var subjectUrl = "{% url 'subject:api-list' %}";
+    var termUrl = "{% url 'term:api-list' %}";
+
+    var academicYearUrl = "{% url 'academic_year:api-list' %}";
+    var academicClassUrl = "{% url 'classes:api-list' %}";
+
+    var subjectCreateUrl = "{% url 'subject:api-create' %}";
+    var teachersrUrl    =  "{% url 'users:api-list-teachers' %}";
+
+    // alertUser
+    function alertUser(msg,status='bg-success',header='Well done!')
+    { $.jGrowl(msg,{header: header,theme: status}); }
+</script>
+{% render_bundle 'class_allocation' 'js' %}
+{% endblock %}

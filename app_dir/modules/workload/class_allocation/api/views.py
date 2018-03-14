@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import pagination
 from .pagination import PostLimitOffsetPagination
 
-from ...classes.models import Class as Table
+from ...class_allocation.models import ClassAllocation as Table
 from .serializers import (
     CreateListSerializer,
     TableListSerializer,
@@ -58,8 +58,7 @@ class ListAPIView(generics.ListAPIView):
         query = self.request.GET.get('q')
         if query:
             queryset_list = queryset_list.filter(
-                Q(name__icontains=query) |
-                Q(stream__name__icontains=query))
+                Q(name__icontains=query))
         return queryset_list.order_by('-id')
 
 
@@ -74,22 +73,3 @@ class UpdateAPIView(generics.RetrieveUpdateAPIView):
     """
     queryset = Table.objects.all()
     serializer_class = UpdateSerializer
-
-class ListClassGroupsAPIView(generics.ListAPIView):
-    """
-        list details
-        GET /api/setting/
-    """
-    serializer_class = TableListSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-    pagination_class = PostLimitOffsetPagination
-
-    def get_serializer_context(self):
-        if self.request.GET.get('date'):
-            return {"date": self.request.GET.get('date'), 'request': self.request}
-        return {"date": None, 'request': self.request}
-
-    def get_queryset(self, *args, **kwargs):
-        queryset_list = Table.objects.all().order_by('class_group').distinct(
-            'class_group')
-        return queryset_list

@@ -17,6 +17,7 @@
     "classnames": "^2.2.5",
     "countries-and-timezones": "^1.0.0",
     "create-react-class": "^15.6.3",
+    "daterangepicker": "^2.1.27",
     "es6-promise": "^4.2.4",
     "highcharts": "^5.0.14",
     "jgrowl": "^1.4.6",

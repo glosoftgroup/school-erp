@@ -9,9 +9,9 @@ import json
 
 
 class Curriculum(models.Model):
-    subject       = models.ForeignKey(Subject, default=1, on_delete=models.CASCADE)
-    academicclass = models.ForeignKey(Class,  default=1, on_delete=models.CASCADE)
-    academicyear  = models.ForeignKey(AcademicYear,  default=1, on_delete=models.CASCADE)
+    subject       = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    academicclass = models.ForeignKey(Class, on_delete=models.CASCADE)
+    academicyear  = models.ForeignKey(AcademicYear, on_delete=models.CASCADE)
     topics        = JSONField(default={})
 
 

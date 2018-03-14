@@ -10,12 +10,15 @@ class TableListSerializer(serializers.ModelSerializer):
     room = serializers.SerializerMethodField()
     academic_year = serializers.SerializerMethodField()
     stream = serializers.SerializerMethodField()
+    class_teacher_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Table
         fields = ('id',
                   'name',
                   'class_teacher',
+                  'class_teacher_name',
+                  'class_group',
                   'academic_year',
                   'room',
                   'no_of_students',
@@ -32,6 +35,9 @@ class TableListSerializer(serializers.ModelSerializer):
     def get_stream(self, obj):
         return obj.stream.name
 
+    def get_class_teacher_name(self, obj):
+        return obj.class_teacher.fullname
+
 
 class CreateListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,6 +45,7 @@ class CreateListSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'name',
                   'class_teacher',
+                  'class_group',
                   'academic_year',
                   'room',
                   'no_of_students',
@@ -51,6 +58,8 @@ class CreateListSerializer(serializers.ModelSerializer):
             instance.name = validated_data.get('name', instance.name)
         if validated_data.get('class_teacher'):
             instance.class_teacher = validated_data.get('class_teacher')
+        if validated_data.get('class_group'):
+            instance.class_group = validated_data.get('class_group')
         if validated_data.get('academic_year'):
             instance.academic_year = validated_data.get('academic_year')
         if validated_data.get('room'):
@@ -70,6 +79,7 @@ class UpdateSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'name',
                   'class_teacher',
+                  'class_group',
                   'academic_year',
                   'room',
                   'no_of_students',
@@ -81,6 +91,8 @@ class UpdateSerializer(serializers.ModelSerializer):
             instance.name = validated_data.get('name', instance.name)
         if validated_data.get('class_teacher'):
             instance.class_teacher = validated_data.get('class_teacher')
+        if validated_data.get('class_group'):
+            instance.class_group = validated_data.get('class_group')
         if validated_data.get('academic_year'):
             instance.academic_year = validated_data.get('academic_year')
         if validated_data.get('room'):
