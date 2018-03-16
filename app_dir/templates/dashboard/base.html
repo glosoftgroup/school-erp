@@ -179,6 +179,22 @@
                                 {% endif %}
                                 <!--/workload -->
 
+                                <!--exams-->
+                                {% if perms.configuration.view_examconfiguration %}
+                                <li class="">
+                                    <a href="#" class="has-ul"><i class="icon-menu2"></i><span>Exams</span></a>
+                                    <ul>
+                                        {% if perms.configuration.view_examconfiguration %}
+                                        <li class="{% block menu_exam_configuration_class %}{% endblock %}">
+                                          <a href="{% url 'exam_configuration:index' %}"><i class='icon-clipboard5'></i>Exam Configuration</a>
+                                        </li>
+                                        {% endif %}
+
+                                    </ul>
+                                </li>
+                                {% endif %}
+                                <!--/exams -->
+
                                 <!--student-->
                                 <li>
                                   <a href="javascript:;">

@@ -7,6 +7,7 @@
   "license": "Proprietary",
   "scripts": {
     "test": "mocha ./app_dir/static/test --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
+    "test_react": "mocha ./app_dir/static/test/react/ --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
     "test_vue": "mocha-webpack --webpack-config webpack.config.js --require ./app_dir/static/test/setup.js ./app_dir/static/test/**/*.spec.js",
     "build": "webpack"
   },
