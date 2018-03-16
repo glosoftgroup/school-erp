@@ -16,7 +16,7 @@ module.exports = {
         'room': './app_dir/static/js/room/',
         'site': './app_dir/static/js/site/',
         'stream': './app_dir/static/js/academics/stream/',
-        'student': './app_dir/static/js/student/',
+        'student': './app_dir/static/js/students/',
         'classes': './app_dir/static/js/academics/classes/',
         'curriculum': './app_dir/static/js/academics/curriculum/',
         'term': './app_dir/static/js/term/',
@@ -58,7 +58,7 @@ module.exports = {
                 'process.env.NODE_ENV': JSON.stringify('development')
             }),
             new BundleTracker({filename: './webpack-stats.json'}),
-            new ExtractTextPlugin("styles.css"),
+            new ExtractTextPlugin("[name].css"),
             new webpack.ProvidePlugin({
                 $: 'jquery',
                 jquery: 'jquery',
