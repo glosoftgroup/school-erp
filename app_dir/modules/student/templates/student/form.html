@@ -21,7 +21,14 @@ Edit {{object.first_name}} details - Student
 
 {% block custom_css %}
 {% render_bundle 'student' 'css' %}
-
+<style>
+html {
+  font-size: 14px;
+}
+.select2{
+width:100% !important;
+}
+</style>
 {% endblock %}
 {% block content %}
 <!--room details-->
