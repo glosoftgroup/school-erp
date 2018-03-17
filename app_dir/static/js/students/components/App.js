@@ -2,6 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import UserList from '../containers/user-list';
 import UserDetails from '../containers/user-detail';
+import BioData from '../containers/BioData';
 import 'react-tabs/style/react-tabs.css';
 import './styles.scss';
 
@@ -43,7 +44,7 @@ class CrudForm extends React.Component {
                                     </TabList>
 
                                     <TabPanel>
-                                        <h2>Any content 1</h2>
+                                       <BioData/>
                                     </TabPanel>
                                     <TabPanel>
                                         <h2>Any content 2</h2>
@@ -57,12 +58,15 @@ class CrudForm extends React.Component {
                                     <TabPanel>
                                         <h2>Any content 5</h2>
                                     </TabPanel>
+                                    <TabPanel>
+                                        <h2>Any content 6</h2>
+                                    </TabPanel>
                                 </Tabs>
-                                <h2>User List</h2>
+                                {/* <h2>User List</h2>
                                 <UserList />
                                 <hr />
                                 <h2>User Details</h2>
-                                <UserDetails />
+                                <UserDetails /> */}
                             </div>
                             {/* /tabs */}
                         </div>
