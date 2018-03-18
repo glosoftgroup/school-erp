@@ -6,6 +6,7 @@ import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import Select2 from 'react-select2-wrapper';
 import {connect} from 'react-redux';
+import { saveStudent } from '../actions/actions';
  
 import 'react-datepicker/dist/react-datepicker.css';
 class BioData extends React.Component {
@@ -19,6 +20,8 @@ class BioData extends React.Component {
           description:'',
           dob: moment(new Date()),
           pob:'',
+          errors:{},
+          loading:false,
           buttonText:'Add'
       };      
 
@@ -35,38 +38,29 @@ class BioData extends React.Component {
         var self = this; 
         // check if pk checked and populate update details 
         if(pk){
-            axios.get(updateUrl)
-            .then(function (response) {
-                response = response.data;
-                if(response.description == null){
-                    response.description = '';
-                }
-                self.refs.start_date.value = response.start_date;
-                self.refs.end_date.value = response.end_date;
-                self.setState({
-                            name: response.name,
-                            description: response.description,
-                            start_date: response.start_date,
-                            end_date: response.end_date,
-                            buttonText:'Edit'
-                            });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
+            // FETCH    data
         }
     }
 
-    handleInputChange = event =>{        
-                
+    handleInputChange = event =>{   
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;        
-                
-        this.setState({
-          [name]: value
-        });
+        const name = target.name; 
+
+        if(!!this.state.errors[name]){
+            let errors = Object.assign({}, this.state.errors);
+            delete errors[name];             
+                    
+            this.setState({
+                [name]: value,
+                errors
+            });
+        }else{
+            this.setState({
+                [name]: value
+            });
+        }
+        
        
     }
     
@@ -83,31 +77,34 @@ class BioData extends React.Component {
     
     handleSubmit = event =>{
       event.preventDefault();
-      const data = new FormData(event.target);
-      data.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
-      
-      axios.defaults.xsrfHeaderName = "X-CSRFToken"
-      axios.defaults.xsrfCookieName = 'csrftoken'
-      // check if pk is set and update details 
-      if(pk){
-            axios.put(updateUrl,data)
-            .then(function (response) {
-                alertUser('Data sent successfully');
-                window.location.href = redirectUrl;
-            })
-            .catch(function (error) {
-                console.log(error);
-            }); 
+
+      // validation
+      let errors = {};
+      if(this.state.first_name === '') errors.first_name = 'Field required';
+      if(this.state.middle_name === '') errors.middle_name = 'Field required';
+      if(this.state.last_name === '') errors.last_name = 'Field required';
+
+      this.setState({errors:errors});
+
+      const isValid = Object.keys(errors).length === 0;
+
+      if(isValid){
+        //  if data is valid, add student
+        // const data = this.state;
+        this.setState({loading:true, buttonText:'loading ..'})
+        const data = new FormData(event.target);
+        // check if pk is set and update details 
+        if(pk){
+            // UPDATE STUDENT 
         }else{
-            axios.post(createUrl,data)
-            .then(function (response) {
-                alertUser('Data sent successfully');
-                window.location.href = redirectUrl;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        }   
+            // CREATE STUDENT
+            this.props.saveStudent(data);
+        }
+        // this.props.addStudent(data);
+      }else{
+          return;
+      }      
+         
     }
 
     render() {
@@ -119,8 +116,8 @@ class BioData extends React.Component {
                 <div className="row">
                     <div className="col-md-4">
                         <label className="text-bold">First Name:<span className="text-danger">*</span></label>
-                        <input value={this.state.first_name} onChange={this.handleInputChange} required className="form-control" name="first_name" id="first_name" placeholder="First name" type="text"/>
-                        <span className="help-block text-warning"></span>
+                        <input value={this.state.first_name} onChange={this.handleInputChange} className="form-control" name="first_name" id="first_name" placeholder="First name" type="text"/>
+                        <span className="help-block text-warning">{this.state.errors.first_name}</span>
                     </div>
                     <div className="col-md-4">
                         <label className="text-bold">Middle Name:<span className="text-danger">*</span></label>
@@ -186,7 +183,7 @@ class BioData extends React.Component {
                 <textarea value={this.state.description} onChange={this.handleInputChange} rows="5" cols="5" className="form-control" id="description" name="description" placeholder="Enter room description here" />
                 
                 <span className="help-block text-warning"></span>
-            </div>
+            </div> 
         </div>
         <div className="text-right col-md-12">
             <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
@@ -206,4 +203,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(BioData);
+export default connect(mapStateToProps, {saveStudent})(BioData);

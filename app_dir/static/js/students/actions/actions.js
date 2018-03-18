@@ -4,9 +4,10 @@ export const STUDENT_FETCHED = 'STUDENT_FETCHED';
 export const STUDENT_UPDATED = 'STUDENT_UPDATED';
 export const STUDENT_DELETED = 'STUDENT_DELETED';
 
-function handleResponse(response) {
-  if (response.ok) {
-    return response.json();
+function handleResponse(response) { 
+  if (response.status == 201) {
+    console.log(response.data);
+    return response.data;
   } else { Error(response.statusText);
     error.response
     let error = new response;
@@ -23,7 +24,7 @@ export function setStudents(students) {
 
 export function addStudent(student) {
   return {
-    type: ADD_GAME,
+    type: ADD_STUDENT,
     student
   }
 }
@@ -51,27 +52,50 @@ export function studentDeleted(studentId) {
 
 export function saveStudent(data) {
   return dispatch => {
-    return fetch('/api/games', {
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(handleResponse)
-    .then(data => dispatch(addGame(data.student)));
+    // return fetch('/api/games', {
+    //   method: 'post',
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // }).then(handleResponse)
+    // .then(data => dispatch(addGame(data.student)));
+    
+    axios.defaults.xsrfHeaderName = "X-CSRFToken"
+    axios.defaults.xsrfCookieName = 'csrftoken'
+    axios.post(createUrl,data)
+    .then(function (response) {
+        alertUser('Data sent successfully');
+        handleResponse(response)
+    })
+    .then(data => dispatch(addStudent(data)))
+    .catch(function (error) {
+        console.log(error);
+        handleResponse(error);
+    });
   }
 }
 
 export function updateStudent(data) {
   return dispatch => {
-    return fetch(`/api/games/${data._id}`, {
-      method: 'put',
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(handleResponse)
-    .then(data => dispatch(gameUpdated(data.student)));
+    // return fetch(`/api/games/${data._id}`, {
+    //   method: 'put',
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // }).then(handleResponse)
+    // .then(data => dispatch(gameUpdated(data.student)));
+    axios.put(updateUrl,data)
+    .then(function (response) {
+        alertUser('Data sent successfully');        
+    })
+    .then(data=> dispatch(studentUpdated(data)))
+    .catch(function (error) {
+        console.log(error);
+        handleResponse(error);
+    });
+
   }
 }
 
@@ -89,16 +113,33 @@ export function deleteStudent(id) {
 
 export function fetchGames() {
   return dispatch => {
-    fetch('/api/games')
-      .then(res => res.json())
-      .then(data => dispatch(setStudents(data.students)));
+    // fetch('/api/games')
+    //   .then(res => res.json())
+    //   .then(data => dispatch(setStudents(data.students)));
+    axios.get(updateUrl)
+    .then(function (response) {
+        response = response.data;        
+    })
+    .then(data=> dispatch(setStudents(data)))
+    .catch(function (error) {
+        console.log(error);
+    });
   }
 }
 
-export function fetchGame(id) {
+export function fetchStudent(id) {
   return dispatch => {
-    fetch(`/api/games/${id}`)
-      .then(res => res.json())
-      .then(data => dispatch(gameFetched(data.game)));
+    // fetch(`/api/games/${id}`)
+    //   .then(res => res.json())
+    //   .then(data => dispatch(gameFetched(data.game)));
+    axios.get(updateUrl)
+    .then(function (response) {
+        response = response.data;        
+    })
+    .then(data=> dispatch(studentFetched(data)))
+    .catch(function (error) {
+        console.log(error);
+        handleResponse(errors);
+    });
   }
 }
