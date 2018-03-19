@@ -98,7 +98,11 @@ class BioData extends React.Component {
             // UPDATE STUDENT 
         }else{
             // CREATE STUDENT
-            this.props.saveStudent(data);
+             this.props.saveStudent({data})
+             .catch((err) => err.response.json()
+             .then(
+                 ({errors}) => this.setState({ errors, loading: false }))
+                );
         }
         // this.props.addStudent(data);
       }else{
@@ -114,6 +118,9 @@ class BioData extends React.Component {
        <div className="col-md-8">
             <div className="form-group">
                 <div className="row">
+                    <div className="col-md-12">
+                        <div className="ui alert alert-warning negative message"><p>{this.state.errors.toString}</p></div>
+                    </div>
                     <div className="col-md-4">
                         <label className="text-bold">First Name:<span className="text-danger">*</span></label>
                         <input value={this.state.first_name} onChange={this.handleInputChange} className="form-control" name="first_name" id="first_name" placeholder="First name" type="text"/>

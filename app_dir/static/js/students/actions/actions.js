@@ -1,16 +1,15 @@
-export const SET_STUDENT = 'SET_GAMES';
-export const ADD_STUDENT = 'ADD_GAME';
+export const SET_STUDENT = 'SET_STUDENTS';
+export const ADD_STUDENT = 'ADD_STUDENT';
 export const STUDENT_FETCHED = 'STUDENT_FETCHED';
 export const STUDENT_UPDATED = 'STUDENT_UPDATED';
 export const STUDENT_DELETED = 'STUDENT_DELETED';
 
-function handleResponse(response) { 
-  if (response.status == 201) {
-    console.log(response.data);
-    return response.data;
-  } else { Error(response.statusText);
-    error.response
-    let error = new response;
+function handleResponse(response) {
+  if (response.ok) {
+    return response.json();
+  } else {
+    let error = new Error(response.statusText);
+    error.response = response;
     throw error;
   }
 }
@@ -60,19 +59,29 @@ export function saveStudent(data) {
     //   }
     // }).then(handleResponse)
     // .then(data => dispatch(addGame(data.student)));
+
+    return fetch(createUrl, {
+      method: 'post',
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(handleResponse)
+    .then(data => dispatch(addStudent(data.game)));
     
-    axios.defaults.xsrfHeaderName = "X-CSRFToken"
-    axios.defaults.xsrfCookieName = 'csrftoken'
-    axios.post(createUrl,data)
-    .then(function (response) {
-        alertUser('Data sent successfully');
-        handleResponse(response)
-    })
-    .then(data => dispatch(addStudent(data)))
-    .catch(function (error) {
-        console.log(error);
-        handleResponse(error);
-    });
+    // axios.defaults.xsrfHeaderName = "X-CSRFToken"
+    // axios.defaults.xsrfCookieName = 'csrftoken'
+    // axios.post(createUrl,data)
+    // .then(function (response) {
+    //     alertUser('Data sent successfully');
+    //     //handleResponse(response)
+    //     return response;
+    // })
+    // .then(data => dispatch(addStudent(data)))
+    // .catch(function (error) {
+    //     //handleResponse(error);
+    //     return error;
+    // });
   }
 }
 
@@ -92,7 +101,6 @@ export function updateStudent(data) {
     })
     .then(data=> dispatch(studentUpdated(data)))
     .catch(function (error) {
-        console.log(error);
         handleResponse(error);
     });
 
@@ -138,8 +146,7 @@ export function fetchStudent(id) {
     })
     .then(data=> dispatch(studentFetched(data)))
     .catch(function (error) {
-        console.log(error);
-        handleResponse(errors);
+        handleResponse(error);
     });
   }
 }
