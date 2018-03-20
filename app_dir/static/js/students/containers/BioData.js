@@ -98,11 +98,17 @@ class BioData extends React.Component {
             // UPDATE STUDENT 
         }else{
             // CREATE STUDENT
-             this.props.saveStudent({data})
-             .catch((err) => err.response.json()
-             .then(
-                 ({errors}) => this.setState({ errors, loading: false }))
-                );
+            axios.defaults.xsrfHeaderName = "X-CSRFToken"
+            axios.defaults.xsrfCookieName = 'csrftoken'
+            axios.post(createUrl,data)
+            .then(function (response) {
+                alertUser('Data sent successfully');
+                return response;
+            })
+            .then(data => dispatch(addStudent(data)))
+            .catch(function (error) {
+                return error;
+            });
         }
         // this.props.addStudent(data);
       }else{
@@ -119,7 +125,7 @@ class BioData extends React.Component {
             <div className="form-group">
                 <div className="row">
                     <div className="col-md-12">
-                        <div className="ui alert alert-warning negative message"><p>{this.state.errors.toString}</p></div>
+                        <div className="ui alert alert-warning negative message"><p>{this.state.errors.global}</p></div>
                     </div>
                     <div className="col-md-4">
                         <label className="text-bold">First Name:<span className="text-danger">*</span></label>

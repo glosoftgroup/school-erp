@@ -9,7 +9,9 @@ function handleResponse(response) {
     return response.json();
   } else {
     let error = new Error(response.statusText);
+    console.log(error)
     error.response = response;
+    
     throw error;
   }
 }
