@@ -1,6 +1,6 @@
 /*
  * The countries reducer will always return an array of countries no matter what
- * You need to return something, so if there are no users then just return an empty array
+ * You need to return something, so if there are no country then just return an empty array
  * */
 
 export default function () {

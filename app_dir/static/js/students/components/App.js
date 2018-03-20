@@ -29,7 +29,7 @@ class CrudForm extends React.Component {
                     </div>
                 </div>
                 <div className="col-md-10">
-                    <div className="">
+                    <div className="a">
                         <div className="panel-body">
                             {/* tabs */}
                             <div className="ilive-preview">
@@ -47,7 +47,7 @@ class CrudForm extends React.Component {
                                        <BioData/>
                                     </TabPanel>
                                     <TabPanel>
-                                        <h2>Any content 2</h2>
+                                        <div>tab 2</div>
                                     </TabPanel>
                                     <TabPanel>
                                         <h2>Any content 3</h2>

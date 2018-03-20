@@ -1,16 +1,17 @@
-export const SET_STUDENT = 'SET_GAMES';
-export const ADD_STUDENT = 'ADD_GAME';
+export const SET_STUDENT = 'SET_STUDENTS';
+export const ADD_STUDENT = 'ADD_STUDENT';
 export const STUDENT_FETCHED = 'STUDENT_FETCHED';
 export const STUDENT_UPDATED = 'STUDENT_UPDATED';
 export const STUDENT_DELETED = 'STUDENT_DELETED';
 
-function handleResponse(response) { 
-  if (response.status == 201) {
-    console.log(response.data);
-    return response.data;
-  } else { Error(response.statusText);
-    error.response
-    let error = new response;
+function handleResponse(response) {
+  if (response.ok) {
+    return response.json();
+  } else {
+    let error = new Error(response.statusText);
+    console.log(error)
+    error.response = response;
+    
     throw error;
   }
 }
@@ -28,6 +29,14 @@ export function addStudent(student) {
     student
   }
 }
+
+export const selectStudent = (student) => {
+  console.log("You clicked on user: ", student.first_name);
+  return {
+      type: 'STUDENT_SELECTED',
+      payload: student
+  }
+};
 
 export function studentFetched(student) {
   return {
@@ -51,28 +60,8 @@ export function studentDeleted(studentId) {
 }
 
 export function saveStudent(data) {
-  return dispatch => {
-    // return fetch('/api/games', {
-    //   method: 'post',
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // }).then(handleResponse)
-    // .then(data => dispatch(addGame(data.student)));
-    
-    axios.defaults.xsrfHeaderName = "X-CSRFToken"
-    axios.defaults.xsrfCookieName = 'csrftoken'
-    axios.post(createUrl,data)
-    .then(function (response) {
-        alertUser('Data sent successfully');
-        handleResponse(response)
-    })
-    .then(data => dispatch(addStudent(data)))
-    .catch(function (error) {
-        console.log(error);
-        handleResponse(error);
-    });
+  return dispatch => {    
+    dispatch(selectStudent(data.data))
   }
 }
 
@@ -92,7 +81,6 @@ export function updateStudent(data) {
     })
     .then(data=> dispatch(studentUpdated(data)))
     .catch(function (error) {
-        console.log(error);
         handleResponse(error);
     });
 
@@ -129,17 +117,30 @@ export function fetchGames() {
 
 export function fetchStudent(id) {
   return dispatch => {
-    // fetch(`/api/games/${id}`)
-    //   .then(res => res.json())
-    //   .then(data => dispatch(gameFetched(data.game)));
+    
     axios.get(updateUrl)
     .then(function (response) {
         response = response.data;        
     })
     .then(data=> dispatch(studentFetched(data)))
     .catch(function (error) {
-        console.log(error);
-        handleResponse(errors);
+        handleResponse(error);
+    });
+  }
+}
+
+export function apiFetchStudent(id,callback){
+  return dispatch => {
+    axios.get(updateUrl)
+    .then(function (response) {
+        response = response; 
+        callback()       
+    })
+    .then(data=> dispatch(selectStudent(data)))
+    .catch(function (error) {
+        // handleResponse(error);
+        console.log('sdfsd sdfe')
+        console.log(error)
     });
   }
 }
