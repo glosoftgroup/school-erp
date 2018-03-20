@@ -2,6 +2,9 @@
 
 from rest_framework import serializers
 from ...configuration.models import ExamConfiguration as Table
+from structlog import get_logger
+
+logger = get_logger(__name__)
 
 
 class TableListSerializer(serializers.ModelSerializer):
@@ -39,6 +42,8 @@ class TableListSerializer(serializers.ModelSerializer):
 
 
 class CreateListSerializer(serializers.ModelSerializer):
+    exams = serializers.JSONField(write_only=True)
+
     class Meta:
         model = Table
         fields = ('id',
@@ -46,7 +51,8 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'academicyear',
                   'academicclass',
                   'term',
-                  'percentage',
+                  'is_percentage',
+                  'exams',
                  )
 
     def create(self, validated_data):
@@ -59,9 +65,13 @@ class CreateListSerializer(serializers.ModelSerializer):
             instance.academicclass = validated_data.get('academicclass')
         if validated_data.get('term'):
             instance.term = validated_data.get('term')
-        if validated_data.get('percentage'):
-            instance.percentage = validated_data.get('percentage')
-        instance.save()
+        if validated_data.get('is_percentage'):
+            instance.is_percentage = validated_data.get('is_percentage')
+
+        logger.info('details: ' + str(validated_data))
+        for i in validated_data.get('custom'):
+            logger.info(i)
+        # instance.save()
 
         return instance
 
