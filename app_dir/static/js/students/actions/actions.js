@@ -30,6 +30,14 @@ export function addStudent(student) {
   }
 }
 
+export const selectStudent = (student) => {
+  console.log("You clicked on user: ", student.first_name);
+  return {
+      type: 'STUDENT_SELECTED',
+      payload: student
+  }
+};
+
 export function studentFetched(student) {
   return {
     type: STUDENT_FETCHED,
@@ -52,38 +60,8 @@ export function studentDeleted(studentId) {
 }
 
 export function saveStudent(data) {
-  return dispatch => {
-    // return fetch('/api/games', {
-    //   method: 'post',
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // }).then(handleResponse)
-    // .then(data => dispatch(addGame(data.student)));
-
-    return fetch(createUrl, {
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(handleResponse)
-    .then(data => dispatch(addStudent(data.game)));
-    
-    // axios.defaults.xsrfHeaderName = "X-CSRFToken"
-    // axios.defaults.xsrfCookieName = 'csrftoken'
-    // axios.post(createUrl,data)
-    // .then(function (response) {
-    //     alertUser('Data sent successfully');
-    //     //handleResponse(response)
-    //     return response;
-    // })
-    // .then(data => dispatch(addStudent(data)))
-    // .catch(function (error) {
-    //     //handleResponse(error);
-    //     return error;
-    // });
+  return dispatch => {    
+    dispatch(selectStudent(data.data))
   }
 }
 
@@ -139,9 +117,7 @@ export function fetchGames() {
 
 export function fetchStudent(id) {
   return dispatch => {
-    // fetch(`/api/games/${id}`)
-    //   .then(res => res.json())
-    //   .then(data => dispatch(gameFetched(data.game)));
+    
     axios.get(updateUrl)
     .then(function (response) {
         response = response.data;        
@@ -149,6 +125,22 @@ export function fetchStudent(id) {
     .then(data=> dispatch(studentFetched(data)))
     .catch(function (error) {
         handleResponse(error);
+    });
+  }
+}
+
+export function apiFetchStudent(id,callback){
+  return dispatch => {
+    axios.get(updateUrl)
+    .then(function (response) {
+        response = response; 
+        callback()       
+    })
+    .then(data=> dispatch(selectStudent(data)))
+    .catch(function (error) {
+        // handleResponse(error);
+        console.log('sdfsd sdfe')
+        console.log(error)
     });
   }
 }

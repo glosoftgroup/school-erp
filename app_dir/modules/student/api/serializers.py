@@ -56,6 +56,8 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'nationality',
                   'dob',
                   'pob',
+                  # por (place of residence)
+                  'por',
                   'gender',
                   'religion',
                   'image',
@@ -68,22 +70,6 @@ class CreateListSerializer(serializers.ModelSerializer):
         instance.first_name = validated_data.get('first_name')
         instance.middle_name = validated_data.get('middle_name')
         instance.last_name = validated_data.get('last_name')
-        #
-        # def set_adm_no():
-        #     # auto generate admission no
-        #     try:
-        #         adm_no = Table.objects.latest('id').pk
-        #         adm_no += 1
-        #     except Exception as e:
-        #         adm_no = 2
-        #         print(e)
-        #     instance.adm_no = adm_no
-        # if str(validated_data.get('adm_no')) != 'null':
-        #     instance.adm_no = validated_data.get('adm_no')
-        # elif not validated_data.get('adm_no'):
-        #     set_adm_no()
-        # else:
-        #     set_adm_no()
 
         if validated_data.get('nationality'):
             instance.nationality = validated_data.get('nationality')
@@ -93,6 +79,8 @@ class CreateListSerializer(serializers.ModelSerializer):
             instance.gender = validated_data.get('gender')
         if validated_data.get('pob'):
             instance.pob = validated_data.get('pob')
+        if validated_data.get('por'):
+            instance.por = validated_data.get('por')
         if validated_data.get('religion'):
             instance.religion = validated_data.get('religion')
         if validated_data.get('image'):
@@ -113,6 +101,7 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'last_name',
                   'nationality',
                   'dob',
+                  'por',
                   'pob',
                   'gender',
                   'religion',
@@ -129,6 +118,7 @@ class UpdateSerializer(serializers.ModelSerializer):
         instance.nationality = validated_data.get('nationality', instance.nationality)
         instance.dob = validated_data.get('dob', instance.dob)
         instance.pob = validated_data.get('pob', instance.pob)
+        instance.por = validated_data.get('por', instance.por)
         instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance

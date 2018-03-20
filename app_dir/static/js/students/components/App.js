@@ -3,7 +3,6 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import UserList from '../containers/user-list';
 import UserDetails from '../containers/user-detail';
 import BioData from '../containers/BioData';
-import GameForm from '../containers/GameFormPage'
 import 'react-tabs/style/react-tabs.css';
 import './styles.scss';
 
