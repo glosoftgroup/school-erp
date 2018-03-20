@@ -22,6 +22,7 @@ class TopicListComponent extends React.Component {
           examName:'',
           examType:'',
           total:0,
+          pass:0,
           errors:{},
           percentage:false
         };
@@ -78,12 +79,20 @@ class TopicListComponent extends React.Component {
         if(name=="percentage"){
             this.setState({percentage: !this.state.percentage})
             if(!this.state.percentage){
+                let exams = []
                 for (const field in this.refs) {
-                  console.log(this.refs[field].value != 0?this.refs[field].value:null);
+                    if(this.refs[field].value != 0){
+                        let ex = {}
+                        ex["name"] = this.refs[field].name
+                        ex["value"] = this.refs[field].value
+                        exams.push(ex)
+                    }
                 }
+                this.props.addConfigCallBack(exams)
             }
             return;
         }
+
     }
 
     handleInputChange = event =>{
@@ -111,6 +120,8 @@ class TopicListComponent extends React.Component {
         const name   =  event.target.name
         let value    =  event.target.value
 
+        if(value == ''){value = 0}
+
         if(keyCode === 8 || keyCode === 46){
             let total = this.state.total - parseInt(value)
                 this.setState({
@@ -118,6 +129,36 @@ class TopicListComponent extends React.Component {
                   total:total
                 });
         }
+    }
+
+    saveConfig = () =>{        
+        if(!this.state.percentage){
+            let totalmarks = 0
+            for (const field in this.refs) {
+                let value = this.refs[field].value
+                totalmarks+=parseInt(value)
+
+            }
+            if(totalmarks > 100){
+                alertUser('Should be less than a hundred', status='bg-danger')
+                return
+            }else if(totalmarks < 100){
+                alertUser('Should add upto a hundred', status='bg-danger')
+                return
+            }
+        }
+
+        let exams = []
+        for (const field in this.refs) {
+            if(this.refs[field].value != 0){
+                let ex = {}
+                ex["name"] = this.refs[field].name
+                ex["value"] = this.refs[field].value
+                exams.push(ex)
+            }
+        }
+
+        this.props.addConfigCallBack(exams)      
     }
 
     render() {
@@ -258,6 +299,25 @@ class TopicListComponent extends React.Component {
                                 value={this.state.total}
                                 onChange={this.handleInputChange}
                                 />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className="text-right"><span>Pass Marks</span></td>
+                            <td colSpan="2">
+                                <input type="text" className="form-control"
+                                name="pass"
+                                value={this.state.pass}
+                                onChange={this.handleInputChange}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
+                                <button className="btn btn-primary pull-right"
+                                    onClick={this.saveConfig}>
+                                    Save
+                                </button>
                             </td>
                         </tr>
                         </tbody>

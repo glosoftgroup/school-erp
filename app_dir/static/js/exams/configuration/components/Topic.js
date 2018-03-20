@@ -85,6 +85,12 @@ class TopicComponent extends React.Component {
             this.props.addTopicCallBack(newTopicState)
             this.resetForm()
             this.props.slideToggle()
+            //uncheck the fields
+            for (const field in this.refs) {
+                $(this.refs[field]).prop("checked", false)
+                $(this.refs[field]).parent().removeClass('checked')
+            }
+
         }else{
             this.setState({errors: errs });
             return;
@@ -96,6 +102,7 @@ class TopicComponent extends React.Component {
         const name   =  event.target.name;
         let value    =  event.target.value;
         this.setState({[name]: !this.state[name]})
+
     }
 
     render() {
@@ -114,7 +121,8 @@ class TopicComponent extends React.Component {
                                 <div className="checkbox">
                                     <label>
                                         <input type="checkbox" onClick={this.checkToggle}
-                                        name="assignmentstatus" className="styled" />
+                                        name="assignmentstatus" className="styled"
+                                        ref="assignment" />
                                         Assignment(s)
                                     </label>
                                 </div>
@@ -143,7 +151,8 @@ class TopicComponent extends React.Component {
                                 <div className="checkbox">
                                     <label>
                                         <input type="checkbox" className="styled"
-                                        onClick={this.checkToggle} name="catstatus"/>
+                                        onClick={this.checkToggle} name="catstatus"
+                                        ref="cat"/>
                                         CAT(s)
                                     </label>
                                 </div>
@@ -172,7 +181,8 @@ class TopicComponent extends React.Component {
                                 <div className="checkbox">
                                     <label>
                                         <input type="checkbox" className="styled"
-                                        onClick={this.checkToggle} name="examstatus"/>
+                                        onClick={this.checkToggle} name="examstatus"
+                                        ref="exam"/>
                                         Exam(s)
                                     </label>
                                 </div>
