@@ -22,7 +22,7 @@ class CrudForm extends React.Component {
         academicclass:'',
         errors:{},
         topics:[],
-        config:{},
+        config:[],
         showModal:false,
         term:'',
         assignmentArray:[],
@@ -46,18 +46,19 @@ class CrudForm extends React.Component {
             let option = new Option(objectSubject, objectSubjectId, true, true)
             $('#subject').append(option).trigger('change')
 
-             //academic class
+            //academic class
             let classData = {"id": objectClassId, "text": objectClass}
             this.state.academicclass = objectClassId
             let option2 = new Option(objectClass, objectClassId, true, true)
             $('#academicclass').append(option2).trigger('change')
 
-             //academic year
+            //academic year
             let academicData = {"id": objectAcademicId, "text": objectAcademic}
             this.state.academicyear = objectAcademicId
             let option3 = new Option(objectAcademic, objectAcademicId, true, true)
             $('#academicyear').append(option3).trigger('change')
 
+            //term
             let termData = {"id": objectAcademicId, "text": objectAcademic}
             this.state.term = objectTermId
             let option4 = new Option(objectTerm, objectTermId, true, true)
@@ -202,23 +203,15 @@ class CrudForm extends React.Component {
     }
 
 
+    addConfigCallBack = (examsFromChild) => {
+        this.setState({config:examsFromChild})
+    }
+
     addTopicCallBack = (topicFromChild) => {
         let topics = this.state.topics
         let found = false;
 
         console.log(topicFromChild)
-
-//        if(topics.length > 0){
-//            for(let i = 0; i < topics.length; i++) {
-//                if (topics[i].name == topicFromChild.name) {
-//                    found = true;
-//                    $.jGrowl('Topic Already Exists', {
-//                          theme: 'bg-danger'
-//                     });
-//                    return;
-//                }
-//            }
-//        }
 
         topics.push(topicFromChild)
         let v = []
@@ -235,7 +228,7 @@ class CrudForm extends React.Component {
         for(let i=0;i<topicFromChild.exam;i++){
             v3.push(i+1);
         }
-        this.setState({topics:topics, config:topicFromChild, catArray:v, assignmentArray:v2,examArray:v3})
+        this.setState({topics:topics, catArray:v, assignmentArray:v2,examArray:v3})
         this.state.errors['topics'] = '';
         $.jGrowl('Topic Added Successfully', {
                       theme: 'bg-success'
@@ -324,7 +317,8 @@ class CrudForm extends React.Component {
         data.append("academicyear", this.state.academicyear)
         data.append("academicclass", this.state.academicclass)
         data.append("term", this.state.term)
-        data.append("topics", JSON.stringify(this.state.topics))
+        data.append("is_percentage", "true")
+        data.append("exams", JSON.stringify(this.state.config))
 
         axios.defaults.xsrfHeaderName = "X-CSRFToken"
         axios.defaults.xsrfCookieName = 'csrftoken'
@@ -344,7 +338,7 @@ class CrudForm extends React.Component {
             axios.post(createUrl,data)
             .then(function (response) {
                 alertUser('Data sent successfully');
-                window.location.href = redirectUrl;
+                // window.location.href = redirectUrl;
             })
             .catch(function (error) {
                 console.log(error);
@@ -481,6 +475,7 @@ class CrudForm extends React.Component {
                                 catArray={this.state.catArray}
                                 assignmentArray={this.state.assignmentArray}
                                 examArray={this.state.examArray}
+                                addConfigCallBack={this.addConfigCallBack}
                                 />
                     <div className="col-md-12">
                         <div className="col-md-12">

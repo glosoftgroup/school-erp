@@ -21,7 +21,8 @@ class TopicListComponent extends React.Component {
           examDetail:'',
           examName:'',
           examType:'',
-          total:'',
+          total:0,
+          pass:0,
           errors:{},
           percentage:false
         };
@@ -71,14 +72,33 @@ class TopicListComponent extends React.Component {
         this.setState({ showDelete: false})
     }
 
-    handleInputChange = event =>{
-        const name   =  event.target.name;
-        let value    =  event.target.value;
+    percentageToggle = event =>{
+        const name   =  event.target.name
+        let value    =  event.target.value
 
         if(name=="percentage"){
             this.setState({percentage: !this.state.percentage})
+            if(!this.state.percentage){
+                let exams = []
+                for (const field in this.refs) {
+                    if(this.refs[field].value != 0){
+                        let ex = {}
+                        ex["name"] = this.refs[field].name
+                        ex["value"] = this.refs[field].value
+                        exams.push(ex)
+                    }
+                }
+                this.props.addConfigCallBack(exams)
+            }
             return;
         }
+
+    }
+
+    handleInputChange = event =>{
+        const name   =  event.target.name
+        let value    =  event.target.value
+        const re = /^[0-9\b]+$/;
 
         if(isEmpty(value)){
             this.state.errors[name] = "This field is required";
@@ -86,10 +106,59 @@ class TopicListComponent extends React.Component {
             this.state.errors[name] = '';
         }
 
-        this.setState({
-          [name]: value
-        });
+        if(re.test(value)){
+            let total = (this.state.total - parseInt(this.state[name])) + parseInt(value)
+            this.setState({
+              [name]: value,
+              total:total
+            });
+        }
+    }
 
+    onKeyDown = (event) =>{
+        let keyCode  = event.keyCode
+        const name   =  event.target.name
+        let value    =  event.target.value
+
+        if(value == ''){value = 0}
+
+        if(keyCode === 8 || keyCode === 46){
+            let total = this.state.total - parseInt(value)
+                this.setState({
+                  [name]: 0,
+                  total:total
+                });
+        }
+    }
+
+    saveConfig = () =>{        
+        if(!this.state.percentage){
+            let totalmarks = 0
+            for (const field in this.refs) {
+                let value = this.refs[field].value
+                totalmarks+=parseInt(value)
+
+            }
+            if(totalmarks > 100){
+                alertUser('Should be less than a hundred', status='bg-danger')
+                return
+            }else if(totalmarks < 100){
+                alertUser('Should add upto a hundred', status='bg-danger')
+                return
+            }
+        }
+
+        let exams = []
+        for (const field in this.refs) {
+            if(this.refs[field].value != 0){
+                let ex = {}
+                ex["name"] = this.refs[field].name
+                ex["value"] = this.refs[field].value
+                exams.push(ex)
+            }
+        }
+
+        this.props.addConfigCallBack(exams)      
     }
 
     render() {
@@ -111,7 +180,7 @@ class TopicListComponent extends React.Component {
                                         name="percentage"
                                         checked={this.state.percentage}
                                         value={this.state.percentage}
-                                        onClick={this.handleInputChange}/>
+                                        onClick={this.percentageToggle}/>
                                         use percentage (%)
                                     </label>
                                 </div>
@@ -140,8 +209,10 @@ class TopicListComponent extends React.Component {
                                         <td>
                                             <input type="text" className="form-control"
                                                 name={`assignment_${exam}`}
+                                                ref={`assignment_${exam}`}
                                                 value={this.state["assignment_"+(exam)]?this.state["assignment_"+(exam)]:""}
-                                                onChange={this.handleInputChange}/>
+                                                onChange={this.handleInputChange}
+                                                onKeyDown={this.onKeyDown}/>
                                         </td>
                                         <td>
                                             <Button className="btn btn-primary" type="button"
@@ -168,9 +239,10 @@ class TopicListComponent extends React.Component {
                                         <td>
                                             <input type="text" className="form-control"
                                             name={`cat_${exam}`}
+                                            ref={`cat_${exam}`}
                                             value={this.state["cat_"+(exam)]?this.state["cat_"+(exam)]:""}
                                             onChange={this.handleInputChange}
-
+                                            onKeyDown={this.onKeyDown}
                                             />
                                         </td>
                                         <td>
@@ -197,8 +269,10 @@ class TopicListComponent extends React.Component {
                                         <td>
                                             <input type="text" className="form-control"
                                             name={`exam_${exam}`}
+                                            ref={`exam_${exam}`}
                                             value={this.state["exam_"+(exam)]?this.state["exam_"+(exam)]:""}
                                             onChange={this.handleInputChange}
+                                            onKeyDown={this.onKeyDown}
                                             />
                                         </td>
                                         <td>
@@ -225,6 +299,25 @@ class TopicListComponent extends React.Component {
                                 value={this.state.total}
                                 onChange={this.handleInputChange}
                                 />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className="text-right"><span>Pass Marks</span></td>
+                            <td colSpan="2">
+                                <input type="text" className="form-control"
+                                name="pass"
+                                value={this.state.pass}
+                                onChange={this.handleInputChange}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3">
+                                <button className="btn btn-primary pull-right"
+                                    onClick={this.saveConfig}>
+                                    Save
+                                </button>
                             </td>
                         </tr>
                         </tbody>
