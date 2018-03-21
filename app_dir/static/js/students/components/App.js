@@ -3,6 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import UserList from '../containers/user-list';
 import UserDetails from '../containers/user-detail';
 import BioData from '../containers/BioData';
+import ImagePreview from '../containers/ImagePreview'
 import 'react-tabs/style/react-tabs.css';
 import './styles.scss';
 
@@ -24,12 +25,10 @@ class CrudForm extends React.Component {
         return(
             <div className="row panel panel-default">
                 <div className="col-md-2">
-                    <div className="image-container panel-body text-center">
-                    <img data-src="holder.js/100%x100%" src="/static/images/users/default-avatar.png" alt="..." />
-                    </div>
+                    <ImagePreview/>
                 </div>
                 <div className="col-md-10">
-                    <div className="">
+                    <div className="a">
                         <div className="panel-body">
                             {/* tabs */}
                             <div className="ilive-preview">
@@ -47,7 +46,7 @@ class CrudForm extends React.Component {
                                        <BioData/>
                                     </TabPanel>
                                     <TabPanel>
-                                        <h2>Any content 2</h2>
+                                        <div>tab 2</div>
                                     </TabPanel>
                                     <TabPanel>
                                         <h2>Any content 3</h2>
