@@ -35,34 +35,19 @@ class BioData extends React.Component {
     // update state data
     //____________________________
     componentDidMount() { 
-        // console.log(this.props.countries)
-        // this.refs.start_date.value = moment(new Date()).format("YYYY-MM-DD");
-        // this.refs.end_date.value = moment(new Date()).format("YYYY-MM-DD");       
-        console.log(this.props.student);
-        var self = this; 
+      var self = this; 
         // check if pk checked and populate update details 
         if(pk){
+            if(this.props.student.first_name === undefined){
             // FETCH from api            
-            this.props.apiFetchStudent(pk,this.fetchStudent);            
             axios.get(updateUrl)
-            .then(function (response) {
-                response = response.data;
-                self.setState({
-                    first_name: response.first_name,
-                    middle_name: response.middle_name,
-                    last_name: response.last_name,
-                    pob: response.pob,
-                    por: response.por,
-                    dob: moment(new Date(response.dob)),
-                    religion: response.religion,
-                    nationality: response.nationality,
-                    gender: response.gender
-                })      
-            })
+            .then(data => this.props.saveStudent(data))
+            .then(()=>self.fetchStudent())           
             .catch(function (error) {
                 // handleResponse(error);
                 return error       
             });
+          }else{this.fetchStudent()}
         }else{
             this.fetchStudent()
         }
@@ -71,7 +56,7 @@ class BioData extends React.Component {
 
     // populate state values with student details from redux store
     fetchStudent = () =>{
-        if(this.props.student){
+        if(this.props.student.first_name != undefined){
             this.setState({
                 first_name: this.props.student.first_name,
                 last_name: this.props.student.last_name,
@@ -138,9 +123,14 @@ class BioData extends React.Component {
 
       if(isValid){
         //  if data is valid, add student
-        // const data = this.state;
         this.setState({loading:true, buttonText:'loading ..'})
         const data = new FormData(event.target);
+
+        // append image on formdata if is set
+        if(this.props.avatar){
+            data.append('image', this.props.avatar.avatar)        
+        }
+        
         // check if pk is set and update details 
         if(pk){
             // UPDATE STUDENT 
@@ -170,11 +160,12 @@ class BioData extends React.Component {
             .then(function (response) {
                 alertUser('Data sent successfully');
                 self.setState({loading:false, buttonText:'Submit'});
+                pk = response.data.id
+                updateUrl = response.data.update_url
                 return response;
             })
             .then(data => this.props.saveStudent(data))
             .catch(function (response) {
-                console.log(response.message)
                 let error = new Error(response.message);
                
                 error.response = response;
@@ -279,6 +270,7 @@ class BioData extends React.Component {
                 />
             </div>            
         </div>
+        
         <div className="col-md-4"> 
             <div className="form-group">
                 <label>Countries</label>
@@ -310,7 +302,8 @@ function mapStateToProps(state) {
         countries: state.countries,
         student: state.activeStudent,
         genders: state.genders,
-        religions: state.religions
+        religions: state.religions,
+        avatar: state.avatar
     }
 }
 

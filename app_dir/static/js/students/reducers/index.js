@@ -6,6 +6,7 @@ import ActiveCountryReducer from './reducer-active-country';
 import ActiveStudentReducer from './reducer-active-student'
 import ReligionReducer from './reducer-religions'
 import GenderReducer from './reducer-genders'
+import ImagePreviewReducer from './reducer-image'
 
 /*
  * We combine all reducers into a single object before updated data is dispatched (sent) to store
@@ -19,7 +20,8 @@ const allReducers = combineReducers({
     countries: CountriesReducer,
     religions: ReligionReducer,
     genders: GenderReducer,
-    activeCountry: ActiveCountryReducer
+    activeCountry: ActiveCountryReducer,
+    avatar: ImagePreviewReducer
 });
 
 export default allReducers
