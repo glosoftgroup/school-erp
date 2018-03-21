@@ -17,9 +17,13 @@ class ExamConfiguration(models.Model):
     is_percentage = models.BooleanField(
         pgettext_lazy('ExamConfiguration field', 'isPercentage'),
         default=False)
+    pass_marks = models.CharField(
+        pgettext_lazy('ExamConfiguration field', 'pass_mark'), blank=True, null=True, max_length=128)
+    total_marks = models.CharField(
+        pgettext_lazy('ExamConfiguration field', 'pass_mark'), blank=True, null=True, max_length=128)
     updated_at = models.DateTimeField(
         pgettext_lazy('ExamConfiguration field', 'updated at'), auto_now=True, null=True)
-    created = models.DateTimeField(pgettext_lazy('Term field', 'created'),
+    created = models.DateTimeField(pgettext_lazy('ExamConfiguration field', 'created'),
                                    default=now, editable=False)
 
     def __str__(self):

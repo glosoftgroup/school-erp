@@ -21,8 +21,8 @@ class TopicListComponent extends React.Component {
           examDetail:'',
           examName:'',
           examType:'',
-          total:0,
-          pass:0,
+          total:'0',
+          pass:'0',
           errors:{},
           percentage:false
         };
@@ -99,12 +99,14 @@ class TopicListComponent extends React.Component {
         const name   =  event.target.name
         let value    =  event.target.value
         const re = /^[0-9\b]+$/;
+        // const re = /^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/ /* matches digits and decimal places from 0*/
 
         if(isEmpty(value)){
             this.state.errors[name] = "This field is required";
         }else{
             this.state.errors[name] = '';
         }
+          
 
         if(re.test(value)){
             let total = (this.state.total - parseInt(this.state[name])) + parseInt(value)
@@ -113,6 +115,20 @@ class TopicListComponent extends React.Component {
               total:total
             });
         }
+    }
+    handlePassChange = event =>{
+        const name   =  event.target.name
+        let value    =  event.target.value
+
+        let val = parseInt(value);
+
+        /* test */
+        if (isNaN(val)) {
+          this.setState({ [name]: '', })
+        } else {
+            this.setState({[name]: value});
+        }
+
     }
 
     onKeyDown = (event) =>{
@@ -132,7 +148,7 @@ class TopicListComponent extends React.Component {
     }
 
     saveConfig = () =>{        
-        if(!this.state.percentage){
+        if(this.state.percentage == true){
             let totalmarks = 0
             for (const field in this.refs) {
                 let value = this.refs[field].value
@@ -140,10 +156,10 @@ class TopicListComponent extends React.Component {
 
             }
             if(totalmarks > 100){
-                alertUser('Should be less than a hundred', status='bg-danger')
+                alertUser('Should be less than or a hundred', 'bg-danger',null)
                 return
-            }else if(totalmarks < 100){
-                alertUser('Should add upto a hundred', status='bg-danger')
+            }else if(totalmarks < 50){
+                alertUser('Should more than half percentage', 'bg-danger', null)
                 return
             }
         }
@@ -158,7 +174,8 @@ class TopicListComponent extends React.Component {
             }
         }
 
-        this.props.addConfigCallBack(exams)      
+        this.props.addConfigCallBack(exams)
+        this.props.getPassCallBack(this.state.percentage, this.state.total, this.state.pass)      
     }
 
     render() {
@@ -297,7 +314,6 @@ class TopicListComponent extends React.Component {
                                 <input type="text" className="form-control"
                                 name="total"
                                 value={this.state.total}
-                                onChange={this.handleInputChange}
                                 />
                             </td>
                         </tr>
@@ -308,13 +324,13 @@ class TopicListComponent extends React.Component {
                                 <input type="text" className="form-control"
                                 name="pass"
                                 value={this.state.pass}
-                                onChange={this.handleInputChange}
+                                onChange={this.handlePassChange}
                                 />
                             </td>
                         </tr>
                         <tr>
                             <td colSpan="3">
-                                <button className="btn btn-primary pull-right"
+                                <button type="button" className="btn btn-primary pull-right"
                                     onClick={this.saveConfig}>
                                     Save
                                 </button>

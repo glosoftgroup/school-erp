@@ -27,7 +27,10 @@ class CrudForm extends React.Component {
         term:'',
         assignmentArray:[],
         catArray:[],
-        examArray:[]
+        examArray:[],
+        total_marks:'',
+        pass_marks:'',
+        is_percentage:'false'
       }
 
     }
@@ -202,6 +205,9 @@ class CrudForm extends React.Component {
         this.setState({visible:!this.state.visible})
     }
 
+    getPassCallBack = (is_percentage, totals, pass_marks) => {
+        this.setState({is_percentage:is_percentage, total_marks:totals, pass_marks:pass_marks})
+    }
 
     addConfigCallBack = (examsFromChild) => {
         this.setState({config:examsFromChild})
@@ -230,9 +236,7 @@ class CrudForm extends React.Component {
         }
         this.setState({topics:topics, catArray:v, assignmentArray:v2,examArray:v3})
         this.state.errors['topics'] = '';
-        $.jGrowl('Topic Added Successfully', {
-                      theme: 'bg-success'
-                 });
+        alertUser('Number of exams added successfully', 'bg-success', null)
     }
 
     deleteTopicCallBack = (exam, type) => {
@@ -305,9 +309,7 @@ class CrudForm extends React.Component {
         event.preventDefault();
         const { errs, isValid } = this.validateInput(this.state);
 
-        if(isValid){
-            console.log("yes it is valid");
-        }else{
+        if(!isValid){
             this.setState({errors: errs});
             return;
         }
@@ -317,7 +319,9 @@ class CrudForm extends React.Component {
         data.append("academicyear", this.state.academicyear)
         data.append("academicclass", this.state.academicclass)
         data.append("term", this.state.term)
-        data.append("is_percentage", "true")
+        data.append("total_marks", this.state.total_marks)
+        data.append("pass_marks", this.state.pass_marks)
+        data.append("is_percentage", this.state.is_percentage)
         data.append("exams", JSON.stringify(this.state.config))
 
         axios.defaults.xsrfHeaderName = "X-CSRFToken"
@@ -328,7 +332,7 @@ class CrudForm extends React.Component {
         if(pk){
             axios.put(updateUrl,data)
             .then(function (response) {
-                alertUser('Data sent successfully');
+                alertUser('Data sent successfully', 'bg-success','Well Done!')
                 window.location.href = redirectUrl;
             })
             .catch(function (error) {
@@ -337,11 +341,12 @@ class CrudForm extends React.Component {
         }else{
             axios.post(createUrl,data)
             .then(function (response) {
-                alertUser('Data sent successfully');
-                // window.location.href = redirectUrl;
+                alertUser('Data sent successfully', 'bg-success','Well Done!')
+                window.location.href = redirectUrl;
             })
             .catch(function (error) {
-                console.log(error);
+                alertUser('Exam Setting already Exists','bg-danger','Oops! Error Found')
+
             });
         }
 
@@ -476,6 +481,7 @@ class CrudForm extends React.Component {
                                 assignmentArray={this.state.assignmentArray}
                                 examArray={this.state.examArray}
                                 addConfigCallBack={this.addConfigCallBack}
+                                getPassCallBack={this.getPassCallBack}
                                 />
                     <div className="col-md-12">
                         <div className="col-md-12">
