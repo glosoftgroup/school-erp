@@ -8,8 +8,8 @@
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="actives"><a href="{% url 'curriculum:index' %}">Curriculum</a></li>
-     <li class="active"><a href="{% url 'curriculum:detail' pk=object.id %}" >{{object.subject.name | title}} Details</a></li>
+     <li class="actives"><a href="{% url 'exam_configuration:index' %}">Exam Configurations</a></li>
+     <li class="active"><a href="{% url 'exam_configuration:detail' pk=object.id %}" >{{object.subject.name | title}} Details</a></li>
  {% endblock %}
 
 
@@ -31,51 +31,46 @@
         <div class="row">
             <div id="app-root">
                 <h3 class="heading-divided text-center"> {{object.academicclass.name}} {{object.subject.name}}</h3>
+                <h6>Total Marks {{object.total_marks}}</h6>
+                <h6>Pass Marks {{object.pass_marks}}</h6>
+                <h6>Percentage Calculation {{object.is_percentage}}</h6>
                 <div class="col-md-12">
                 <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
                     <thead>
                       <tr class="bg-primary">
-                        <th>Topic Name</th>
-                        <th>Period</th>
-                        <th>Subtopics</th>
-                        <th>Objectives</th>
-                        <th>Expectations</th>
+                          <th></th>
+                        <th>Assignments</th>
+                        <th>Cats</th>
+                        <th>Exams</th>
                       </tr>
                     </thead>
                     <tbody id="tb">
-                    {% for i in object.topics %}
                         <tr class="animated fadeIn" id="item.id">
                             <td class="td" data-url="item.detail_url">
                                {{ forloop.counter }}. {{i.name}}
                             </td>
                             <td class="td" data-url="item.detail_url">
-                                {{i.period}}
+                                {% for x in object.assignment.all %}
+                                <li> Assignment {{ forloop.counter }} - {{x.marks}} </li>
+                                {% endfor %}
                             </td>
 
                             <td class="td" data-url="item.detail_url">
                                 <ul>
-                                {% for x in i.subtopics %}
-                                <li> {{x}} </li>
+                                {% for x in object.cat.all %}
+                                <li> CAT {{ forloop.counter }} - {{x.marks}} </li>
                                 {% endfor %}
                                 </ul>
                             </td>
 
                             <td class="td" data-url="item.detail_url">
                                 <ul>
-                                {% for x in i.objectives %}
-                                <li> {{x}} </li>
-                                {% endfor %}
-                                </ul>
-                            </td>
-                            <td class="td" data-url="item.detail_url">
-                                <ul>
-                                {% for x in i.expectations %}
-                                <li> {{x}} </li>
+                                {% for x in object.exam.all %}
+                                <li> Exam {{ forloop.counter }} - {{x.marks}} </li>
                                 {% endfor %}
                                 </ul>
                             </td>
                         </tr>
-                    {% endfor %}
                     </tbody>
                </table>
                 </div>

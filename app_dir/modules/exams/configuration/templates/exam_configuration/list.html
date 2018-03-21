@@ -80,6 +80,9 @@
                     <th>Subject</th>
                     <th>Class</th>
                     <th>Academic Year</th>
+                    <th>Assignments</th>
+                    <th>Cats</th>
+                    <th>Exams</th>
                       {% if perms.configuration.change_examconfiguration or perms.configuration.delete_examconfiguration %}
                     <th></th>
                       {% endif %}
@@ -114,7 +117,19 @@
                         </td>
 
                         <td class="td" :data-url="item.detail_url">
-                            ${item.academicyear}
+                            ${item.term} - ${item.academicyear}
+                        </td>
+
+                        <td class="td" :data-url="item.detail_url">
+                            ${item.assignments}
+                        </td>
+
+                        <td class="td" :data-url="item.detail_url">
+                            ${item.cats}
+                        </td>
+
+                        <td class="td" :data-url="item.detail_url">
+                            ${item.exams}
                         </td>
                         {% if perms.configuration.change_examconfiguration or perms.configuration.delete_examconfiguration %}
                         <td class="text-center">
@@ -210,7 +225,7 @@
  </div>
 
 <input type="hidden" class="pageUrls"
-  data-listurl="{% url 'curriculum:api-list' %}"
+  data-listurl="{% url 'exam_configuration:api-list' %}"
 >
 {% endblock%}
 {% block custom_js %}
