@@ -6,12 +6,9 @@ from app_dir.core.views import index, home
 from app_dir.core.urls import urlpatterns as core_urls
 from app_dir.modules.academics.academic_year.urls import urlpatterns as academic_year_urls
 from app_dir.modules.academics.classes.urls import urlpatterns as class_urls
-<<<<<<< HEAD
 from app_dir.modules.exams.configuration.urls import urlpatterns as configuration_urls
 from app_dir.modules.exams.marks_allocation.urls import urlpatterns as marks_allocations_urls
 from app_dir.modules.student.urls import urlpatterns as student_urls
-=======
->>>>>>> master
 from app_dir.modules.academics.curriculum.urls import urlpatterns as curriculum_urls
 from app_dir.modules.academics.subject.urls import urlpatterns as subject_urls
 from app_dir.modules.academics.stream.urls import urlpatterns as stream_urls
