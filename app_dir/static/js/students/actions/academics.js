@@ -8,22 +8,22 @@ export function setAcademics(payload) {
     }
   }
 
-export function fetchAcademics() {
+  export function fetchAcademics() {
     return dispatch => {
         axios.get('/academic_year/api/list')
         .then(response=>response.data.results)
         .then(function(data){
-            // create an new array from result
-            // with text/id keys as required by select2
-            const arr = new Array();
-            data.map(item => {
-                const obj = {id:item.id, text:item.name}
-                arr.push(obj)             
-            })
-            dispatch(setAcademics(arr))
+           // create an new array from result
+           // with text/id keys as required by select2
+           const arr = new Array();
+           data.map(item => {
+             const obj = {id:item.id, text:item.name}
+             arr.push(obj)             
+           })
+           dispatch(setAcademics(arr))
         })
         .catch(function (error) {
             console.log(error)
         });
     }
-}
+  }
