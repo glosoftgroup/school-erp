@@ -12,9 +12,9 @@ urlpatterns = [
     url(r'^api/list/$', ListAPIView.as_view(), name='api-list-rooms'),
     url(r'^api/update/(?P<pk>[0-9]+)/$', UpdateAPIView.as_view(), name='api-update'),
     url(r'^api/users/$', UserListAPIView.as_view(), name='api-list-users'),
-    url(r'^add/$', TemplateView.as_view(template_name="room/room_form.html"), name='add-room'),
+    url(r'^add/$', TemplateView.as_view(template_name="room/crud_form.html"), name='add-room'),
     url(r'^update/(?P<pk>[0-9]+)/$',
-        UpdateView.as_view(template_name="room/room_form.html", model=Table, fields=['id', 'name']),
+        UpdateView.as_view(template_name="room/crud_form.html", model=Table, fields=['id', 'name']),
         name='update-room'),
 ]
 

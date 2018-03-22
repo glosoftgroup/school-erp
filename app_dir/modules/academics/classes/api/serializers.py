@@ -8,6 +8,7 @@ class TableListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='classes:update')
     delete_url = serializers.HyperlinkedIdentityField(view_name='classes:api-delete')
     room = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
     academic_year = serializers.SerializerMethodField()
     stream = serializers.SerializerMethodField()
     class_teacher_name = serializers.SerializerMethodField()
@@ -26,6 +27,10 @@ class TableListSerializer(serializers.ModelSerializer):
                   'update_url',
                   'delete_url'
                  )
+
+    def get_name(self, obj):
+        return (str(obj.name) + " " + str(obj.stream.name))
+
     def get_room(self, obj):
         return obj.room.name
 
@@ -47,7 +52,7 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'class_teacher',
                   'class_group',
                   'academic_year',
-                  'room',
+                  'house',
                   'no_of_students',
                   'stream',
                  )
@@ -62,8 +67,8 @@ class CreateListSerializer(serializers.ModelSerializer):
             instance.class_group = validated_data.get('class_group')
         if validated_data.get('academic_year'):
             instance.academic_year = validated_data.get('academic_year')
-        if validated_data.get('room'):
-            instance.room = validated_data.get('room')
+        if validated_data.get('house'):
+            instance.room = validated_data.get('house')
         if validated_data.get('no_of_students'):
             instance.no_of_students = validated_data.get('no_of_students')
         if validated_data.get('stream'):
@@ -81,7 +86,7 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'class_teacher',
                   'class_group',
                   'academic_year',
-                  'room',
+                  'house',
                   'no_of_students',
                   'stream',
                  )
@@ -95,8 +100,8 @@ class UpdateSerializer(serializers.ModelSerializer):
             instance.class_group = validated_data.get('class_group')
         if validated_data.get('academic_year'):
             instance.academic_year = validated_data.get('academic_year')
-        if validated_data.get('room'):
-            instance.room = validated_data.get('room')
+        if validated_data.get('house'):
+            instance.room = validated_data.get('house')
         if validated_data.get('no_of_students'):
             instance.no_of_students = validated_data.get('no_of_students')
         if validated_data.get('stream'):
