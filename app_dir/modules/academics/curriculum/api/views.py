@@ -62,7 +62,7 @@ class UpdateAPIView(generics.RetrieveUpdateAPIView):
         @:param pk curriculum id
         @:method PUT
 
-        PUT /api/room/update/
+        PUT /api/house/update/
         payload Json: /payload/update.json
     """
     queryset = Table.objects.all()

@@ -69,6 +69,7 @@ LOCAL_APPS = (
     'loglib',
     'app_dir.api',
     'app_dir.core',
+    'app_dir.modules.house',
     'app_dir.modules.room',
     'app_dir.modules.users.user',
     'app_dir.modules.site',
