@@ -4,19 +4,29 @@
 {% load render_bundle from webpack_loader %}
 
 {% block title %}
-  Add Stream
+  {% if object.name %}
+   Edit {{object.name}}
+  {% else %}
+    Add house
+  {% endif %}
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a href="{% url 'stream:index' %}" >Stream</a></li>
+     <li class=""><a href="{% url 'room:index' %}" >Houses</a></li>
+     <li class="active"><a >
+         {% if object.name %}
+           Edit {{object.name}}
+         {% else %}
+            Add house
+         {% endif %}
+     </a></li>
  {% endblock %}
 
 
-{% block menu_stream_class %}active{% endblock %}
+{% block menu_room %}active{% endblock %}
 
 {% block custom_css %}
 <link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
-<link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
 {% endblock %}
 {% block content %}
  <!--house details-->
@@ -24,12 +34,11 @@
 <div class="panel panel-flat animated fadeIn" id="vue-app">
     <div class="panel-body">
         <div class="row">
-           <div id="app-root">
+           <div id="room">
            </div>
         </div>
     </div>
 </div>
-
 <!--./house details-->
 {% endblock %}
 
@@ -49,18 +58,17 @@ var options = [
 function logChange(val) {
   console.log("Selected: " + val);
 }
-    {% if pk %}
-    var pk = "{{pk}}";
-    var updateUrl = "{% url 'stream:api-update' pk=pk %}";
+    {% if object.id %}
+    var pk = "{{object.id}}";
+    var updateUrl = "{% url 'house:api-update' pk=object.id %}";
     {% else %}
     var pk= false;
     {% endif %}
-    var createUrl = "{% url 'stream:api-create' %}";
-    var redirectUrl = "{% url 'stream:index' %}";
+    var createUrl = "{% url 'house:api-create-house' %}";
+    var redirectUrl = "{% url 'house:index' %}";
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
-
 </script>
-{% render_bundle 'stream' 'js' %}
+{% render_bundle 'house' 'js' %}
 {% endblock %}

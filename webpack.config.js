@@ -11,18 +11,20 @@ module.exports = {
     entry: {
         'academic_year': './app_dir/static/js/academic_year/',
         'classes': './app_dir/static/js/academics/classes/',
+        'class_allocation': './app_dir/static/js/workload/class_allocation/',
+        'classes': './app_dir/static/js/academics/classes/',
+        'configuration': './app_dir/static/js/exams/configuration/',
+        'curriculum': './app_dir/static/js/academics/curriculum/',
         'dashboard': './app_dir/static/js/',
+        'house': './app_dir/static/js/house/',
         'parent': './app_dir/static/js/parent/',
         'room': './app_dir/static/js/room/',
         'site': './app_dir/static/js/site/',
         'stream': './app_dir/static/js/academics/stream/',
         'student': './app_dir/static/js/students/',
-        'classes': './app_dir/static/js/academics/classes/',
-        'curriculum': './app_dir/static/js/academics/curriculum/',
         'term': './app_dir/static/js/term/',
-        'users': './app_dir/static/js/users/',
-        'class_allocation': './app_dir/static/js/workload/class_allocation/',
-        'configuration': './app_dir/static/js/exams/configuration/'
+        'users': './app_dir/static/js/users/'
+
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),

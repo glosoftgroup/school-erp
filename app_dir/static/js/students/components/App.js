@@ -4,8 +4,10 @@ import UserList from '../containers/user-list';
 import UserDetails from '../containers/user-detail';
 import BioData from '../containers/BioData';
 import ImagePreview from '../containers/ImagePreview'
+import Admission from '../containers/Admission'
 import 'react-tabs/style/react-tabs.css';
 import './styles.scss';
+import './avatar.styles.scss'
 
 class CrudForm extends React.Component {
     constructor(props) {
@@ -36,7 +38,7 @@ class CrudForm extends React.Component {
                                     <TabList>
                                         <Tab>Bio Data</Tab>
                                         <Tab>Academic Admissions</Tab>
-                                        <Tab>Financil Details</Tab>
+                                        <Tab>Financial Details</Tab>
                                         <Tab>Parental Details</Tab>
                                         <Tab>Emergency Details</Tab>
                                         <Tab>Fee Structure</Tab>
@@ -46,7 +48,7 @@ class CrudForm extends React.Component {
                                        <BioData/>
                                     </TabPanel>
                                     <TabPanel>
-                                        <div>tab 2</div>
+                                        <Admission/>
                                     </TabPanel>
                                     <TabPanel>
                                         <h2>Any content 3</h2>

@@ -65,11 +65,11 @@ class ListAPIView(generics.ListAPIView):
 
 class UpdateAPIView(generics.RetrieveUpdateAPIView):
     """
-        update room details
-        @:param pk room id
+        update house details
+        @:param pk house id
         @:method PUT
 
-        PUT /api/room/update/
+        PUT /api/house/update/
         payload Json: /payload/update_room.json
     """
     queryset = Table.objects.all()

@@ -7,6 +7,9 @@ import ActiveStudentReducer from './reducer-active-student'
 import ReligionReducer from './reducer-religions'
 import GenderReducer from './reducer-genders'
 import ImagePreviewReducer from './reducer-image'
+import ClassesReducer from './reducer-classes'
+import AcademicReducer from './reducer-academic-years'
+import HousesReducers from './reducer-houses'
 
 /*
  * We combine all reducers into a single object before updated data is dispatched (sent) to store
@@ -21,7 +24,10 @@ const allReducers = combineReducers({
     religions: ReligionReducer,
     genders: GenderReducer,
     activeCountry: ActiveCountryReducer,
-    avatar: ImagePreviewReducer
+    avatar: ImagePreviewReducer,
+    classes: ClassesReducer,
+    academics: AcademicReducer,
+    houses: HousesReducers
 });
 
 export default allReducers
