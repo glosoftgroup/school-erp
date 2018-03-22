@@ -11,6 +11,7 @@ from app_dir.modules.users.user.urls import urlpatterns as users_urls
 from app_dir.modules.academics.stream.urls import urlpatterns as stream_urls
 from app_dir.modules.academics.classes.urls import urlpatterns as class_urls
 from app_dir.modules.exams.configuration.urls import urlpatterns as configuration_urls
+from app_dir.modules.exams.marks_allocation.urls import urlpatterns as marks_allocations_urls
 from app_dir.modules.student.urls import urlpatterns as student_urls
 from app_dir.modules.academics.curriculum.urls import urlpatterns as curriculum_urls
 from app_dir.modules.academics.subject.urls import urlpatterns as subject_urls
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^users/', include(users_urls, namespace='users')),
     url(r'^class/allocation/', include(class_allocation_urls, namespace='class_allocation')),
     url(r'^exams/configuration/', include(configuration_urls, namespace='exam_configuration')),
+    url(r'^exams/marks/allocation/', include(marks_allocations_urls, namespace='marks_allocation')),
 
 
 ]

@@ -190,6 +190,10 @@
                                         </li>
                                         {% endif %}
 
+                                        <li class="{% block menu_marks_allocation_class %}{% endblock %}">
+                                          <a href="{% url 'marks_allocation:add' %}"><i class='icon-clipboard5'></i>Marks Allocation</a>
+                                        </li>
+
                                     </ul>
                                 </li>
                                 {% endif %}

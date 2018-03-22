@@ -22,7 +22,8 @@ module.exports = {
         'term': './app_dir/static/js/term/',
         'users': './app_dir/static/js/users/',
         'class_allocation': './app_dir/static/js/workload/class_allocation/',
-        'configuration': './app_dir/static/js/exams/configuration/'
+        'configuration': './app_dir/static/js/exams/configuration/',
+        'marks_allocation': './app_dir/static/js/exams/marks_allocation/'
     },
     output: {
         path: path.resolve('./app_dir/static/dist'),
