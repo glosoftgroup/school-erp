@@ -8,8 +8,7 @@ from django.contrib.auth.decorators import (
 )
 
 from .api.views import *
-from .models import ExamConfiguration as Table
-
+from app_dir.modules.exams.configuration.models import ExamConfiguration as Table
 
 urlpatterns = [
     url(r'^$', permission_required('configuration.view_examconfiguration', login_url='core:not_found')(TemplateView.as_view(template_name="marks_allocation/form.html")), name="index"),

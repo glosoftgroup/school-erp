@@ -9,8 +9,7 @@ from django.utils.translation import pgettext_lazy
 from django.utils.timezone import now
 
 
-# class Marks(models.Model):
-#     pass
+
 
 
 
