@@ -25,7 +25,8 @@ class CrudForm extends React.Component {
     // update state data
     //____________________________
     componentWillMount() {
-        var self = this; 
+        var self = this;
+        let pk = pk ? pk : false
         // check if pk checked and populate update details 
         if(pk){
             axios.get(updateUrl)

@@ -1,0 +1,138 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+    {% if object.id %}
+        Marks Allocation
+    {% else %}
+       Marks Allocation
+    {% endif %}
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class="active"><a href="{% url 'marks_allocation:add' %}" >Marks Allocation</a></li>
+ {% endblock %}
+
+
+{% block menu_marks_allocation_class %}active{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+<link rel="stylesheet" href="{% static 'js/plugins/react/react-datepicker.min.css">
+<style>
+    fieldset.scheduler-border {
+        border: 1px groove #efefef !important;
+        border-radius:5px;
+        padding: 0 1.4em 1.4em 1.4em !important;
+        margin: 0 0 1.5em 0 !important;
+        -webkit-box-shadow:  0px 0px 0px 0px #000;
+                box-shadow:  0px 0px 0px 0px #000;
+    }
+
+    legend.scheduler-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width:auto;
+        padding:0 10px;
+        border-bottom:none;
+    }
+
+   .select2-container{
+        border-bottom: 1px solid #ddd !important;
+    }
+    .select2-container--focus{
+        border-bottom: 1px solid #26A96A !important;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="panel panel-flat animated fadeIn" id="vue-app">
+    <div class="panel-body">
+        <div class="row">
+            <div id="app-root"></div>
+        </div>
+    </div>
+</div>
+
+
+<input type="hidden" id="subjectPk" value="{{object.subject.pk}}">
+<input type="hidden" id="subjectStatus" value="false">
+{% if object.id %}
+<input type="hidden" id="postUrl" value="{% url 'curriculum:api-update' pk=object.pk %}">
+    <input type="hidden" id="postMethod" value="PUT">
+    <input type="hidden" id="pk" value="{{object.pk}}">
+{% else %}
+    <input type="hidden" id="postUrl" value="{% url 'curriculum:api-create' %}">
+    <input type="hidden" id="postMethod" value="POST">
+    <input type="hidden" id="pk" value="none">
+{% endif %}
+
+<!-- to populate select elements -->
+<input type="hidden" id="redirectUrl" value="{% url 'curriculum:index' %}">
+<input type="hidden" id="subjectUrl" value="{% url 'subject:api-list' %}">
+<input type="hidden" id="csrftoken" value="{{ csrf_token }}">
+
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'js/core/libraries/jquery.validate.min.js' %} "></script>
+<script type="text/javascript" src="{% static 'js/plugins/forms/styling/uniform.min.js' %}"></script>
+<script>
+
+   {% if object.id %}
+        var pk = "{{object.id}}";
+        var updateUrl = "{% url 'exam_configuration:api-update' pk=object.id %}";
+
+        var v = "{{object.get_json_data}}";
+        var objectTopics =JSON.parse(v.replace(/&quot;/g, '"'));
+
+        var objectSubject = "{{object.subject}}";
+        var objectSubjectId = "{{object.subject.id}}";
+
+        var objectClass = "{{object.academicclass.class_group}}";
+        var objectClassId = "{{object.academicclass.id}}";
+
+        var objectAcademic = "{{object.academicyear.name}}";
+        var objectAcademicId = "{{object.academicyear.id}}";
+
+        var objectTerm = "{{object.term.name}}";
+        var objectTermId = "{{object.term.id}}";
+    {% else %}
+        var pk= false;
+        var objectTopics = [];
+    {% endif %}
+
+    var createUrl = "{% url 'exam_configuration:api-create' %}";
+    var redirectUrl = "{% url 'exam_configuration:index' %}";
+    var subjectUrl = "{% url 'subject:api-list' %}";
+    var academicYearUrl = "{% url 'academic_year:api-list' %}";
+    var academicClassUrl = "{% url 'classes:api-list-groups' %}";
+    var termUrl = "{% url 'term:api-list' %}";
+
+    var subjectCreateUrl = "{% url 'subject:api-create' %}";
+
+    // alertUser
+    function alertUser(msg,status='bg-success',header='Well done!')
+    { $.jGrowl(msg,{header: header,theme: status}); }
+
+</script>
+{% render_bundle 'marks_allocation' 'js' %}
+<script>
+        $(".styled, .multiselect-container input").uniform({
+            radioClass: 'choice'
+        });
+        $(".control-percentage").uniform({
+            radioClass: 'choice',
+            wrapperClass: 'border-warning-600 text-warning-800'
+        });
+
+
+</script>
+{% endblock %}
