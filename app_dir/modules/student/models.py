@@ -8,6 +8,8 @@ from . import ReligionChoices
 from . import GenderChoices
 from app_dir.modules.academics.academic_year.models import AcademicYear
 from app_dir.modules.academics.classes.models import Class, Stream
+from app_dir.modules.house.models import House
+from app_dir.modules.parent.models import Parent
 
 
 class Student(models.Model):
@@ -25,7 +27,7 @@ class Student(models.Model):
         pgettext_lazy('Student field', 'place of birth'), default='', max_length=128)
     por = models.CharField(
         pgettext_lazy('Student field', 'place of residence'), default='', max_length=128)
-
+    parents = models.ManyToManyField(Parent)
     gender = models.CharField(
         max_length=23,
         choices=GenderChoices.CHOICES,
@@ -82,6 +84,10 @@ class StudentOfficialDetails(models.Model):
     course = models.ForeignKey(
         Class, related_name='student_class', blank=True, null=True,
         verbose_name=pgettext_lazy('StudentOfficialDetails field', 'class'))
+    house = models.ForeignKey(
+        House, related_name='student_house', blank=True, null=True,
+        verbose_name=pgettext_lazy('StudentOfficialDetails field', 'house'))
+
     stream = models.ForeignKey(
         Stream, related_name='student_stream', blank=True, null=True,
         verbose_name=pgettext_lazy('StudentOfficialDetails field', 'stream'))

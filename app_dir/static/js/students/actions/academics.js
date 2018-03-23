@@ -21,7 +21,6 @@ export function setAcademics(payload) {
              arr.push(obj)             
            })
            dispatch(setAcademics(arr))
-           return arr
         })
         .catch(function (error) {
             console.log(error)
