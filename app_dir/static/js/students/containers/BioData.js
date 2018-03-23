@@ -27,8 +27,7 @@ class BioData extends React.Component {
           loading:false,
           buttonText:'submit',
           server_errror:''
-      };      
-
+      };
     }
 
     // load site settings on mount
@@ -41,15 +40,15 @@ class BioData extends React.Component {
             if(this.props.student.first_name === undefined){
             // FETCH from api            
             axios.get(updateUrl)
-            .then(data => this.props.saveStudent(data))
+            .then(data => self.props.saveStudent(data))
             .then(()=>self.fetchStudent())           
             .catch(function (error) {
                 // handleResponse(error);
                 return error       
             });
-          }else{this.fetchStudent()}
+          }else{self.fetchStudent()}
         }else{
-            this.fetchStudent()
+            self.fetchStudent()
         }
         
     }

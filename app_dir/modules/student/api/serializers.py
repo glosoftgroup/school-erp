@@ -1,10 +1,10 @@
-# site settings rest api serializers
+# student module rest api serializers
 
 from rest_framework import serializers
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 from ...student.models import Student as Table
 from ...student.models import StudentOfficialDetails as OfficialDetail
-
+from app_dir.modules.parent.models import Parent
 
 # student details
 class TableListSerializer(serializers.ModelSerializer):
@@ -32,6 +32,7 @@ class TableListSerializer(serializers.ModelSerializer):
                   'pob',
                   'gender',
                   'religion',
+                  'parents',
                   'image',
                   'update_url',
                   'delete_url'
@@ -44,8 +45,16 @@ class TableListSerializer(serializers.ModelSerializer):
             return ''
 
 
+class ParentsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Parent
+        fields = ('first_name', 'middle_name', 'last_name')
+
+
 class CreateListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='student:api-update')
+    parents = ParentsSerializer(read_only=True, many=True)
 
     class Meta:
         model = Table
@@ -61,8 +70,12 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'gender',
                   'religion',
                   'image',
+                  'parents',
                   'update_url'
                  )
+
+    def get_parents(self, obj):
+        return obj.parents
 
     def create(self, validated_data):
         instance = Table()
@@ -92,7 +105,8 @@ class CreateListSerializer(serializers.ModelSerializer):
 
 class UpdateSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='student:api-update')
-
+    parents = ParentsSerializer(read_only=True, many=True)
+    
     class Meta:
         model = Table
         fields = ('id',
@@ -106,6 +120,7 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'gender',
                   'religion',
                   'image',
+                  'parents',
                   'update_url'
                  )
 
@@ -138,6 +153,7 @@ class OfficialDetailsListSerializer(serializers.ModelSerializer):
                   'academic_name',
                   'stream',
                   'course',
+                  'house',
                   'join_date',
                   'update_url'
                   )
@@ -157,6 +173,7 @@ class CreateOfficialDetailListSerializer(serializers.ModelSerializer):
                   'academic_year',
                   'stream',
                   'course',
+                  'house',
                   'join_date',
                   'update_url'
                  )
@@ -185,6 +202,8 @@ class CreateOfficialDetailListSerializer(serializers.ModelSerializer):
             instance.stream = validated_data.get('stream')
         if validated_data.get('course'):
             instance.course = validated_data.get('course')
+        if validated_data.get('house'):
+            instance.house = validated_data.get('house')
         if validated_data.get('join_date'):
             instance.join_date = validated_data.get('join_date')
         instance.save()
@@ -203,6 +222,7 @@ class UpdateOfficialDetailListSerializer(serializers.ModelSerializer):
                   'academic_year',
                   'stream',
                   'course',
+                  'house',
                   'join_date',
                   'update_url'
                  )
@@ -213,6 +233,7 @@ class UpdateOfficialDetailListSerializer(serializers.ModelSerializer):
         instance.academic_year = validated_data.get('academic_year', instance.academic_year)
         instance.stream = validated_data.get('stream', instance.stream)
         instance.course = validated_data.get('course', instance.course)
+        instance.house = validated_data.get('house', instance.house)
         instance.join_date = validated_data.get('join_date', instance.join_date)
 
         instance.save()

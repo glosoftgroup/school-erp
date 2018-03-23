@@ -8,7 +8,6 @@ export const selectStudent = (student) => {
   }
 };
 
-
 export function saveStudent(data) {
   return dispatch => {    
     dispatch(selectStudent(data.data))
