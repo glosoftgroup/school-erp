@@ -23,7 +23,7 @@ module.exports = {
         'stream': './app_dir/static/js/academics/stream/',
         'student': './app_dir/static/js/students/',
         'term': './app_dir/static/js/term/',
-        'marks_allocation': './app_dir/static/js/exams/marks_allocation/'
+        'marks_allocation': './app_dir/static/js/exams/marks_allocation/',
         'users': './app_dir/static/js/users/'
     },
     output: {
