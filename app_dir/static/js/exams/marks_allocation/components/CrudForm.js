@@ -6,7 +6,10 @@ import map from 'lodash/map';
 import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import AcademicYears from './AcademicYears';
+import BreadCrumb from './BreadCrumb';
+import Classes from './Classes';
 import Subjects from './Subjects';
+import Exams from './Exams';
 import select2 from 'select2';
 import {jGrowl} from 'jgrowl';
 import modal from 'bootstrap';
@@ -17,11 +20,21 @@ class CrudForm extends React.Component {
       super(props);
       this.state = {
         academicYears:[
-            {name:"2017-2018", terms:["Term 1", "Term 2", "Term 3"]},
-            {name:"2018-2019", terms:["Term 1", "Term 2"]}
+            {name:"2017-2018", terms:[
+                {name:"Term 1", classes:["class 1", "class 2"]},
+                {name:"Term 2", classes:["class 4"]},
+                {name:"Term 3", classes:["class 5", "class 3"]}]},
+            {name:"2018-2019", terms:[
+                {name:"Term 1", classes:["class 1", "class 2"]},
+                {name:"Term 2", classes:["class 4"]}]}
         ],
-        status:false,
-        term:''
+        status:{
+            yearStatus:true,
+            classStatus:false,
+            subjectStatus:false,
+            examStatus:false
+        },
+        term:{}
       }
 
     }
@@ -102,20 +115,51 @@ class CrudForm extends React.Component {
 
     }
 
-    callBack = (item) =>{
-        console.log(item)
-        this.setState({status: !this.state.status, term:item})
+    callBack = (term, status) =>{
+    console.log("terms is "+term)
+    console.log("terms is "+this.state.term)
+        let item = term == null? this.state.term: term
+        let test = this.state.status
+        for (let [key, value] of Object.entries(test)) {
+            key == status ? test[status] = true : test[key] = false
+        }
+
+        this.setState({test:test,term:item})
     }
 
 
     render() {
       return (
-          <div className="col-md-12">
-                <AcademicYears years={this.state.academicYears}
-                        callBack={this.callBack}/>
-                <Subjects years={this.state.academicYears}
-                          status={this.state.status}
-                          term={this.state.term}/>
+          <div className="row col-md-12s">
+                  <BreadCrumb callBack={this.callBack} status={this.state.status}/>
+
+                  {
+                    this.state.status.yearStatus &&
+                    <AcademicYears years={this.state.academicYears}
+                    status={this.state.status.yearStatus}
+                    callBack={this.callBack}/>
+                  }
+                  {
+                    this.state.status.classStatus &&
+                    <Classes years={this.state.academicYears}
+                      status={this.state.status.classStatus}
+                      term={this.state.term}
+                      callBack={this.callBack}/>
+                  }
+                  {
+                    this.state.status.subjectStatus &&
+                    <Subjects years={this.state.academicYears}
+                      status={this.state.status.subjectStatus}
+                      term={this.state.term}
+                      callBack={this.callBack}/>
+                  }
+                  {
+                    this.state.status.examStatus &&
+                    <Exams years={this.state.academicYears}
+                      status={this.state.status.examStatus}
+                      term={this.state.term}
+                      callBack={this.callBack}/>
+                  }
           </div>
       );
     }
