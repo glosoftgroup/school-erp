@@ -5,6 +5,7 @@ import UserDetails from '../containers/user-detail';
 import BioData from '../containers/BioData';
 import ImagePreview from '../containers/ImagePreview'
 import Admission from '../containers/Admission'
+import Parent from '../containers/Parents'
 import 'react-tabs/style/react-tabs.css';
 import './styles.scss';
 import './avatar.styles.scss'
@@ -38,8 +39,8 @@ class CrudForm extends React.Component {
                                     <TabList>
                                         <Tab>Bio Data</Tab>
                                         <Tab>Academic Admissions</Tab>
-                                        <Tab>Financial Details</Tab>
                                         <Tab>Parental Details</Tab>
+                                        <Tab>Financial Details</Tab>                                        
                                         <Tab>Emergency Details</Tab>
                                         <Tab>Fee Structure</Tab>
                                     </TabList>
@@ -51,16 +52,16 @@ class CrudForm extends React.Component {
                                         <Admission/>
                                     </TabPanel>
                                     <TabPanel>
-                                        <h2>Any content 3</h2>
+                                       <Parent/>
                                     </TabPanel>
                                     <TabPanel>
-                                        <h2>Any content 4</h2>
+                                        <h2> ... </h2>
+                                    </TabPanel>                                   
+                                    <TabPanel>
+                                        <h2> ..... </h2>
                                     </TabPanel>
                                     <TabPanel>
-                                        <h2>Any content 5</h2>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <h2>Any content 6</h2>
+                                        <h2> ...... </h2>
                                     </TabPanel>
                                 </Tabs>
                                 {/* <h2>User List</h2>

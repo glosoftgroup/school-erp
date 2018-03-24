@@ -41,7 +41,7 @@ class ListAPIView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         try:
             if self.kwargs['pk']:
-                queryset_list = Table.objects.filter(customer__pk=self.kwargs['pk']).select_related()
+                queryset_list = Table.objects.filter(sdf=self.kwargs['pk']).select_related()
             else:
                 queryset_list = Table.objects.all.select_related()
         except Exception as e:
@@ -58,7 +58,10 @@ class ListAPIView(generics.ListAPIView):
         query = self.request.GET.get('q')
         if query:
             queryset_list = queryset_list.filter(
-                Q(name__icontains=query))
+                Q(first_name__icontains=query) |
+                Q(middle_name__icontains=query) |
+                Q(last_name__icontains=query)
+            )
         return queryset_list.order_by('-id')
 
 

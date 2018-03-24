@@ -5,7 +5,7 @@ import Select2 from 'react-select2-wrapper';
 import {fetchClasses} from '../actions/classes'
 import {fetchAcademics} from '../actions/academics'
 import {fetchHouses} from '../actions/houses'
-import admissionsApi from '../api/apiAdmission'
+import admissionsApi from '../api/Api'
 import {apiFetchAdmission, saveAdmission, updateAdmission} from '../actions/admissions'
 
 class Admission extends React.Component{
@@ -24,7 +24,8 @@ class Admission extends React.Component{
         };
     }
   
-    componentDidMount() {   
+    componentDidMount() { 
+        // fetch select dropdown data  
         this.props.fetchClasses();
         this.props.fetchAcademics();
         this.props.fetchHouses();
@@ -67,8 +68,8 @@ class Admission extends React.Component{
     }
 
     handleSubmit = event =>{
-        event.preventDefault();       
-        console.log(this.state.update_url)
+        event.preventDefault();  
+
         // validation
         let errors = {};
         let self = this;
@@ -217,7 +218,7 @@ function mapStateToProps(state) {
 }
 
 
-// Get actions and pass them as props to to UserList
+// Get actions and pass them as props
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
         fetchClasses: fetchClasses,

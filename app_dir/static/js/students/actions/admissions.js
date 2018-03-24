@@ -1,7 +1,6 @@
 export const ADMISSION_SELECTED = 'ADMISSION_SELECTED'
 
 export const selectAdmission = (payload) => {
-  console.log("You selected on admission: ", payload);
   return {
       type: ADMISSION_SELECTED,
       payload

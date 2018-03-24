@@ -1,7 +1,6 @@
 export const STUDENT_SELECTED = 'STUDENT_SELECTED'
 
 export const selectStudent = (student) => {
-  console.log("You selected on user: ", student.first_name);
   return {
       type: STUDENT_SELECTED,
       payload: student

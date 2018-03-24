@@ -7,10 +7,12 @@ from ...parent.models import Parent as Table
 class TableListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='parent:update')
     delete_url = serializers.HyperlinkedIdentityField(view_name='parent:api-delete')
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Table
         fields = ('id',
+                  'name',
                   'first_name',
                   'middle_name',
                   'last_name',
@@ -20,6 +22,9 @@ class TableListSerializer(serializers.ModelSerializer):
                   'update_url',
                   'delete_url'
                  )
+
+    def get_name(self, obj):
+        return str(obj.first_name)+' '+str(obj.last_name)
 
 
 class CreateListSerializer(serializers.ModelSerializer):
