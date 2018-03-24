@@ -26,20 +26,20 @@ class BreadCrumb extends React.Component {
                      (<li className="active"><a href="javascript:;" onClick={() => this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>) : null
                     }
                     {status.classStatus ?
-                    <div>
-                      <li><a href="javascript:;" onClick={() => this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>
-                      <li className="active"><a href="javascript:;" onClick={() => this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li></div> : null
+                    [
+                      <li><a href="javascript:;" onClick={() => this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>,
+                      <li className="active"><a href="javascript:;" onClick={() => this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li>] : null
                     }
-                    {status.subjectStatus ?(<div>
-                      <li><a href="javascript:;" onClick={() =>this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>
-                      <li><a href="javascript:;" onClick={() =>this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li>
-                      <li className="active"><a href="javascript:;" onClick={() =>this.navigate("subjectStatus")}><i className="icon-home2 position-left"></i> Subjects</a></li></div>) : null
+                    {status.subjectStatus ?([
+                      <li><a href="javascript:;" onClick={this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>,
+                      <li><a href="javascript:;" onClick={this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li>,
+                      <li className="active"><a href="javascript:;" onClick={this.navigate("subjectStatus")}><i className="icon-home2 position-left"></i> Subjects</a></li>]) : null
                     }
-                    {status.examStatus ?(<div>
-                      <li><a href="javascript:;" onClick={() =>this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>
-                      <li><a href="javascript:;" onClick={() =>this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li>
-                      <li><a href="javascript:;" onClick={() =>this.navigate("subjectStatus")}><i className="icon-home2 position-left"></i> SUbjects</a></li>
-                      <li className="active"><a href="javascript:;" onClick={() =>this.navigate("examStatus")}><i className="icon-home2 position-left"></i> Exams</a></li></div>) : null
+                    {status.examStatus ?([
+                      <li><a href="javascript:;" onClick={this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>,
+                      <li><a href="javascript:;" onClick={this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li>,
+                      <li><a href="javascript:;" onClick={this.navigate("subjectStatus")}><i className="icon-home2 position-left"></i> SUbjects</a></li>,
+                      <li className="active"><a href="javascript:;" onClick={this.navigate("examStatus")}><i className="icon-home2 position-left"></i> Exams</a></li>]) : null
                     }
 
                 </ul>
