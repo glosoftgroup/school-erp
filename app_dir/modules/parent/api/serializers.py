@@ -24,7 +24,7 @@ class TableListSerializer(serializers.ModelSerializer):
                  )
 
     def get_name(self, obj):
-        return str(obj.first_name)+' '+str(obj.last_name)
+        return str(obj.first_name)+ ' '+ str(obj.middle_name) +' '+str(obj.last_name)
 
 
 class CreateListSerializer(serializers.ModelSerializer):

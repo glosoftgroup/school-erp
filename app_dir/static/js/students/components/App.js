@@ -1,7 +1,6 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import UserList from '../containers/user-list';
-import UserDetails from '../containers/user-detail';
 import BioData from '../containers/BioData';
 import ImagePreview from '../containers/ImagePreview'
 import Admission from '../containers/Admission'
@@ -15,16 +14,21 @@ class CrudForm extends React.Component {
       super(props);
       this.state = {
           name: '',
-          description:'',
-          start_date: moment(new Date()).format("YYYY-MM-DD"),
-          end_date: moment(new Date()).format("YYYY-MM-DD"),
-          startDate:moment(),
-          buttonText:'Add'
-      };      
+          disable:true
+      }; 
+    }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.student.id){
+           this.setState({disable:false}) 
+        }       
+        
     }
 
     render(){
+        var inputProps = {
+            disabled: this.state.disable
+        };
         return(
             <div className="row panel panel-default">
                 <div className="col-md-2">
@@ -38,11 +42,10 @@ class CrudForm extends React.Component {
                                 <Tabs>
                                     <TabList>
                                         <Tab>Bio Data</Tab>
-                                        <Tab>Academic Admissions</Tab>
-                                        <Tab>Parental Details</Tab>
-                                        <Tab>Financial Details</Tab>                                        
-                                        <Tab>Emergency Details</Tab>
-                                        <Tab>Fee Structure</Tab>
+                                        <Tab {...inputProps}>Academic Admissions</Tab>
+                                        <Tab {...inputProps}>Parental Details</Tab>
+                                        <Tab disabled >Financial Details</Tab>
+                                        <Tab disabled >Fee Structure</Tab>
                                     </TabList>
 
                                     <TabPanel>
@@ -53,10 +56,7 @@ class CrudForm extends React.Component {
                                     </TabPanel>
                                     <TabPanel>
                                        <Parent/>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <h2> ... </h2>
-                                    </TabPanel>                                   
+                                    </TabPanel>                                                                       
                                     <TabPanel>
                                         <h2> ..... </h2>
                                     </TabPanel>
@@ -64,11 +64,7 @@ class CrudForm extends React.Component {
                                         <h2> ...... </h2>
                                     </TabPanel>
                                 </Tabs>
-                                {/* <h2>User List</h2>
-                                <UserList />
-                                <hr />
-                                <h2>User Details</h2>
-                                <UserDetails /> */}
+                               
                             </div>
                             {/* /tabs */}
                         </div>
@@ -82,6 +78,13 @@ class CrudForm extends React.Component {
         
 
 }
-    
 
-export default CrudForm;
+// Get apps state and pass it as props to Bio data
+//      > whenever state changes, the UserList will automatically re-render
+function mapStateToProps(state) {
+    return {
+        student: state.activeStudent
+    }
+}
+
+export default connect(mapStateToProps)(CrudForm);

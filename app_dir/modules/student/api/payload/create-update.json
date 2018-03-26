@@ -1,0 +1,14 @@
+{
+    "id": 12,
+    "first_name": "asd",
+    "middle_name": "sdfsdf",
+    "last_name": "sdfsdfsdf",
+    "nationality": "KE",
+    "dob": null,
+    "por": "12as",
+    "pob": "sdfsdfs",
+    "gender": "male",
+    "religion": "christian",
+    "parents": [12,10],
+    "update_url": "http://127.0.0.1:8094/student/api/update/12/"
+}
