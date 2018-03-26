@@ -6,6 +6,7 @@ from ...student.models import Student as Table
 from ...student.models import StudentOfficialDetails as OfficialDetail
 from app_dir.modules.parent.models import Parent
 
+
 # student details
 class TableListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='student:update')
@@ -45,16 +46,10 @@ class TableListSerializer(serializers.ModelSerializer):
             return ''
 
 
-class ParentsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Parent
-        fields = ('first_name', 'middle_name', 'last_name')
-
-
 class CreateListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='student:api-update')
-    parents = ParentsSerializer(read_only=True, many=True)
+    parents = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Parent.objects.all())
 
     class Meta:
         model = Table
@@ -63,7 +58,9 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'middle_name',
                   'last_name',
                   'nationality',
+                  # dob = date of birth
                   'dob',
+                  # pob = place of birth
                   'pob',
                   # por (place of residence)
                   'por',
@@ -71,11 +68,7 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'religion',
                   'image',
                   'parents',
-                  'update_url'
-                 )
-
-    def get_parents(self, obj):
-        return obj.parents
+                  'update_url')
 
     def create(self, validated_data):
         instance = Table()
@@ -83,7 +76,6 @@ class CreateListSerializer(serializers.ModelSerializer):
         instance.first_name = validated_data.get('first_name')
         instance.middle_name = validated_data.get('middle_name')
         instance.last_name = validated_data.get('last_name')
-
         if validated_data.get('nationality'):
             instance.nationality = validated_data.get('nationality')
         if validated_data.get('dob'):
@@ -99,14 +91,18 @@ class CreateListSerializer(serializers.ModelSerializer):
         if validated_data.get('image'):
             instance.image = validated_data.get('image', instance.image)
         instance.save()
+        if validated_data.get('parents'):
+            instance.parents = validated_data.get('parents')
+        instance.save()
 
         return instance
 
 
 class UpdateSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='student:api-update')
-    parents = ParentsSerializer(read_only=True, many=True)
-    
+    parents = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Parent.objects.all())
+
     class Meta:
         model = Table
         fields = ('id',
@@ -125,6 +121,9 @@ class UpdateSerializer(serializers.ModelSerializer):
                  )
 
     def update(self, instance, validated_data):
+        if validated_data.get('parents'):
+            instance.parents = validated_data.get('parents')
+
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.middle_name = validated_data.get('middle_name', instance.middle_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)

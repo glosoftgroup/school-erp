@@ -20,9 +20,7 @@ export function apiFetchStudent(id){
     .then(response=>response.data)
     .then(data=> dispatch(selectStudent(data)))
     .catch(function (error) {
-        // handleResponse(error);
-        console.log('sdfsd sdfe')
-        console.log(error)
+        throw error
     });
   }
 }

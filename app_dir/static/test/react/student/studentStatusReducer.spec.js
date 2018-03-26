@@ -5,8 +5,9 @@ import countriesReducer from '../../../js/students/reducers/reducer-countries';
 import religionsReducer from '../../../js/students/reducers/reducer-religions';
 import imageReducer from '../../../js/students/reducers/reducer-image';
 import admissionReducer from '../../../js/students/reducers/reducer-admission';
+import parentReducer from '../../../js/students/reducers/reducer-parents'
 
-describe('StudentReducers', () => {
+describe('[STUDENT] StudentReducers', () => {
   it('should set selected student obj ', () => {
     const action = { type: 'STUDENT_SELECTED', payload: { action: {} } }
     const newState = activeStudentReducer([], action)
@@ -27,14 +28,14 @@ describe('StudentReducers', () => {
 
 });
 
-describe('ReligionsReducer', () => {
+describe('[STUDENT] ReligionsReducer', () => {
   it('Should return a an object with text and id keys', () => {
     const newState = religionsReducer()
     expect(Object.keys(newState[0])).toEqual(['text','id'])
   });
 });
 
-describe('CountriesReducer', () => {
+describe('[STUDENT] CountriesReducer', () => {
   it('Should return a list of countries ', () => {
     const newState = countriesReducer()
     expect(newState[0].text).toEqual('Afghanistan')

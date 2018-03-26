@@ -27,7 +27,7 @@ class Student(models.Model):
         pgettext_lazy('Student field', 'place of birth'), default='', max_length=128)
     por = models.CharField(
         pgettext_lazy('Student field', 'place of residence'), default='', max_length=128)
-    parents = models.ManyToManyField(Parent)
+    parents = models.ManyToManyField(Parent, blank=True)
     gender = models.CharField(
         max_length=23,
         choices=GenderChoices.CHOICES,
