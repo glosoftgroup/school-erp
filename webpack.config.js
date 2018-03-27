@@ -10,6 +10,7 @@ function resolve (dir) {
 module.exports = {
     entry: {
         'academic_year': './app_dir/static/js/academic_year/',
+        'attendance': './app_dir/static/js/attendance/',
         'classes': './app_dir/static/js/academics/classes/',
         'class_allocation': './app_dir/static/js/workload/class_allocation/',
         'classes': './app_dir/static/js/academics/classes/',
