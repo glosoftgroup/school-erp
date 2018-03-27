@@ -5,14 +5,12 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import pagination
 from .pagination import PostLimitOffsetPagination
 
-from ...parent.models import Parent as Table
+from app_dir.modules.attendance.models import Attendance as Table
 from .serializers import (
     CreateListSerializer,
     TableListSerializer,
     UpdateSerializer
      )
-
-User = get_user_model()
 
 
 class CreateAPIView(generics.CreateAPIView):
@@ -41,7 +39,7 @@ class ListAPIView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         try:
             if self.kwargs['pk']:
-                queryset_list = Table.objects.filter(sdf=self.kwargs['pk']).select_related()
+                queryset_list = Table.objects.filter(customer__pk=self.kwargs['pk']).order_by('car').distinct('car').select_related()
             else:
                 queryset_list = Table.objects.all.select_related()
         except Exception as e:
@@ -54,27 +52,22 @@ class ListAPIView(generics.ListAPIView):
             pagination.PageNumberPagination.page_size = 10
         if self.request.GET.get('date'):
             queryset_list = queryset_list.filter(created__icontains=self.request.GET.get('date'))
-        if self.request.GET.get('academic'):
-            queryset_list = queryset_list.filter(academic_year__pk=self.request.GET.get('academic'))
 
         query = self.request.GET.get('q')
         if query:
             queryset_list = queryset_list.filter(
-                Q(first_name__icontains=query) |
-                Q(middle_name__icontains=query) |
-                Q(last_name__icontains=query)
-            )
+                Q(student__first_name__icontains=query))
         return queryset_list.order_by('-id')
 
 
 class UpdateAPIView(generics.RetrieveUpdateAPIView):
     """
-        update instance details
+        update house details
         @:param pk house id
         @:method PUT
 
         PUT /api/house/update/
-        payload Json: /payload/update.json
+        payload Json: /payload/update_room.json
     """
     queryset = Table.objects.all()
     serializer_class = UpdateSerializer
