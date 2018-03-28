@@ -10,25 +10,38 @@ import Classes from '../../../js/exams/marks_allocation/components/Classes';
 import Subjects from '../../../js/exams/marks_allocation/components/Subjects';
 import Exams from '../../../js/exams/marks_allocation/components/Exams';
 
-import visibilityStatus from '../../../js/exams/marks_allocation/actions/visibilityStatus';
-import changeStatus from '../../../js/exams/marks_allocation/actions/changeStatus';
+import visibilityStatus from '../../../js/exams/marks_allocation/reducers/visibilityStatus';
+import changeStatus from '../../../js/exams/marks_allocation/actions/visibilityStatus';
 
 
 describe('<AcademicYears/>', () => {
-
-  it('should be mounted on year status true', () => {
-    const wrapper = shallow(<AcademicYears/>)
-
+    let props;
+    let mountedComponentAcademic;
     const newState = visibilityStatus()
 
-//    let mountedLockScreen;
-//    if (!mountedLockScreen) {
-//      mountedLockScreen = mount(<AcademicYears />);
-//    }
-//    return mountedLockScreen;
+    const component = (co, st) => {
+    if (newState.status[st]) {
+      mountedComponentAcademic = shallow(
+        co
+      );
+    }
+    return mountedComponentAcademic;
+    }
 
-    expect(newState).to.have.length(3)
-  });
+    beforeEach(() => {
+        mountedComponentAcademic = undefined;
+    });
+
+    it("always renders academicYears Component on year status == true", () => {
+      const divs = component(<AcademicYears />, 'year').find("div");
+      expect(divs.length).to.be.greaterThan(0);
+    });
+
+    it("always renders academicYears Component on year status == true", () => {
+      const divs = component(<Classes />, 'year').find("div");
+      expect(divs.length).to.be.greaterThan(0);
+    });
+
 });
 
 

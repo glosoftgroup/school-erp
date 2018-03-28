@@ -5,12 +5,8 @@ import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
-import select2 from 'select2';
-import 'select2/dist/css/select2.css';
 import { Motion, spring } from 'react-motion';
 import Animations from './Animations';
-
-import modal from 'bootstrap';
 import { MenuItem, DropdownButton } from 'react-bootstrap';
 
 

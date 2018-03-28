@@ -1,6 +1,5 @@
 import React from 'react';
-import select2 from 'select2';
-import 'select2/dist/css/select2.css';
+import visibilityStatus from '../reducers/visibilityStatus';
 
 
 class BreadCrumb extends React.Component {
@@ -18,6 +17,8 @@ class BreadCrumb extends React.Component {
     render() {
 
       let {status} = this.props
+      const v = visibilityStatus()
+      console.log(v.status.year)
 
       return (
       <div  className="col-md-12">
