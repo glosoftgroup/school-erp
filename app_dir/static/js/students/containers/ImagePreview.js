@@ -48,9 +48,7 @@ class ImagePreview extends React.Component {
             }else{
                 this.setState({imagePreviewUrl: '/static/images/users/default-avatar.png'})
             }
-        }
-        
-        
+        }       
         
     }
 

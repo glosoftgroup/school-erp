@@ -3,11 +3,11 @@
 {% load i18n %}
 
 {% block title %}
-  Houses
+  Attendance
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a>Houses </a></li>
+     <li class="active"><a>Attendance </a></li>
  {% endblock %}
 
 
@@ -56,7 +56,7 @@
             <div class="col-md-2">
               <label style="visibility: hidden;"> add</label>
               <div class="form-group">
-                    <a id="toggle-add-form" href="{% url 'house:add-house' %}" class="btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light">
+                    <a id="toggle-add-form" href="{% url 'attendance:add-attendance' %}" class="btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light">
                         <i class="icon-plus2 position-left"></i>Add
                     </a>
               </div>
@@ -112,7 +112,7 @@
       <div class="panel panel-flat" id="printme">
         <div class="panel-body">
             <div class="col-md-12">
-                <h5 class="text-center text-bold">Houses</h5>
+                <h5 class="text-center text-bold">Attendance</h5>
             </div>
         <div class="">
           <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
@@ -236,7 +236,7 @@
  </div>
 
 <input type="hidden" class="pageUrls"
-  data-listurl="{% url 'house:api-list-houses' %}"
+  data-listurl="{% url 'attendance:api-list-attendance' %}"
 >
 {% endblock%}
 {% block custom_js %}

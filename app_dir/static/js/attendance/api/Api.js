@@ -1,4 +1,6 @@
-class AdmissionsApi {
+import axios from 'axios';
+
+class Api {
 
     static retrieve(url){
         axios.defaults.xsrfHeaderName = "X-CSRFToken"
@@ -7,7 +9,7 @@ class AdmissionsApi {
         .then(response => {
             return response;
         }).catch(error => {
-            return error;
+            throw error;
         }); 
     }
 
@@ -18,7 +20,7 @@ class AdmissionsApi {
         .then(response => {
             return response;
         }).catch(error => {
-            return error;
+            throw error;
         });
     }
 
@@ -29,9 +31,9 @@ class AdmissionsApi {
         .then(response => {
             return response;
         }).catch(error => {
-            return error;
+            throw error;
         });
     }
 }
 
-export default AdmissionsApi
+export default Api

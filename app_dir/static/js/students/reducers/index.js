@@ -8,10 +8,12 @@ import ActiveStudentReducer from './reducer-active-student'
 import CountriesReducer from './reducer-countries';
 import ClassesReducer from './reducer-classes'
 import GenderReducer from './reducer-genders'
+import HousesReducers from './reducer-houses'
 import ImagePreviewReducer from './reducer-image'
 import ReligionReducer from './reducer-religions'
 import UserReducer from './reducer-users';
-import HousesReducers from './reducer-houses'
+import ParentsReducer from './reducer-parents'
+
 
 
 /*
@@ -31,7 +33,8 @@ const allReducers = combineReducers({
     genders: GenderReducer,    
     houses: HousesReducers,
     religions: ReligionReducer,
-    users: UserReducer
+    users: UserReducer,
+    parents: ParentsReducer
 });
 
 export default allReducers

@@ -7,7 +7,8 @@ import DatePicker from 'react-datepicker';
 import Select2 from 'react-select2-wrapper';
 import {connect} from 'react-redux';
 import { saveStudent, apiFetchStudent } from '../actions/actions';
- 
+import { fetchParents } from '../actions/parents'
+import api from '../api/Api'
 import 'react-datepicker/dist/react-datepicker.css';
 class BioData extends React.Component {
     constructor(props) {
@@ -38,14 +39,18 @@ class BioData extends React.Component {
         // check if pk checked and populate update details 
         if(pk){
             if(this.props.student.first_name === undefined){
-            // FETCH from api            
-            axios.get(updateUrl)
+            // FETCH from api 
+            api.retrieve(updateUrl)
             .then(data => self.props.saveStudent(data))
-            .then(()=>self.fetchStudent())           
+            .then(()=>self.fetchStudent())
+                       
+            api.retrieve(updateUrl)
+            .then(data => self.props.fetchParents(data))                       
             .catch(function (error) {
-                // handleResponse(error);
                 return error       
             });
+
+            
           }else{self.fetchStudent()}
         }else{
             self.fetchStudent()
@@ -125,10 +130,24 @@ class BioData extends React.Component {
         this.setState({loading:true, buttonText:'loading ..'})
         const data = new FormData(event.target);
 
-        // append image on formdata if is set
+        // add image on formdata if is set
         if(this.props.avatar){
             data.append('image', this.props.avatar.avatar)        
         }
+        
+        // add parents        
+        if(this.props.parents){            
+            // data.append('parents',JSON.parse([11,10]))
+            // var arr = [12, 10];
+            const arr = new Array();
+            this.props.parents.map(item => {
+                arr.push(item.id)             
+            })
+            for (var i = 0; i < arr.length; i++) {
+                data.append('parents', arr[i]);
+            }
+        }
+
         
         // check if pk is set and update details 
         if(pk){
@@ -302,8 +321,9 @@ function mapStateToProps(state) {
         student: state.activeStudent,
         genders: state.genders,
         religions: state.religions,
-        avatar: state.avatar
+        avatar: state.avatar,
+        parents: state.parents
     }
 }
 
-export default connect(mapStateToProps, {saveStudent, apiFetchStudent})(BioData);
+export default connect(mapStateToProps, {saveStudent, apiFetchStudent, fetchParents})(BioData);

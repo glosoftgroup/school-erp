@@ -7,17 +7,17 @@
   {% if object.name %}
    Edit {{object.name}}
   {% else %}
-    Add house
+    Add Attendance
   {% endif %}
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class=""><a href="{% url 'room:index' %}" >Houses</a></li>
+     <li class=""><a href="{% url 'room:index' %}" >Attendance</a></li>
      <li class="active"><a >
          {% if object.name %}
            Edit {{object.name}}
          {% else %}
-            Add house
+            Add Attendance
          {% endif %}
      </a></li>
  {% endblock %}
@@ -26,19 +26,25 @@
 {% block house_student %}active{% endblock %}
 
 {% block custom_css %}
-<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+{% render_bundle 'student' 'css' %}
+<style>
+html {
+  font-size: 14px;
+}
+.select2{
+width:100% !important;
+}
+</style>
 {% endblock %}
+
 {% block content %}
  <!--house details-->
 
-<div class="panel panel-flat animated fadeIn" id="vue-app">
-    <div class="panel-body">
-        <div class="row">
-           <div id="room">
-           </div>
-        </div>
-    </div>
+<div class="row">
+   <div id="root">
+   </div>
 </div>
+
 <!--./house details-->
 {% endblock %}
 
@@ -70,5 +76,5 @@ function logChange(val) {
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
 </script>
-{% render_bundle 'house' 'js' %}
+{% render_bundle 'attendance' 'js' %}
 {% endblock %}

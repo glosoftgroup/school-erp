@@ -6,12 +6,11 @@ from app_dir.core.views import index, home
 from app_dir.core.urls import urlpatterns as core_urls
 from app_dir.modules.academics.academic_year.urls import urlpatterns as academic_year_urls
 from app_dir.modules.academics.classes.urls import urlpatterns as class_urls
-from app_dir.modules.exams.configuration.urls import urlpatterns as configuration_urls
 from app_dir.modules.exams.marks_allocation.urls import urlpatterns as marks_allocations_urls
-from app_dir.modules.student.urls import urlpatterns as student_urls
 from app_dir.modules.academics.curriculum.urls import urlpatterns as curriculum_urls
 from app_dir.modules.academics.subject.urls import urlpatterns as subject_urls
 from app_dir.modules.academics.stream.urls import urlpatterns as stream_urls
+from app_dir.modules.attendance.urls import urlpatterns as attendance_urls
 from app_dir.modules.exams.configuration.urls import urlpatterns as configuration_urls
 from app_dir.modules.house.urls import urlpatterns as house_urls
 from app_dir.modules.room.urls import urlpatterns as room_urls
@@ -26,6 +25,7 @@ urlpatterns = [
     url(r'^', include(core_urls, namespace='core')),
     url(r'^admin/', admin.site.urls),
     url(r'^academic_year/', include(academic_year_urls, namespace='academic_year')),
+    url(r'^attendance/', include(attendance_urls, namespace='attendance')),
     url(r'^class/', include(class_urls, namespace='classes')),
     url(r'^curriculum/', include(curriculum_urls, namespace='curriculum')),
     url(r'^class/allocation/', include(class_allocation_urls, namespace='class_allocation')),
