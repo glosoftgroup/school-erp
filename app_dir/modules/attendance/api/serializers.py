@@ -9,6 +9,7 @@ fields = ('id',
           'student',
           'academic_year',
           'description',
+          'attended',
           'date',)
 
 
@@ -29,6 +30,7 @@ class CreateListSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         instance = Table()
         instance.student = validated_data.get('student')
+        instance.attended = validated_data.get('attended')
         if validated_data.get('description'):
             instance.description = validated_data.get('description')
         if validated_data.get('academic_year'):
@@ -47,6 +49,7 @@ class UpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('student', instance.name)
+        instance.attended = validated_data.get('student', instance.attended)
         instance.description = validated_data.get('description', instance.description)
         instance.academic_year = validated_data.get('academic_year', instance.academic_year)
         instance.date = validated_data.get('date', instance.date)

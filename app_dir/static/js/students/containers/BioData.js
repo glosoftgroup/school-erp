@@ -48,9 +48,7 @@ class BioData extends React.Component {
             .then(data => self.props.fetchParents(data))                       
             .catch(function (error) {
                 return error       
-            });
-
-            
+            });            
           }else{self.fetchStudent()}
         }else{
             self.fetchStudent()
