@@ -6,16 +6,14 @@ const animations = [
           defaultStyle: { translateX: 1200 },
           style: (config) => ({ translateX: spring(0, config)}),
           render: (value) => ({
-                transform: `translateX(${value.translateX}px)`,
-                visibility: value.translateX==0?'hidden':'visible'})
+                transform: `translateX(${value.translateX}px)`})
         },
         {
           name: 'slideOut',
           defaultStyle: { translateX: 0 },
           style: (config) => ({ translateX: spring(-1200, config)}),
           render: (value) => ({
-                transform: `translateX(${value.translateX}px)`,
-                visibility: value.translateX==0?'hidden':'visible'})
+                transform: `translateX(${value.translateX}px)`})
         },
         {
           name: 'flipX',

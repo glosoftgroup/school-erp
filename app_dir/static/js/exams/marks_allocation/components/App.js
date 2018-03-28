@@ -6,32 +6,33 @@ import map from 'lodash/map';
 import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import AcademicYears from './AcademicYears';
+import BreadCrumb from './BreadCrumb';
+import Classes from './Classes';
 import Subjects from './Subjects';
-import select2 from 'select2';
-import {jGrowl} from 'jgrowl';
-import modal from 'bootstrap';
+import Exams from './Exams';
 import {Motion, spring} from 'react-motion';
+import {Provider} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { changeStatus } from '../actions/visibilityStatus';
 
-class CrudForm extends React.Component {
+class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         academicYears:[
-            {name:"2017-2018", terms:["Term 1", "Term 2", "Term 3"]},
-            {name:"2018-2019", terms:["Term 1", "Term 2"]}
-        ],
-        status:false,
-        term:''
+            {name:"2017-2018", terms:[
+                {name:"Term 1", classes:["class 1", "class 2"]},
+                {name:"Term 2", classes:["class 4"]},
+                {name:"Term 3", classes:["class 5", "class 3"]}]},
+            {name:"2018-2019", terms:[
+                {name:"Term 1", classes:["class 1", "class 2"]},
+                {name:"Term 2", classes:["class 4"]}]}
+        ]
       }
 
     }
 
-    componentWillMount(){
-
-    }
-    componentDidMount(){
-
-    }
 
     handleInputChange = event =>{
         const name   =  event.target.name;
@@ -102,24 +103,55 @@ class CrudForm extends React.Component {
 
     }
 
-    callBack = (item) =>{
-        console.log(item)
-        this.setState({status: !this.state.status, term:item})
+    callBack = (term, status) =>{
+        this.props.changeStatus(status)
     }
 
 
     render() {
+
       return (
-          <div className="col-md-12">
-                <AcademicYears years={this.state.academicYears}
-                        callBack={this.callBack}/>
-                <Subjects years={this.state.academicYears}
-                          status={this.state.status}
-                          term={this.state.term}/>
+          <div className="row col-md-12s">
+                  <BreadCrumb callBack={this.callBack} status={this.props.status}/>
+
+                  {
+                    this.props.status.year &&
+                    <AcademicYears years={this.state.academicYears}
+                    status={this.props.status.year}
+                    callBack={this.callBack}/>
+                  }
+                  {
+                    this.props.status.class &&
+                    <Classes years={this.state.academicYears}
+                      status={this.props.status.class}
+                      term={this.state.term}
+                      callBack={this.callBack}/>
+                  }
+                  {
+                    this.props.status.subject &&
+                    <Subjects years={this.state.academicYears}
+                      status={this.props.status.subject}
+                      callBack={this.callBack}/>
+                  }
+                  {
+                    this.props.status.exam &&
+                    <Exams years={this.state.academicYears}
+                      status={this.props.status.exam}
+                      callBack={this.callBack}/>
+                  }
           </div>
       );
     }
   }
 
 
-  export default CrudForm;
+  const mapStateToProps = state => ({
+        status:state.see.status
+    })
+
+  const matchDispatchToProps = dispatch => (
+        bindActionCreators({changeStatus: changeStatus}, dispatch)
+  )
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(App);

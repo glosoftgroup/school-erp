@@ -314,7 +314,7 @@ class CrudForm extends React.Component {
 
                     <div className="col-md-4">
                         <div className={classnames("form-group ",{"has-error": errors.teacher} )}>
-                            <label className="text-bold">Term:<span className="text-danger">*</span></label>
+                            <label className="text-bold">Teacher:<span className="text-danger">*</span></label>
                                 <div>
                                 <select name="teacher" id="teacher"
                                     className="sel" value={this.state.teacher}

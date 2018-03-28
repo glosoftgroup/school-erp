@@ -1,7 +1,24 @@
+import 'babel-polyfill';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import promise from 'redux-promise';
+import createLogger from 'redux-logger';
+import rootReducers from './reducers';
+import App from './components/App';
 
-import CrudForm from './components/CrudForm';
+const logger = createLogger();
+const store = createStore(
+    rootReducers,
+    applyMiddleware(thunk, promise, logger)
+);
 
-// basic settings
-ReactDOM.render(<CrudForm />, document.getElementById('app-root'));
+ReactDOM.render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('app-root')
+);
+

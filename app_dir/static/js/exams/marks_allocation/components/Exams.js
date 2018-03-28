@@ -10,12 +10,12 @@ import Animations from './Animations';
 import {MenuItem, DropdownButton} from 'react-bootstrap';
 
 
-class Subjects extends React.Component {
+class Exams extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
             config:{ stiffness: 120, damping: 20 },
-            subjects:["English", "Maths", "Kiswahili", "Physics"]
+            exams:["Assignment 1", "Assignment 2", "CAT 1", "Exam"]
         };
     }
 
@@ -23,13 +23,13 @@ class Subjects extends React.Component {
     }
 
     showAlert = (index) =>{
-        this.props.callBack(null, "exam")
+        this.props.callBack(null, "year")
     }
 
 
     render() {
       const {status } = this.props
-      const {subjects} = this.state
+      const {exams} = this.state
       let animation = status ? Animations[0] : Animations[1]
 
       return (
@@ -41,24 +41,24 @@ class Subjects extends React.Component {
                                 <table className="table table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
                                         <thead>
                                           <tr className="bg-primary">
-                                            <th>Subject Name</th>
+                                            <th>Exam Name</th>
                                             <th></th>
                                           </tr>
                                         </thead>
                                         <tbody id="tb">
                                         {
-                                            subjects.length > 0
+                                            exams.length > 0
                                             ?
-                                            (subjects.map((tm, index) => {
+                                            (exams.map((tm, index) => {
                                                 return (
                                                     <tr key={index}>
                                                         <td>{tm}</td>
-                                                        <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Exams</button></td>
+                                                        <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Students</button></td>
                                                     </tr>
                                                 )
                                             }))
                                             :(
-                                                <tr><td colSpan="2" className="text-center">No Subjects Available</td></tr>
+                                                <tr><td colSpan="2" className="text-center">No Exams Available</td></tr>
                                             )
                                         }
 
@@ -75,4 +75,4 @@ class Subjects extends React.Component {
   }
 
 
-  export default Subjects;
+  export default Exams;
