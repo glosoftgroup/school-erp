@@ -14,8 +14,12 @@ import select2 from 'select2';
 import {jGrowl} from 'jgrowl';
 import modal from 'bootstrap';
 import {Motion, spring} from 'react-motion';
+import {Provider} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { changeStatus } from '../actions/visibilityStatus';
 
-class CrudForm extends React.Component {
+class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -27,24 +31,11 @@ class CrudForm extends React.Component {
             {name:"2018-2019", terms:[
                 {name:"Term 1", classes:["class 1", "class 2"]},
                 {name:"Term 2", classes:["class 4"]}]}
-        ],
-        status:{
-            yearStatus:true,
-            classStatus:false,
-            subjectStatus:false,
-            examStatus:false
-        },
-        term:{}
+        ]
       }
 
     }
 
-    componentWillMount(){
-
-    }
-    componentDidMount(){
-
-    }
 
     handleInputChange = event =>{
         const name   =  event.target.name;
@@ -116,48 +107,39 @@ class CrudForm extends React.Component {
     }
 
     callBack = (term, status) =>{
-    console.log("terms is "+term)
-    console.log("terms is "+this.state.term)
-        let item = term == null? this.state.term: term
-        let test = this.state.status
-        for (let [key, value] of Object.entries(test)) {
-            key == status ? test[status] = true : test[key] = false
-        }
-
-        this.setState({test:test,term:item})
+        this.props.changeStatus(status)
     }
 
 
     render() {
+
       return (
           <div className="row col-md-12s">
-                  <BreadCrumb callBack={this.callBack} status={this.state.status}/>
+                  <BreadCrumb callBack={this.callBack} status={this.props.status}/>
 
                   {
-                    this.state.status.yearStatus &&
+                    this.props.status.year &&
                     <AcademicYears years={this.state.academicYears}
-                    status={this.state.status.yearStatus}
+                    status={this.props.status.year}
                     callBack={this.callBack}/>
                   }
                   {
-                    this.state.status.classStatus &&
+                    this.props.status.class &&
                     <Classes years={this.state.academicYears}
-                      status={this.state.status.classStatus}
+                      status={this.props.status.class}
                       term={this.state.term}
                       callBack={this.callBack}/>
                   }
                   {
-                    this.state.status.subjectStatus &&
+                    this.props.status.subject &&
                     <Subjects years={this.state.academicYears}
-                      status={this.state.status.subjectStatus}
-                      term={this.state.term}
+                      status={this.props.status.subject}
                       callBack={this.callBack}/>
                   }
                   {
-                    this.state.status.examStatus &&
+                    this.props.status.exam &&
                     <Exams years={this.state.academicYears}
-                      status={this.state.status.examStatus}
-                      term={this.state.term}
+                      status={this.props.status.exam}
                       callBack={this.callBack}/>
                   }
           </div>
@@ -166,4 +148,13 @@ class CrudForm extends React.Component {
   }
 
 
-  export default CrudForm;
+  const mapStateToProps = state => ({
+        status:state.see.status
+    })
+
+  const matchDispatchToProps = dispatch => (
+        bindActionCreators({changeStatus: changeStatus}, dispatch)
+  )
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(App);

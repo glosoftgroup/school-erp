@@ -13,9 +13,10 @@
  {% endblock %}
 
 
-{% block menu_curriculum_class %}active{% endblock %}
+{% block menu_exam_configuration_class %}active{% endblock %}
 
 {% block custom_css %}
+<META HTTP-EQUIV="Access-Control-Allow-Origin" CONTENT="http://www.example.org">
 <style>
     .heading-divided {
         text-transform: uppercase;
@@ -26,54 +27,96 @@
 {% endblock %}
 {% block content %}
 
-<div class="panel panel-flat animated fadeIn" id="vue-app">
+<div class="panel panel-flat animated fadeIn" id="app">
     <div class="panel-body">
         <div class="row">
             <div id="app-root">
-                <h3 class="heading-divided text-center"> {{object.academicclass.name}} {{object.subject.name}}</h3>
-                <h6>Total Marks {{object.total_marks}}</h6>
-                <h6>Pass Marks {{object.pass_marks}}</h6>
-                <h6>Percentage Calculation {{object.is_percentage}}</h6>
                 <div class="col-md-12">
-                <table class="table room-striped room-hover dataroom-header-footer" style="border-bottom:1px solid #ddd;">
-                    <thead>
-                      <tr class="bg-primary">
-                          <th></th>
-                        <th>Assignments</th>
-                        <th>Cats</th>
-                        <th>Exams</th>
-                      </tr>
-                    </thead>
-                    <tbody id="tb">
-                        <tr class="animated fadeIn" id="item.id">
-                            <td class="td" data-url="item.detail_url">
-                               {{ forloop.counter }}. {{i.name}}
-                            </td>
-                            <td class="td" data-url="item.detail_url">
-                                {% for x in object.assignment.all %}
-                                <li> Assignment {{ forloop.counter }} - {{x.marks}} </li>
-                                {% endfor %}
-                            </td>
-
-                            <td class="td" data-url="item.detail_url">
-                                <ul>
-                                {% for x in object.cat.all %}
-                                <li> CAT {{ forloop.counter }} - {{x.marks}} </li>
-                                {% endfor %}
-                                </ul>
-                            </td>
-
-                            <td class="td" data-url="item.detail_url">
-                                <ul>
-                                {% for x in object.exam.all %}
-                                <li> Exam {{ forloop.counter }} - {{x.marks}} </li>
-                                {% endfor %}
-                                </ul>
-                            </td>
-                        </tr>
-                    </tbody>
-               </table>
+                    <h2 class="text-bold text-center"> {{object.academicclass.name}} {{object.subject.name}}</h2>
+                    <button class="btn btn-primary pull-right" onClick="printSomething()">Print</button>
                 </div>
+
+
+                <div class="col-md-12">
+                    <div class="col-md-6">
+
+                        <div class="col-md-12">
+                            <div class="panel border-left-lg border-left-grey invoice-grid timeline-content">
+                              <div class="panel-body">
+                                <div class="row">
+                                  <div class="col-sm-12">
+                                    <h6 class="text-bold no-margin-top">Assignmnets</h6>
+                                    <ul class="list list-unstyled">
+                                        {% if object.assignment %}
+                                            {% for x in object.assignment.all %}
+                                            <li> Assignment {{ forloop.counter }} - {{x.marks}} (marks) </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li><span class="text-semibold"> No Assignments</span></li>
+                                        {% endif %}
+
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        <div class="col-md-12">
+                            <div class="panel border-left-lg border-left-warning invoice-grid timeline-content">
+                              <div class="panel-body">
+                                <div class="row">
+                                  <div class="col-sm-12">
+                                    <h6 class="text-bold no-margin-top">CATs (Continuous Assessment Tests)</h6>
+                                    <ul class="list list-unstyled">
+                                        {% if object.cat %}
+                                            {% for x in object.cat.all %}
+                                            <li> CAT {{ forloop.counter }} - {{x.marks}} (marks) </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li><span class="text-semibold"> No Cats</span></li>
+                                        {% endif %}
+
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        <div class="col-md-12">
+                            <div class="panel border-left-lg border-left-primary invoice-grid timeline-content">
+                              <div class="panel-body">
+                                <div class="row">
+                                  <div class="col-sm-12">
+                                    <h6 class="text-bold no-margin-top">Exams</h6>
+                                    <ul class="list list-unstyled">
+                                        {% if object.exam %}
+                                            {% for x in object.exam.all %}
+                                            <li> Exam {{ forloop.counter }} - {{x.marks}} (marks) </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li><span class="text-semibold"> No Exams</span></li>
+                                        {% endif %}
+
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <h3 class="text-bold">Total Marks {{object.total_marks}}</h3>
+                            <h3 class="text-bold">Pass Marks {{object.pass_marks}}</h3>
+                            <h3 class="text-bold">Percentage Calculation {{object.is_percentage}}</h3>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -83,5 +126,11 @@
 {% endblock %}
 
 {% block custom_js %}
+<script src="http://www.cloudformatter.com/Resources/Pages/CSS2Pdf/Script/xepOnline.jqPlugin.js"></script>
+<script>
+function printSomething(){
+    return xepOnline.Formatter.Format('app', {render:'download'});
+}
+</script>
 
 {% endblock %}

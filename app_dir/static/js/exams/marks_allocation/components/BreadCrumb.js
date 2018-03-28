@@ -7,9 +7,8 @@ class BreadCrumb extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        };
+      };
     }
-
 
     navigate = (status) =>{
         this.props.callBack(null, status)
@@ -17,32 +16,42 @@ class BreadCrumb extends React.Component {
 
 
     render() {
-      const {status} = this.props
+
+      let {status} = this.props
 
       return (
+      <div  className="col-md-12">
+      <div className="col-md-12">
             <div className="breadcrumb-line bg-primary">
                 <ul className="breadcrumb">
-                    {status.yearStatus ?
-                     (<li className="active"><a href="javascript:;" onClick={() => this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>) : null
+                    {status.year &&
+                     (<li key="1"><a href="javascript:;" onClick={() => this.navigate("year")}> Academic Years</a></li>)
                     }
-                    {status.classStatus ?
+
+                    {status.class &&
                     [
-                      <li><a href="javascript:;" onClick={() => this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>,
-                      <li className="active"><a href="javascript:;" onClick={() => this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li>] : null
+                      <li key="2"><a href="javascript:;" onClick={() => this.navigate("year")}> Academic Years</a></li>,
+                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> Classes</a></li>]
                     }
-                    {status.subjectStatus ?([
-                      <li><a href="javascript:;" onClick={this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>,
-                      <li><a href="javascript:;" onClick={this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li>,
-                      <li className="active"><a href="javascript:;" onClick={this.navigate("subjectStatus")}><i className="icon-home2 position-left"></i> Subjects</a></li>]) : null
+
+                    {status.subject &&
+                    [
+                      <li key="2"><a href="javascript:;" onClick={() => this.navigate("year")}> Academic Years</a></li>,
+                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> Classes</a></li>,
+                      <li key="4"><a href="javascript:;" onClick={() => this.navigate("subject")}> Subject</a></li>]
                     }
-                    {status.examStatus ?([
-                      <li><a href="javascript:;" onClick={this.navigate("yearStatus")}><i className="icon-home2 position-left"></i> Academic Years</a></li>,
-                      <li><a href="javascript:;" onClick={this.navigate("classStatus")}><i className="icon-home2 position-left"></i> Classes</a></li>,
-                      <li><a href="javascript:;" onClick={this.navigate("subjectStatus")}><i className="icon-home2 position-left"></i> SUbjects</a></li>,
-                      <li className="active"><a href="javascript:;" onClick={this.navigate("examStatus")}><i className="icon-home2 position-left"></i> Exams</a></li>]) : null
+
+                    {status.exam &&
+                    [
+                      <li key="2"><a href="javascript:;" onClick={() => this.navigate("year")}> Academic Years</a></li>,
+                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> Classes</a></li>,
+                      <li key="4"><a href="javascript:;" onClick={() => this.navigate("subject")}> Subject</a></li>,
+                      <li key="5"><a href="javascript:;" onClick={() => this.navigate("exam")}> Exam</a></li>]
                     }
 
                 </ul>
+                </div>
+            </div>
             </div>
       );
     }

@@ -7,26 +7,23 @@ import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import select2 from 'select2';
 import 'select2/dist/css/select2.css';
-import {Motion, spring} from 'react-motion';
+import { Motion, spring } from 'react-motion';
 import Animations from './Animations';
 
 import modal from 'bootstrap';
-import {MenuItem, DropdownButton} from 'react-bootstrap';
+import { MenuItem, DropdownButton } from 'react-bootstrap';
 
 
 class AcademicYears extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-            config:{ stiffness: 110, damping: 10 }
+            config:{ stiffness: 120, damping: 20 }
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-    }
-
     showAlert = (index) =>{
-        this.props.callBack(index, "classStatus")
+        this.props.callBack(index, "class")
 
     }
     renderTerms = (year) => {
@@ -63,7 +60,7 @@ class AcademicYears extends React.Component {
              <Motion key={animation.name} defaultStyle={animation.defaultStyle} style={animation.style(this.state.config, status)}>
                 {(value) =>(
               <div className="col-md-12" style={animation.render(value)}>
-                <table className="table-sm table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
+                <table className="table table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
                         <thead>
                           <tr className="bg-primary">
                             <th>Name</th>

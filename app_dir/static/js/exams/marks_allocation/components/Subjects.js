@@ -18,7 +18,7 @@ class Subjects extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-            config:{ stiffness: 110, damping: 10 },
+            config:{ stiffness: 120, damping: 20 },
             subjects:["English", "Maths", "Kiswahili", "Physics"]
         };
     }
@@ -27,7 +27,7 @@ class Subjects extends React.Component {
     }
 
     showAlert = (index) =>{
-        this.props.callBack(null, "examStatus")
+        this.props.callBack(null, "exam")
     }
 
 
@@ -38,44 +38,39 @@ class Subjects extends React.Component {
 
       return (
            <div className="col-md-12 pt-15">
-                     <div key={animation.name}>
-                      <Motion key={animation.name} defaultStyle={animation.defaultStyle} style={animation.style(this.state.config, status)}>
-                        {
-                          (value) =>
-                            <div>
-                                <div style={animation.render(value)}>
-                                    <table className="table-sm table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
-                                            <caption> Class X </caption>
-                                            <thead>
-                                              <tr className="bg-primary">
-                                                <th>Subject Name</th>
-                                                <th></th>
-                                              </tr>
-                                            </thead>
-                                            <tbody id="tb">
-                                            {
-                                                subjects.length > 0
-                                                ?
-                                                (subjects.map((tm, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>{tm}</td>
-                                                            <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Exams</button></td>
-                                                        </tr>
-                                                    )
-                                                }))
-                                                :(
-                                                    <tr><td colSpan="2" className="text-center">No Subjects Available</td></tr>
+                  <Motion key={animation.name} defaultStyle={animation.defaultStyle} style={animation.style(this.state.config, status)}>
+                    {
+                      (value) =>
+                            <div className="col-md-12" style={animation.render(value)}>
+                                <table className="table table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
+                                        <thead>
+                                          <tr className="bg-primary">
+                                            <th>Subject Name</th>
+                                            <th></th>
+                                          </tr>
+                                        </thead>
+                                        <tbody id="tb">
+                                        {
+                                            subjects.length > 0
+                                            ?
+                                            (subjects.map((tm, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{tm}</td>
+                                                        <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Exams</button></td>
+                                                    </tr>
                                                 )
-                                            }
+                                            }))
+                                            :(
+                                                <tr><td colSpan="2" className="text-center">No Subjects Available</td></tr>
+                                            )
+                                        }
 
-                                            </tbody>
-                                       </table>
-                                    </div>
-                            </div>
-                        }
-                        </Motion>
-                   </div>
+                                        </tbody>
+                                   </table>
+                                </div>
+                    }
+                    </Motion>
 
 
             </div>

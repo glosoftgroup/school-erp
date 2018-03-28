@@ -18,62 +18,59 @@ class Classes extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-            config:{ stiffness: 110, damping: 10 }
+            config:{ stiffness: 120, damping: 20 },
+            term:{name:"Term 1", classes:["class 1", "class 2"]}
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillMount() {
     }
 
     showAlert = (index) =>{
-        this.props.callBack(index, "subjectStatus")
+        this.props.callBack(null, "subject")
     }
 
 
     render() {
-      const {scale, status, term } = this.props;
+      const {scale, status} = this.props;
+      const {term} = this.state;
       let animation = status ? Animations[0] : Animations[1]
 
       return (
            <div className="col-md-12 pt-15">
-                     <div key={animation.name}>
-                      <Motion key={animation.name} defaultStyle={animation.defaultStyle} style={animation.style(this.state.config, status)}>
-                        {
-                          (value) =>
-                            <div>
-                                <div style={animation.render(value)}>
-                                    <table className="table-sm table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
-                                            <caption> Term X </caption>
-                                            <thead>
-                                              <tr className="bg-primary">
-                                                <th>Class Name</th>
-                                                <th></th>
-                                              </tr>
-                                            </thead>
-                                            <tbody id="tb">
-                                            {
-                                                Object.keys(term).length !== 0
-                                                ?
-                                                (term.classes.map((tm, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>{tm}</td>
-                                                            <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Subjects</button></td>
-                                                        </tr>
-                                                    )
-                                                }))
-                                                :(
-                                                    <tr><td colSpan="2" className="text-center">No Classes</td></tr>
-                                                )
-                                            }
+                  <Motion key={animation.name} defaultStyle={animation.defaultStyle} style={animation.style(this.state.config, status)}>
+                    {
+                      (value) =>
+                            <div className="col-md-12" style={animation.render(value)}>
+                               <table className="table table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
+                                    <thead>
+                                      <tr className="bg-primary">
+                                        <th>Class Name</th>
+                                        <th></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="tb">
+                                        {
+                                        Object.keys(term).length !== 0
+                                        ?
+                                        (term.classes.map((tm, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{tm}</td>
+                                                    <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Subjects</button></td>
+                                                </tr>
+                                            )
+                                        }))
+                                        :(
+                                            <tr><td colSpan="2" className="text-center">No Classes</td></tr>
+                                        )
+                                    }
 
-                                            </tbody>
-                                       </table>
-                                    </div>
+                                    </tbody>
+                               </table>
                             </div>
-                        }
-                        </Motion>
-                   </div>
+                    }
+                    </Motion>
 
 
             </div>
