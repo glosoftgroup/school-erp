@@ -89,7 +89,7 @@ class Comp extends React.Component {
 
     render() {
         return (
-            <div>               
+            <div className="parent-form">               
 
                 {/* add new parent */}
                 <form encType="multipart/form-data" onSubmit={this.handleSubmit}>

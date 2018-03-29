@@ -13,6 +13,7 @@ import ImagePreviewReducer from './reducer-image'
 import ReligionReducer from './reducer-religions'
 import UserReducer from './reducer-users';
 import ParentsReducer from './reducer-parents'
+import TabStepReducer from './reducer-active-step'
 
 
 
@@ -34,7 +35,8 @@ const allReducers = combineReducers({
     houses: HousesReducers,
     religions: ReligionReducer,
     users: UserReducer,
-    parents: ParentsReducer
+    parents: ParentsReducer,
+    step: TabStepReducer
 });
 
 export default allReducers

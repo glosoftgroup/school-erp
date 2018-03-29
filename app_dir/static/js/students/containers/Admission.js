@@ -2,17 +2,19 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import Select2 from 'react-select2-wrapper';
+import Loader from 'react-loaders'
 import {fetchClasses} from '../actions/classes'
 import {fetchAcademics} from '../actions/academics'
 import {fetchHouses} from '../actions/houses'
+import {selectStep} from '../actions/tab-step'
 import admissionsApi from '../api/Api'
 import {apiFetchAdmission, saveAdmission, updateAdmission} from '../actions/admissions'
-
+import 'loaders.css/src/animations/line-scale.scss'
 class Admission extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            buttonText:'submit',
+            buttonText:'save & continue',
             adm_no: '',
             course:'',
             academic_year:'',
@@ -98,7 +100,9 @@ class Admission extends React.Component{
                     self.setState({
                         loading:false, buttonText:'submit',
                         update_url:response.data.update_url
-                    })                   
+                    }) 
+                    // goto next tab
+                    self.tabNavigator(false)                  
                     return response;
                 })
                 .then(data => self.props.updateAdmission(data))
@@ -113,7 +117,9 @@ class Admission extends React.Component{
                     self.setState({
                         loading:false, buttonText:'submit',
                         update_url:response.data.update_url
-                    })                   
+                    })  
+                    // goto next tab
+                    self.tabNavigator(false)                   
                     return response;
                 })
                 .then(data => self.props.saveAdmission(data))
@@ -124,6 +130,17 @@ class Admission extends React.Component{
         }
               
         
+    }
+
+    tabNavigator =(back)=>{
+        var num;
+        if(back){
+            num = this.props.step.id -= 1
+        }else{
+            num = this.props.step.id += 1
+        }
+        var back = Object.assign({'id':num})
+        this.props.selectStep(back)
     }
 
     format(item){ return item.name; }
@@ -194,10 +211,19 @@ class Admission extends React.Component{
                     </div>
                 </div>
 
-                <div className="text-center col-md-12">
-                    <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
-                    {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>
-                    </button>
+                <div className="row">
+                    <div className="col-md-6 text-left">
+                        <button onClick={()=>this.tabNavigator(true)} id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
+                            <i className="con-arrow-left7 position-left"></i>Back
+                        </button>
+                    </div>
+                    <div className="col-md-6 text-right">
+                        <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
+                        {!!this.state.loading && <Loader type="line-scale" className="custom-loader" />}{this.state.buttonText}
+           
+                        </button>
+                    </div>
+                    
                 </div> 
 
               </div>
@@ -213,7 +239,8 @@ function mapStateToProps(state) {
         admission: state.admission,
         courses: state.classes,        
         houses: state.houses,
-        student: state.activeStudent                     
+        student: state.activeStudent,
+        step: state.step                    
     }
 }
 
@@ -226,7 +253,8 @@ function matchDispatchToProps(dispatch){
         fetchHouses: fetchHouses,
         apiFetchAdmission: apiFetchAdmission,
         saveAdmission: saveAdmission,
-        updateAdmission: updateAdmission
+        updateAdmission: updateAdmission, 
+        selectStep: selectStep
     }, dispatch);
 }
 

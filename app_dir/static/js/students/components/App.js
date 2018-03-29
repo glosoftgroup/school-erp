@@ -1,19 +1,20 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import BioData from '../containers/BioData';
+import classnames from 'classnames'
 import ImagePreview from '../containers/ImagePreview'
-import Admission from '../containers/Admission'
-import Parent from '../containers/Parents'
+import Tabs from './Tabs'
+import {selectStep} from '../actions/tab-step'
 import 'react-tabs/style/react-tabs.css';
-import './styles.scss';
-import './avatar.styles.scss'
+import '../css/styles.scss';
+import '../css/avatar.styles.scss'
+import '../css/breadcrumbs.scss'
 
 class CrudForm extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
           name: '',
+          step:1,
           disable:true
       }; 
     }
@@ -22,7 +23,12 @@ class CrudForm extends React.Component {
         if(nextProps.student.id){
            this.setState({disable:false}) 
         }       
-        
+    } 
+    
+    navigate = (step)=>{
+        let tab = Object.assign({'id':step})
+        console.log(step)
+        this.props.selectStep(tab)
     }
 
     render(){
@@ -38,32 +44,28 @@ class CrudForm extends React.Component {
                     <div className="a">
                         <div className="panel-body">
                             {/* tabs */}
-                            <div className="ilive-preview">
-                                <Tabs>
-                                    <TabList>
-                                        <Tab>Bio Data</Tab>
-                                        <Tab {...inputProps}>Academic Admissions</Tab>
-                                        <Tab {...inputProps}>Parental Details</Tab>
-                                        <Tab disabled >Financial Details</Tab>
-                                        <Tab disabled >Fee Structure</Tab>
-                                    </TabList>
+                            <div className="btn-group btn-group-justified">
+									<div className="btn-group">
+										<button onClick={()=>{this.navigate(1)}} type="button" className={classnames("btn tab-btn custom-tab ", {"active-tab": this.props.step.id == 1} )}>Bio Data</button>
+									</div>
 
-                                    <TabPanel>
-                                       <BioData/>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <Admission/>
-                                    </TabPanel>
-                                    <TabPanel>
-                                       <Parent/>
-                                    </TabPanel>                                                                       
-                                    <TabPanel>
-                                        <h2> ..... </h2>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <h2> ...... </h2>
-                                    </TabPanel>
-                                </Tabs>
+									<div className="btn-group">
+										<button onClick={()=>{this.navigate(2)}} type="button" className={classnames("btn tab-btn custom-tab ", {"active-tab": this.props.step.id == 2} )}>Academic Admissions</button>
+									</div>
+
+									<div className="btn-group">
+										<button onClick={()=>{this.navigate(3)}} type="button" className={classnames("btn tab-btn custom-tab ", {"active-tab": this.props.step.id == 3} )}>Parental Details</button>
+									</div>
+                                    <div className="btn-group">
+                                        <button  type="button" className={classnames("btn tab-btn custom-tab ", {"active-tab": this.props.step.id == 4} )}>Financial Details</button>
+                                    </div>
+                                    <div className="btn-group">
+                                        <button type="button" className="btn tab-btn custom-tab">Fee Structure</button>
+                                    </div>
+								</div>
+                            <div className="ilive-preview">
+                               <Tabs/>
+                               
                                
                             </div>
                             {/* /tabs */}
@@ -83,8 +85,9 @@ class CrudForm extends React.Component {
 //      > whenever state changes, the UserList will automatically re-render
 function mapStateToProps(state) {
     return {
-        student: state.activeStudent
+        student: state.activeStudent,
+        step: state.step
     }
 }
 
-export default connect(mapStateToProps)(CrudForm);
+export default connect(mapStateToProps, {selectStep})(CrudForm);
