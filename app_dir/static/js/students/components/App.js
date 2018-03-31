@@ -3,7 +3,10 @@ import {connect} from 'react-redux';
 import classnames from 'classnames'
 import ImagePreview from '../containers/ImagePreview'
 import Tabs from './Tabs'
+import { ToastContainer, toast } from 'react-toastify';
 import {selectStep} from '../actions/tab-step'
+import {selectEditable} from  '../actions/editable'
+
 import 'react-tabs/style/react-tabs.css';
 import '../css/styles.scss';
 import '../css/avatar.styles.scss'
@@ -18,7 +21,11 @@ class CrudForm extends React.Component {
           disable:true
       }; 
     }
-
+    componentDidMount(){
+        if(!pk){
+            this.editable()
+        }
+    }
     componentWillReceiveProps(nextProps){
         if(nextProps.student.id){
            this.setState({disable:false}) 
@@ -26,9 +33,20 @@ class CrudForm extends React.Component {
     } 
     
     navigate = (step)=>{
-        let tab = Object.assign({'id':step})
-        console.log(step)
-        this.props.selectStep(tab)
+        if(!this.state.disable){
+            let tab = Object.assign({'id':step})
+            this.props.selectStep(tab)
+        }else{
+            toast.error("Sorry! Add student bio details to proceed.", {
+                position: toast.POSITION.TOP_RIGHT
+              });
+        }
+        
+    }
+
+    editable=()=>{
+        let editable = Object.assign({'editable':true})
+        this.props.selectEditable(editable)
     }
 
     render(){
@@ -37,12 +55,23 @@ class CrudForm extends React.Component {
         };
         return(
             <div className="row panel panel-default">
+                <ToastContainer />
+
                 <div className="col-md-2">
+                    {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return ;
+                                 
+                                default:      return <button onClick={()=>{this.editable()}} className="mt-20 btn btn-sm bg-primary">Edit</button>
+                                ;
+                            }
+                    })()}
                     <ImagePreview/>
                 </div>
                 <div className="col-md-10">
                     <div className="a">
                         <div className="panel-body">
+                          
                             {/* tabs */}
                             <div className="btn-group btn-group-justified">
 									<div className="btn-group">
@@ -85,9 +114,10 @@ class CrudForm extends React.Component {
 //      > whenever state changes, the UserList will automatically re-render
 function mapStateToProps(state) {
     return {
+        editable: state.editable,
         student: state.activeStudent,
         step: state.step
     }
 }
 
-export default connect(mapStateToProps, {selectStep})(CrudForm);
+export default connect(mapStateToProps, {selectStep, selectEditable})(CrudForm);

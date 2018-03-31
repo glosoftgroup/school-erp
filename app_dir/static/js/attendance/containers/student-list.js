@@ -77,16 +77,16 @@ class Comp extends React.Component{
             
             api.create('/attendance/api/create/', data)
             .then(function(data){
-                console.log(data)
-                self.notify()
+                console.log(data)                
             })
             .catch(function(error){
                  console.error(error)
-                 toast.error("Sorry!! You can only check attendance once per day!", {
-                    position: toast.POSITION.TOP_RIGHT
-                  });
+                //  toast.error("Sorry!! You can only check attendance once per day!", {
+                //     position: toast.POSITION.TOP_RIGHT
+                //  });
             })
             if(count >= objLength){
+               self.notify()
                self.setState({loading:false, buttonText: 'submit'})
             }
         })

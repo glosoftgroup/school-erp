@@ -220,17 +220,41 @@ class BioData extends React.Component {
                 <div className="row">                    
                     <div className="col-md-4">
                         <label className="text-bold">First Name:<span className="text-danger">*</span></label>
-                        <input value={this.state.first_name} onChange={this.handleInputChange} className="form-control" name="first_name" id="first_name" placeholder="First name" type="text"/>
+                        {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <input value={this.state.first_name} onChange={this.handleInputChange} className="form-control" name="first_name" id="first_name" placeholder="First name" type="text"/>                        
+                                ;
+                                case false: return <span><br/>{this.state.first_name}</span>;
+                                
+                                default:      return "";
+                            }
+                        })()}
                         <span className="help-block text-warning">{this.state.errors.first_name}</span>
                     </div>
                     <div className="col-md-4">
                         <label className="text-bold">Middle Name:<span className="text-danger">*</span></label>
-                        <input value={this.state.middle_name} onChange={this.handleInputChange} className="form-control" name="middle_name" id="middle_name" placeholder="Middle name" type="text"/>
+                        {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <input value={this.state.middle_name} onChange={this.handleInputChange} className="form-control" name="middle_name" id="middle_name" placeholder="Middle name" type="text"/>                        
+                                ;
+                                case false: return <span><br/>{this.state.middle_name}</span>;
+                                
+                                default:      return "";
+                            }
+                        })()}
                         <span className="help-block text-warning">{this.state.errors.middle_name}</span>
                     </div>
                     <div className="col-md-4">
                         <label className="text-bold">Last Name:<span className="text-danger">*</span></label>
-                        <input value={this.state.last_name} onChange={this.handleInputChange} className="form-control" name="last_name" id="last_name" placeholder="Last name" type="text"/>
+                        {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <input value={this.state.last_name} onChange={this.handleInputChange} className="form-control" name="last_name" id="last_name" placeholder="Last name" type="text"/>                        
+                                ;
+                                case false: return <span><br/>{this.state.last_name}</span>;
+                                
+                                default:      return "";
+                            }
+                        })()}
                         <span className="help-block text-warning">{this.state.errors.last_name}</span>
                     </div>                    
                 </div>
@@ -240,14 +264,21 @@ class BioData extends React.Component {
                 <div className="row">
                     <div className="col-md-4">
                         <div className="form-group">
-                            <label className="text-bold">Date of Birth:</label>
-                            <DatePicker
-                                selected={this.state.dob}
-                                onChange={this.handleChange}
-                                name="dob"
-                                dateFormat="YYYY-MM-DD"
-                                className="form-control"
-                            />
+                            <label className="text-bold">Date of Birth:</label>                            
+                            {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <DatePicker
+                                                selected={this.state.dob}
+                                                onChange={this.handleChange}
+                                                name="dob"
+                                                dateFormat="YYYY-MM-DD"
+                                                className="form-control"
+                                            />;
+                                case false: return <span><br/>{this.state.first_name}</span>;
+                                
+                                default:      return "";
+                            }
+                        })()}
                             <span className="help-block text-warning">{this.state.errors.dob}</span>
                         </div>
                     </div>
@@ -255,7 +286,16 @@ class BioData extends React.Component {
                     <div className="col-md-4">
                         <div className="form-group">
                             <label className="text-bold">Place of birth:</label>
-                            <input ref="pob" onChange={this.handleInputChange} name="pob" value={this.state.pob}  id="pob" placeholder="eg Moscow" className="form-control" type="text"   />
+                            {(() => {
+                                switch (this.props.editable.editable) {
+                                    case true:   return <input ref="pob" onChange={this.handleInputChange} name="pob" value={this.state.pob}  id="pob" placeholder="eg Moscow" className="form-control" type="text"   />
+                                    ;
+                                    case false: return <span><br/>{this.state.pob}</span>;
+                                    
+                                    default:      return "";
+                                }
+                            })()}
+                            
                             <span className="help-block text-warning">{this.state.errors.pob}</span>
                         </div>
                     </div>
@@ -263,7 +303,16 @@ class BioData extends React.Component {
                     <div className="col-md-4">
                         <div className="form-group">
                             <label className="text-bold">Place of residence:</label>
-                            <input ref="por" onChange={this.handleInputChange} name="por" value={por}  id="por" placeholder="eg. Moscow" className="form-control" type="text"  />
+                            {(() => {
+                                switch (this.props.editable.editable) {
+                                    case true:   return <input ref="por" onChange={this.handleInputChange} name="por" value={por}  id="por" placeholder="eg. Moscow" className="form-control" type="text"  />
+                                    ;
+                                    case false: return <span><br/>{this.state.pob}</span>;
+                                    
+                                    default:      return "";
+                                }
+                            })()}
+                            
                             <span className="help-block text-warning">{this.state.errors.por}</span>
                         </div>
                     </div>
@@ -273,50 +322,80 @@ class BioData extends React.Component {
         <div className="col-md-4"> 
             <div className="form-group">
                 <label>Gender:</label>
-                <Select2
-                data={this.props.genders}
-                onChange={this.onSelectChange}
-                value={ gender }
-                name="gender"
-                options={{
-                    placeholder: 'select gender',
-                }}
-                />
+                {(() => {
+                    switch (this.props.editable.editable) {
+                        case true:   return <Select2
+                                            data={this.props.genders}
+                                            onChange={this.onSelectChange}
+                                            value={ gender }
+                                            name="gender"
+                                            options={{
+                                                placeholder: 'select gender',
+                                            }}
+                                            />;
+                        case false: return <span><br/>{this.state.gender}</span>;
+                        
+                        default:      return "";
+                    }
+                })()}
+                
             </div>            
         </div>
         <div className="col-md-4"> 
             <div className="form-group">
                 <label>Religion:</label>
-                <Select2
-                data={this.props.religions}
-                onChange={this.onSelectChange}
-                value={ religion }
-                name="religion"
-                options={{
-                    placeholder: 'select religion',
-                }}
-                />
+               
+                {(() => {
+                    switch (this.props.editable.editable) {
+                        case true:   return <Select2
+                                            data={this.props.religions}
+                                            onChange={this.onSelectChange}
+                                            value={ religion }
+                                            name="religion"
+                                            options={{
+                                                placeholder: 'select religion',
+                                            }}
+                                            />;
+                        case false: return <span><br/>{this.state.religion}</span>;
+                        
+                        default:      return "";
+                    }
+                })()}
             </div>            
         </div>
         
         <div className="col-md-4"> 
             <div className="form-group">
                 <label>Countries</label>
-                <Select2
-                data={this.props.countries}
-                onChange={this.onSelectChange}
-                value={ nationality }
-                name="nationality"
-                options={{
-                    placeholder: 'search country',
-                }}
-                />
+                
+                {(() => {
+                    switch (this.props.editable.editable) {
+                        case true:   return <Select2
+                                            data={this.props.countries}
+                                            onChange={this.onSelectChange}
+                                            value={ nationality }
+                                            name="nationality"
+                                            options={{
+                                                placeholder: 'search country',
+                                            }}
+                                            />;
+                        case false: return <span><br/>{this.state.nationality}</span>;
+                        
+                        default:      return "";
+                    }
+                })()}
             </div>            
         </div>
         <div className="text-right col-md-12">
-            <button type="button" type="submit" className="btn btn-primary legitRipple">
-            {!!this.state.loading && <Loader type="line-scale" className="custom-loader" />}{this.state.buttonText}
-            </button>
+        {(() => {
+            switch (this.props.editable.editable) {
+                case true:   return <button type="button" type="submit" className="btn btn-primary legitRipple">
+                                    {!!this.state.loading && <Loader type="line-scale" className="custom-loader" />}{this.state.buttonText}
+                                    </button>;
+                default:      return "";
+            }
+        })()}
+           
             
         </div> 
       </form>
@@ -328,13 +407,14 @@ class BioData extends React.Component {
 //      > whenever state changes, the UserList will automatically re-render
 function mapStateToProps(state) {
     return {
-        countries: state.countries,
-        student: state.activeStudent,
-        genders: state.genders,
-        religions: state.religions,
         avatar: state.avatar,
+        countries: state.countries,
+        editable: state.editable,        
+        genders: state.genders,
+        religions: state.religions,        
         parents: state.parents,
-        step: state.step
+        step: state.step,
+        student: state.activeStudent
     }
 }
 

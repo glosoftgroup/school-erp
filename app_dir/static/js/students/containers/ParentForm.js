@@ -64,7 +64,7 @@ class Comp extends React.Component {
 
         if(isValid){
             // add parent
-            this.setState({loading:true, buttonText:'loading ..'})
+            this.setState({loading:true, buttonText:''})
             const data = new FormData(event.target);
 
             // create admissions

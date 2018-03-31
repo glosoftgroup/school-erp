@@ -7,6 +7,7 @@ import ActiveCountryReducer from './reducer-active-country';
 import ActiveStudentReducer from './reducer-active-student'
 import CountriesReducer from './reducer-countries';
 import ClassesReducer from './reducer-classes'
+import EditableReducer from './reducer-editable'
 import GenderReducer from './reducer-genders'
 import HousesReducers from './reducer-houses'
 import ImagePreviewReducer from './reducer-image'
@@ -30,7 +31,8 @@ const allReducers = combineReducers({
     admission: AdmissionReducers, 
     avatar: ImagePreviewReducer,  
     classes: ClassesReducer, 
-    countries: CountriesReducer,    
+    countries: CountriesReducer, 
+    editable: EditableReducer,   
     genders: GenderReducer,    
     houses: HousesReducers,
     religions: ReligionReducer,

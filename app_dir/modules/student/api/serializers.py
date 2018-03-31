@@ -12,6 +12,7 @@ class TableListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='student:update')
     delete_url = serializers.HyperlinkedIdentityField(view_name='student:api-delete')
     adm_no = serializers.SerializerMethodField()
+    course = serializers.SerializerMethodField()
     image = VersatileImageFieldSerializer(
         sizes=[
             ('full_size', 'url'),
@@ -25,6 +26,7 @@ class TableListSerializer(serializers.ModelSerializer):
         model = Table
         fields = ('id',
                   'adm_no',
+                  'course',
                   'first_name',
                   'middle_name',
                   'last_name',
@@ -42,6 +44,12 @@ class TableListSerializer(serializers.ModelSerializer):
     def get_adm_no(self, obj):
         try:
             return obj.student_official.first().adm_no
+        except:
+            return ''
+
+    def get_course(self, obj):
+        try:
+            return obj.student_official.first().course.name
         except:
             return ''
 
@@ -102,6 +110,9 @@ class UpdateSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name='student:api-update')
     parents = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Parent.objects.all())
+    course = serializers.SerializerMethodField()
+    academic_year = serializers.SerializerMethodField()
+    house = serializers.SerializerMethodField()
 
     class Meta:
         model = Table
@@ -111,6 +122,9 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'last_name',
                   'nationality',
                   'dob',
+                  'course',
+                  'academic_year',
+                  'house',
                   'por',
                   'pob',
                   'gender',
@@ -119,6 +133,24 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'parents',
                   'update_url'
                  )
+
+    def get_course(self, obj):
+        try:
+            return obj.student_official.first().course.name
+        except:
+            return ''
+
+    def get_academic_year(self, obj):
+        try:
+            return obj.student_official.first().academic_year.name
+        except:
+            return ''
+
+    def get_house(self, obj):
+        try:
+            return obj.student_official.first().house.name
+        except:
+            return ''
 
     def update(self, instance, validated_data):
         if validated_data.get('parents'):

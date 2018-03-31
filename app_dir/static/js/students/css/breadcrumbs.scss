@@ -2,7 +2,11 @@
 $primary-color: #2196F3;
 $white-color: #fff;
 $border-color: #ddd;
+$primary-font: #000;
 .custom-tab{
+  &:after {
+    content: '',
+  }
   background-color: transparent;
   font-size: 12px;
   color: #000;
@@ -25,17 +29,33 @@ $border-color: #ddd;
   transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
 }
 .active-tab {
-  color: $white-color;
-  background-color:  $primary-color;  
+  color: $primary-color;
+  //background-color:  $primary-color;  
   font-weight: 700;
-  &:hover { color:$white-color; }
-  &:focus { color:$white-color; }
+  &:after {
+    content: '';
+    background: #ffd6d6;
+    width: 0%;
+    height: 40px;
+    position: absolute;
+    z-index: -2;
+    top: 30px;
+    left: 25px;
+    transition: all ease-out 0.3s;
+	}
+  &:hover { color:$primary-color; }
+  &:focus { color:$primary-color; }
 }
-
+.active-tab:after {
+  background-color: #7986cb;
+}
 .btn-group{
-  margin-bottom: 20px;  
+  margin-bottom: 0px;  
 }
 .btn-group-justified{
   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
    box-shadow: 0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+}
+.navbar-default .navbar-nav>.active>a:after {
+    background-color: #7986cb;
 }

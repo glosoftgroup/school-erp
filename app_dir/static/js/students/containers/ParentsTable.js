@@ -104,14 +104,22 @@ class Comp extends React.Component{
                 <div className="col-md-6 text-left">
                     <button onClick={()=>this.tabNavigator(true)} id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
                         <i className="con-arrow-left7 position-left"></i>Back
-                    </button>
+                    </button>      
+                    
                 </div>
                 <div className="col-md-6 text-right">
-                {this.props.parents.length !== 0 &&                     
-                <button onClick={this.handleSubmit} id="add-room-btn" type="submit" className="btn btn-sm btn-primary legitRipple">
-                    {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>
-                </button>
-                }
+
+                {this.props.parents.length !== 0 &&
+                 (() => {
+                    switch (this.props.editable.editable) {
+                        case true:   return <button onClick={this.handleSubmit} id="add-room-btn" type="submit" className="btn btn-sm btn-primary legitRipple">
+                                            {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>
+                                        </button>;
+                        default:      return "";
+                    }
+                })()}                    
+                
+                
                 </div>
                 
                 </div>
@@ -123,6 +131,7 @@ class Comp extends React.Component{
 
 function mapStateToProps(state) {
     return {
+        editable:state.editable,
         student: state.activeStudent,
         parents: state.parents,
         step: state.step
