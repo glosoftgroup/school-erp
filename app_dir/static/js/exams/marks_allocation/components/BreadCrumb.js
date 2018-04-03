@@ -16,7 +16,7 @@ class BreadCrumb extends React.Component {
 
     render() {
 
-      let {status} = this.props
+      let {status, term} = this.props
       const v = visibilityStatus()
       console.log("bread "+v.status.year)
 
@@ -31,21 +31,21 @@ class BreadCrumb extends React.Component {
 
                     {status.class &&
                     [
-                      <li key="2"><a href="javascript:;" onClick={() => this.navigate("year")}> Academic Years</a></li>,
-                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> Classes</a></li>]
+                      <li key="2"><a href="javascript:;" onClick={() => this.navigate("year")}> Academic Years </a></li>,
+                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> {term.name} </a></li>]
                     }
 
                     {status.subject &&
                     [
                       <li key="2"><a href="javascript:;" onClick={() => this.navigate("year")}> Academic Years</a></li>,
-                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> Classes</a></li>,
+                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> {term.name}</a></li>,
                       <li key="4"><a href="javascript:;" onClick={() => this.navigate("subject")}> Subject</a></li>]
                     }
 
                     {status.exam &&
                     [
                       <li key="2"><a href="javascript:;" onClick={() => this.navigate("year")}> Academic Years</a></li>,
-                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> Classes</a></li>,
+                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> {term.name}</a></li>,
                       <li key="4"><a href="javascript:;" onClick={() => this.navigate("subject")}> Subject</a></li>,
                       <li key="5"><a href="javascript:;" onClick={() => this.navigate("exam")}> Exam</a></li>]
                     }

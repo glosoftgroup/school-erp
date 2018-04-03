@@ -11,7 +11,8 @@ from .serializers import (
     CreateListSerializer,
     TableListSerializer,
     UpdateSerializer,
-    ClassAllocationSerializer
+    ClassAllocationSerializer,
+    TeacherListSerializer
      )
 
 User = get_user_model()
@@ -73,13 +74,13 @@ class UpdateAPIView(generics.RetrieveUpdateAPIView):
 
 class TeacherDetailView(generics.ListAPIView):
     """
-        list details
-        GET /api/setting/
+        list teacher details (include academic years &
+              terms)
     """
     serializer_class = ClassAllocationSerializer
 
     def get_queryset(self, *args, **kwargs):
-        queryset_list = ClassAllocation.objects.all()
+        queryset_list = ClassAllocation.objects.all().distinct('academicYear', 'teacher')
 
         query = self.request.GET.get('tr')
         year = self.request.GET.get('year')
@@ -89,4 +90,14 @@ class TeacherDetailView(generics.ListAPIView):
         if query:
             queryset_list = queryset_list.filter(
                 Q(teacher__pk=query))
-        return queryset_list.order_by('-id')
+        return queryset_list
+
+class TeacherListView(generics.ListAPIView):
+    """
+        list teachers only
+    """
+    serializer_class = TeacherListSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = User.objects.all().filter(is_teacher=True)
+        return queryset_list.order_by('id')
