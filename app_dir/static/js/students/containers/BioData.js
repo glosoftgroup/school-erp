@@ -215,7 +215,7 @@ class BioData extends React.Component {
       <div className="col-md-12">
             {!!server_errror && <div className="ui alert alert-warning negative message"><p>{this.state.server_errror}</p></div>} 
       </div>
-       <div className="col-md-12">
+       <div className="col-md-12 animated fadeIn">
             <div className="form-group">
                 <div className="row">                    
                     <div className="col-md-4">
