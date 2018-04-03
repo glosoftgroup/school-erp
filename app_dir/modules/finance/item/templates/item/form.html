@@ -1,0 +1,80 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+  {% if object.name %}
+   Edit {{object.name}}
+  {% else %}
+    Add Attendance
+  {% endif %}
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class=""><a href="{% url 'attendance:index' %}" >Attendance</a></li>
+     <li class="active"><a >
+         {% if object.name %}
+           Edit {{object.name}}
+         {% else %}
+            Add Attendance
+         {% endif %}
+     </a></li>
+ {% endblock %}
+
+
+{% block attendance_student %}active{% endblock %}
+
+{% block custom_css %}
+{% render_bundle 'attendance' 'css' %}
+<style>
+html {
+  font-size: 14px;
+}
+.select2{
+width:100% !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+ <!--house details-->
+
+<div class="row">
+   <div id="root">
+   </div>
+</div>
+
+<!--./house details-->
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.bootstrap-select').selectpicker();
+  });
+</script>
+<script>
+var options = [
+  { value: '1', label: 'One' },
+  { value: '2', label: 'Two' }
+];
+
+function logChange(val) {
+  console.log("Selected: " + val);
+}
+    {% if object.id %}
+    var pk = "{{object.id}}";
+    var updateUrl = "{% url 'house:api-update' pk=object.id %}";
+    {% else %}
+    var pk= false;
+    {% endif %}
+    var createUrl = "{% url 'house:api-create-house' %}";
+    var redirectUrl = "{% url 'house:index' %}";
+    // alertUser
+    function alertUser(msg,status='bg-success',header='Well done!')
+    { $.jGrowl(msg,{header: header,theme: status}); }
+</script>
+{% render_bundle 'attendance' 'js' %}
+{% endblock %}

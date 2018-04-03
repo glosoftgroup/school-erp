@@ -27,7 +27,7 @@ class Comp extends React.Component {
     }
 
     componentWillReceiveProps(nextProps){
-        console.warn(nextProps.parents)
+        // console.warn(nextProps.parents)
     }
 
     onChange = (e) => {
