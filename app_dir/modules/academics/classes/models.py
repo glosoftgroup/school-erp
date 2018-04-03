@@ -19,7 +19,7 @@ class Class(models.Model):
     class_teacher = models.ForeignKey(User, null=True, blank=True)
     class_group = models.IntegerField(default=0)
     no_of_students = models.CharField(
-        pgettext_lazy('Class field', 'no_of_students'), max_length=128)
+        pgettext_lazy('Class field', 'no_of_students'), max_length=128, null=True, blank=True)
 
     class Meta:
         app_label = 'classes'

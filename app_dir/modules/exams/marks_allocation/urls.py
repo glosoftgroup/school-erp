@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^api/update/(?P<pk>[0-9]+)/$', UpdateAPIView.as_view(), name='api-update'),
     url(r'^api/teacher/$', TeacherDetailView.as_view(), name='api-teacher-view'),
     url(r'^api/teacher/list/$', TeacherListView.as_view(), name='api-teacher-list'),
+    url(r'^api/subjects/list/$', SubjectListView.as_view(), name='api-subject-list'),
+    url(r'^api/exams/list/$', ExamListView.as_view(), name='api-exam-list'),
     # url(r'^add/$', permission_required('configuration.add_examconfiguration', login_url='core:not_found')(TemplateView.as_view(template_name="marks_allocation/form.html")), name='add'),
     url(r'^add/$', TemplateView.as_view(template_name="marks_allocation/form.html"), name='add'),
     url(r'^update/(?P<pk>[0-9]+)/$', permission_required('configuration.change_examconfiguration', login_url='core:not_found')(UpdateView.as_view(template_name="marks_allocation/form.html", model=Table, fields=['id'])),

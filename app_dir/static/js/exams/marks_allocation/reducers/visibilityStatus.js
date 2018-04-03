@@ -1,4 +1,7 @@
-import {TEST, CHANGE_STATUS, FETCH_YEARS, SET_TERM_YEAR, ERROR  } from '../actions/types';
+import {
+        TEST, CHANGE_STATUS, FETCH_YEARS, SET_TERM_YEAR,
+        SET_CLASS, ERROR, FETCH_SUBJECTS, SET_SUBJECT,
+        FETCH_EXAMS, SET_EXAM  } from '../actions/types';
 
 const initialState ={
     status:{
@@ -8,6 +11,12 @@ const initialState ={
         exam:false
     },
     yearDetails:[],
+    subjects:[],
+    subject:null,
+    exams:[],
+    exam:null,
+    teacher:null,
+    class:null,
     term:null,
     year:null,
     error:null
@@ -21,7 +30,8 @@ export default function (state=initialState, action={}){
             for (let [key, value] of Object.entries(test)) {
                 key == action.payload ? test[key] = true : test[key] = false
             }
-            return {...state, status:test}
+            let year = action.payload == 'year'? null : state.year
+            return {...state, status:test, year:year}
 
         case FETCH_YEARS:
             return {
@@ -33,8 +43,40 @@ export default function (state=initialState, action={}){
             return {
                 ...state,
                 year:action.payload.year,
-                term:action.payload.term
+                term:action.payload.term,
+                teacher:action.payload.year.teacher
                 }
+
+        case FETCH_SUBJECTS:
+            return {
+                ...state,
+                subjects:action.payload
+                }
+
+        case SET_SUBJECT:
+            return {
+                ...state,
+                subject:action.payload
+                }
+
+        case FETCH_EXAMS:
+            return {
+                ...state,
+                exams:action.payload
+                }
+
+        case SET_EXAM:
+            return {
+                ...state,
+                exam:action.payload
+                }
+
+        case SET_CLASS:
+            return {
+                ...state,
+                class:action.payload
+                }
+
         case ERROR:
             return {...state, error:"Something went wrong"}
         case TEST:

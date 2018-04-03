@@ -45,7 +45,7 @@ class TableListSerializer(serializers.ModelSerializer):
         return obj.academicyear.name
 
     def get_academicclass(self, obj):
-        return obj.academicclass.name
+        return "Class "+str(obj.academicclass)
 
     def get_term(self, obj):
         return obj.term.name

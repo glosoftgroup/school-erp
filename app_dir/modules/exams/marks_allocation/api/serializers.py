@@ -175,7 +175,19 @@ class ClassAllocationSerializer(serializers.ModelSerializer):
 
     def get_terms(self, obj):
         query = ClassAllocation.objects.filter(teacher=obj.teacher, academicYear=obj.academicYear)
-        terms = [ {"id":i.term.id, "name":i.term.name} for i in query ]
+        terms = []
+        for i in query:
+            q = query.filter(term=i.term.id)
+            classes = []
+
+            for j in q:
+                k = {"id":j.classTaught.id, "name":j.classTaught.name+' '+j.classTaught.stream.name}
+                if k not in classes:
+                    classes.append(k)
+                    continue
+            terms.append({"id":i.term.id, "name":i.term.name, "classes":classes})
+
+        terms = [i for n, i in enumerate(terms) if i not in terms[n + 1:]]
         return terms
 
     def get_teacher(self, obj):
@@ -195,3 +207,86 @@ class TeacherListSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return obj.fullname
+
+class SubjectListSerializer(serializers.ModelSerializer):
+    id = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+    term = serializers.SerializerMethodField()
+    year = serializers.SerializerMethodField()
+    teacher = serializers.SerializerMethodField()
+    classTaught = serializers.SerializerMethodField()
+    class Meta:
+        model = ClassAllocation
+        fields = (
+            'id',
+            'name',
+            'term',
+            'year',
+            'teacher',
+            'classTaught'
+        )
+
+    def get_id(self, obj):
+        return obj.subject.id
+
+    def get_name(self, obj):
+        return obj.subject.name
+
+    def get_teacher(self, obj):
+        return obj.teacher.fullname
+
+    def get_term(self, obj):
+        return obj.term.name
+
+    def get_year(self, obj):
+        return obj.academicYear.name
+
+    def get_classTaught(self, obj):
+        return obj.classTaught.name+' '+obj.classTaught.stream.name
+
+class ExamListSerializer(serializers.ModelSerializer):
+    subject = serializers.SerializerMethodField()
+    classGroup = serializers.SerializerMethodField()
+    exams = serializers.SerializerMethodField()
+    term = serializers.SerializerMethodField()
+    year = serializers.SerializerMethodField()
+    class Meta:
+        model = Table
+        fields = (
+            'id',
+            'subject',
+            'classGroup',
+            'term',
+            'year',
+            'exams'
+        )
+
+    def get_subject(self, obj):
+        return obj.subject.name
+
+    def get_term(self, obj):
+        return obj.term.name
+
+    def get_year(self, obj):
+        return obj.academicyear.name
+
+    def get_classGroup(self, obj):
+        return "Class "+str(obj.academicclass)
+
+    def get_exams(self, obj):
+        exams = Exam.objects.filter(examId=obj.pk).order_by('id')
+        assignments = Assignment.objects.filter(examId=obj.pk).order_by('id')
+        cats = Cat.objects.filter(examId=obj.pk).order_by('id')
+
+        all = []
+
+        for i in assignments:
+            all.append({"id": i.id, "name": "Assignment "+ str(i.id), "totalmarks": i.marks})
+
+        for i in cats:
+            all.append({"id": i.id, "name": "CAT "+ str(i.id), "totalmarks": i.marks})
+
+        for i in exams:
+            all.append({"id": i.id, "name": "Exam "+ str(i.id), "totalmarks": i.marks})
+
+        return all

@@ -272,9 +272,7 @@ class CrudForm extends React.Component {
       event.preventDefault();
       const { errs, isValid } = this.validateInput(this.state);
 
-        if(isValid){
-            console.log("yes it is valid");
-        }else{
+        if(!isValid){
             this.setState({errors: errs});
             return;
         }
@@ -300,7 +298,12 @@ class CrudForm extends React.Component {
                 window.location.href = redirectUrl;
             })
             .catch(function (error) {
-                console.log(error);
+                let status = error.response.status
+                if(status == 400){
+                    alertUser('Allocation already Exists ('+ status +')', 'bg-danger', 'Oops!');
+                }else{
+                    alertUser('Something Went Wrong ('+ status +')', 'bg-danger', 'Oops!');
+                }
             });
         }   
     }

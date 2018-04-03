@@ -6,13 +6,16 @@ from rest_framework import pagination
 from .pagination import PostLimitOffsetPagination
 
 from ...configuration.models import ExamConfiguration as Table
+from ...configuration.models import Exam, Cat, Assignment
 from app_dir.modules.workload.class_allocation.models import ClassAllocation
 from .serializers import (
     CreateListSerializer,
     TableListSerializer,
     UpdateSerializer,
     ClassAllocationSerializer,
-    TeacherListSerializer
+    TeacherListSerializer,
+    SubjectListSerializer,
+    ExamListSerializer
      )
 
 User = get_user_model()
@@ -101,3 +104,43 @@ class TeacherListView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset_list = User.objects.all().filter(is_teacher=True)
         return queryset_list.order_by('id')
+
+class SubjectListView(generics.ListAPIView):
+    """
+        list subjects only
+    """
+    serializer_class = SubjectListSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = ClassAllocation.objects.all()
+
+        teacher = self.request.GET.get('tr')
+        year = self.request.GET.get('yr')
+        term = self.request.GET.get('trm')
+        classTaught = self.request.GET.get('cls')
+
+        if teacher and year and term and classTaught:
+            queryset_list = queryset_list.filter(
+                Q(academicYear__pk=year, teacher=teacher, term=term, classTaught=classTaught))
+
+        return queryset_list.order_by('id')
+
+class ExamListView(generics.ListAPIView):
+    """
+        list exams only
+    """
+    serializer_class = ExamListSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = Table.objects.all()
+
+        year = self.request.GET.get('yr')
+        subject = self.request.GET.get('sbj')
+        term = self.request.GET.get('trm')
+
+        if year and subject and term:
+            queryset_list = queryset_list.filter(
+                Q(subject__pk=subject, academicyear__pk=year, term__pk=term))
+
+        return queryset_list
+

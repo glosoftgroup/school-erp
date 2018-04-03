@@ -9,20 +9,34 @@ import {Motion, spring} from 'react-motion';
 import Animations from './Animations';
 import {MenuItem, DropdownButton} from 'react-bootstrap';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { setSubject, fetchSubjects } from '../actions/visibilityStatus';
+
 
 class Subjects extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
             config:{ stiffness: 120, damping: 20 },
-            subjects:["English", "Maths", "Kiswahili", "Physics"]
+            subjects:[]
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillMount() {
+
+        let trId = this.props.teacher.id,
+            yrId = this.props.academicYear.year.id,
+            clsId = this.props.classTaught.id,
+            trmId = this.props.term.id
+        this.props.fetchSubjects(trId, yrId, clsId, trmId)
+    }
+    componentWillReceiveProps(nextProps){
+        this.setState({subjects:nextProps.subjects})
     }
 
-    showAlert = (index) =>{
+    goToExams = (subject) =>{
+        this.props.setSubject(subject)
         this.props.callBack(null, "exam")
     }
 
@@ -31,8 +45,6 @@ class Subjects extends React.Component {
       const {status } = this.props
       const {subjects} = this.state
       let animation = status ? Animations[0] : Animations[1]
-
-      console.log(this.props.fetch)
 
       return (
            <div className="col-md-12 pt-15">
@@ -51,11 +63,11 @@ class Subjects extends React.Component {
                                         {
                                             subjects.length > 0
                                             ?
-                                            (subjects.map((tm, index) => {
+                                            (subjects.map((subject, index) => {
                                                 return (
                                                     <tr key={index}>
-                                                        <td>{tm}</td>
-                                                        <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Exams</button></td>
+                                                        <td>{subject.name}</td>
+                                                        <td><button className="btn btn-primary" onClick={()=>this.goToExams(subject)}>Load Exams</button></td>
                                                     </tr>
                                                 )
                                             }))
@@ -77,4 +89,20 @@ class Subjects extends React.Component {
   }
 
 
-  export default Subjects;
+  const mapStateToProps = state => ({
+        subjects:state.see.subjects,
+        term:state.see.term,
+        classTaught:state.see.class,
+        teacher:state.see.teacher,
+        academicYear:state.see.year
+  })
+
+  const matchDispatchToProps = dispatch => (
+        bindActionCreators(
+            {setSubject: setSubject,
+             fetchSubjects: fetchSubjects},
+            dispatch)
+  )
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(Subjects);
