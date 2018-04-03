@@ -1,53 +1,26 @@
 {% extends "dashboard/base.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
 {% block title %}
   Attendance
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a>Attendance </a></li>
+     <li class="active"><a>Financial Items </a></li>
  {% endblock %}
 
 
 {% block house_student %}active{% endblock %}
- {% block custom_css %}
-   <style type="text/css">
-      .theme_xbox .pace_activity, .theme_xbox .pace_activity::after, .theme_xbox .pace_activity::before, .theme_xbox_sm .pace_activity, .theme_xbox_sm .pace_activity::after, .theme_xbox_sm .pace_activity::before, .theme_xbox_xs .pace_activity, .theme_xbox_xs .pace_activity::after, .theme_xbox_xs .pace_activity::before {
-        border-radius: 50%;
-        border: 1px solid transparent;
-            border-top-width: 1px;
-            border-right-width: 1px;
-            border-bottom-width: 1px;
-            border-left-width: 1px;
-            border-top-color: transparent;
-        border-top-color: #1649fc;
-    }
-    .pace-demo {
-        background-color:#fff;
-    }
-    @media print {
-       #printBtn {
-          display: none;
-       }
-       #addPayment {
-          display: none;
-       }
-       .media-none {
-          display: none;
-       }
-       #media-none {
-          display: none;
-       }
-    }
 
-    .td { cursor:pointer }
-   </style>
+{% block custom_css %}
+{% render_bundle 'finance_item' 'css' %}
+
  {% endblock %}
 
 {% block content %}
- <div class="row animated " id="vue-app">
+ <div class="row animated " id="root">
 
    <div class="col-md-12">
       <div class="panel panel-flat">
@@ -70,6 +43,7 @@
                 </div>
               </div>
             </div>
+
             <div class="col-md-2 hidden">
               <div class="form-group">
                  <label>Status</label>
@@ -240,23 +214,6 @@
 >
 {% endblock%}
 {% block custom_js %}
+{% render_bundle 'finance_item' 'js' %}
 
-    <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
-
-    <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_select.min.js' %}"></script>
-<!-- datepicker -->
-  <script type="text/javascript" src="{% static 'js/plugins/pickers/daterangepicker.js' %}"></script>
-
-    <script type="text/javascript" src="{% static 'js/plugins/pagination/jquery.twbsPagination.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/loaders/progressbar.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/vue/vue.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/vue/vue-resource.js' %}"></script>
-    <script src="{% static 'js/plugins/vue/axios.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/common/listing.js' %}"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('.bootstrap-select').selectpicker();
-      });
-
-    </script>
 {% endblock %}

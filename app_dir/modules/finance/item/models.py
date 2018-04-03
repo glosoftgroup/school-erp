@@ -6,15 +6,11 @@ from django.core.validators import MinValueValidator, RegexValidator
 
 
 class Item(models.Model):
-    slug = models.SlugField(
-        pgettext_lazy('Fee item field', 'internal name'),
-        max_length=50, unique=True)
     name = models.CharField(
         pgettext_lazy('Fee item field', 'display name'),
         max_length=100, unique=True)
 
     class Meta:
-        ordering = ('slug', )
         verbose_name = pgettext_lazy('Item model', 'Fee item')
         verbose_name_plural = pgettext_lazy('Fee Items model', 'Fee item')
 
@@ -29,7 +25,7 @@ class ItemChoiceValue(models.Model):
     name = models.CharField(
         pgettext_lazy('Item choice value field', 'display name'),
         max_length=100)
-    slug = models.SlugField()
+    # slug = models.SlugField()
     color = models.CharField(
         pgettext_lazy('Item choice value field', 'color'),
         max_length=7,

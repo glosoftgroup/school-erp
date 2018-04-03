@@ -4,7 +4,7 @@ from rest_framework import serializers
 from app_dir.modules.finance.item.models import Item as Table
 
 global fields, module
-module = 'item'
+module = 'finance_item'
 fields = ('id',
           'name',)
 
@@ -25,7 +25,7 @@ class CreateListSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = Table()
-        instance.student = validated_data.get('name')
+        instance.name = validated_data.get('name')
         instance.save()
 
         return instance
