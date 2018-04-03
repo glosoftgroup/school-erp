@@ -7,7 +7,10 @@ import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import {Motion, spring} from 'react-motion';
 import Animations from './Animations';
-import {MenuItem, DropdownButton} from 'react-bootstrap';
+import { MenuItem, DropdownButton } from 'react-bootstrap';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { setClass } from '../actions/visibilityStatus';
 
 
 class Classes extends React.Component {
@@ -15,24 +18,24 @@ class Classes extends React.Component {
       super(props);
       this.state = {
             config:{ stiffness: 120, damping: 20 },
-            term:{name:"Term 1", classes:["class 1", "class 2"]}
+            classes:[]
         };
     }
 
     componentWillMount() {
+        this.setState({classes:this.props.classes})
     }
 
-    showAlert = (index) =>{
+    goToSubjects = (cls) =>{
+        this.props.setClass(cls)
         this.props.callBack(null, "subject")
     }
 
 
     render() {
       const {scale, status} = this.props;
-      const {term} = this.state;
+      const {classes} = this.state;
       let animation = status ? Animations[0] : Animations[1]
-
-      console.log(this.props.fetch)
 
       return (
            <div className="col-md-12 pt-15">
@@ -49,13 +52,13 @@ class Classes extends React.Component {
                                     </thead>
                                     <tbody id="tb">
                                         {
-                                        Object.keys(term).length !== 0
+                                        Object.keys(classes).length !== 0
                                         ?
-                                        (term.classes.map((tm, index) => {
+                                        (classes.map((cls, index) => {
                                             return (
                                                 <tr key={index}>
-                                                    <td>{tm}</td>
-                                                    <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Subjects</button></td>
+                                                    <td>{cls.name}</td>
+                                                    <td><button className="btn btn-primary" onClick={()=>this.goToSubjects(cls)}>Load Subjects</button></td>
                                                 </tr>
                                             )
                                         }))
@@ -76,5 +79,15 @@ class Classes extends React.Component {
     }
   }
 
+  const mapStateToProps = state => ({
+        classes:state.see.term.classes
+  })
 
-  export default Classes;
+  const matchDispatchToProps = dispatch => (
+        bindActionCreators(
+            {setClass: setClass},
+            dispatch)
+  )
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(Classes);

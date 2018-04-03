@@ -161,7 +161,11 @@ class App extends React.Component {
 
                   <BreadCrumb callBack={this.callBack}
                              status={this.props.status}
-                             term={this.props.term}/>
+                             term={this.props.term}
+                             classTaught={this.props.classTaught}
+                             teacher={this.props.teacher}
+                             subject={this.props.subject}
+                             academicYear={this.props.academicYear}/>
 
                   {
                     this.props.status.year &&
@@ -174,15 +178,12 @@ class App extends React.Component {
                     this.props.status.class &&
                     <Classes years={this.state.academicYears}
                               status={this.props.status.class}
-                              fetch = {this.props.st}
                               term={this.state.term}
                               callBack={this.callBack}/>
                   }
                   {
                     this.props.status.subject &&
-                    <Subjects years={this.state.academicYears}
-                              status={this.props.status.subject}
-                              fetch = {this.props.st}
+                    <Subjects status={this.props.status.subject}
                               callBack={this.callBack}/>
                   }
                   {
@@ -200,8 +201,11 @@ class App extends React.Component {
   const mapStateToProps = state => ({
         status:state.see.status,
         years:state.see.yearDetails,
-        st:state.see,
-        term:state.see.term
+        term:state.see.term,
+        classTaught:state.see.class,
+        teacher:state.see.teacher,
+        academicYear:state.see.year,
+        subject:state.see.subject
     })
 
   const matchDispatchToProps = dispatch => (

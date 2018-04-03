@@ -81,7 +81,7 @@ class AcademicYears extends React.Component {
                                 )
                             }))
                             :(
-                                <tr><td colSpan="2" className="text-center">No Academic Years Assigned have been set</td></tr>
+                                <tr><td colSpan="3" className="text-center">No Academic Years Assigned have been set</td></tr>
                             )
                         }
 

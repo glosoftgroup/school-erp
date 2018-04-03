@@ -1,6 +1,7 @@
 # site settings rest api serializers
 
 from rest_framework import serializers
+from django.utils.translation import ugettext_lazy as _
 from ...class_allocation.models import ClassAllocation as Table
 
 
@@ -49,6 +50,17 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'academicYear',
                   'hours',
                  )
+        validators = [
+            serializers.UniqueTogetherValidator(
+                queryset=model.objects.all(),
+                fields=(
+                  'subject',
+                  'classTaught',
+                  'term',
+                  'academicYear'),
+                message=_("Allocation Exists.")
+            )
+        ]
 
     def create(self, validated_data):
         instance = Table()

@@ -8,6 +8,9 @@ import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import {Motion, spring} from 'react-motion';
 import Animations from './Animations';
 import {MenuItem, DropdownButton} from 'react-bootstrap';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { setExam, fetchExams } from '../actions/visibilityStatus';
 
 
 class Exams extends React.Component {
@@ -15,14 +18,23 @@ class Exams extends React.Component {
       super(props);
       this.state = {
             config:{ stiffness: 120, damping: 20 },
-            exams:["Assignment 1", "Assignment 2", "CAT 1", "Exam"]
+            exams:[]
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillMount() {
+
+        let yrId = this.props.academicYear.year.id,
+            sbjId = this.props.subject.id,
+            trmId = this.props.term.id
+        this.props.fetchExams(yrId, sbjId, trmId)
+    }
+    componentWillReceiveProps(nextProps){
+        this.setState({exams:nextProps.exams})
     }
 
-    showAlert = (index) =>{
+    goToStudents = (exam) =>{
+        this.props.setExam(exam)
         this.props.callBack(null, "year")
     }
 
@@ -42,6 +54,7 @@ class Exams extends React.Component {
                                         <thead>
                                           <tr className="bg-primary">
                                             <th>Exam Name</th>
+                                            <th>Total Marks</th>
                                             <th></th>
                                           </tr>
                                         </thead>
@@ -49,16 +62,17 @@ class Exams extends React.Component {
                                         {
                                             exams.length > 0
                                             ?
-                                            (exams.map((tm, index) => {
+                                            (exams.map((exam, index) => {
                                                 return (
                                                     <tr key={index}>
-                                                        <td>{tm}</td>
-                                                        <td><button className="btn btn-primary" onClick={()=>this.showAlert(tm)}>Load Students</button></td>
+                                                        <td>{exam.name}</td>
+                                                        <td>{exam.totalmarks}</td>
+                                                        <td><button className="btn btn-primary" onClick={()=>this.goToStudents(exam)}>Load Students</button></td>
                                                     </tr>
                                                 )
                                             }))
                                             :(
-                                                <tr><td colSpan="2" className="text-center">No Exams Available</td></tr>
+                                                <tr><td colSpan="3" className="text-center">No Exams Available</td></tr>
                                             )
                                         }
 
@@ -75,4 +89,19 @@ class Exams extends React.Component {
   }
 
 
-  export default Exams;
+  const mapStateToProps = state => ({
+        exams:state.see.exams,
+        term:state.see.term,
+        subject:state.see.subject,
+        academicYear:state.see.year
+  })
+
+  const matchDispatchToProps = dispatch => (
+        bindActionCreators(
+            {setExam: setExam,
+             fetchExams: fetchExams},
+            dispatch)
+  )
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(Exams);

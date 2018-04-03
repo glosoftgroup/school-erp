@@ -11,7 +11,8 @@ from django.utils.timezone import now
 
 class ExamConfiguration(models.Model):
     subject       = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    academicclass = models.ForeignKey(Class, on_delete=models.CASCADE)
+    academicclass = models.CharField(
+        pgettext_lazy('ExamConfiguration field', 'academicclass'), max_length=128, null=True, blank=True)
     academicyear  = models.ForeignKey(AcademicYear, on_delete=models.CASCADE)
     term  = models.ForeignKey(Term, on_delete=models.CASCADE)
     is_percentage = models.BooleanField(
