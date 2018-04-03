@@ -32,6 +32,8 @@ class Classes extends React.Component {
       const {term} = this.state;
       let animation = status ? Animations[0] : Animations[1]
 
+      console.log(this.props.fetch)
+
       return (
            <div className="col-md-12 pt-15">
                   <Motion key={animation.name} defaultStyle={animation.defaultStyle} style={animation.style(this.state.config, status)}>

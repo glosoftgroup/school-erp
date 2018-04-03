@@ -25,7 +25,7 @@ class Class(models.Model):
         app_label = 'classes'
 
     def __str__(self):
-        return self.name
+        return  (str(self.name) + " " + str(self.stream.name))
 
 
 

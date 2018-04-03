@@ -14,30 +14,39 @@ import {Motion, spring} from 'react-motion';
 import {Provider} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
-import { changeStatus } from '../actions/visibilityStatus';
+import { changeStatus, fetchAcademicYears } from '../actions/visibilityStatus';
+import Select2 from 'react-select2-wrapper';
 
 class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        academicYears:[
-            {name:"2017-2018", terms:[
-                {name:"Term 1", classes:["class 1", "class 2"]},
-                {name:"Term 2", classes:["class 4"]},
-                {name:"Term 3", classes:["class 5", "class 3"]}]},
-            {name:"2018-2019", terms:[
-                {name:"Term 1", classes:["class 1", "class 2"]},
-                {name:"Term 2", classes:["class 4"]}]}
-        ]
+        teachers:[{"id":1, "text":"alex"},{"id":2, "text":"kim"}, {"id":3, "text":"susan"}],
+        teacher:{"id":3, "text":"james"},
+        teacherLoggedIn:false,
+        teacherLoggedId:null,
+        errors:{}
       }
 
+    }
+
+    componentWillMount(){
+        let teacher = teacherLoggedIn == null ? false : true
+        let teacherId = teacherLoggedId == null ? null : teacherLoggedId
+        this.state.teacherLoggedIn = teacher
+        this.state.teacherLoggedId = teacherId
+
+        if(teacher){
+            this.props.fetchAcademicYears(teacherId)
+        }else{
+            this.props.fetchAcademicYears('')
+        }
     }
 
 
     handleInputChange = event =>{
         const name   =  event.target.name;
         let value    =  event.target.value;
-
         if(isEmpty(value)){
             this.state.errors[name] = "This field is required";
         }else{
@@ -47,7 +56,12 @@ class App extends React.Component {
         this.setState({
           [name]: value
         });
+    }
 
+    handleSelectInputChange = (event) =>{
+        this.handleInputChange(event)
+        console.log("-------------------------------")
+        this.props.fetchAcademicYears(event.target.value)
     }
 
     validateInput = (data) =>  {
@@ -112,11 +126,31 @@ class App extends React.Component {
 
       return (
           <div className="row col-md-12s">
+                  {
+                      !this.state.teacherLoggedIn &&
+                      <div className="col-md-12">
+                          <div className="col-md-12">
+                               <Select2
+                                    className="col-md-6"
+                                    data={this.state.teachers}
+                                    onChange={this.handleSelectInputChange}
+                                    value={ this.state.teacher }
+                                    name="teacher"
+                                    options={{
+                                        formatSelection: this.format,
+                                        formatResult: this.format,
+                                        placeholder: 'Select Teacher',
+                                    }}
+                               />
+                          </div>
+                      </div>
+                  }
+
                   <BreadCrumb callBack={this.callBack} status={this.props.status}/>
 
                   {
                     this.props.status.year &&
-                    <AcademicYears years={this.state.academicYears}
+                    <AcademicYears years={this.props.years}
                     status={this.props.status.year}
                     callBack={this.callBack}/>
                   }
@@ -124,6 +158,7 @@ class App extends React.Component {
                     this.props.status.class &&
                     <Classes years={this.state.academicYears}
                       status={this.props.status.class}
+                      fetch = {this.props.st}
                       term={this.state.term}
                       callBack={this.callBack}/>
                   }
@@ -131,6 +166,7 @@ class App extends React.Component {
                     this.props.status.subject &&
                     <Subjects years={this.state.academicYears}
                       status={this.props.status.subject}
+                      fetch = {this.props.st}
                       callBack={this.callBack}/>
                   }
                   {
@@ -146,11 +182,16 @@ class App extends React.Component {
 
 
   const mapStateToProps = state => ({
-        status:state.see.status
+        status:state.see.status,
+        years:state.see.academicYears,
+        st:state.see
     })
 
   const matchDispatchToProps = dispatch => (
-        bindActionCreators({changeStatus: changeStatus}, dispatch)
+        bindActionCreators(
+            {changeStatus: changeStatus,
+            fetchAcademicYears: fetchAcademicYears},
+            dispatch)
   )
 
 

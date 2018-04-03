@@ -6,10 +6,12 @@ from rest_framework import pagination
 from .pagination import PostLimitOffsetPagination
 
 from ...configuration.models import ExamConfiguration as Table
+from app_dir.modules.workload.class_allocation.models import ClassAllocation
 from .serializers import (
     CreateListSerializer,
     TableListSerializer,
-    UpdateSerializer
+    UpdateSerializer,
+    ClassAllocationSerializer
      )
 
 User = get_user_model()
@@ -67,3 +69,24 @@ class UpdateAPIView(generics.RetrieveUpdateAPIView):
     """
     queryset = Table.objects.all()
     serializer_class = UpdateSerializer
+
+
+class TeacherDetailView(generics.ListAPIView):
+    """
+        list details
+        GET /api/setting/
+    """
+    serializer_class = ClassAllocationSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = ClassAllocation.objects.all()
+
+        query = self.request.GET.get('tr')
+        year = self.request.GET.get('year')
+        if year:
+            queryset_list = queryset_list.filter(
+                Q(academicYear__pk=year))
+        if query:
+            queryset_list = queryset_list.filter(
+                Q(teacher__pk=query))
+        return queryset_list.order_by('-id')

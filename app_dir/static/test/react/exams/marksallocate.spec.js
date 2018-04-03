@@ -1,7 +1,9 @@
 import React from 'react';
-import { expect } from 'chai';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
+import configureStore from 'redux-mock-store'
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk'
 
 import App from '../../../js/exams/marks_allocation/components/App';
 import BreadCrumb from '../../../js/exams/marks_allocation/components/BreadCrumb';
@@ -14,33 +16,41 @@ import visibilityStatus from '../../../js/exams/marks_allocation/reducers/visibi
 import changeStatus from '../../../js/exams/marks_allocation/actions/visibilityStatus';
 
 
-describe('<AcademicYears/>', () => {
-    let props;
-    let mountedComponentAcademic;
-    const newState = visibilityStatus()
+describe('[EXAMS] Marks Allocation', () => {
+    const initialState = {
+       see:{ status:{
+            year:true,
+            class:false,
+            subject:false,
+            exam:false
+        } }
+    }
 
-    const component = (co, st) => {
-    if (newState.status[st]) {
-      mountedComponentAcademic = shallow(
-        co
-      );
-    }
-    return mountedComponentAcademic;
-    }
+    const mockStore = configureStore([thunk])
+    let store, container, wrapper
 
     beforeEach(() => {
-        mountedComponentAcademic = undefined;
+        store = mockStore(initialState)
     });
 
-    it("always renders academicYears Component on year status == true", () => {
-      const divs = component(<AcademicYears />, 'year').find("div");
-      expect(divs.length).to.be.greaterThan(0);
+    it('render the connected(SMART) App component', () => {
+       wrapper = shallow(<App store={store}/>)
+       expect(wrapper.length).toEqual(1)
     });
 
-    it("always renders academicYears Component on year status == true", () => {
-      const divs = component(<Classes />, 'year').find("div");
-      expect(divs.length).to.be.greaterThan(0);
+    it("render same props", () => {
+        wrapper = shallow(<App store={store} />)
+        let c = visibilityStatus(initialState.see, {type:"CHANGE_STATUS", payload:'class'})
+        expect(wrapper.prop('status')).toEqual(initialState.see.status)
     });
+
+    it('render only AcademicYears & BreadCrumb components if status.year is true', () => {
+       wrapper = mount(<App store={store} />)
+       expect(wrapper.find(AcademicYears).length).toEqual(1)
+       expect(wrapper.find(BreadCrumb).length).toEqual(1)
+       expect(wrapper.find(Classes).length).toEqual(0)
+    });
+
 
 });
 
