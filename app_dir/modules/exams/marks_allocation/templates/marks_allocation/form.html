@@ -118,6 +118,23 @@
 
     var subjectCreateUrl = "{% url 'subject:api-create' %}";
 
+    {% if request.user.is_superuser %}
+        var loggedInuser = "{{request.user}}";
+        var loggedInuserId = "{{request.user.id}}";
+    {% else %}
+        var loggedInuser = null;
+        var loggedInuserId = null;
+    {% endif %}
+
+    {% if request.user.is_teacher %}
+        var teacherLoggedIn = "{{request.user}}";
+        var teacherLoggedId = "{{request.user.id}}";
+    {% else %}
+        var teacherLoggedIn = null;
+        var teacherLoggedId = null;
+    {% endif %}
+
+
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }

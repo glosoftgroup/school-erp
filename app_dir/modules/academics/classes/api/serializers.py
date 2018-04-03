@@ -52,7 +52,7 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'class_teacher',
                   'class_group',
                   'academic_year',
-                  'house',
+                  'room',
                   'no_of_students',
                   'stream',
                  )
@@ -67,8 +67,8 @@ class CreateListSerializer(serializers.ModelSerializer):
             instance.class_group = validated_data.get('class_group')
         if validated_data.get('academic_year'):
             instance.academic_year = validated_data.get('academic_year')
-        if validated_data.get('house'):
-            instance.room = validated_data.get('house')
+        if validated_data.get('room'):
+            instance.room = validated_data.get('room')
         if validated_data.get('no_of_students'):
             instance.no_of_students = validated_data.get('no_of_students')
         if validated_data.get('stream'):
@@ -86,7 +86,7 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'class_teacher',
                   'class_group',
                   'academic_year',
-                  'house',
+                  'room',
                   'no_of_students',
                   'stream',
                  )
@@ -100,8 +100,8 @@ class UpdateSerializer(serializers.ModelSerializer):
             instance.class_group = validated_data.get('class_group')
         if validated_data.get('academic_year'):
             instance.academic_year = validated_data.get('academic_year')
-        if validated_data.get('house'):
-            instance.room = validated_data.get('house')
+        if validated_data.get('room'):
+            instance.room = validated_data.get('room')
         if validated_data.get('no_of_students'):
             instance.no_of_students = validated_data.get('no_of_students')
         if validated_data.get('stream'):

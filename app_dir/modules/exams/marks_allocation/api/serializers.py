@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 from ...configuration.models import ExamConfiguration as Table
 from ...configuration.models import Exam, Cat, Assignment
+from app_dir.modules.workload.class_allocation.models import ClassAllocation
 from structlog import get_logger
 
 logger = get_logger(__name__)
@@ -156,3 +157,33 @@ class UpdateSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+class ClassAllocationSerializer(serializers.ModelSerializer):
+    yearId = serializers.SerializerMethodField()
+    yearName = serializers.SerializerMethodField()
+    termId = serializers.SerializerMethodField()
+    termName = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ClassAllocation
+        fields = ('id',
+                  'teacher',
+                  'classTaught',
+                  'subject',
+                  'yearId',
+                  'yearName',
+                  'termId',
+                  'termName'
+                 )
+
+    def get_yearName(self, obj):
+        return obj.academicYear.name
+
+    def get_yearId(self, obj):
+        return obj.academicYear.id
+
+    def get_termName(self, obj):
+        return obj.term.name
+
+    def get_termId(self, obj):
+        return obj.term.id

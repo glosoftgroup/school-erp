@@ -27,7 +27,7 @@ class TableListSerializer(serializers.ModelSerializer):
                  )
 
     def get_classTaught(self, obj):
-        return obj.classTaught.name
+        return (str(obj.classTaught.name) + " " + str(obj.classTaught.stream.name))
     def get_teacher(self, obj):
         return obj.teacher.fullname
     def get_subject(self, obj):

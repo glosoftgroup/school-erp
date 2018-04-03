@@ -161,6 +161,9 @@ class TopicListComponent extends React.Component {
             }else if(totalmarks < 50){
                 alertUser('Should more than half percentage', 'bg-danger', null)
                 return
+            }else{
+                alertUser('Settings saved successfully', 'bg-success', null)
+                return
             }
         }
 

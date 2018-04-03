@@ -117,7 +117,7 @@ class CrudForm extends React.Component {
                             data.map(function(item) {
                                 return {
                                     id : item.id,
-                                    text : item.name+' '+item.stream
+                                    text : item.name
                                 };
                             }
                     )};

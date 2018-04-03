@@ -18,10 +18,10 @@ class BreadCrumb extends React.Component {
 
       let {status} = this.props
       const v = visibilityStatus()
-      console.log(v.status.year)
+      console.log("bread "+v.status.year)
 
       return (
-      <div  className="col-md-12">
+      <div  className="col-md-12 pt-15">
       <div className="col-md-12">
             <div className="breadcrumb-line bg-primary">
                 <ul className="breadcrumb">

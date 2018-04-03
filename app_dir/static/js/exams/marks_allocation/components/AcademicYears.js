@@ -14,7 +14,10 @@ class AcademicYears extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-            config:{ stiffness: 120, damping: 20 }
+            config:{ stiffness: 120, damping: 20 },
+            terms:[
+                {name:"Term 1", classes:["class 1", "class 2"]},
+                {name:"Term 2", classes:["class 4"]}]
         };
     }
 
@@ -22,7 +25,7 @@ class AcademicYears extends React.Component {
         this.props.callBack(index, "class")
 
     }
-    renderTerms = (year) => {
+    renderTerms = (terms) => {
         return (
              <div>
                  <DropdownButton
@@ -32,7 +35,7 @@ class AcademicYears extends React.Component {
                       id="dropdown-size-small"
                     >
                     {
-                        year.terms.map((term, index) => {
+                        terms.map((term, index) => {
                           return (
                             <MenuItem key={index} eventKey={index}
                                 onClick={()=>this.showAlert(term)} >
@@ -71,7 +74,7 @@ class AcademicYears extends React.Component {
                                 return (
                                     <tr key={index}>
                                         <td>{year.name}</td>
-                                        <td>{this.renderTerms(year)}</td>
+                                        <td>{this.renderTerms(this.state.terms)}</td>
                                     </tr>
                                 )
                             }))
