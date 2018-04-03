@@ -30,16 +30,44 @@ class Comp extends React.Component {
             <div>
                 <Tabs>
                     <TabList>
-                        <Tab>New Parent</Tab>
-                        <Tab>Old Parent</Tab>                        
+                        <Tab>
+                        {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return "New Parent";
+                                default:      return "";
+                            }
+                        })()}
+                            
+                        </Tab>
+                        <Tab>
+                            {(() => {
+                                switch (this.props.editable.editable) {
+                                    case true:   return " Old Parent";
+                                    default:      return "";
+                                }
+                            })()}
+                           
+                        </Tab>                        
                     </TabList>
 
                     <TabPanel>
                         {/* add new parent */}
-                        <ParentFrom/>
+                        {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <ParentFrom/>;
+                                default:      return "";
+                            }
+                        })()}
+                        
                     </TabPanel>
                     <TabPanel>
-                        <SelectParent/>
+                        {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <SelectParent/>;
+                                default:      return "";
+                            }
+                        })()}
+                        
                     </TabPanel>
                 </Tabs>                
 
@@ -52,6 +80,7 @@ class Comp extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        editable: state.editable,
         student: state.activeStudent,
         parents: state.parents
     }

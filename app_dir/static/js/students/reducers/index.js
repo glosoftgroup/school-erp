@@ -7,12 +7,14 @@ import ActiveCountryReducer from './reducer-active-country';
 import ActiveStudentReducer from './reducer-active-student'
 import CountriesReducer from './reducer-countries';
 import ClassesReducer from './reducer-classes'
+import EditableReducer from './reducer-editable'
 import GenderReducer from './reducer-genders'
 import HousesReducers from './reducer-houses'
 import ImagePreviewReducer from './reducer-image'
 import ReligionReducer from './reducer-religions'
 import UserReducer from './reducer-users';
 import ParentsReducer from './reducer-parents'
+import TabStepReducer from './reducer-active-step'
 
 
 
@@ -29,12 +31,14 @@ const allReducers = combineReducers({
     admission: AdmissionReducers, 
     avatar: ImagePreviewReducer,  
     classes: ClassesReducer, 
-    countries: CountriesReducer,    
+    countries: CountriesReducer, 
+    editable: EditableReducer,   
     genders: GenderReducer,    
     houses: HousesReducers,
     religions: ReligionReducer,
     users: UserReducer,
-    parents: ParentsReducer
+    parents: ParentsReducer,
+    step: TabStepReducer
 });
 
 export default allReducers

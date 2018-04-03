@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {selectParent, parentDeleted} from '../actions/parents'
 import { saveStudent } from '../actions/actions';
+import {selectStep} from '../actions/tab-step'
 import api from '../api/Api'
 
 class Comp extends React.Component{
@@ -51,6 +52,17 @@ class Comp extends React.Component{
         })
     }
 
+    tabNavigator =(back)=>{
+        var num;
+        if(back){
+            num = this.props.step.id -= 1
+        }else{
+            num = this.props.step.id += 1
+        }
+        var back = Object.assign({'id':num})
+        this.props.selectStep(back)
+    }
+
     render(){
         return (
             <div>
@@ -88,12 +100,28 @@ class Comp extends React.Component{
                         
                     </tbody>
                 </table>
-                <div className="col-md-12 text-center">
-                {this.props.parents.length !== 0 &&                     
-                <button onClick={this.handleSubmit} id="add-room-btn" type="submit" className="btn btn-sm btn-primary legitRipple">
-                    {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>
-                </button>
-                }
+                <div className="row">
+                <div className="col-md-6 text-left">
+                    <button onClick={()=>this.tabNavigator(true)} id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
+                        <i className="con-arrow-left7 position-left"></i>Back
+                    </button>      
+                    
+                </div>
+                <div className="col-md-6 text-right">
+
+                {this.props.parents.length !== 0 &&
+                 (() => {
+                    switch (this.props.editable.editable) {
+                        case true:   return <button onClick={this.handleSubmit} id="add-room-btn" type="submit" className="btn btn-sm btn-primary legitRipple">
+                                            {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>
+                                        </button>;
+                        default:      return "";
+                    }
+                })()}                    
+                
+                
+                </div>
+                
                 </div>
             </div>
         )
@@ -103,8 +131,10 @@ class Comp extends React.Component{
 
 function mapStateToProps(state) {
     return {
+        editable:state.editable,
         student: state.activeStudent,
-        parents: state.parents
+        parents: state.parents,
+        step: state.step
     }
 }
 
@@ -113,7 +143,8 @@ function matchDispatchToProps(dispatch){
     return bindActionCreators({
         selectParent:selectParent,
         parentDeleted: parentDeleted,
-        saveStudent: saveStudent
+        saveStudent: saveStudent,
+        selectStep: selectStep
     }, dispatch);
 }
 

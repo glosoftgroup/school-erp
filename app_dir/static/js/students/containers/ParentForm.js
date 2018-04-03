@@ -64,7 +64,7 @@ class Comp extends React.Component {
 
         if(isValid){
             // add parent
-            this.setState({loading:true, buttonText:'loading ..'})
+            this.setState({loading:true, buttonText:''})
             const data = new FormData(event.target);
 
             // create admissions
@@ -89,7 +89,7 @@ class Comp extends React.Component {
 
     render() {
         return (
-            <div>               
+            <div className="parent-form">               
 
                 {/* add new parent */}
                 <form encType="multipart/form-data" onSubmit={this.handleSubmit}>

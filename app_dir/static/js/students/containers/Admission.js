@@ -2,17 +2,20 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import Select2 from 'react-select2-wrapper';
+import Loader from 'react-loaders'
 import {fetchClasses} from '../actions/classes'
 import {fetchAcademics} from '../actions/academics'
 import {fetchHouses} from '../actions/houses'
+import {selectStep} from '../actions/tab-step'
 import admissionsApi from '../api/Api'
 import {apiFetchAdmission, saveAdmission, updateAdmission} from '../actions/admissions'
-
+import 'loaders.css/src/animations/line-scale.scss'
+import '../css/editable.scss'
 class Admission extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            buttonText:'submit',
+            buttonText:'save & continue',
             adm_no: '',
             course:'',
             academic_year:'',
@@ -38,7 +41,7 @@ class Admission extends React.Component{
         }
     }
 
-    componentWillReceiveProps(nextProps){        
+    componentWillReceiveProps(nextProps){
         if(nextProps.admission[0]){
             this.setState({
                 course: nextProps.admission[0].course,
@@ -47,7 +50,16 @@ class Admission extends React.Component{
                 house: nextProps.admission[0].house,
                 update_url: nextProps.admission[0].update_url
             })
-        }        
+        }
+        if(nextProps.admission.id){
+            this.setState({
+                course: nextProps.admission.course,
+                adm_no: nextProps.admission.adm_no,
+                academic_year: nextProps.admission.academic_year,
+                house: nextProps.admission.house,
+                update_url: nextProps.admission.update_url
+            })
+        }       
     }
 
     onSelectChange = (e) => {
@@ -82,7 +94,7 @@ class Admission extends React.Component{
         const isValid = Object.keys(errors).length === 0;
 
         if(isValid){
-            this.setState({loading:true, buttonText:'loading ..'})
+            this.setState({loading:true, buttonText:''})
             const data = new FormData(event.target);
             if(this.props.student.id){
                 data.append('student',this.props.student.id)
@@ -98,7 +110,9 @@ class Admission extends React.Component{
                     self.setState({
                         loading:false, buttonText:'submit',
                         update_url:response.data.update_url
-                    })                   
+                    }) 
+                    // goto next tab
+                    self.tabNavigator(false)                  
                     return response;
                 })
                 .then(data => self.props.updateAdmission(data))
@@ -113,7 +127,9 @@ class Admission extends React.Component{
                     self.setState({
                         loading:false, buttonText:'submit',
                         update_url:response.data.update_url
-                    })                   
+                    })  
+                    // goto next tab
+                    self.tabNavigator(false)                   
                     return response;
                 })
                 .then(data => self.props.saveAdmission(data))
@@ -124,6 +140,17 @@ class Admission extends React.Component{
         }
               
         
+    }
+
+    tabNavigator =(back)=>{
+        var num;
+        if(back){
+            num = this.props.step.id -= 1
+        }else{
+            num = this.props.step.id += 1
+        }
+        var back = Object.assign({'id':num})
+        this.props.selectStep(back)
     }
 
     format(item){ return item.name; }
@@ -138,7 +165,16 @@ class Admission extends React.Component{
                 <div className="form-group">
                     <label className="col-lg-3 control-label">Admission No.:</label>
                     <div className="col-lg-9">
-                        <input value={this.state.adm_no} name="adm_no" onChange={this.onSelectChange} className="form-control" placeholder="adm no." type="text"/>
+                        {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <input value={this.state.adm_no} name="adm_no" onChange={this.onSelectChange} className="form-control" placeholder="adm no." type="text"/>
+                                ;
+                                case false: return <span>{this.state.adm_no}</span>;
+                                
+                                default:      return "";
+                            }
+                        })()}
+                        
                         <span className="help-block text-warning">{this.state.errors.adm_no}</span>
                     </div>
                 </div>
@@ -146,17 +182,25 @@ class Admission extends React.Component{
                 <div className="form-group">
                     <label className="col-lg-3 control-label">Class.:</label>
                     <div className="col-lg-9">
-                    <Select2
-                        data={this.props.courses}
-                        onChange={this.onSelectChange}
-                        value={ this.state.course }
-                        name="course"
-                        options={{
-                            formatSelection: this.format,
-                            formatResult: this.format,
-                            placeholder: 'Select class',
-                        }}
-                    />
+                    {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <Select2
+                                                    data={this.props.courses}
+                                                    onChange={this.onSelectChange}
+                                                    value={ this.state.course }
+                                                    name="course"
+                                                    options={{
+                                                        formatSelection: this.format,
+                                                        formatResult: this.format,
+                                                        placeholder: 'Select class',
+                                                    }}
+                                                />;
+                                case false: return <span>{this.props.student.course}</span>;
+                                
+                                default:      return "";
+                            }
+                    })()}
+                    
                     <span className="help-block text-warning">{this.state.errors.course}</span>
                     </div>
                 </div>
@@ -164,17 +208,25 @@ class Admission extends React.Component{
                  <div className="form-group">
                     <label className="col-lg-3 control-label"> Academic Year.:</label>
                     <div className="col-lg-9">
-                    <Select2
-                        data={this.props.academics}
-                        onChange={this.onSelectChange}
-                        value={ this.state.academic_year }
-                        name="academic_year"
-                        options={{
-                            formatSelection: this.format,
-                            formatResult: this.format,
-                            placeholder: 'Select class',
-                        }}
-                    />
+                    {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return <Select2
+                                                        data={this.props.academics}
+                                                        onChange={this.onSelectChange}
+                                                        value={ this.state.academic_year }
+                                                        name="academic_year"
+                                                        options={{
+                                                            formatSelection: this.format,
+                                                            formatResult: this.format,
+                                                            placeholder: 'Select class',
+                                                        }}
+                                                    />;
+                                case false: return <span>{this.props.student.academic_year}</span>;
+                                
+                                default:      return "";
+                            }
+                    })()}
+                    
                     <span className="help-block text-warning">{this.state.errors.academic_year}</span>
                     </div>
                 </div>
@@ -182,22 +234,46 @@ class Admission extends React.Component{
                  <div className="form-group">
                     <label className="col-lg-3 control-label">House.:</label>
                     <div className="col-lg-9">
-                    <Select2
-                        data={this.props.houses}
-                        onChange={this.onSelectChange}
-                        value={ this.state.house }
-                        name="house"
-                        options={{
-                            placeholder: 'Select house',
-                        }}
-                    />
+                    {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return  <Select2
+                                                        data={this.props.houses}
+                                                        onChange={this.onSelectChange}
+                                                        value={ this.state.house }
+                                                        name="house"
+                                                        options={{
+                                                            placeholder: 'Select house',
+                                                        }}
+                                                    />;
+                                case false: return <span>{this.props.student.house}</span>;
+                                
+                                default:      return "";
+                            }
+                    })()}
+                   
                     </div>
                 </div>
 
-                <div className="text-center col-md-12">
-                    <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
-                    {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>
-                    </button>
+                <div className="row">
+                    <div className="col-md-6 text-left">
+                        <button onClick={()=>this.tabNavigator(true)} id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
+                            <i className="con-arrow-left7 position-left"></i>Back
+                        </button>
+                    </div>
+                    <div className="col-md-6 text-right">
+                    {(() => {
+                            switch (this.props.editable.editable) {
+                                case true:   return  <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
+                                {!!this.state.loading && <Loader type="line-scale" className="custom-loader" />}{this.state.buttonText}
+                   
+                                </button>;
+                                 
+                                default:      return "";
+                            }
+                    })()}
+                        
+                    </div>
+                    
                 </div> 
 
               </div>
@@ -211,9 +287,11 @@ function mapStateToProps(state) {
     return {
         academics: state.academics,
         admission: state.admission,
-        courses: state.classes,        
+        courses: state.classes,  
+        editable: state.editable,      
         houses: state.houses,
-        student: state.activeStudent                     
+        student: state.activeStudent,
+        step: state.step                    
     }
 }
 
@@ -226,7 +304,8 @@ function matchDispatchToProps(dispatch){
         fetchHouses: fetchHouses,
         apiFetchAdmission: apiFetchAdmission,
         saveAdmission: saveAdmission,
-        updateAdmission: updateAdmission
+        updateAdmission: updateAdmission, 
+        selectStep: selectStep
     }, dispatch);
 }
 
