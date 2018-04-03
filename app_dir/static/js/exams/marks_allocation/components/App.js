@@ -14,15 +14,16 @@ import {Motion, spring} from 'react-motion';
 import {Provider} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
-import { changeStatus, fetchAcademicYears } from '../actions/visibilityStatus';
+import { changeStatus, fetchAcademicYears, setTermAndYear } from '../actions/visibilityStatus';
 import Select2 from 'react-select2-wrapper';
+import Api from '../api/Api';
 
 class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         teachers:[{"id":1, "text":"alex"},{"id":2, "text":"kim"}, {"id":3, "text":"susan"}],
-        teacher:{"id":3, "text":"james"},
+        teacher:1,
         teacherLoggedIn:false,
         teacherLoggedId:null,
         errors:{}
@@ -41,6 +42,18 @@ class App extends React.Component {
         }else{
             this.props.fetchAcademicYears('')
         }
+
+        Api.retrieve('/exams/marks/allocation/api/teacher/list/')
+            .then(response =>{
+                  let tt = []
+                  response.data.results.map(teacher=>{
+                    tt.push({"id":teacher.id, "text":teacher.name})
+                  })
+                  this.setState({teachers:tt})
+                }
+
+            )
+            .catch(error => {console.log(error)})
     }
 
 
@@ -60,8 +73,8 @@ class App extends React.Component {
 
     handleSelectInputChange = (event) =>{
         this.handleInputChange(event)
-        console.log("-------------------------------")
         this.props.fetchAcademicYears(event.target.value)
+        this.callBack(null, 'year')
     }
 
     validateInput = (data) =>  {
@@ -146,34 +159,37 @@ class App extends React.Component {
                       </div>
                   }
 
-                  <BreadCrumb callBack={this.callBack} status={this.props.status}/>
+                  <BreadCrumb callBack={this.callBack}
+                             status={this.props.status}
+                             term={this.props.term}/>
 
                   {
                     this.props.status.year &&
                     <AcademicYears years={this.props.years}
-                    status={this.props.status.year}
-                    callBack={this.callBack}/>
+                             status={this.props.status.year}
+                             callBack={this.callBack}
+                             setTermAndYear={this.props.setTermAndYear}/>
                   }
                   {
                     this.props.status.class &&
                     <Classes years={this.state.academicYears}
-                      status={this.props.status.class}
-                      fetch = {this.props.st}
-                      term={this.state.term}
-                      callBack={this.callBack}/>
+                              status={this.props.status.class}
+                              fetch = {this.props.st}
+                              term={this.state.term}
+                              callBack={this.callBack}/>
                   }
                   {
                     this.props.status.subject &&
                     <Subjects years={this.state.academicYears}
-                      status={this.props.status.subject}
-                      fetch = {this.props.st}
-                      callBack={this.callBack}/>
+                              status={this.props.status.subject}
+                              fetch = {this.props.st}
+                              callBack={this.callBack}/>
                   }
                   {
                     this.props.status.exam &&
                     <Exams years={this.state.academicYears}
-                      status={this.props.status.exam}
-                      callBack={this.callBack}/>
+                              status={this.props.status.exam}
+                              callBack={this.callBack}/>
                   }
           </div>
       );
@@ -183,14 +199,16 @@ class App extends React.Component {
 
   const mapStateToProps = state => ({
         status:state.see.status,
-        years:state.see.academicYears,
-        st:state.see
+        years:state.see.yearDetails,
+        st:state.see,
+        term:state.see.term
     })
 
   const matchDispatchToProps = dispatch => (
         bindActionCreators(
             {changeStatus: changeStatus,
-            fetchAcademicYears: fetchAcademicYears},
+            fetchAcademicYears: fetchAcademicYears,
+            setTermAndYear: setTermAndYear},
             dispatch)
   )
 

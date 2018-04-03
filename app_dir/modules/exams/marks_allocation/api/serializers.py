@@ -5,10 +5,11 @@ from django.utils.translation import ugettext_lazy as _
 from ...configuration.models import ExamConfiguration as Table
 from ...configuration.models import Exam, Cat, Assignment
 from app_dir.modules.workload.class_allocation.models import ClassAllocation
+from django.contrib.auth import get_user_model
 from structlog import get_logger
 
 logger = get_logger(__name__)
-
+User = get_user_model()
 
 class TableListSerializer(serializers.ModelSerializer):
     detail_url = serializers.HyperlinkedIdentityField(view_name='exam_configuration:detail')
@@ -159,31 +160,38 @@ class UpdateSerializer(serializers.ModelSerializer):
         return instance
 
 class ClassAllocationSerializer(serializers.ModelSerializer):
-    yearId = serializers.SerializerMethodField()
-    yearName = serializers.SerializerMethodField()
-    termId = serializers.SerializerMethodField()
-    termName = serializers.SerializerMethodField()
+    teacher = serializers.SerializerMethodField()
+    year = serializers.SerializerMethodField()
+    terms = serializers.SerializerMethodField()
 
     class Meta:
         model = ClassAllocation
         fields = ('id',
                   'teacher',
-                  'classTaught',
-                  'subject',
-                  'yearId',
-                  'yearName',
-                  'termId',
-                  'termName'
+                  'academicYear',
+                  'terms',
+                  'year'
                  )
 
-    def get_yearName(self, obj):
-        return obj.academicYear.name
+    def get_terms(self, obj):
+        query = ClassAllocation.objects.filter(teacher=obj.teacher, academicYear=obj.academicYear)
+        terms = [ {"id":i.term.id, "name":i.term.name} for i in query ]
+        return terms
 
-    def get_yearId(self, obj):
-        return obj.academicYear.id
+    def get_teacher(self, obj):
+        return {"id": obj.teacher.id, "name": obj.teacher.fullname}
 
-    def get_termName(self, obj):
-        return obj.term.name
+    def get_year(self, obj):
+        return {"id":obj.academicYear.id, "name":obj.academicYear.name}
 
-    def get_termId(self, obj):
-        return obj.term.id
+
+class TeacherListSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    class Meta:
+        model = User
+        fields = ('id',
+                  'name',
+                 )
+
+    def get_name(self, obj):
+        return obj.fullname

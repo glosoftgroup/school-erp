@@ -21,11 +21,11 @@ class AcademicYears extends React.Component {
         };
     }
 
-    showAlert = (index) =>{
-        this.props.callBack(index, "class")
-
+    goToTerm = (term, year) =>{
+        this.props.callBack(term, "class")
+        this.props.setTermAndYear(term, year)
     }
-    renderTerms = (terms) => {
+    renderTerms = (terms, year) => {
         return (
              <div>
                  <DropdownButton
@@ -38,7 +38,7 @@ class AcademicYears extends React.Component {
                         terms.map((term, index) => {
                           return (
                             <MenuItem key={index} eventKey={index}
-                                onClick={()=>this.showAlert(term)} >
+                                onClick={()=>this.goToTerm(term, year)} >
                                 {term.name}
                             </MenuItem>
                           )
@@ -62,7 +62,8 @@ class AcademicYears extends React.Component {
                 <table className="table table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
                         <thead>
                           <tr className="bg-primary">
-                            <th>Name</th>
+                            <th>Teacher</th>
+                            <th>Academic Year</th>
                             <th></th>
                           </tr>
                         </thead>
@@ -73,8 +74,9 @@ class AcademicYears extends React.Component {
                             (years.map((year, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td>{year.name}</td>
-                                        <td>{this.renderTerms(this.state.terms)}</td>
+                                        <td>{year.teacher.name}</td>
+                                        <td>{year.year.name}</td>
+                                        <td>{this.renderTerms(year.terms, year)}</td>
                                     </tr>
                                 )
                             }))
