@@ -16,14 +16,13 @@ class BreadCrumb extends React.Component {
 
     render() {
 
-      let { status, term, academicYear, classTaught, teacher, subject } = this.props
-      const v = visibilityStatus()
-      console.log("bread "+v.status.year)
+      let { status, term, academicYear, classTaught, teacher, subject, exam } = this.props
 
       teacher = teacher == null ? 'Teachers ': teacher.name
       academicYear = academicYear == null ? 'Academic Years ': teacher+' ('+academicYear.year.name+')'
       classTaught = classTaught == null ? 'Classes ': classTaught.name
       subject = subject == null ? 'Subject ': subject.name
+      exam = exam == null ? 'Exam ': exam.name
 
       return (
       <div  className="col-md-12 pt-15">
@@ -53,6 +52,15 @@ class BreadCrumb extends React.Component {
                       <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> {term.name}</a></li>,
                       <li key="4"><a href="javascript:;" onClick={() => this.navigate("subject")}> {classTaught}</a></li>,
                       <li key="5"><a href="javascript:;" onClick={() => this.navigate("exam")}> {subject}</a></li>]
+                    }
+
+                    {status.student &&
+                    [
+                      <li key="2"><a href="javascript:;" onClick={() => this.navigate("year")}>  {academicYear}</a></li>,
+                      <li key="3"><a href="javascript:;" onClick={() => this.navigate("class")}> {term.name}</a></li>,
+                      <li key="4"><a href="javascript:;" onClick={() => this.navigate("subject")}> {classTaught}</a></li>,
+                      <li key="5"><a href="javascript:;" onClick={() => this.navigate("exam")}> {subject}</a></li>,
+                      <li key="6"><a href="javascript:;" onClick={() => this.navigate("student")}> {exam}</a></li>]
                     }
 
                 </ul>

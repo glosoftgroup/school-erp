@@ -10,6 +10,7 @@ import BreadCrumb from './BreadCrumb';
 import Classes from './Classes';
 import Subjects from './Subjects';
 import Exams from './Exams';
+import Students from './Students';
 import {Motion, spring} from 'react-motion';
 import {Provider} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -165,6 +166,7 @@ class App extends React.Component {
                              classTaught={this.props.classTaught}
                              teacher={this.props.teacher}
                              subject={this.props.subject}
+                             exam={this.props.exam}
                              academicYear={this.props.academicYear}/>
 
                   {
@@ -188,8 +190,12 @@ class App extends React.Component {
                   }
                   {
                     this.props.status.exam &&
-                    <Exams years={this.state.academicYears}
-                              status={this.props.status.exam}
+                    <Exams    status={this.props.status.exam}
+                              callBack={this.callBack}/>
+                  }
+                  {
+                    this.props.status.student &&
+                    <Students status={this.props.status.student}
                               callBack={this.callBack}/>
                   }
           </div>
@@ -205,7 +211,8 @@ class App extends React.Component {
         classTaught:state.see.class,
         teacher:state.see.teacher,
         academicYear:state.see.year,
-        subject:state.see.subject
+        subject:state.see.subject,
+        exam:state.see.exam
     })
 
   const matchDispatchToProps = dispatch => (

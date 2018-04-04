@@ -1,10 +1,11 @@
 # site settings rest api serializers
 
 from rest_framework import serializers
-from django.utils.translation import ugettext_lazy as _
-from ...configuration.models import ExamConfiguration as Table
+from ...configuration.models import ExamConfiguration
 from ...configuration.models import Exam, Cat, Assignment
+from ..models import MarksAllocation as Table
 from app_dir.modules.workload.class_allocation.models import ClassAllocation
+from app_dir.modules.student.models import StudentOfficialDetails, Student
 from django.contrib.auth import get_user_model
 from structlog import get_logger
 
@@ -12,149 +13,97 @@ logger = get_logger(__name__)
 User = get_user_model()
 
 class TableListSerializer(serializers.ModelSerializer):
-    detail_url = serializers.HyperlinkedIdentityField(view_name='exam_configuration:detail')
-    update_url = serializers.HyperlinkedIdentityField(view_name='exam_configuration:update')
-    delete_url = serializers.HyperlinkedIdentityField(view_name='exam_configuration:api-delete')
-    subject    = serializers.SerializerMethodField()
-    academicyear    = serializers.SerializerMethodField()
-    academicclass    = serializers.SerializerMethodField()
-    term    = serializers.SerializerMethodField()
-    assignments    = serializers.SerializerMethodField()
-    cats    = serializers.SerializerMethodField()
-    exams    = serializers.SerializerMethodField()
+    detail_url = serializers.HyperlinkedIdentityField(view_name='marks_allocation:detail')
+    update_url = serializers.HyperlinkedIdentityField(view_name='marks_allocation:update')
+    delete_url = serializers.HyperlinkedIdentityField(view_name='marks_allocation:api-delete')
 
     class Meta:
         model = Table
         fields = ('id',
+                  'student',
                   'subject',
-                  'academicyear',
                   'academicclass',
+                  'academicyear',
                   'term',
-                  'pass_marks',
-                  'total_marks',
-                  'is_percentage',
-                  'assignments',
-                  'cats',
-                  'exams',
+                  'exam',
+                  'exam_marks',
+                  'student_marks',
+                  'is_committed',
+                  'updated_at',
+                  'created',
                   'detail_url',
                   'update_url',
                   'delete_url'
                  )
-    def get_subject(self, obj):
-        return obj.subject.name
-
-    def get_academicyear(self, obj):
-        return obj.academicyear.name
-
-    def get_academicclass(self, obj):
-        return obj.academicclass.name
-
-    def get_term(self, obj):
-        return obj.term.name
-
-    def get_cats(self, obj):
-        return obj.cat.count()
-
-    def get_assignments(self, obj):
-        return obj.assignment.count()
-
-    def get_exams(self, obj):
-        return obj.exam.count()
 
 
 class CreateListSerializer(serializers.ModelSerializer):
-    exams = serializers.JSONField(write_only=True)
+    students = serializers.JSONField(write_only=True)
 
     class Meta:
         model = Table
         fields = ('id',
+                  'student',
                   'subject',
-                  'academicyear',
                   'academicclass',
+                  'academicyear',
                   'term',
-                  'is_percentage',
-                  'pass_marks',
-                  'total_marks',
-                  'exams',
+                  'exam',
+                  'exam_marks',
+                  'student_marks',
+                  'is_committed',
+                  'students'
                  )
-        validators = [
-            serializers.UniqueTogetherValidator(
-                queryset=Table.objects.all(),
-                fields=('subject', 'academicyear', 'academicclass', 'term'),
-                message=_("Exam Setting Already Exists.")
-            )
-        ]
 
     def create(self, validated_data):
-        instance = Table()
-        if validated_data.get('subject'):
-            instance.subject = validated_data.get('subject')
-        if validated_data.get('academicyear'):
-            instance.academicyear = validated_data.get('academicyear')
-        if validated_data.get('academicclass'):
-            instance.academicclass = validated_data.get('academicclass')
-        if validated_data.get('term'):
-            instance.term = validated_data.get('term')
-        if validated_data.get('is_percentage'):
-            instance.is_percentage = validated_data.get('is_percentage')
-        if validated_data.get('pass_marks'):
-            instance.pass_marks = validated_data.get('pass_marks')
-        if validated_data.get('total_marks'):
-            instance.total_marks = validated_data.get('total_marks')
 
-        instance.save()
+        for i in validated_data.get('students'):
+            try:
+                logger.info(" student id-"+str(i['student'])+": marks-"+str(i['student_marks']))
+                instance = Table()
+                student = Student.objects.get(pk=int(i['student']))
+                instance.student = student
+                instance.subject = validated_data.get('subject')
+                instance.academicyear = validated_data.get('academicyear')
+                instance.academicclass = validated_data.get('academicclass')
+                instance.term = validated_data.get('term')
+                instance.exam = validated_data.get('exam')
+                instance.exam_marks = validated_data.get('exam_marks')
+                instance.student_marks = i['student_marks']
+                instance.is_committed = validated_data.get('is_committed')
+                instance.save()
+            except Exception as e:
+                logger.info(" student id-" + str(i['student']) + ": marks-" + str(i['student_marks']))
+                raise serializers.ValidationError('Error adding the bulk students marks')
 
-        for i in validated_data.get('exams'):
-            if 'assignment' in str(i['name']):
-                logger.info(" assignment name-"+str(i['name'])+": value-"+str(i['value']))
-                assignment = Assignment()
-                assignment.examId = instance
-                assignment.name = i['name']
-                assignment.marks = i['value']
-                assignment.save()
-                continue
-            elif 'cat' in str(i['name']):
-                logger.info(" cat name-" + str(i['name']) + ": value-" + str(i['value']))
-                cat = Cat()
-                cat.examId = instance
-                cat.name = i['name']
-                cat.marks = i['value']
-                cat.save()
-                continue
-            elif 'exam' in str(i['name']):
-                logger.info(" exam name-" + str(i['name']) + ": value-" + str(i['value']))
-                exam = Exam()
-                exam.examId = instance
-                exam.name = i['name']
-                exam.marks = i['value']
-                exam.save()
-                continue
-
-
-        return instance
+        return Table.objects.last()
 
 
 class UpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
         fields = ('id',
+                  'student',
                   'subject',
-                  'academicyear',
                   'academicclass',
+                  'academicyear',
                   'term',
+                  'exam',
+                  'exam_marks',
+                  'student_marks',
+                  'is_committed'
                  )
 
     def update(self, instance, validated_data):
-        if validated_data.get('subject'):
-            instance.subject = validated_data.get('subject')
-        if validated_data.get('academicyear'):
-            instance.academicyear = validated_data.get('academicyear')
-        if validated_data.get('academicclass'):
-            instance.academicclass = validated_data.get('academicclass')
-        if validated_data.get('term'):
-            instance.term = validated_data.get('term')
-        if validated_data.get('percentage'):
-            instance.percentage = validated_data.get('percentage')
+        instance.student = validated_data.get('student')
+        instance.subject = validated_data.get('subject')
+        instance.academicyear = validated_data.get('academicyear')
+        instance.academicclass = validated_data.get('academicclass')
+        instance.term = validated_data.get('term')
+        instance.exam = validated_data.get('exam')
+        instance.exam_marks = validated_data.get('exam_marks')
+        instance.student_marks = validated_data.get('student_marks')
+        instance.is_committed = validated_data.get('is_committed')
 
         instance.save()
         return instance
@@ -251,7 +200,7 @@ class ExamListSerializer(serializers.ModelSerializer):
     term = serializers.SerializerMethodField()
     year = serializers.SerializerMethodField()
     class Meta:
-        model = Table
+        model = ExamConfiguration
         fields = (
             'id',
             'subject',
@@ -290,3 +239,33 @@ class ExamListSerializer(serializers.ModelSerializer):
             all.append({"id": i.id, "name": "Exam "+ str(i.id), "totalmarks": i.marks})
 
         return all
+
+class StudentListSerializer(serializers.ModelSerializer):
+    year = serializers.SerializerMethodField()
+    classTaught = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+    student_pk = serializers.SerializerMethodField()
+    class Meta:
+        model = StudentOfficialDetails
+        fields = (
+            'id',
+            'name',
+            'student_pk',
+            'adm_no',
+            'course',
+            'classTaught',
+            'academic_year',
+            'year',
+        )
+
+    def get_classTaught(self, obj):
+        return obj.course.name+" "+obj.course.stream.name
+
+    def get_year(self, obj):
+        return obj.academic_year.name
+
+    def get_student_pk(self, obj):
+        return obj.student.pk
+
+    def get_name(self, obj):
+        return obj.student.first_name+" "+obj.student.middle_name+" "+obj.student.last_name

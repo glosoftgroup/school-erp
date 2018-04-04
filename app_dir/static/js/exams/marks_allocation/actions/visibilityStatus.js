@@ -1,7 +1,7 @@
 import  {
         CHANGE_STATUS, TEST, FETCH_YEARS, SET_TERM_YEAR,
         SET_CLASS, FETCH_SUBJECTS, ERROR, SET_SUBJECT,
-        FETCH_EXAMS, SET_EXAM } from './types';
+        FETCH_EXAMS, SET_EXAM, FETCH_STUDENTS } from './types';
 import Api from '../api/Api';
 
 /** action handlers */
@@ -19,6 +19,10 @@ const fetchSubject = (subjects) =>{
 
 const fetchExam = (exams) =>{
     return { type: FETCH_EXAMS, payload: exams }
+}
+
+const fetchStudent = (students) =>{
+    return { type: FETCH_STUDENTS, payload: students }
 }
 
 /** change components display status */
@@ -77,3 +81,14 @@ export const setExam = (exam) => dispatch => {
         dispatch({type:SET_EXAM, payload:exam})
 }
 /** ..end */
+
+/** fetch students */
+export const fetchStudents = (yrId, clsId) => dispatch => {
+        /**
+           yrId = AcademicYear id, clsId = ClassTaughtId
+        **/
+        let params = 'yr='+yrId+'&cls='+clsId
+        Api.retrieve('/exams/marks/allocation/api/students/list/?'+params)
+            .then(response => dispatch(fetchStudent(response.data.results)))
+            .catch(error => dispatch(handleError(error)))
+}

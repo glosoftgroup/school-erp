@@ -35,7 +35,7 @@ class Exams extends React.Component {
 
     goToStudents = (exam) =>{
         this.props.setExam(exam)
-        this.props.callBack(null, "year")
+        this.props.callBack(null, "student")
     }
 
 

@@ -211,6 +211,7 @@ class CrudForm extends React.Component {
 
     addConfigCallBack = (examsFromChild) => {
         this.setState({config:examsFromChild})
+        alertUser('Settings saved successfully', 'bg-success', null)
     }
 
     addTopicCallBack = (topicFromChild) => {
