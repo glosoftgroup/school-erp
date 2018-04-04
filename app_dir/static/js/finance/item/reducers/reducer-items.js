@@ -1,6 +1,15 @@
 import { SET_ITEMS, ADD_ITEM, ITEM_DELETED } from '../actions/action-items.js';
 
-export default function students(state = [], action = {}) {
+const initial = {    
+        "links": {
+            "next": null,
+            "previous": null
+        },
+        "count": 7,
+        "total_pages": 1,
+        "results": []
+}
+export default function students(state = initial, action = {}) {
   switch(action.type) { 
     case ITEM_DELETED:
       return state.filter(item => item.id !== action.parentId);
