@@ -163,7 +163,6 @@ class TopicListComponent extends React.Component {
                 return
             }else{
                 alertUser('Settings saved successfully', 'bg-success', null)
-                return
             }
         }
 
@@ -177,10 +176,18 @@ class TopicListComponent extends React.Component {
             }
         }
 
+        if(exams.length == 0){
+            alertUser('No exams Settings', 'bg-danger', null)
+            return
+         }
+
         this.props.addConfigCallBack(exams)
         this.props.getPassCallBack(this.state.percentage, this.state.total, this.state.pass)      
     }
 
+    dummyHandler = (event) =>{
+        console.log(event.target.value)
+    }
     render() {
       const { config, catArray, assignmentArray, examArray } = this.props;
       const { errors } = this.state;
@@ -317,6 +324,7 @@ class TopicListComponent extends React.Component {
                                 <input type="text" className="form-control"
                                 name="total"
                                 value={this.state.total}
+                                onChange={this.dummyHandler}
                                 />
                             </td>
                         </tr>

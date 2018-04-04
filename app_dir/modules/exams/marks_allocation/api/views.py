@@ -5,8 +5,9 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import pagination
 from .pagination import PostLimitOffsetPagination
 
-from ...configuration.models import ExamConfiguration as Table
-from ...configuration.models import Exam, Cat, Assignment
+from ...configuration.models import ExamConfiguration
+from ..models import MarksAllocation as Table
+from app_dir.modules.student.models import StudentOfficialDetails
 from app_dir.modules.workload.class_allocation.models import ClassAllocation
 from .serializers import (
     CreateListSerializer,
@@ -15,7 +16,8 @@ from .serializers import (
     ClassAllocationSerializer,
     TeacherListSerializer,
     SubjectListSerializer,
-    ExamListSerializer
+    ExamListSerializer,
+    StudentListSerializer
      )
 
 User = get_user_model()
@@ -132,7 +134,7 @@ class ExamListView(generics.ListAPIView):
     serializer_class = ExamListSerializer
 
     def get_queryset(self, *args, **kwargs):
-        queryset_list = Table.objects.all()
+        queryset_list = ExamConfiguration.objects.all()
 
         year = self.request.GET.get('yr')
         subject = self.request.GET.get('sbj')
@@ -141,6 +143,24 @@ class ExamListView(generics.ListAPIView):
         if year and subject and term:
             queryset_list = queryset_list.filter(
                 Q(subject__pk=subject, academicyear__pk=year, term__pk=term))
+
+        return queryset_list
+
+class StudentListView(generics.ListAPIView):
+    """
+        list students only
+    """
+    serializer_class = StudentListSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = StudentOfficialDetails.objects.all()
+
+        year = self.request.GET.get('yr')
+        classTaught = self.request.GET.get('cls')
+
+        if year and classTaught:
+            queryset_list = queryset_list.filter(
+                Q(course=classTaught, academic_year=year))
 
         return queryset_list
 

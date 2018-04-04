@@ -12,3 +12,5 @@ export const FETCH_EXAMS = 'FETCH_EXAMS';
 export const SET_EXAM = 'SET_EXAM';
 
 export const SET_CLASS = 'SET_CLASS';
+
+export const FETCH_STUDENTS = 'FETCH_STUDENTS';

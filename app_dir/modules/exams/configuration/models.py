@@ -10,18 +10,23 @@ from django.utils.timezone import now
 
 
 class ExamConfiguration(models.Model):
-    subject       = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    subject       = models.ForeignKey(Subject, on_delete=models.CASCADE,
+                                      null=True, blank=True)
     academicclass = models.CharField(
-        pgettext_lazy('ExamConfiguration field', 'academicclass'), max_length=128, null=True, blank=True)
-    academicyear  = models.ForeignKey(AcademicYear, on_delete=models.CASCADE)
-    term  = models.ForeignKey(Term, on_delete=models.CASCADE)
+        pgettext_lazy('ExamConfiguration field', 'academicclass'), max_length=128,
+        null=True, blank=True)
+    academicyear  = models.ForeignKey(AcademicYear, on_delete=models.CASCADE,
+                                      null=True, blank=True)
+    term  = models.ForeignKey(Term, on_delete=models.CASCADE, null=True, blank=True)
     is_percentage = models.BooleanField(
         pgettext_lazy('ExamConfiguration field', 'isPercentage'),
         default=False)
     pass_marks = models.CharField(
-        pgettext_lazy('ExamConfiguration field', 'pass_mark'), blank=True, null=True, max_length=128)
+        pgettext_lazy('ExamConfiguration field', 'pass_mark'), blank=True,
+        null=True, max_length=128)
     total_marks = models.CharField(
-        pgettext_lazy('ExamConfiguration field', 'pass_mark'), blank=True, null=True, max_length=128)
+        pgettext_lazy('ExamConfiguration field', 'pass_mark'), blank=True,
+        null=True, max_length=128)
     updated_at = models.DateTimeField(
         pgettext_lazy('ExamConfiguration field', 'updated at'), auto_now=True, null=True)
     created = models.DateTimeField(pgettext_lazy('ExamConfiguration field', 'created'),
@@ -31,7 +36,8 @@ class ExamConfiguration(models.Model):
         return self.academicyear.name
 
 class Assignment(models.Model):
-    examId = models.ForeignKey(ExamConfiguration, related_name='assignment',  on_delete=models.CASCADE)
+    examId = models.ForeignKey(ExamConfiguration, related_name='assignment',
+                               on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(
         pgettext_lazy('Assignment field', 'name'), max_length=128)
     marks = models.CharField(
@@ -41,7 +47,8 @@ class Assignment(models.Model):
         return self.name
 
 class Cat(models.Model):
-    examId = models.ForeignKey(ExamConfiguration, related_name='cat', on_delete=models.CASCADE)
+    examId = models.ForeignKey(ExamConfiguration, related_name='cat',
+                               on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(
         pgettext_lazy('Cat field', 'name'), max_length=128)
     marks = models.CharField(
@@ -51,7 +58,8 @@ class Cat(models.Model):
         return self.name
 
 class Exam(models.Model):
-    examId = models.ForeignKey(ExamConfiguration, related_name='exam', on_delete=models.CASCADE)
+    examId = models.ForeignKey(ExamConfiguration, related_name='exam',
+                               on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(
         pgettext_lazy('Exam field', 'name'), max_length=128)
     marks = models.CharField(
