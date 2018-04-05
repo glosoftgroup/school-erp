@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 
+import ActiveItemReducer from './reducer-active-item'
 import ItemsReducer from './reducer-items';
 import FormToggleStatus from './reducer-form-status'
 
@@ -11,7 +12,8 @@ import FormToggleStatus from './reducer-form-status'
  * Your entire applications state (store) is just whatever gets returned from all your reducers
  * */
 
-const allReducers = combineReducers({    
+const allReducers = combineReducers({ 
+    item: ActiveItemReducer,   
     items: ItemsReducer,
     toggler: FormToggleStatus
 });
