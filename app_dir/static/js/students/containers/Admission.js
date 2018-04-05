@@ -105,8 +105,6 @@ class Admission extends React.Component{
                 admissionsApi.update(this.state.update_url,data)                 
                 .then(function (response) {
                     alertUser('Data sent successfully');
-                    console.log('response....')
-                    console.warn(response)
                     self.setState({
                         loading:false, buttonText:'submit',
                         update_url:response.data.update_url

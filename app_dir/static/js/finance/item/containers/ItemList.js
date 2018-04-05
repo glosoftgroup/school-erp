@@ -2,28 +2,63 @@ import React, { Component } from 'react'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Pagination from "react-js-pagination";
+import Select2 from 'react-select2-wrapper';
 import api from '../api/Api'
-import { selectItems } from '../actions/action-items'
+import { fetchItems } from '../actions/action-items'
 
 class Comp extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          activePage: 15,
-          totalPages: 450
+          activePage: 1,
+          totalPages: 450,
+          itemsCountPerPage:5,
+          pageSizes: [
+            { "text": "5", "id": "5"},
+            { "text": "10", "id": "10"},
+            { "text": "20", "id": "20"},
+          ]
         };
     }
     
     componentWillMount(){
         // fetch items
         var self = this;
-        api.retrieve('/finance/item/api/list/')
-        .then(data => self.props.selectItems(data.data.results))
+        this.props.fetchItems();
+    }
+
+    onSelectChange=(e)=>{
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+
+        this.filterContent()
+    }
+
+    filterContent=(page=1)=>{
+
+        var params = Object.assign({
+            page_size:this.state.itemsCountPerPage,
+            page: page
+        });
+        if(this.state.search){
+            params = Object.assign(params,{'q':this.state.search});
+        }
+        // update store
+        this.props.fetchItems(params)
+
+        // // reset active page
+        // this.setState({activePage:1})
     }
     
     handlePageChange =(pageNumber)=> {
-        console.log(`active page is ${pageNumber}`);
+        // console.log(`active page is ${pageNumber}`);
         this.setState({activePage: pageNumber});
+        this.filterContent(pageNumber);
+    }
+
+    deleteItem = (url) =>{
+        console.log(url)
     }
 
     render(){
@@ -31,7 +66,7 @@ class Comp extends Component {
             <div className="">             
                 <div className="col-md-12"> 
                     <div className="panel panel-flat">
-                        <div className="panel-body  search-panel">
+                        <div className="panel-body">
                     
                             <table className="table table-xs table-hover">
                                 <thead>
@@ -42,14 +77,44 @@ class Comp extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {this.props.items.map(obj => {
+                                {this.props.items.results.map(obj => {
                                     return (
                                     <tr key={obj.id}>
                                         <td>{obj.name}</td>
-                                        <td>{obj.middle_name}</td>
+                                        <td>{obj.values.map(item=>{
+                                            
+                                                try{
+                                                    for (const key in item) {
+                                                        if (item.hasOwnProperty(key)) {
+                                                            const element = item[key];
+                                                            return(<span key={item[key]}>{item[key]}, </span>)                                                            
+                                                        }
+                                                    }
+                                                    
+                                                }catch(err){
+                                                    console.log(err)
+                                                }
+                                               
+                                           
+                                           
+                                        })}</td>
                                         
-                                        <td onClick={() => this.removeparent(obj.id)} >
-                                            <i className="icon-trash"></i>
+                                        <td >
+                                        <ul className="icons-list">
+                                            <li className="dropdown">
+                                                <button type="button" data-toggle="dropdown" aria-expanded="true" className="btn btn-xs btn-primary dropdown-toggle legitRipple">
+                                                Actions<span className="caret"></span>
+                                                </button> 
+                                                <ul className="dropdown-menu-xs dropdown-menu">
+                                                    <li><a href="javascript:;">
+                                                        <i className="icon-pencil"></i> Edit</a>
+                                                    </li> 
+                                                    <li>
+                                                        <a onClick={()=>{this.deleteItem(obj.delete_url)}} href="javascript:;"><i className=" icon-trash-alt"></i> Delete</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
                                         </td>
                                     </tr>
                                     )})
@@ -65,14 +130,30 @@ class Comp extends Component {
                                 </tbody>
                             </table>
 
-                            <div className="col-md-12 text-center mb-15">
+                            <div className="row text-center mb-15">
+                                <div className="col-md-2 mt-15">
+                                <Select2
+                                    data={this.state.pageSizes}
+                                    onChange={this.onSelectChange}
+                                    value={ this.state.itemsCountPerPage }
+                                    name="itemsCountPerPage"
+                                    options={{
+                                        minimumResultsForSearch: -1,
+                                        placeholder: 'Select Page size',
+                                    }}
+                                />
+                                </div>
+                                <div className="col-md-8">
                                 <Pagination
                                     activePage={this.state.activePage}
-                                    itemsCountPerPage={10}
-                                    totalItemsCount={1}
+                                    itemsCountPerPage={this.state.itemsCountPerPage}
+                                    totalItemsCount={this.props.items.count}
                                     pageRangeDisplayed={5}
                                     onChange={this.handlePageChange}
                                     />
+                                </div>
+                                <div className="col-md-2 mt-15">Page {this.state.activePage} of {this.props.items.total_pages}</div>
+                                
                             </div>
                         </div>                    
                     </div>
@@ -91,7 +172,7 @@ function mapStateToProps(state) {
 
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
-        selectItems: selectItems
+        fetchItems: fetchItems
     }, dispatch);
 }
 
