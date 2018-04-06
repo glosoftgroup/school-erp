@@ -57,7 +57,6 @@ class Comp extends Component {
         
     }
 
-
     onMultiSelectChange2 = (e) =>{
         if(this.state.allowEdit){
             var value = [];

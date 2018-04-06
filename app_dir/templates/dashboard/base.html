@@ -209,7 +209,7 @@
                                         <li class="{% block menu_student %}{% endblock %}">
                                           <a href="{% url 'student:index' %}">Students Admission</a>
                                         </li>
-                                        <li class="{% block attendance_student %}{% endblock %}">
+                                        <li class="hidden {% block attendance_student %}{% endblock %}">
                                           <a href="{% url 'attendance:index' %}">Attendance</a>
                                         </li>
                                         <li class="{% block house_student %}{% endblock %}">
@@ -218,6 +218,20 @@
                                     </ul>
                                 </li>
                                 <!--./student-->
+
+                                <!--finance-->
+                                <li>
+                                  <a href="javascript:;">
+                                    <i class="icon-user"></i>
+                                    <span>Finance Management</span>
+                                  </a>
+                                 <ul>
+                                    <li class="{% block menu_finance_item %}{% endblock %}">
+                                      <a href="{% url 'finance_item:index' %}">Fee Item</a>
+                                    </li>
+                                 </ul>
+                                </li>
+                                <!--/finance-->
                             </ul>
                         </div>
                     </div>

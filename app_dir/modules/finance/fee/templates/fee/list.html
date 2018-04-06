@@ -4,18 +4,18 @@
 {% load render_bundle from webpack_loader %}
 
 {% block title %}
-  Financial Items
+  Fees Structure
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class="active"><a>Financial Items </a></li>
+     <li class="active"><a>Fees Structure </a></li>
  {% endblock %}
 
 
 {% block menu_finance_item %}active{% endblock %}
 
 {% block custom_css %}
-{% render_bundle 'finance_item' 'css' %}
+{% render_bundle 'fee' 'css' %}
 
  {% endblock %}
 
@@ -29,6 +29,6 @@
 >
 {% endblock%}
 {% block custom_js %}
-{% render_bundle 'finance_item' 'js' %}
+{% render_bundle 'fee' 'js' %}
 
 {% endblock %}
