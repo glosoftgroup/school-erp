@@ -4,7 +4,10 @@ import {connect} from 'react-redux';
 import Pagination from "react-js-pagination";
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api'
-import { fetchItems } from '../actions/action-items'
+import EditFrom from '../containers/EditForm'
+import Modal from '../components/Modal'
+
+import { fetchItems, deleteItem, selectItem } from '../actions/action-items'
 
 class Comp extends Component {
     constructor(props) {
@@ -13,6 +16,10 @@ class Comp extends Component {
           activePage: 1,
           totalPages: 450,
           itemsCountPerPage:5,
+          show: false,
+          edit: false,
+          deleteUrl:'url',
+          item: {},
           pageSizes: [
             { "text": "5", "id": "5"},
             { "text": "10", "id": "10"},
@@ -25,7 +32,7 @@ class Comp extends Component {
         // fetch items
         var self = this;
         this.props.fetchItems();
-    }
+    }    
 
     onSelectChange=(e)=>{
         this.setState({
@@ -57,13 +64,42 @@ class Comp extends Component {
         this.filterContent(pageNumber);
     }
 
-    deleteItem = (url) =>{
-        console.log(url)
+    handleClose =()=> {
+        this.setState({ show: false });
+    }
+
+    handleShow =(url,obj)=>{
+        this.setState({ show: true,deleteUrl:url, item: obj });
+    }
+
+    handleEditClose =()=> {
+        this.setState({ show: false });
+    }
+
+    handleEditShow =()=>{
+        this.setState({ edit: true});
+    }
+
+    deleteItem = () =>{
+        var self = this;
+        api.delete(this.state.deleteUrl)
+        .then((data)=>{ self.setState({show:false})}) 
+        .then(function(data){self.filterContent(self.state.activePage) })                      
+        .catch(function(error){console.log(error)})
+    } 
+    
+    selectItem = (obj) =>{
+        this.props.selectItem(obj)
+        this.handleEditShow();
     }
 
     render(){
         return (
-            <div className="">             
+            <div className="">  
+            {/* <EditFrom deleteInstance={this.deleteItem} show={this.state.edit} handleEditShow={this.handleEditShow} handleClose={this.handleClose} />            */}
+                
+                <Modal deleteInstance={this.deleteItem} show={this.state.show} handleShow={this.handleShow} handleClose={this.handleClose} />           
+                
                 <div className="col-md-12"> 
                     <div className="panel panel-flat">
                         <div className="panel-body">
@@ -93,8 +129,7 @@ class Comp extends Component {
                                                     
                                                 }catch(err){
                                                     console.log(err)
-                                                }
-                                               
+                                                }                                   
                                            
                                            
                                         })}</td>
@@ -106,11 +141,12 @@ class Comp extends Component {
                                                 Actions<span className="caret"></span>
                                                 </button> 
                                                 <ul className="dropdown-menu-xs dropdown-menu">
-                                                    <li><a href="javascript:;">
-                                                        <i className="icon-pencil"></i> Edit</a>
+                                                    <li><a onClick={()=>{this.selectItem(obj)}} href="javascript:;">
+                                                        <i className="icon-pencil"></i> Edit
+                                                        </a>
                                                     </li> 
                                                     <li>
-                                                        <a onClick={()=>{this.deleteItem(obj.delete_url)}} href="javascript:;"><i className=" icon-trash-alt"></i> Delete</a>
+                                                        <a onClick={()=>{this.handleShow(obj.delete_url, obj)}} href="javascript:;"><i className="icon-trash-alt"></i> Delete</a>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -172,7 +208,9 @@ function mapStateToProps(state) {
 
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
-        fetchItems: fetchItems
+        fetchItems: fetchItems,
+        deleteItem: deleteItem,
+        selectItem: selectItem
     }, dispatch);
 }
 
