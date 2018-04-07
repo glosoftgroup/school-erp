@@ -146,7 +146,6 @@ class Students extends React.Component {
                                             <th>Student Admission No</th>
                                             <th>Student Name</th>
                                             <th>Marks / {totalmarks}</th>
-                                            <th></th>
                                           </tr>
                                         </thead>
                                         <tbody id="tb">
@@ -165,7 +164,6 @@ class Students extends React.Component {
                                                                        value={this.state[student.student_pk]?this.state[student.student_pk]:""}
                                                                        onChange={this.handleInputChange}/>
                                                         </td>
-                                                        <td><button type="button" className="btn btn-sm btn-primary" onClick={()=>this.goToStudents(student)}>Save</button></td>
                                                     </tr>
                                                 )
                                             }))

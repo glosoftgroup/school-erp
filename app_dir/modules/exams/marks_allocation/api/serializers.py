@@ -245,6 +245,7 @@ class StudentListSerializer(serializers.ModelSerializer):
     classTaught = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
     student_pk = serializers.SerializerMethodField()
+    student = serializers.SerializerMethodField()
     class Meta:
         model = StudentOfficialDetails
         fields = (
@@ -256,6 +257,7 @@ class StudentListSerializer(serializers.ModelSerializer):
             'classTaught',
             'academic_year',
             'year',
+            'student'
         )
 
     def get_classTaught(self, obj):
@@ -269,3 +271,14 @@ class StudentListSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return obj.student.first_name+" "+obj.student.middle_name+" "+obj.student.last_name
+
+    def get_student(self, obj):
+        return {
+            "id": obj.student.id,
+            "name": self.get_name(obj),
+            "adm_no": obj.adm_no,
+            "class": { "id" : obj.course.id, "name" : self.get_classTaught(obj) },
+            "academic_year" : { "id" : obj.academic_year.id, "name" : self.get_year(obj) },
+            "house" : { "id" : obj.house.id, "name" : obj.house.name },
+
+        }
