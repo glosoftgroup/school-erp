@@ -96,7 +96,7 @@ class RoomForm extends React.Component {
                 <div className="form-group">
                     <div className="row">
                         <div className="col-md-6">
-                            <label className="text-bold">Class Name:<span className="text-danger">*</span></label>
+                            <label className="text-bold">Name:<span className="text-danger">*</span></label>
                             <input value={this.state.name} onChange={this.handleInputChange} required className="form-control" name="name" id="name" placeholder="Name" type="text"/>
                             <span className="help-block text-warning"></span>
                         </div>

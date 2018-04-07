@@ -10,6 +10,7 @@ import StudentList from '../containers/student-list'
 import {selectStudents} from '../actions/students'
 import {selectAcademicYear} from '../actions/academic-year'
 import {selectDate} from '../actions/date'
+import { selectTerm } from '../actions/action-term'
 import {selectCourse} from '../actions/course'
 import 'react-datepicker/dist/react-datepicker.css';
 import '../css/styles.scss';
@@ -22,6 +23,7 @@ class FeeItem extends React.Component {
           date:moment(new Date()),
           academic_year:'',
           course:'',
+          term: '',
           students: Object.assign({}),
           loading: false,
           buttonText:'Submit'
@@ -36,6 +38,16 @@ class FeeItem extends React.Component {
         var self = this;
         let date = Object.assign({'date':moment(new Date()).format('YYYY-MM-DD')})
         this.props.selectDate(date)
+
+        // set default term
+        api.retrieve('/term/api/list')
+        .then(data=>data.data.results)
+        .then(function(data){
+            self.props.selectCourse(data[0])
+            var option1 = new Option(data[0].name,data[0].id, true);
+            self.refs.term.el.append(option1).trigger('change');            
+        })
+        
         // set default class
         api.retrieve('/class/api/list')
         .then(data=>data.data.results)
@@ -131,6 +143,8 @@ class FeeItem extends React.Component {
     render() {
         var _options =  this.selectOptions('/class/api/list', 'Select Classes')
         var _academicOptions = this.selectOptions('/academic_year/api/list','Select Academic year')
+        var _termOptions = this.selectOptions('/term/api/list','Select term')
+        
         var students = this.state.students
 
       return (
@@ -139,18 +153,7 @@ class FeeItem extends React.Component {
         <div className="col-md-12">
             <div className="panel panel-flat panel-custom">
                 
-                <div className="panel-body  search-panel">                  
-
-                    <div className="col-md-4">
-                        <label>Class:</label>
-                        <div className="form-group">
-                        <Select2 ref="course"
-                            onChange = {this.handleInputChange}
-                            name = 'course'
-                            value = {this.state.course}
-                            options={ _options}/>
-                        </div>
-                    </div>
+                <div className="panel-body  search-panel"> 
 
                     <div className="col-md-4">
                         <label>Academic Year:</label>
@@ -162,6 +165,28 @@ class FeeItem extends React.Component {
                         options={ _academicOptions}/>
                         </div>
                     </div>
+
+                    <div className="col-md-4">
+                        <label>Term:</label>
+                        <div className="form-group">
+                        <Select2 ref="term"
+                        onChange = {this.handleInputChange}
+                        name = 'term'
+                        value = {this.state.term}
+                        options={ _termOptions}/>
+                        </div>
+                    </div>
+
+                    <div className="col-md-4">
+                        <label>Class:</label>
+                        <div className="form-group">
+                        <Select2 ref="course"
+                            onChange = {this.handleInputChange}
+                            name = 'course'
+                            value = {this.state.course}
+                            options={ _options}/>
+                        </div>
+                    </div>                   
 
                 </div>
             </div>
