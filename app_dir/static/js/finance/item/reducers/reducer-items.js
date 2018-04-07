@@ -12,7 +12,7 @@ const initial = {
 export default function students(state = initial, action = {}) {
   switch(action.type) { 
     case ITEM_DELETED:
-      return state.filter(item => item.id !== action.parentId);
+      return state.results.filter(item => item !== action.item);
 
     case ADD_ITEM:
       return [

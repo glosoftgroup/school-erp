@@ -13,6 +13,7 @@ from app_dir.modules.academics.stream.urls import urlpatterns as stream_urls
 from app_dir.modules.attendance.urls import urlpatterns as attendance_urls
 from app_dir.modules.exams.configuration.urls import urlpatterns as configuration_urls
 from app_dir.modules.finance.item.urls import urlpatterns as finance_item_urls
+from app_dir.modules.finance.fee.urls import urlpatterns as finance_fee_urls
 from app_dir.modules.house.urls import urlpatterns as house_urls
 from app_dir.modules.room.urls import urlpatterns as room_urls
 from app_dir.modules.parent.urls import urlpatterns as parent_urls
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^exams/configuration/', include(configuration_urls, namespace='exam_configuration')),
     url(r'^exams/marks/allocation/', include(marks_allocations_urls, namespace='marks_allocation')),
     url(r'^finance/item/', include(finance_item_urls, namespace="finance_item")),
+    url(r'^finance/fee/', include(finance_fee_urls, namespace="fee")),
     url(r'^house/', include(house_urls, namespace='house')),
     url(r'^parent/', include(parent_urls, namespace='parent')),
     url(r'^room/', include(room_urls, namespace='room')),

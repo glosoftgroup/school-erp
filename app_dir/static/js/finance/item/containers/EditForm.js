@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
+import classnames from 'classnames';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Select2 from 'react-select2-wrapper';
-import classnames from 'classnames';
-import { ToastContainer, toast } from 'react-toastify';
+import { Modal, Tooltip, Button, OverlayTrigger } from 'react-bootstrap';
 import api from '../api/Api'
 import { fetchItems } from '../actions/action-items'
 import { toggleStatus } from '../actions/action-form-status'
 
-class Comp extends Component {
+class EditModal extends Component {
     constructor(props){
         super(props);
         this.state  = {
@@ -40,7 +40,7 @@ class Comp extends Component {
         this.props.fetchItems(params)
     }
 
-    onMultiSelectChange = (e) =>{       
+    onMultiSelectChange = (e) =>{
         if(!this.props.item.id){
             var value = [];
             var options = e.target.options;
@@ -50,64 +50,60 @@ class Comp extends Component {
                 }
             }
             this.setState({itemValues: value});
-        }else{
-            this.onMultiSelectChange2(e)
-        }       
-       
-        
-    }
-
-    onMultiSelectChange2 = (e) =>{
-        if(this.state.allowEdit){
-            var value = [];
-            var options = e.target.options;
-            for (var i = 0, l = options.length; i < l; i++) {
-                if (options[i].selected) {
-                    value.push(options[i].value);
-                }
-            }
-            this.setState({itemValues: value});
-            console.log('allow edit..')
-        }else{
-            this.setState({
-                allowEdit:true
-            })
         }
-           
        
         
     }
    
+    componentDidUpdate(){
+        // var element = document.getElementById("values");
+        // console.log(element)
+        // console.log(this.props.item)
+        // if(this.props.item.id){
+        //     var value = [];
+        //     var options = this.props.item.values;            
+
+        //     for (var i = 0, l = options.length; i < l; i++) {                
+        //         value.push(options[i].name); 
+        //         var element = document.getElementById("values");
+        //         element.select2({   
+        //             width:'100%',
+        //             tags: true,
+        //             tokenSeparators: [",", " "],}).append('<option value="' +options[i].name
+        //                + '">' +options[i].name + '</option>');               
+        //     }
+        //     this.setState({
+        //         name:this.props.item.name,
+        //         itemValues: value,
+        //         allowEdit:true
+        //     })
+        //     element.trigger("change");
+
+        // }
+            
+    }
 
     componentWillReceiveProps(nextProps){        
         if(nextProps.item.id){
-            var value = [];
-            console.log(nextProps.item.values)
-            var options = nextProps.item.values;
-            this.refs.values.el.empty().trigger("change");;
-            this.refs.values.el.val(null).trigger('change');
-            for (var i = 0, l = options.length; i < l; i++) {                
-                value.push(options[i].name); 
-                this.refs.values.el.select2({   
-                    width:'100%',
-                    tags: true,
-                    tokenSeparators: [",", " "],}).append('<option value="' +options[i].name
-                       + '">' +options[i].name + '</option>');               
-            }
-            this.setState({
-                name:nextProps.item.name,
-                itemValues: value,
-                allowEdit:false
-            })
-            this.refs.values.el.trigger("change");
-            var toggle;
-            if(this.props.toggler.id){
-                toggle = false           
-            }else{
-                toggle = true
-                var status = Object.assign({'id':toggle})
-                this.props.toggleStatus(status)                
-            }
+            // var value = [];
+            // var options = nextProps.item.values;            
+
+            // for (var i = 0, l = options.length; i < l; i++) {                
+            //     value.push(options[i].name); 
+            //     var elementdd = document.getElementById("values");
+            //     elementdd.select2({   
+            //         width:'100%',
+            //         tags: true,
+            //         tokenSeparators: [",", " "],}).append('<option value="' +options[i].name
+            //            + '">' +options[i].name + '</option>');               
+            // }
+            // this.setState({
+            //     name:nextProps.item.name,
+            //     itemValues: value,
+            //     allowEdit:true
+            // })
+            // elementdd.trigger("change");
+            
             window.scrollTo(0, 0);
 
        
@@ -116,37 +112,6 @@ class Comp extends Component {
             
         }       
         
-    }
-
-    onSelectChange = (e) => {
-        console.log(e.target.name)
-        if(!!this.state.errors[e.target.name]){
-            let errors = Object.assign({}, this.state.errors);
-            delete errors[e.target.name];             
-                    
-            this.setState({
-                [e.target.name]: e.target.value,
-                errors:errors
-            });
-        }else{
-            this.setState({
-                [e.target.name]: e.target.value
-            });
-        } 
-        
-        
-    }
-
-    toggleForm =()=>{
-        var toggle;
-        if(this.props.toggler.id){
-            toggle = false           
-        }else{
-            toggle = true
-        }
-
-        var status = Object.assign({'id':toggle})
-        this.props.toggleStatus(status)
     }
 
     handleSubmit = event =>{
@@ -181,9 +146,7 @@ class Comp extends Component {
                 api.update(this.props.item.update_url, data)
                 .then(function(data){// reload items                
                     self.props.fetchItems(); // close form
-                    self.toggleForm();
-                    window.location.reload();
-                })
+                    self.toggleForm();})
                 .catch(function(error){console.log(error)})
 
             }else{
@@ -223,34 +186,22 @@ class Comp extends Component {
              
         }
     }
-    render(){
-        return (
-            <div className="col-md-12">
-            <ToastContainer />
-                <div className="panel panel-flat">
-                    <div className="panel-body  search-panel">
+  
+    render() {
+     
 
-                        <div className="col-md-2">
-                            <label> &nbsp;</label>
-                            <div className="form-group">
-                                <button id="toggle-add-form" onClick={this.toggleForm} className={classnames('btn btn-primary hvr-glow btn-raised legitRipple waves-effect waves-light togglebtn', { showbutton : this.props.toggler.id })}>
-                                    {!this.props.toggler.id && <span><i className="icon-plus2 position-left"></i>Add</span>}
-                                    {this.props.toggler.id && <i className="icon-cross"></i>}
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className={classnames('col-md-4 mini-form', { showform : !this.props.toggler.id })}>
-                            <label>Search </label>
-                            <div className="form-group form-group-material has-feedback">
-                                <input value={this.state.search} name="search" onChange={this.handleChange} className="form-control" placeholder="Search ..." type="text" />
-                                <div className="form-control-feedback">
-                                <i className="icon-search4 text-size-base"></i>
-                                </div>
-                            </div>
-                        </div>
-                       
-                        <div  className={classnames('col-md-10 mini-form', { showform : this.props.toggler.id })}>
+      const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
+  
+      return (
+        <div>         
+          <Modal show={this.props.show} onHide={this.props.handleClose}>
+            <Modal.Header closeButton className="modal-header bg-primary">
+              <Modal.Title>Edit Fee Item</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+             
+             
+              <div  className={classnames('col-md-10 mini-form', { showform : this.props.toggler.id })}>
                         <div className="error">
                             {!!this.state.server_errror && <div className="ui alert alert-warning negative message"><p>{this.state.server_errror}</p></div>} 
                             </div>
@@ -265,15 +216,18 @@ class Comp extends Component {
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input value={this.state.name} name="name" onChange={this.onSelectChange} className="form-control" placeholder="eg. Transport" type="text"/>
+                                        <input value={this.state.name} name="name" onChange={()=>{this.onSelectChange}} className="form-control" placeholder="eg. Transport" type="text"/>
+                                        
                                         <span className="help-block text-warning">{this.state.errors.name}</span>
                                     </td>            
                                     <td>
+                                        {this.selectN()}
                                     <Select2
                                         multiple
                                         onChange={this.onMultiSelectChange}
                                         value={ this.state.itemValues }
                                         ref="values"
+                                        id="values"
                                         name="itemValues"
                                         options={{   
                                             width:'100%',
@@ -291,15 +245,21 @@ class Comp extends Component {
                                 </tr>
                                 </tbody>      
                             </table>
-                        </div>
-
-                    </div>
-                </div>
-                
-            </div>
-        );
+                        </div>           
+  
+              
+            </Modal.Body>
+            <Modal.Footer className="text-center">
+              <Button onClick={this.props.handleClose}>Close</Button>
+              <Button bsStyle="warning" bsSize="small" onClick={this.props.deleteInstance}>
+                Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      );
     }
-}
+  }
 
 function mapStateToProps(state) {
     return {
@@ -316,4 +276,4 @@ function matchDispatchToProps(dispatch){
     }, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(Comp);
+export default connect(mapStateToProps, matchDispatchToProps)(EditModal);

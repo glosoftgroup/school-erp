@@ -3,6 +3,7 @@ import api from '../api/Api'
 export const SET_ITEMS = "SET_ITEMS"
 export const ADD_ITEM = "ADD_ITEM"
 export const ITEM_DELETED = "ITEM_DELETED"
+export const ITEM_SELECTED = "ITEM_SELECTED"
 
 export const selectItems = (payload) => {    
     return {
@@ -10,6 +11,21 @@ export const selectItems = (payload) => {
         payload
     }
 };
+
+export const selectItem = (payload) => { 
+    console.log(payload)   
+    return {
+        type: ITEM_SELECTED,
+        payload
+    }
+};
+
+export function deleteItem(item) {
+    return {
+      type: ITEM_DELETED,
+      item
+    }
+}
 
 export const fetchItems = (params={}) =>{
     return dispatch => {

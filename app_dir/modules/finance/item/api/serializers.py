@@ -19,7 +19,7 @@ class ValueSerializer(serializers.ModelSerializer):
 
 
 class TableListSerializer(serializers.ModelSerializer):
-    update_url = serializers.HyperlinkedIdentityField(view_name=module+':update')
+    update_url = serializers.HyperlinkedIdentityField(view_name=module+':api-update')
     delete_url = serializers.HyperlinkedIdentityField(view_name=module+':api-delete')
     values = serializers.SerializerMethodField() # ValueSerializer(many=True)
 
@@ -52,11 +52,6 @@ class CreateListSerializer(serializers.ModelSerializer):
 
         try:
             values = validated_data.pop('values')
-            logger.info(type(values))
-            logger.info('length of values '+str(len(values)))
-            for value in values:
-                logger.info('value loop')
-
         except Exception as e:
             logger.info(e)
             raise serializers.ValidationError('Values field should not be empty')
@@ -70,17 +65,28 @@ class CreateListSerializer(serializers.ModelSerializer):
             item.item = instance
             item.name = str(value)
             item.save()
-            # value = Value.objects.create(item=instance, **value)
+
         return instance
 
 
 class UpdateSerializer(serializers.ModelSerializer):
+    values = serializers.JSONField(write_only=True)
+
     class Meta:
         model = Table
-        fields = fields
+        fields = fields + ('values',)
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)     
-
+        instance.name = validated_data.get('name', instance.name)
         instance.save()
+        # try:
+        values = validated_data.pop('values')
+        instance.values.all().delete()
+        for value in values:
+            item = Value()
+            item.item = instance
+            item.name = str(value)
+            item.save()
+        # except Exception as e:
+        #     pass
         return instance
