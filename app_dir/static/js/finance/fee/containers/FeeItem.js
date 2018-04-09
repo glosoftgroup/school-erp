@@ -6,7 +6,7 @@ import {bindActionCreators} from 'redux';
 import DatePicker from 'react-datepicker';
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api'
-import StudentList from '../containers/student-list'
+import ItemList from '../containers/ItemList'
 import {selectStudents} from '../actions/students'
 import {selectAcademicYear} from '../actions/academic-year'
 import {selectDate} from '../actions/date'
@@ -151,8 +151,7 @@ class FeeItem extends React.Component {
       <div className="row">
         {/* filter */}
         <div className="col-md-12">
-            <div className="panel panel-flat panel-custom">
-                
+            <div className="panel panel-flat panel-custom">                
                 <div className="panel-body  search-panel"> 
 
                     <div className="col-md-4">
@@ -188,6 +187,7 @@ class FeeItem extends React.Component {
                         </div>
                     </div>                   
 
+                    <ItemList />
                 </div>
             </div>
        
