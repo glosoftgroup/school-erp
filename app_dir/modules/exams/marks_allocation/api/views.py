@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import pagination
+from rest_framework.mixins import ListModelMixin
 from .pagination import PostLimitOffsetPagination
 
 from ...configuration.models import ExamConfiguration
@@ -146,11 +147,31 @@ class ExamListView(generics.ListAPIView):
 
         return queryset_list
 
-class StudentListView(generics.ListAPIView):
+class StudentListView(generics.ListAPIView, ListModelMixin):
     """
         list students only
     """
     serializer_class = StudentListSerializer
+
+    def list(self, request, *args, **kwargs):
+        response = super(StudentListView, self).list(request, args, kwargs)
+        year = self.request.GET.get('yr')
+        classTaught = self.request.GET.get('cls')
+        trmId = self.request.GET.get('trmId')
+        exam = self.request.GET.get('exam')
+        if year and classTaught and exam and trmId:
+            response.data['is_committed'] = False
+        return response
+
+    def get_serializer_context(self):
+        context = super(StudentListView, self).get_serializer_context()
+        context.update({
+            "yr": self.request.GET.get('yr'),
+            "cls": self.request.GET.get('cls'),
+            "exam": self.request.GET.get('exam'),
+            "trmId": self.request.GET.get('trmId'),
+        })
+        return context
 
     def get_queryset(self, *args, **kwargs):
         queryset_list = StudentOfficialDetails.objects.all()
@@ -162,5 +183,5 @@ class StudentListView(generics.ListAPIView):
             queryset_list = queryset_list.filter(
                 Q(course=classTaught, academic_year=year))
 
-        return queryset_list
+        return queryset_list.order_by('adm_no')
 

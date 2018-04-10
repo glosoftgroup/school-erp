@@ -10,7 +10,7 @@ import Animations from './Animations';
 import {MenuItem, DropdownButton} from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchStudents } from '../actions/visibilityStatus';
+import { fetchStudents, changeFinalCommitStatus } from '../actions/visibilityStatus';
 import Api from '../api/Api';
 
 
@@ -21,42 +21,88 @@ class Students extends React.Component {
             config:{ stiffness: 120, damping: 20 },
             students:[],
             marks:'',
+            is_committed:false,
+            errors:{}
         };
     }
 
     componentWillMount() {
         let yrId = this.props.academicYear.year.id,
-            clsId = this.props.class.id
-        this.props.fetchStudents(yrId, clsId)
+            clsId = this.props.class.id,
+            termId = this.props.term.id,
+            exam = this.props.exam.name
+        this.props.fetchStudents(yrId, clsId, termId, exam)
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.students){
             this.setState({students:nextProps.students})
 
             nextProps.students.map(student=>{
-                let name = student.student_pk
-                this.setState({[name]: ''})
+                let name = student.id,
+                    value = student.exams ? student.exams.marks : '0'
+                this.setState({[name]: value})
             })
         }
+
+        this.setState({is_committed:nextProps.is_committed})
     }
 
     goToStudents = (student) =>{
-        console.log(this.props.exam.totalmarks);
+        console.log(this.props.exam.totalmarks)
 
     }
 
-    handleInputChange = event =>{
-        const name   =  event.target.name;
-        let value    =  event.target.value;
-//        if(isEmpty(value)){
-//            this.state.errors[name] = "This field is required";
-//        }else{
-//            this.state.errors[name] = '';
-//        }
+    onKeyDown = (event) =>{
+        let keyCode  = event.keyCode
+        const name   =  event.target.name
+        let value    =  event.target.value
+        
+        if(keyCode === 8 || keyCode === 46){
+            this.setState({
+                [name]: 0
+            });
+        }
+    }
 
-        this.setState({
-          [name]: value
-        });
+    handleInputChange = event =>{
+        const name   =  event.target.name
+        let value    =  event.target.value
+
+        const re = /^[0-9\b]+$/;
+
+        if(isEmpty(value)){
+                this.state.errors[name] = "This field is required"
+        }else if (!isEmpty(value) && (parseInt(value) > parseInt(this.props.exam.totalmarks))){
+                this.state.errors[name] = "cannot exceed "+this.props.exam.totalmarks+" marks"
+        }else{
+            this.state.errors[name] = ''
+        }
+
+        if(re.test(value)){
+            this.setState({
+                [name]: value
+              });
+            }
+        
+    }
+
+    validateInput = (data) =>  {
+        let errs = {}
+
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                if((key != 'marks') && (key != 'students') && (key != 'is_committed') && (key != 'config') && (key != 'errors')){
+                  if(Validator.isEmpty(data[key])) {
+                      errs[key] = "This field is required "+key
+                  }
+                }
+            }
+        }
+
+        return {
+            errs,
+            isValid: isEmpty(errs)
+        }
     }
 
     handleSubmit = event =>{
@@ -73,23 +119,15 @@ class Students extends React.Component {
             }
 
         }
+  
+       const { errs, isValid } = this.validateInput(this.state);
 
-        if(stds.length == 0){
-            alertUser('No Marks', 'bg-danger', null)
-        }else{
-            stds.map(s=>{
-                console.log(s)
-                if(s.student_marks == ''){
-                    alertUser('No Marks have been set for'+s.student, 'bg-danger', null)
-                }
-            })
-        }
-//        const { errs, isValid } = this.validateInput(this.state);
-//
-//        if(!isValid){
-//            this.setState({errors: errs});
-//            return;
-//        }
+       if(!isValid){
+            this.setState({errors: errs})
+            alertUser('Please fix the errors below', 'bg-danger', 'Oops!')
+            return;
+       }
+    //    return;
 
         const data = new FormData()
         data.append("subject", this.props.subject.name)
@@ -99,14 +137,14 @@ class Students extends React.Component {
         data.append("students", JSON.stringify(stds))
         data.append("exam", this.props.exam.name)
         data.append("exam_marks", this.props.exam.totalmarks)
-        data.append("is_committed", false)
+        data.append("is_committed", this.state.is_committed)
 
 
         if(pk){
             Api.retrieve('/exams/marks/allocation/api/update/'+pk+'/')
             .then(response => {
                 alertUser('Data sent successfully', 'bg-success','Well Done!')
-                window.location.href = redirectUrl;
+                // window.location.href = redirectUrl;
             })
             .catch(error =>{
                 alertUser('Something Wen Wrong', 'bg-danger','Oops!')
@@ -115,7 +153,8 @@ class Students extends React.Component {
             Api.create('/exams/marks/allocation/api/create/', data)
             .then(response => {
                 alertUser('Data sent successfully', 'bg-success','Well Done!')
-                window.location.href = redirectUrl;
+                window.location.reload()
+                // window.location.href = redirectUrl;
             })
             .catch(error =>{
                 alertUser('already Exists', 'bg-danger','Oops!')
@@ -124,10 +163,15 @@ class Students extends React.Component {
 
     }
 
+    handleCommit = event => {
+        event.preventDefault();
+        this.props.changeFinalCommitStatus(null)
+    }
+
 
     render() {
-      const {status, exam } = this.props
-      const {students} = this.state
+      const { status, exam } = this.props
+      const { students, errors, is_committed } = this.state
       let totalmarks = exam.totalmarks
       let animation = status ? Animations[0] : Animations[1]
 
@@ -158,11 +202,18 @@ class Students extends React.Component {
                                                         <td>{student.adm_no}</td>
                                                         <td>{student.name}</td>
                                                         <td>
-                                                            <input className="form-control inp"
-                                                                        name={`${student.student_pk}`}
-                                                                        ref={this.myRef}
-                                                                       value={this.state[student.student_pk]?this.state[student.student_pk]:""}
-                                                                       onChange={this.handleInputChange}/>
+                                                            <div className={classnames("form-group ", {"has-error":errors[student.id]})}>
+                                                                <input className="form-control inp"
+                                                                            name={`${student.id}`}
+                                                                            ref={this.myRef}
+                                                                            disabled={is_committed}
+                                                                        value={this.state[student.id]?this.state[student.id]:""}
+                                                                        onChange={this.handleInputChange}
+                                                                        onKeyDown={this.onKeyDown}/>
+                                                                {this.state[student.id] ?
+                                                                    errors[student.id] && <span className="help-block">{ errors[student.id] }</span>
+                                                                : errors[student.id] = ""}
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 )
@@ -178,7 +229,13 @@ class Students extends React.Component {
                     }
                     </Motion>
                     <div className="col-md-12 pt-15">
-                        <button type="submit" className="btn btn-sm btn-primary">Submit</button>
+                        <button type="submit" 
+                                className="btn btn-sm btn-primary"
+                                disabled={is_committed}>Submit</button>
+                        <button type="submit" 
+                                className="btn btn-sm btn-primary ml-10"
+                                onClick = {this.handleCommit}
+                                disabled={is_committed}>Final Commit</button>
                     </div>
                 </form>
 
@@ -194,12 +251,16 @@ class Students extends React.Component {
         term:state.see.term,
         exam:state.see.exam,
         subject:state.see.subject,
-        academicYear:state.see.year
+        academicYear:state.see.year,
+        is_committed:state.see.is_committed
   })
 
   const matchDispatchToProps = dispatch => (
         bindActionCreators(
-            {fetchStudents: fetchStudents},
+            {
+                fetchStudents: fetchStudents, 
+                changeFinalCommitStatus:changeFinalCommitStatus
+            },
             dispatch)
   )
 

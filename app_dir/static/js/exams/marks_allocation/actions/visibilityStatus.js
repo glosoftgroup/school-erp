@@ -1,7 +1,8 @@
 import  {
         CHANGE_STATUS, TEST, FETCH_YEARS, SET_TERM_YEAR,
         SET_CLASS, FETCH_SUBJECTS, ERROR, SET_SUBJECT,
-        FETCH_EXAMS, SET_EXAM, FETCH_STUDENTS } from './types';
+        FETCH_EXAMS, SET_EXAM, FETCH_STUDENTS, CHANGE_COMMIT_STATUS,
+        LOAD_COMMIT_STATUS } from './types';
 import Api from '../api/Api';
 
 /** action handlers */
@@ -83,12 +84,22 @@ export const setExam = (exam) => dispatch => {
 /** ..end */
 
 /** fetch students */
-export const fetchStudents = (yrId, clsId) => dispatch => {
+export const fetchStudents = (yrId, clsId, termId, exam) => dispatch => {
         /**
            yrId = AcademicYear id, clsId = ClassTaughtId
         **/
-        let params = 'yr='+yrId+'&cls='+clsId
+        let params = 'yr='+yrId+'&cls='+clsId+'&exam='+exam+'&trmId='+termId
         Api.retrieve('/exams/marks/allocation/api/students/list/?'+params)
-            .then(response => dispatch(fetchStudent(response.data.results)))
+            .then(response => {
+                    dispatch(fetchStudent(response.data.results))
+                    dispatch({type:LOAD_COMMIT_STATUS, payload:response.data.is_committed})
+                })
             .catch(error => dispatch(handleError(error)))
+}
+
+/** ..end */
+
+/** changeFinalCommitStatus */
+export const changeFinalCommitStatus = (status) => dispatch => {
+        dispatch({type:CHANGE_COMMIT_STATUS, payload:status})
 }

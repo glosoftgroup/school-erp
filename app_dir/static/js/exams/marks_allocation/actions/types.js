@@ -14,3 +14,6 @@ export const SET_EXAM = 'SET_EXAM';
 export const SET_CLASS = 'SET_CLASS';
 
 export const FETCH_STUDENTS = 'FETCH_STUDENTS';
+
+export const LOAD_COMMIT_STATUS = 'LOAD_COMMIT_STATUS';
+export const CHANGE_COMMIT_STATUS = 'CHANGE_COMMIT_STATUS';

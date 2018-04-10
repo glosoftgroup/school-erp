@@ -99,8 +99,7 @@ class TopicListComponent extends React.Component {
         const name   =  event.target.name
         let value    =  event.target.value
         const re = /^[0-9\b]+$/;
-        // const re = /^\s*(?=.*[1-9])\d*(?:\.\d{1,2})?\s*$/ /* matches digits and decimal places from 0*/
-
+        
         if(isEmpty(value)){
             this.state.errors[name] = "This field is required";
         }else{
