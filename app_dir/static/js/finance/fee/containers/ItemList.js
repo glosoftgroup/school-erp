@@ -14,9 +14,14 @@ class ItemList extends Component {
    
     componentDidMount (){
         var self = this;
-        api.retrieve('/finance/item/api/list/')    
+        api.retrieve('/finance/item/api/list/')
+        .then(data=> data.data.results)    
         .then(function(data){
-            self.props.setItems(data.data.results)
+            // add new _id field
+            data.map((item, index)=>{
+                item._id = item.id;
+            })            
+            self.props.setItems(data)
         })
         .catch(function(error){
             console.log(error)
@@ -24,8 +29,11 @@ class ItemList extends Component {
   }
   
   addToStructure = (obj) =>{
-    // console.log(obj)
+    
+    var obj = Object.assign([obj])
     this.props.addFeeItem(obj)
+   
+   
   }
   
 
@@ -43,12 +51,13 @@ class ItemList extends Component {
             <tbody>
             {this.props.items.map(obj => {
                 return (
-                <tr key={obj.id}>
+                <tr key={obj._id}>
                     <td>{obj.name}</td>                  
                     <td>{obj.mobile}</td>
                     <td onClick={() => this.addToStructure(obj)} >
                         <button className="btn btn-sm bg-primary">add</button>
                     </td>
+               
                 </tr>
                 )})
             }
@@ -69,7 +78,8 @@ class ItemList extends Component {
 
 function mapStateToProps(state) {
     return {
-        items: state.items
+        items: state.items,
+        fee_items: state.fee_items
     }
 }
 

@@ -32,7 +32,7 @@ class TableListSerializer(serializers.ModelSerializer):
             value = []
             for item in obj.values.all():
                 # return value.name
-                value.append({'name': item.name})
+                value.append({'id': item.id, 'text': item.name, 'name': item.name})
             return value
 
         except:

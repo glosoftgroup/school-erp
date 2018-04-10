@@ -1,8 +1,16 @@
 import React, { Component } from 'react'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import ItemChoices from './Choices'
+import ItemAmount from './Amount'
 
 class FeeStructure extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            amount:0
+        }
+    }
     render(){
         return (
             <div>
@@ -26,11 +34,11 @@ class FeeStructure extends Component {
                             <tbody>
                                 {this.props.fee_items.map(obj => {
                                 return (
-                                <tr key={obj.id}>
+                                <tr key={obj._id}>
                                     <td>{obj.name}</td>                  
-                                    <td>{obj.mobile}</td>
-                                    <td onClick={() => this.addToStructure(obj)} >
-                                        <input type="text" placeholder="amount" className="form-control" />
+                                    <td><ItemChoices instance={obj}/></td>
+                                    <td  >
+                                        <ItemAmount instance={obj} />
                                     </td>
                                 </tr>
                                 )})
