@@ -4,6 +4,7 @@ from rest_framework import serializers
 from ...configuration.models import ExamConfiguration
 from ...configuration.models import Exam, Cat, Assignment
 from ..models import MarksAllocation as Table
+from ..models import ExamStatus
 from app_dir.modules.workload.class_allocation.models import ClassAllocation
 from app_dir.modules.student.models import StudentOfficialDetails, Student
 from django.contrib.auth import get_user_model
@@ -60,21 +61,48 @@ class CreateListSerializer(serializers.ModelSerializer):
         for i in validated_data.get('students'):
             try:
                 logger.info(" student id-"+str(i['student'])+": marks-"+str(i['student_marks']))
-                instance = Table()
-                student = Student.objects.get(pk=int(i['student']))
-                instance.student = student
-                instance.subject = validated_data.get('subject')
-                instance.academicyear = validated_data.get('academicyear')
-                instance.academicclass = validated_data.get('academicclass')
-                instance.term = validated_data.get('term')
-                instance.exam = validated_data.get('exam')
-                instance.exam_marks = validated_data.get('exam_marks')
-                instance.student_marks = i['student_marks']
-                instance.is_committed = validated_data.get('is_committed')
-                instance.save()
+                try:
+                    findStudent = Table.objects.get(
+                                student=i['student'],
+                                academicyear=validated_data.get('academicyear'),
+                                academicclass=validated_data.get('academicclass'),
+                                exam=validated_data.get('exam'),
+                                exam_marks=validated_data.get('exam_marks'),
+                                term=validated_data.get('term'))
+                    findStudent.student_marks = i['student_marks']
+                    findStudent.is_committed = validated_data.get('is_committed')
+                    findStudent.save()
+                except Exception as e:
+                    instance = Table()
+                    student = Student.objects.get(pk=int(i['student']))
+                    instance.student = student
+                    instance.subject = validated_data.get('subject')
+                    instance.academicyear = validated_data.get('academicyear')
+                    instance.academicclass = validated_data.get('academicclass')
+                    instance.term = validated_data.get('term')
+                    instance.exam = validated_data.get('exam')
+                    instance.exam_marks = validated_data.get('exam_marks')
+                    instance.student_marks = i['student_marks']
+                    instance.is_committed = validated_data.get('is_committed')
+                    instance.save()
+
             except Exception as e:
                 logger.info(" student id-" + str(i['student']) + ": marks-" + str(i['student_marks']))
-                raise serializers.ValidationError('Error adding the bulk students marks')
+                raise serializers.ValidationError({'message':'Error allocating marks to students','status':'400'})
+
+        try:
+            statusObject = ExamStatus.objects.get(
+                academicyear=validated_data.get('academicyear'),
+                academicclass=validated_data.get('academicclass'),
+                term=validated_data.get('term'),
+                subject=validated_data.get('subject'),
+                exam=validated_data.get('exam'))
+
+            statusObject.is_committed = validated_data.get('is_committed')
+            statusObject.save()
+
+        except Exception as e:
+            raise serializers.ValidationError({'message':'Error status in the Final Commit','status':'400'})
 
         return Table.objects.last()
 
@@ -241,31 +269,63 @@ class ExamListSerializer(serializers.ModelSerializer):
         return all
 
 class StudentListSerializer(serializers.ModelSerializer):
-    year = serializers.SerializerMethodField()
-    classTaught = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
-    student_pk = serializers.SerializerMethodField()
+    academic_year = serializers.SerializerMethodField()
+    classTaught = serializers.SerializerMethodField()
+    house = serializers.SerializerMethodField()
+    exams = serializers.SerializerMethodField()
+
     class Meta:
         model = StudentOfficialDetails
         fields = (
             'id',
             'name',
-            'student_pk',
             'adm_no',
-            'course',
             'classTaught',
             'academic_year',
-            'year',
+            'house',
+            'exams'
         )
 
-    def get_classTaught(self, obj):
-        return obj.course.name+" "+obj.course.stream.name
-
-    def get_year(self, obj):
-        return obj.academic_year.name
-
-    def get_student_pk(self, obj):
+    def get_id(self, obj):
         return obj.student.pk
 
     def get_name(self, obj):
-        return obj.student.first_name+" "+obj.student.middle_name+" "+obj.student.last_name
+        return obj.student.first_name + " " + obj.student.middle_name + " " + obj.student.last_name
+
+    def get_classTaught(self, obj):
+        return { "id" : obj.course.id, "name" : obj.course.name+" "+obj.course.stream.name }
+
+    def get_academic_year(self, obj):
+        return { "id" : obj.academic_year.id, "name" : obj.academic_year.name }
+
+    def get_house(self, obj):
+        return { "id" : obj.house.id, "name" : obj.house.name }
+
+    def get_exams(self, obj):
+        yr = self.context.get("yr", None)
+        cls = self.context.get("cls", None)
+        exam = self.context.get("exam", None)
+        trmId = self.context.get("trmId", None)
+
+        exams = []
+        try:
+            mks = Table.objects.get(
+                    student=obj.student.pk,
+                    academicyear=yr,
+                    exam=exam,
+                    term=trmId)
+            exams = {"subject": mks.subject , "name":mks.exam, "marks":mks.student_marks, "term":mks.term.name}
+
+            logger.info({"error": "None", "expected": "fetch one filtered exam details for student"})
+        except Exception as e:
+            mks = Table.objects.filter(
+                student=obj.student.pk,
+                academicyear=obj.academic_year.id).order_by('-id')
+            for i in mks:
+                v = {"subject": i.subject , "name":i.exam, "marks":i.student_marks, "term":i.term.name}
+                exams.append(v)
+
+            logger.info({"error":str(e), "expected":"fetch all the exams of the student"})
+        return exams

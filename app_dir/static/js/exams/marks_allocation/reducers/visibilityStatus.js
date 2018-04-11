@@ -1,7 +1,8 @@
 import {
         TEST, CHANGE_STATUS, FETCH_YEARS, SET_TERM_YEAR,
         SET_CLASS, ERROR, FETCH_SUBJECTS, SET_SUBJECT,
-        FETCH_EXAMS, SET_EXAM, FETCH_STUDENTS  } from '../actions/types';
+        FETCH_EXAMS, SET_EXAM, FETCH_STUDENTS, CHANGE_COMMIT_STATUS,
+        LOAD_COMMIT_STATUS, CHANGE_LOADING_STATUS  } from '../actions/types';
 
 const initialState ={
     status:{
@@ -21,7 +22,9 @@ const initialState ={
     class:null,
     term:null,
     year:null,
-    error:null
+    error:null,
+    is_committed:false,
+    loading:true
 
 }
 
@@ -87,6 +90,23 @@ export default function (state=initialState, action={}){
                 ...state,
                 students:action.payload,
                 error:null
+                }
+
+        case LOAD_COMMIT_STATUS:
+            return {
+                ...state,
+                is_committed: action.payload
+            }
+            
+        case CHANGE_LOADING_STATUS:
+            return {
+                ...state,
+                loading:false
+            }
+        case CHANGE_COMMIT_STATUS:
+                return {
+                    ...state,
+                    is_committed: true
                 }
 
         case ERROR:
