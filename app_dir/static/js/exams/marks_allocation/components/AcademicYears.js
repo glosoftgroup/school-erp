@@ -8,6 +8,7 @@ import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import { Motion, spring } from 'react-motion';
 import Animations from './Animations';
 import { MenuItem, DropdownButton } from 'react-bootstrap';
+import LoaderHOC from './HOC/LoaderHOC';
 
 
 class AcademicYears extends React.Component {
@@ -97,4 +98,4 @@ class AcademicYears extends React.Component {
   }
 
 
-  export default AcademicYears;
+  export default LoaderHOC(AcademicYears);

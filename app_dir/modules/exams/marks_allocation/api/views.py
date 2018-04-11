@@ -8,8 +8,12 @@ from .pagination import PostLimitOffsetPagination
 
 from ...configuration.models import ExamConfiguration
 from ..models import MarksAllocation as Table
+from ..models import ExamStatus
 from app_dir.modules.student.models import StudentOfficialDetails
+from app_dir.modules.academics.academic_year.models import AcademicYear
 from app_dir.modules.workload.class_allocation.models import ClassAllocation
+from app_dir.modules.term.models import Term
+from app_dir.modules.academics.classes.models import Class
 from .serializers import (
     CreateListSerializer,
     TableListSerializer,
@@ -157,10 +161,37 @@ class StudentListView(generics.ListAPIView, ListModelMixin):
         response = super(StudentListView, self).list(request, args, kwargs)
         year = self.request.GET.get('yr')
         classTaught = self.request.GET.get('cls')
+        className= self.request.GET.get('clsName')
         trmId = self.request.GET.get('trmId')
         exam = self.request.GET.get('exam')
-        if year and classTaught and exam and trmId:
-            response.data['is_committed'] = False
+        subject = self.request.GET.get('sbj')
+        # status = False
+
+        if year and classTaught and exam and trmId and subject:
+
+            clsTaught = Class.objects.get(pk=classTaught).name
+            academicYear = AcademicYear.objects.get(pk=year)
+            term = Term.objects.get(pk=trmId)
+            try:
+                statusObject = ExamStatus.objects.get(
+                    academicyear=academicYear,
+                    academicclass=className,
+                    term=term,
+                    exam=exam,
+                    subject=subject)
+                status = statusObject.is_committed
+            except Exception as e:
+                statusObject = ExamStatus()
+                statusObject.academicclass = className
+                statusObject.academicyear = academicYear
+                statusObject.term = term
+                statusObject.is_committed = False
+                statusObject.exam = exam
+                statusObject.subject = subject
+                statusObject.save()
+                status = statusObject.is_committed
+
+            response.data['is_committed'] = status
         return response
 
     def get_serializer_context(self):

@@ -12,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchStudents, changeFinalCommitStatus } from '../actions/visibilityStatus';
 import Api from '../api/Api';
+import LoaderHOC from './HOC/LoaderHOC';
 
 
 class Students extends React.Component {
@@ -29,9 +30,11 @@ class Students extends React.Component {
     componentWillMount() {
         let yrId = this.props.academicYear.year.id,
             clsId = this.props.class.id,
+            clsName = this.props.class.name,
             termId = this.props.term.id,
-            exam = this.props.exam.name
-        this.props.fetchStudents(yrId, clsId, termId, exam)
+            exam = this.props.exam.name,
+            subject = this.props.subject.name
+        this.props.fetchStudents(yrId, clsId, clsName, termId, exam, subject)
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.students){
@@ -45,11 +48,6 @@ class Students extends React.Component {
         }
 
         this.setState({is_committed:nextProps.is_committed})
-    }
-
-    goToStudents = (student) =>{
-        console.log(this.props.exam.totalmarks)
-
     }
 
     onKeyDown = (event) =>{
@@ -105,8 +103,10 @@ class Students extends React.Component {
         }
     }
 
-    handleSubmit = event =>{
+    handleSubmit = (event, status) =>{
         event.preventDefault();
+
+        let commitStatus = status ? status : false
 
         let x = document.getElementById('marksForm')
         let stds = []
@@ -127,7 +127,6 @@ class Students extends React.Component {
             alertUser('Please fix the errors below', 'bg-danger', 'Oops!')
             return;
        }
-    //    return;
 
         const data = new FormData()
         data.append("subject", this.props.subject.name)
@@ -137,7 +136,7 @@ class Students extends React.Component {
         data.append("students", JSON.stringify(stds))
         data.append("exam", this.props.exam.name)
         data.append("exam_marks", this.props.exam.totalmarks)
-        data.append("is_committed", this.state.is_committed)
+        data.append("is_committed", commitStatus)
 
 
         if(pk){
@@ -153,11 +152,10 @@ class Students extends React.Component {
             Api.create('/exams/marks/allocation/api/create/', data)
             .then(response => {
                 alertUser('Data sent successfully', 'bg-success','Well Done!')
-                window.location.reload()
-                // window.location.href = redirectUrl;
+                status ? this.props.changeFinalCommitStatus() : null
             })
             .catch(error =>{
-                alertUser('already Exists', 'bg-danger','Oops!')
+                alertUser(error.response.data.message, 'bg-danger','Oops! '+error.response.data.status)
             })
         }
 
@@ -165,7 +163,7 @@ class Students extends React.Component {
 
     handleCommit = event => {
         event.preventDefault();
-        this.props.changeFinalCommitStatus(null)
+        this.handleSubmit(event, true)
     }
 
 
@@ -229,13 +227,15 @@ class Students extends React.Component {
                     }
                     </Motion>
                     <div className="col-md-12 pt-15">
+                    {is_committed ? null :
                         <button type="submit" 
                                 className="btn btn-sm btn-primary"
-                                disabled={is_committed}>Submit</button>
+                                disabled={is_committed}>Submit</button>}
+                    {is_committed ? null :
                         <button type="submit" 
                                 className="btn btn-sm btn-primary ml-10"
                                 onClick = {this.handleCommit}
-                                disabled={is_committed}>Final Commit</button>
+                                disabled={is_committed}>Final Commit</button>}
                     </div>
                 </form>
 
@@ -252,7 +252,8 @@ class Students extends React.Component {
         exam:state.see.exam,
         subject:state.see.subject,
         academicYear:state.see.year,
-        is_committed:state.see.is_committed
+        is_committed:state.see.is_committed,
+        loading:state.see.loading
   })
 
   const matchDispatchToProps = dispatch => (
@@ -265,4 +266,5 @@ class Students extends React.Component {
   )
 
 
-export default connect(mapStateToProps, matchDispatchToProps)(Students);
+// export default connect(mapStateToProps, matchDispatchToProps)(Students);
+export default LoaderHOC(connect(mapStateToProps, matchDispatchToProps)(Students));

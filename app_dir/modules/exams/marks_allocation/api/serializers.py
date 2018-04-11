@@ -4,6 +4,7 @@ from rest_framework import serializers
 from ...configuration.models import ExamConfiguration
 from ...configuration.models import Exam, Cat, Assignment
 from ..models import MarksAllocation as Table
+from ..models import ExamStatus
 from app_dir.modules.workload.class_allocation.models import ClassAllocation
 from app_dir.modules.student.models import StudentOfficialDetails, Student
 from django.contrib.auth import get_user_model
@@ -84,9 +85,24 @@ class CreateListSerializer(serializers.ModelSerializer):
                     instance.student_marks = i['student_marks']
                     instance.is_committed = validated_data.get('is_committed')
                     instance.save()
+
             except Exception as e:
                 logger.info(" student id-" + str(i['student']) + ": marks-" + str(i['student_marks']))
-                raise serializers.ValidationError(str(e)+str(i['academicyear']))
+                raise serializers.ValidationError({'message':'Error allocating marks to students','status':'400'})
+
+        try:
+            statusObject = ExamStatus.objects.get(
+                academicyear=validated_data.get('academicyear'),
+                academicclass=validated_data.get('academicclass'),
+                term=validated_data.get('term'),
+                subject=validated_data.get('subject'),
+                exam=validated_data.get('exam'))
+
+            statusObject.is_committed = validated_data.get('is_committed')
+            statusObject.save()
+
+        except Exception as e:
+            raise serializers.ValidationError({'message':'Error status in the Final Commit','status':'400'})
 
         return Table.objects.last()
 
