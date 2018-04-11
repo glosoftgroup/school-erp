@@ -43,7 +43,7 @@ class FeeItem extends React.Component {
         api.retrieve('/term/api/list')
         .then(data=>data.data.results)
         .then(function(data){
-            self.props.selectCourse(data[0])
+            self.props.selectTerm(data[0])
             var option1 = new Option(data[0].name,data[0].id, true);
             self.refs.term.el.append(option1).trigger('change');            
         })
@@ -211,7 +211,8 @@ function matchDispatchToProps(dispatch){
         selectStudents: selectStudents,
         selectAcademicYear: selectAcademicYear,
         selectDate: selectDate,
-        selectCourse: selectCourse
+        selectCourse: selectCourse,
+        selectTerm: selectTerm
     }, dispatch);
 }
 export default connect(mapStateToProps, matchDispatchToProps)(FeeItem);
