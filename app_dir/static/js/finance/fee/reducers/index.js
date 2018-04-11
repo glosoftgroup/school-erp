@@ -8,6 +8,7 @@ import ActiveTermReducer from './reducer-active-term'
 import ItemReducer from './reducer-items'
 import FeeStructureReducer from './reducer-fee-structure'
 import FeeItemsReducer from './reducer-fee-items'
+
 const allReducers = combineReducers({    
     students: StudentsReducer,
     academic_year: AcademicYearReducer,
@@ -16,7 +17,10 @@ const allReducers = combineReducers({
     fee_items: FeeItemsReducer,
     course: CourseReducer,
     items: ItemReducer,
-    term: ActiveTermReducer
+    term: ActiveTermReducer,
+    // total: getTotal
 });
 
 export default allReducers
+
+

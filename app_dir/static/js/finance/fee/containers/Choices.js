@@ -27,7 +27,7 @@ export class ItemChoices extends Component {
     var val = Object.assign({'choice':value, id: this.props.instance.id})
     var instance = Object.assign(this.props.instance)  
     instance.choice = val;
-    console.log(instance)
+    // console.log(instance)
     this.props.updateFeeItem(instance)
   }
 

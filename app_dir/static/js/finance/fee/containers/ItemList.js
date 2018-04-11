@@ -30,7 +30,7 @@ class ItemList extends Component {
   
   addToStructure = (obj) =>{
     
-    var obj = Object.assign([obj])
+    // var obj = Object.assign([obj])
     this.props.addFeeItem(obj)
    
    

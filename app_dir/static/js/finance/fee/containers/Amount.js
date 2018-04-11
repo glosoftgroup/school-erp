@@ -8,7 +8,7 @@ export class Amount extends Component {
   constructor(props){
     super(props)
     this.state = {
-      amount:0,
+      amount:'',
       error: ''
     }
   }

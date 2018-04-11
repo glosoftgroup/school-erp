@@ -8,6 +8,11 @@ export const addFeeItem = (payload) => ({
   payload
 })
 
+export const deleteFeeItem = (Id) => ({
+  type: FEE_ITEM_DELETED,
+  Id
+})
+
 export const updateFeeItem = (payload) => ({
   type: FEE_ITEM_UPDATED,
   payload
