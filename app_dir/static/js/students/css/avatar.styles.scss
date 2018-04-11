@@ -26,7 +26,7 @@
 .avatar-upload {
     position: relative;
     max-width: 205px;
-    margin: 50px auto;
+    margin: 10px auto;
     .avatar-edit {
         position: absolute;
         right: 12px;
@@ -82,4 +82,8 @@
             background-position: center;
         }
     }
+}
+
+.no-margin {
+    padding-left: 32px;
 }

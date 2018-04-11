@@ -5,11 +5,12 @@ from app_dir.modules.finance.item.models import Item as Table
 from app_dir.modules.finance.item.models import ItemChoiceValue as Value
 from structlog import get_logger
 
+logger = get_logger(__name__)
 global fields, module
 module = 'finance_item'
 fields = ('id',
           'name',)
-logger = get_logger(__name__)
+
 
 
 class ValueSerializer(serializers.ModelSerializer):
@@ -32,7 +33,7 @@ class TableListSerializer(serializers.ModelSerializer):
             value = []
             for item in obj.values.all():
                 # return value.name
-                value.append({'name': item.name})
+                value.append({'id': item.id, 'text': item.name, 'name': item.name})
             return value
 
         except:

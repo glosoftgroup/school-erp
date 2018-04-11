@@ -1,0 +1,8 @@
+student | student | Can add student
+student | student | Can change student
+student | student | Can delete student
+student | student | Can view student
+student | student official details | Can add student official details
+student | student official details | Can change student official details
+student | student official details | Can delete student official details
+student | student official details | Can view student official details
