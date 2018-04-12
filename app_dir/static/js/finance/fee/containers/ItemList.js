@@ -33,9 +33,7 @@ class ItemList extends Component {
     // var obj = Object.assign([obj])
     this.props.addFeeItem(obj)
    
-   
-  }
-  
+  }  
 
   render() {
     return (

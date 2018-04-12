@@ -19,6 +19,7 @@ module.exports = {
         'dashboard': './app_dir/static/js/',
         'finance_item': './app_dir/static/js/finance/item/',
         'fee': './app_dir/static/js/finance/fee/',
+        'fee_list': './app_dir/static/js/finance/fee_list/',
         'house': './app_dir/static/js/house/',
         'parent': './app_dir/static/js/parent/',
         'room': './app_dir/static/js/room/',

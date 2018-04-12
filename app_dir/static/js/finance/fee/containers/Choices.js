@@ -12,8 +12,14 @@ export class ItemChoices extends Component {
       choice:''
     }
   }
-  componentDidMount = () => {
+  componentMount = () => {
+    console.error('inside choices')
+    // console.log(this.props.instance)
     this.setState({choices:this.props.instance.values})
+    // if(this.props.instance.choice.choice !== ""){
+    //   this.setState({choice:this.props.instance.choice.choice})
+    // }
+    
   }
 
   handleInputChange = event =>{
@@ -27,7 +33,6 @@ export class ItemChoices extends Component {
     var val = Object.assign({'choice':value, id: this.props.instance.id})
     var instance = Object.assign(this.props.instance)  
     instance.choice = val;
-    // console.log(instance)
     this.props.updateFeeItem(instance)
   }
 

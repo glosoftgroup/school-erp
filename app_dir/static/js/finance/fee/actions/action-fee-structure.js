@@ -10,11 +10,6 @@ export const selectStructure = (payload) => {
     }
 };
 
-// export const addFeeItem = (payload) => ({
-//   type: ADD_FEE_ITEM,
-//   payload
-// })
-
 export const addStructure = (payload) => {    
     return {
         type: ADD_STRUCTURE,
