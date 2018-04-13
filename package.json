@@ -6,6 +6,7 @@
   "author": "Kent Marete <maretekent@gmail.com>",
   "license": "Proprietary",
   "scripts": {
+    "jest": "jest",
     "test": "mocha ./app_dir/static/test --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
     "test_react": "mocha ./app_dir/static/test/react/ --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
     "build": "webpack"

@@ -7,13 +7,12 @@ import DatePicker from 'react-datepicker';
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api'
 import ItemList from '../containers/ItemList'
-import {selectStudents} from '../actions/students'
 import {selectAcademicYear} from '../actions/academic-year'
 import {selectDate} from '../actions/date'
 import { selectTerm } from '../actions/action-term'
 import {selectCourse} from '../actions/course'
-import 'react-datepicker/dist/react-datepicker.css';
-import '../css/styles.scss';
+// import 'react-datepicker/dist/react-datepicker.css';
+import '../css/popover.scss'
 
 class FeeItem extends React.Component {
     constructor(props) {
@@ -24,7 +23,6 @@ class FeeItem extends React.Component {
           academic_year:'',
           course:'',
           term: '',
-          students: Object.assign({}),
           loading: false,
           buttonText:'Submit'
       };
@@ -39,32 +37,34 @@ class FeeItem extends React.Component {
         let date = Object.assign({'date':moment(new Date()).format('YYYY-MM-DD')})
         this.props.selectDate(date)
 
-        // set default term
-        api.retrieve('/term/api/list')
-        .then(data=>data.data.results)
-        .then(function(data){
-            self.props.selectTerm(data[0])
-            var option1 = new Option(data[0].name,data[0].id, true);
-            self.refs.term.el.append(option1).trigger('change');            
-        })
-        
-        // set default class
-        api.retrieve('/class/api/list')
-        .then(data=>data.data.results)
-        .then(function(data){
-            self.props.selectCourse(data[0])
-            var option1 = new Option(data[0].name,data[0].id, true);
-            self.refs.course.el.append(option1).trigger('change');            
-        })
+        if(!pk){
+            // set default term
+            api.retrieve('/term/api/list')
+            .then(data=>data.data.results)
+            .then(function(data){
+                self.props.selectTerm(data[0])
+                var option1 = new Option(data[0].name,data[0].id, true);
+                self.refs.term.el.append(option1).trigger('change');            
+            })
+            
+            // set default class
+            api.retrieve('/class/api/list')
+            .then(data=>data.data.results)
+            .then(function(data){
+                self.props.selectCourse(data[0])
+                var option1 = new Option(data[0].name,data[0].id, true);
+                self.refs.course.el.append(option1).trigger('change');            
+            })
 
-        // set default academic_year
-        api.retrieve('/academic_year/api/list')
-        .then(data=>data.data.results)
-        .then(function(data){
-            self.props.selectAcademicYear(data[0])
-            var option1 = new Option(data[0].name,data[0].id, true);
-            self.refs.academic_year.el.append(option1).trigger('change');            
-        })
+            // set default academic_year
+            api.retrieve('/academic_year/api/list')
+            .then(data=>data.data.results)
+            .then(function(data){
+                self.props.selectAcademicYear(data[0])
+                var option1 = new Option(data[0].name,data[0].id, true);
+                self.refs.academic_year.el.append(option1).trigger('change');            
+            })
+        }
                
     }
 
@@ -86,15 +86,14 @@ class FeeItem extends React.Component {
         this.setState({
           [name]: value
         });
-        
-        if(this.state.course  && this.state.academic_year){
-            var self = this;
-            api.retrieve('/student/api/list/?page_size=1200&course='+this.state.course+'&academic_year='+this.state.academic_year)
-            .then(data=>data.data.results)
-            .then(function(data){
-                self.props.selectStudents(data)
-                self.state.students = data
-            })
+        if(name === 'academic_year'){            
+            this.props.selectAcademicYear({id: value})
+        }
+        else if(name === 'term'){
+            this.props.selectTerm({id: value })
+        }
+        else if(name === 'course'){
+            this.props.selectCourse({id: value})
         }
     }
 
@@ -145,11 +144,9 @@ class FeeItem extends React.Component {
         var _academicOptions = this.selectOptions('/academic_year/api/list','Select Academic year')
         var _termOptions = this.selectOptions('/term/api/list','Select term')
         
-        var students = this.state.students
-
+        
       return (
       <div className="row">
-        {/* filter */}
         <div className="col-md-12">
             <div className="panel panel-flat panel-custom">                
                 <div className="panel-body  search-panel"> 
@@ -201,14 +198,11 @@ class FeeItem extends React.Component {
 
 
 function mapStateToProps(state) {
-    return {
-        students: state.students
-    }
+    return {}
 }
 // Get actions and pass them as props
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
-        selectStudents: selectStudents,
         selectAcademicYear: selectAcademicYear,
         selectDate: selectDate,
         selectCourse: selectCourse,

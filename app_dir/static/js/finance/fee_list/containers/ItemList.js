@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import Pagination from "react-js-pagination";
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api'
-import EditFrom from '../containers/EditForm'
 import Modal from '../components/Modal'
 
 import { fetchItems, deleteItem, selectItem } from '../actions/action-items'
@@ -92,9 +91,8 @@ class Comp extends Component {
 
     render(){
         return (
-            <div className="">  
-            {/* <EditFrom deleteInstance={this.deleteItem} show={this.state.edit} handleEditShow={this.handleEditShow} handleClose={this.handleClose} />            */}
-                
+            <div className=""> 
+             
                 <Modal deleteInstance={this.deleteItem} show={this.state.show} handleShow={this.handleShow} handleClose={this.handleClose} />           
                 
                 <div className="col-md-12"> 
@@ -164,7 +162,7 @@ class Comp extends Component {
                                     }}
                                 />
                                 </div>
-                                <div className="col-md-8">
+                                <div className="col-md-8 mt-15">
                                 <Pagination
                                     activePage={this.state.activePage}
                                     itemsCountPerPage={this.state.itemsCountPerPage}

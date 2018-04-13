@@ -56,7 +56,11 @@ class ListAPIView(generics.ListAPIView):
         query = self.request.GET.get('q')
         if query:
             queryset_list = queryset_list.filter(
-                Q(name__icontains=query))
+                Q(academic_year__name__icontains=query) |
+                Q(course__name__icontains=query) |
+                Q(term__name__icontains=query) |
+                Q(name__icontains=query)
+            )
         return queryset_list.order_by('-id')
 
 
@@ -66,8 +70,9 @@ class UpdateAPIView(generics.RetrieveUpdateAPIView):
         @:param pk instance id
         @:method PUT
 
-        PUT /api/house/update/
-        payload Json: /payload/update_room.json
+        PUT /api/update/
+        payload Json: /payload/instance.json
+        
     """
     queryset = Table.objects.all()
     serializer_class = UpdateSerializer
