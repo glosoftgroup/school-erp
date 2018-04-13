@@ -12,6 +12,7 @@ import {MenuItem, DropdownButton} from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setSubject, fetchSubjects } from '../actions/visibilityStatus';
+import LoaderHOC from './HOC/LoaderHOC';
 
 
 class Subjects extends React.Component {
@@ -105,4 +106,4 @@ class Subjects extends React.Component {
   )
 
 
-export default connect(mapStateToProps, matchDispatchToProps)(Subjects);
+export default LoaderHOC(connect(mapStateToProps, matchDispatchToProps)(Subjects));

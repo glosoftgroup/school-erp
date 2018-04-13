@@ -11,6 +11,7 @@ import {MenuItem, DropdownButton} from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setExam, fetchExams } from '../actions/visibilityStatus';
+import LoaderHOC from './HOC/LoaderHOC';
 
 
 class Exams extends React.Component {
@@ -104,4 +105,4 @@ class Exams extends React.Component {
   )
 
 
-export default connect(mapStateToProps, matchDispatchToProps)(Exams);
+export default LoaderHOC(connect(mapStateToProps, matchDispatchToProps)(Exams));
