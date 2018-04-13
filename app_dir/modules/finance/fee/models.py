@@ -28,7 +28,11 @@ class FeeStructure(models.Model):
 
     class Meta:
         app_label = 'fee'
+        unique_together = ("academic_year", "course", "term")
 
+    def save(self, *args, **kwargs):
+        self.name = self.academic_year.name +' Term:'+ self.term.name +' Class:'+ self.course.name
+        super().save(*args, **kwargs)
     def __str__(self):
         return self.name
 

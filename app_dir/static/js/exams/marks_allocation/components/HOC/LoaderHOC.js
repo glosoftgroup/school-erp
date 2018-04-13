@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import './LoaderHOC.css';
+
 
 const LoaderHOC = (WrappedComponent) => {
     class LoaderHOC extends Component{

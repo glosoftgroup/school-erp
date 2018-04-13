@@ -37,7 +37,6 @@ export class Amount extends Component {
 
         var instance = Object.assign(this.props.instance)  
         instance.amount = value;
-        console.log(instance)
         this.props.updateFeeItem(instance)
     }
     

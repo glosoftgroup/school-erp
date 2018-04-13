@@ -28,14 +28,13 @@ class Comp extends Component {
         this.setState({
             [e.target.name]: e.target.value
         });
-
-        this.filterContent()
+        this.filterContent(e.target.value)
     }
 
-    filterContent=()=>{
+    filterContent=(search)=>{
         var params = Object.assign({page_size:5})
         if(this.state.search){
-            params = Object.assign(params,{'q':this.state.search});
+            params = Object.assign(params,{'q':search});
         }
         this.props.fetchItems(params)
     }
@@ -242,7 +241,7 @@ class Comp extends Component {
                         <div className={classnames('col-md-4 mini-form', { showform : !this.props.toggler.id })}>
                             <label>Search </label>
                             <div className="form-group form-group-material has-feedback">
-                                <input value={this.state.search} name="search" onChange={this.handleChange} className="form-control" placeholder="Search ..." type="text" />
+                                <input value={this.state.search} name="search" onChange={this.handleChange} className="form-control" placeholder="Search by academic year, class or term..." type="text" />
                                 <div className="form-control-feedback">
                                 <i className="icon-search4 text-size-base"></i>
                                 </div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import api from '../api/Api'
-import {setItems} from '../actions/action-items'
+import { setItems } from '../actions/action-items'
 import { addFeeItem } from '../actions/action-fee-item'
 
 class ItemList extends Component {

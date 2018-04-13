@@ -9,6 +9,7 @@ function resolve (dir) {
 
 module.exports = {
     entry: {
+        'fee': './app_dir/static/js/finance/fee/',
         'academic_year': './app_dir/static/js/academic_year/',
         'attendance': './app_dir/static/js/attendance/',
         'classes': './app_dir/static/js/academics/classes/',
@@ -18,7 +19,7 @@ module.exports = {
         'curriculum': './app_dir/static/js/academics/curriculum/',
         'dashboard': './app_dir/static/js/',
         'finance_item': './app_dir/static/js/finance/item/',
-        'fee': './app_dir/static/js/finance/fee/',
+
         'fee_list': './app_dir/static/js/finance/fee_list/',
         'house': './app_dir/static/js/house/',
         'parent': './app_dir/static/js/parent/',
@@ -43,14 +44,15 @@ module.exports = {
 						optimizeSSR: false
              },
             },
-            { test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader'},
             {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                   fallback: "style-loader",
                   use: "css-loader"
                 })
-            }
+            },
+            { test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader'}
+
         ]
     },
     resolve: {
