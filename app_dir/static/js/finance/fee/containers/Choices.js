@@ -12,13 +12,13 @@ export class ItemChoices extends Component {
       choice:''
     }
   }
-  componentMount = () => {
-    console.error('inside choices')
-    // console.log(this.props.instance)
-    this.setState({choices:this.props.instance.values})
-    // if(this.props.instance.choice.choice !== ""){
-    //   this.setState({choice:this.props.instance.choice.choice})
-    // }
+  
+  componentDidMount = () => {
+   var obj = this.props.instance
+   this.setState({choices:obj.values})
+    if(obj.value !== ""){
+      this.setState({choice:obj.value})
+    }
     
   }
 

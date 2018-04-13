@@ -226,6 +226,9 @@
                                     <span>Finance Management</span>
                                   </a>
                                  <ul>
+                                    <li class="{% block menu_finance_fee %}{% endblock %}">
+                                      <a href="{% url 'fee:index' %}">Fee Structure</a>
+                                    </li>
                                     <li class="{% block menu_finance_item %}{% endblock %}">
                                       <a href="{% url 'finance_item:index' %}">Fee Item</a>
                                     </li>

@@ -14,6 +14,7 @@ class FeeStructure extends Component {
             amount:'',
             total:0,
             errors:false,
+            buttonText:'submit',
             showHideBtn: 'hidden',
             updateJson: {}
         }
@@ -23,28 +24,33 @@ class FeeStructure extends Component {
         this.getTotal(nextProps.fee_items)
 
         // ensure you update fee item onces and items are set
-        if(Object.keys(nextProps.items).length > 0 && Object.keys(this.state.updateJson).length > 0){            
-            this.prepareFeeItem(this.state.updateJson)
-            // reset updateJson
-            this.setState({updateJson:{}})
-            
+       
+        if(this.state.updateJson !== 'undefined'){
+            if(Object.keys(nextProps.items).length > 0 && Object.keys(this.state.updateJson).length > 0){            
+                this.prepareFeeItem(nextProps.items,this.state.updateJson)
+                // reset updateJson
+                this.setState({updateJson:{}})
+                
+            }
         }
     }
 
-    prepareFeeItem = (items) =>{
+    prepareFeeItem = (allItems,items) =>{
         items.map((value,index)=>{
-           // add one fee item at a go
-           this.addFeeItem(value) 
+           // add one fee item at a go      
+           this.addFeeItem(allItems,value) 
         })
     }
 
-    addFeeItem = (obj) =>{
-        this.props.items.map((item,index) =>{           
-            // add fee item        
+    addFeeItem = (allItems,obj) =>{
+        allItems.map((item,index) =>{ 
+            // add fee item       
             if(item.id === obj.choice.id){
                 // append amount
-                console.error('found a match')
                 var copy = { ...item, amount: obj.amount };
+                if(obj.choice.choice){
+                    copy = { ...copy, value: obj.choice.choice}
+                }
                 this.props.addFeeItem(copy)
             }
         })
@@ -57,6 +63,7 @@ class FeeStructure extends Component {
             // fetch fee structure
             api.retrieve('/finance/fee/api/update/'+pk+'/')
             .then(function(data){
+                console.error(data)
                 self.setState({updateJson: data.data.fee_items})
             })
             .catch(function(error){
@@ -114,6 +121,7 @@ class FeeStructure extends Component {
             return;
         }
 
+
         const data = new FormData();
 
         data.append('term',this.props.term.id)
@@ -122,7 +130,8 @@ class FeeStructure extends Component {
         data.append('amount', this.state.total.replace(',',''))
         data.append('fee_items',JSON.stringify(this.props.fee_items))
         
-        api.create('/finance/fee/api/create/',data)
+        if(pk){
+        api.update('/finance/fee/api/update/'+pk+'/',data)
            .then(function (response) {
                
                toast.success("Data send successfully !", {
@@ -132,6 +141,19 @@ class FeeStructure extends Component {
             .catch(function(error){
                 console.log(error)
             })
+        }else{
+            api.create('/finance/fee/api/create/',data)
+           .then(function (response) {
+               
+               toast.success("Data send successfully !", {
+                position: toast.POSITION.TOP_RIGHT
+              });
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+
+        }
     }
 
     getInitialState = () => {
@@ -197,7 +219,7 @@ class FeeStructure extends Component {
                             <tfoot>
                                 <tr style={{backgroundColor:"#EEEDED"}}>
                                     <th>
-                                        <button onClick={this.handleSubmit} className="btn btn-primary btn-sm">Add</button>
+                                        <button onClick={this.handleSubmit} className="btn btn-primary btn-sm">{this.state.buttonText}</button>
                                     </th>
                                     <th className="text-center text-bold" colSpan={3}>Total: KES {this.state.total}</th>
                                 </tr>
