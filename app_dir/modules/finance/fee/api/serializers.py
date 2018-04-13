@@ -100,19 +100,48 @@ class CreateListSerializer(serializers.ModelSerializer):
 
 
 class UpdateSerializer(serializers.ModelSerializer):
+<<<<<<< HEAD
     values = serializers.JSONField(write_only=True)
     fee_items = ItemSerializer(many=True)
 
     class Meta:
         model = Table
         fields = fields + ('fee_items', 'values',)
+=======
+    values = serializers.JSONField(read_only=True)
+    fee_items = serializers.JSONField(write_only=True)
+
+    class Meta:
+        model = Table
+        fields = fields + ('fee_items', 'values')
+>>>>>>> c4e1c007eab52ed54e12ccaccdb041016f1f4e7a
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.academic_year = validated_data.get('academic_year', instance.academic_year)
         instance.term = validated_data.get('term', instance.term)
         instance.course = validated_data.get('course', instance.course)
+        try:
+            fee_items = validated_data.pop('fee_items')
+        except:
+            raise serializers.ValidationError('Fee items field should not be empty')
 
         instance.save()
+
+        for fee_item in fee_items:
+            fee_item['id'] = None
+            fee_item['name'] = re.sub(r'\d', '', fee_item['name']).replace('[.]','')
+            try:
+                del fee_item['update_url']
+                del fee_item['delete_url']
+                del fee_item['_id']
+                del fee_item['values']
+                del fee_item['value']
+                fee_item['choice']['id'] = fee_item['_id']
+            except:
+                pass
+
+            logger.info(fee_item)
+            Item.objects.create(fee=instance, **fee_item)
 
         return instance

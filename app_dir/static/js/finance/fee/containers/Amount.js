@@ -28,10 +28,8 @@ export class Amount extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
     if(!this.isNumeric(value) ){
-        console.log('eeror')
-        this.setState({error:'Enter a valid number'})
+        console.error('Enter a valid number')
     }else{
-        console.log('cool')
         this.setState({
             [name]: value,
             error: ''

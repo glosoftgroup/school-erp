@@ -1,7 +1,8 @@
 import  {
         CHANGE_STATUS, TEST, FETCH_YEARS, SET_TERM_YEAR,
         SET_CLASS, FETCH_SUBJECTS, ERROR, SET_SUBJECT,
-        FETCH_EXAMS, SET_EXAM, FETCH_STUDENTS } from './types';
+        FETCH_EXAMS, SET_EXAM, FETCH_STUDENTS, CHANGE_COMMIT_STATUS,
+        LOAD_COMMIT_STATUS, CHANGE_LOADING_STATUS } from './types';
 import Api from '../api/Api';
 
 /** action handlers */
@@ -33,8 +34,14 @@ export const changeStatus = (status) => dispatch => {
 /** fetch academic years and set term and Year when selected */
 export const fetchAcademicYears = (teacherId) => dispatch => {
         Api.retrieve('/exams/marks/allocation/api/teacher/?tr='+teacherId)
-            .then(response => dispatch(fetchYears(response.data.results)))
-            .catch(error => dispatch(handleError(error)))
+            .then(response => {
+                    dispatch(fetchYears(response.data.results))
+                    dispatch({type:CHANGE_LOADING_STATUS, payload:false})
+            })
+            .catch(error => {
+                    dispatch(handleError(error))
+                    dispatch({type:CHANGE_LOADING_STATUS, payload:false})
+            })
 }
 
 
@@ -56,8 +63,14 @@ export const fetchSubjects = (trId, yrId, clsId, trmId) => dispatch => {
         **/
         let params = 'tr='+trId+'&yr='+yrId+'&cls='+clsId+'&trm='+trmId
         Api.retrieve('/exams/marks/allocation/api/subjects/list/?'+params)
-            .then(response => dispatch(fetchSubject(response.data.results)))
-            .catch(error => dispatch(handleError(error)))
+            .then(response => {
+                    dispatch(fetchSubject(response.data.results))
+                    dispatch({type:CHANGE_LOADING_STATUS, payload:false})
+                })
+            .catch(error => {
+                   dispatch(handleError(error))
+                   dispatch({type:CHANGE_LOADING_STATUS, payload:false})
+                })
 }
 
 export const setSubject = (subject) => dispatch => {
@@ -73,8 +86,14 @@ export const fetchExams = (yrId, sbjId, trmId) => dispatch => {
         **/
         let params = 'yr='+yrId+'&sbj='+sbjId+'&trm='+trmId
         Api.retrieve('/exams/marks/allocation/api/exams/list/?'+params)
-            .then(response => dispatch(fetchExam(response.data.results[0].exams)))
-            .catch(error => dispatch(handleError(error)))
+                .then(response => {
+                        dispatch(fetchExam(response.data.results[0].exams))
+                        dispatch({type:CHANGE_LOADING_STATUS, payload:false})
+                })
+                .catch(error => {
+                        dispatch(handleError(error))
+                        dispatch({type:CHANGE_LOADING_STATUS, payload:false})
+                })
 }
 
 export const setExam = (exam) => dispatch => {
@@ -83,12 +102,26 @@ export const setExam = (exam) => dispatch => {
 /** ..end */
 
 /** fetch students */
-export const fetchStudents = (yrId, clsId) => dispatch => {
+export const fetchStudents = (yrId, clsId, clsName, termId, exam, sbjName) => dispatch => {
         /**
            yrId = AcademicYear id, clsId = ClassTaughtId
         **/
-        let params = 'yr='+yrId+'&cls='+clsId
+        let params = 'yr='+yrId+'&cls='+clsId+'&clsName='+clsName+'&exam='+exam+'&trmId='+termId+'&sbj='+sbjName
         Api.retrieve('/exams/marks/allocation/api/students/list/?'+params)
-            .then(response => dispatch(fetchStudent(response.data.results)))
-            .catch(error => dispatch(handleError(error)))
+                .then(response => {
+                        dispatch(fetchStudent(response.data.results))
+                        dispatch({type:LOAD_COMMIT_STATUS, payload:response.data.is_committed})
+                        dispatch({type:CHANGE_LOADING_STATUS, payload:false})
+                })
+                .catch(error => {
+                        dispatch(handleError(error))
+                        dispatch({type:CHANGE_LOADING_STATUS, payload:false})
+                })
+}
+
+/** ..end */
+
+/** changeFinalCommitStatus */
+export const changeFinalCommitStatus = () => dispatch => {
+        dispatch({type:CHANGE_COMMIT_STATUS, payload:true})
 }
