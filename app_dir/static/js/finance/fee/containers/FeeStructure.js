@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
 import api from '../api/Api'
-import { deleteFeeItem } from '../actions/action-fee-item'
+import { addFeeItem, deleteFeeItem } from '../actions/action-fee-item'
 import ItemChoices from './Choices'
 import ItemAmount from './Amount'
 
@@ -12,19 +13,73 @@ class FeeStructure extends Component {
         this.state = {
             amount:'',
             total:0,
-            showHideBtn: 'hidden'
+            errors:false,
+            buttonText:'submit',
+            showHideBtn: 'hidden',
+            updateJson: {}
         }
     }
 
     componentWillReceiveProps(nextProps){
         this.getTotal(nextProps.fee_items)
+
+        // ensure you update fee item onces and items are set
+       
+        if(this.state.updateJson !== 'undefined'){
+            if(Object.keys(nextProps.items).length > 0 && Object.keys(this.state.updateJson).length > 0){            
+                this.prepareFeeItem(nextProps.items,this.state.updateJson)
+                // reset updateJson
+                this.setState({updateJson:{}})
+                
+            }
+        }
     }
+
+    prepareFeeItem = (allItems,items) =>{
+        items.map((value,index)=>{
+           // add one fee item at a go      
+           this.addFeeItem(allItems,value) 
+        })
+    }
+
+    addFeeItem = (allItems,obj) =>{
+        allItems.map((item,index) =>{ 
+            // add fee item       
+            if(item.id === obj.choice.id){
+                // append amount
+                var copy = { ...item, amount: obj.amount };
+                if(obj.choice.choice){
+                    copy = { ...copy, value: obj.choice.choice}
+                }
+                this.props.addFeeItem(copy)
+            }
+        })
+        //this.props.addFeeItem()
+    }
+    
+    componentDidMount = () => {
+        var self = this;
+        if(pk){
+            // fetch fee structure
+            api.retrieve('/finance/fee/api/update/'+pk+'/')
+            .then(function(data){
+                console.error(data)
+                self.setState({updateJson: data.data.fee_items})
+            })
+            .catch(function(error){
+                console.error(error)
+            })
+        }
+    }    
 
     getTotal = (items) =>{
         let sum = 0;
         items.forEach((num) => {
             if(num.amount){
                 sum += parseInt(num.amount)
+                this.setState({errors:false})
+            }else{
+                this.setState({errors:true})
             }            
         });
         sum = this.formatNumber(sum, 2, '.', ',');
@@ -49,6 +104,24 @@ class FeeStructure extends Component {
     handleSubmit = event =>{
         event.preventDefault(); 
 
+        // validation
+        if(this.state.errors){  
+            console.log('in errors')          
+            toast.error("Make sure fee item amount field is not empty!", {
+                position: toast.POSITION.TOP_RIGHT
+              });
+            return;
+        }
+        if(this.state.total < 1){
+            console.log('total errors')
+            console.log(this.state.total)
+            toast.error("Make sure fee item amount field is not empty!", {
+                position: toast.POSITION.TOP_RIGHT
+              });
+            return;
+        }
+
+
         const data = new FormData();
 
         data.append('term',this.props.term.id)
@@ -57,13 +130,30 @@ class FeeStructure extends Component {
         data.append('amount', this.state.total.replace(',',''))
         data.append('fee_items',JSON.stringify(this.props.fee_items))
         
-        api.create('/finance/fee/api/create/',data)
+        if(pk){
+        api.update('/finance/fee/api/update/'+pk+'/',data)
            .then(function (response) {
-               console.log(response)
+               
+               toast.success("Data send successfully !", {
+                position: toast.POSITION.TOP_RIGHT
+              });
             })
             .catch(function(error){
                 console.log(error)
             })
+        }else{
+            api.create('/finance/fee/api/create/',data)
+           .then(function (response) {
+               
+               toast.success("Data send successfully !", {
+                position: toast.POSITION.TOP_RIGHT
+              });
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+
+        }
     }
 
     getInitialState = () => {
@@ -82,6 +172,7 @@ class FeeStructure extends Component {
     render(){
         return (
             <div>
+                <ToastContainer />
                 <div className="">
                     <div className="panel panel-white">
                     <div className="panel-heading">
@@ -93,8 +184,7 @@ class FeeStructure extends Component {
                     <div className="table-responsive">
                         <table className="table table-sm">
                             <thead>
-                                <tr className="bg-primary">
-                                    
+                                <tr className="bg-primary">                                    
                                     <th className="col-sm-1">Item</th>
                                     <th className="col-sm-1">Choice</th>
                                     <th className="col-sm-1">Amount</th>
@@ -106,7 +196,7 @@ class FeeStructure extends Component {
                                 <tr key={obj.id} onMouseLeave={this.toggleDeletenav} onMouseEnter={this.toggleDeletenav}>
                                     <td>
                                         <span>
-                                            <i onClick={()=>{this.deleteFeeItem(obj.id)}} className='icon-trash text-warning'></i>
+                                            <i onClick={()=>{this.deleteFeeItem(obj.id)}} className='icon-cross cursor-pointer text-warning'></i>
                                             &nbsp;{this.formatText(obj.name)}
                                         </span>                                     
                                     </td>                  
@@ -129,7 +219,7 @@ class FeeStructure extends Component {
                             <tfoot>
                                 <tr style={{backgroundColor:"#EEEDED"}}>
                                     <th>
-                                        <button onClick={this.handleSubmit} className="btn btn-primary btn-sm">Add</button>
+                                        <button onClick={this.handleSubmit} className="btn btn-primary btn-sm">{this.state.buttonText}</button>
                                     </th>
                                     <th className="text-center text-bold" colSpan={3}>Total: KES {this.state.total}</th>
                                 </tr>
@@ -150,6 +240,7 @@ function mapStateToProps(state) {
         academic_year: state.academic_year,
         course: state.course,
         fee_items: state.fee_items,
+        items: state.items,
         term: state.term,
         total: state.total
     }
@@ -157,7 +248,8 @@ function mapStateToProps(state) {
 // Get actions and pass them as props
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
-        deleteFeeItem: deleteFeeItem
+        addFeeItem,
+        deleteFeeItem
     }, dispatch);
 }
 export default connect(mapStateToProps, matchDispatchToProps)(FeeStructure);

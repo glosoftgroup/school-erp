@@ -44,4 +44,4 @@ class FeeItem(models.Model):
         app_label = 'fee'
 
     def __str__(self):
-        return self.fee
+        return self.name

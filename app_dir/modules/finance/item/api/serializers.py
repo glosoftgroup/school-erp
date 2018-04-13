@@ -12,7 +12,6 @@ fields = ('id',
           'name',)
 
 
-
 class ValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Value
@@ -22,7 +21,7 @@ class ValueSerializer(serializers.ModelSerializer):
 class TableListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name=module+':api-update')
     delete_url = serializers.HyperlinkedIdentityField(view_name=module+':api-delete')
-    values = serializers.SerializerMethodField() # ValueSerializer(many=True)
+    values = serializers.SerializerMethodField()
 
     class Meta:
         model = Table
