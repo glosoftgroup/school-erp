@@ -14,10 +14,7 @@ class FeeStructure extends Component {
             amount:'',
             total:0,
             errors:false,
-<<<<<<< HEAD
-=======
             buttonText:'submit',
->>>>>>> c4e1c007eab52ed54e12ccaccdb041016f1f4e7a
             showHideBtn: 'hidden',
             updateJson: {}
         }
@@ -27,30 +24,6 @@ class FeeStructure extends Component {
         this.getTotal(nextProps.fee_items)
 
         // ensure you update fee item onces and items are set
-<<<<<<< HEAD
-        if(Object.keys(nextProps.items).length > 0 && Object.keys(this.state.updateJson).length > 0){            
-            this.prepareFeeItem(this.state.updateJson)
-            // reset updateJson
-            this.setState({updateJson:{}})
-            
-        }
-    }
-
-    prepareFeeItem = (items) =>{
-        items.map((value,index)=>{
-           // add one fee item at a go
-           this.addFeeItem(value) 
-        })
-    }
-
-    addFeeItem = (obj) =>{
-        this.props.items.map((item,index) =>{           
-            // add fee item        
-            if(item.id === obj.choice.id){
-                // append amount
-                console.error('found a match')
-                var copy = { ...item, amount: obj.amount };
-=======
        
         if(this.state.updateJson !== 'undefined'){
             if(Object.keys(nextProps.items).length > 0 && Object.keys(this.state.updateJson).length > 0){            
@@ -78,7 +51,6 @@ class FeeStructure extends Component {
                 if(obj.choice.choice){
                     copy = { ...copy, value: obj.choice.choice}
                 }
->>>>>>> c4e1c007eab52ed54e12ccaccdb041016f1f4e7a
                 this.props.addFeeItem(copy)
             }
         })
@@ -91,10 +63,7 @@ class FeeStructure extends Component {
             // fetch fee structure
             api.retrieve('/finance/fee/api/update/'+pk+'/')
             .then(function(data){
-<<<<<<< HEAD
-=======
                 console.error(data)
->>>>>>> c4e1c007eab52ed54e12ccaccdb041016f1f4e7a
                 self.setState({updateJson: data.data.fee_items})
             })
             .catch(function(error){
@@ -152,10 +121,7 @@ class FeeStructure extends Component {
             return;
         }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> c4e1c007eab52ed54e12ccaccdb041016f1f4e7a
         const data = new FormData();
 
         data.append('term',this.props.term.id)

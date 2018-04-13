@@ -100,21 +100,12 @@ class CreateListSerializer(serializers.ModelSerializer):
 
 
 class UpdateSerializer(serializers.ModelSerializer):
-<<<<<<< HEAD
-    values = serializers.JSONField(write_only=True)
-    fee_items = ItemSerializer(many=True)
-
-    class Meta:
-        model = Table
-        fields = fields + ('fee_items', 'values',)
-=======
     values = serializers.JSONField(read_only=True)
     fee_items = serializers.JSONField(write_only=True)
 
     class Meta:
         model = Table
         fields = fields + ('fee_items', 'values')
->>>>>>> c4e1c007eab52ed54e12ccaccdb041016f1f4e7a
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)

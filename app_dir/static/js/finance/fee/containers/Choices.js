@@ -12,15 +12,6 @@ export class ItemChoices extends Component {
       choice:''
     }
   }
-<<<<<<< HEAD
-  componentMount = () => {
-    console.error('inside choices')
-    // console.log(this.props.instance)
-    this.setState({choices:this.props.instance.values})
-    // if(this.props.instance.choice.choice !== ""){
-    //   this.setState({choice:this.props.instance.choice.choice})
-    // }
-=======
   
   componentDidMount = () => {
    var obj = this.props.instance
@@ -28,7 +19,6 @@ export class ItemChoices extends Component {
     if(obj.value !== ""){
       this.setState({choice:obj.value})
     }
->>>>>>> c4e1c007eab52ed54e12ccaccdb041016f1f4e7a
     
   }
 
