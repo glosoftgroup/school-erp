@@ -93,7 +93,6 @@ class CreateListSerializer(serializers.ModelSerializer):
             del fee_item['update_url']
             del fee_item['delete_url']
             del fee_item['_id']
-            logger.info(fee_item)
             Item.objects.create(fee=instance, **fee_item)
 
         return instance
@@ -138,8 +137,6 @@ class UpdateSerializer(serializers.ModelSerializer):
                 fee_item['choice']['id'] = int(fee_item['choice']['id'])
             except:
                 pass
-
-            logger.info(fee_item)
             Item.objects.create(fee=instance, **fee_item)
 
         return instance

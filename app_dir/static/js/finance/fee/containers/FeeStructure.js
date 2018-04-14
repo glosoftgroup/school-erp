@@ -9,6 +9,8 @@ import { selectAcademicYear } from '../actions/academic-year'
 import { addFeeItem, deleteFeeItem } from '../actions/action-fee-item'
 import ItemChoices from './Choices'
 import ItemAmount from './Amount'
+import Loader from 'react-loaders'
+import 'loaders.css/src/animations/line-scale.scss'
 import '../css/styles.scss';
 
 class FeeStructure extends Component {
@@ -122,22 +124,21 @@ class FeeStructure extends Component {
 
     handleSubmit = event =>{
         event.preventDefault(); 
-
         // validation
         if(this.state.errors){  
             toast.error("Make sure fee item amount field is not empty!", {
                 position: toast.POSITION.TOP_RIGHT
-              });
+            });
             return;
         }
         if(this.state.total < 1){
             toast.error("Make sure fee item amount field is not empty!", {
                 position: toast.POSITION.TOP_RIGHT
-              });
+            });
             return;
         }
 
-
+        var self = this;
         const data = new FormData();
 
         data.append('term',this.props.term.id)
@@ -146,10 +147,10 @@ class FeeStructure extends Component {
         data.append('amount', this.state.total.replace(',',''))
         
         if(pk){
+            this.setState({loading: true, buttonText:''})
             data.append('values',JSON.stringify(this.props.fee_items))        
             api.update('/finance/fee/api/update/'+pk+'/',data)
-           .then(function (response) {
-               
+           .then(function (response) {               
                toast.success("Data send successfully !", {
                 position: toast.POSITION.TOP_RIGHT
               });
@@ -157,11 +158,13 @@ class FeeStructure extends Component {
             })
             .catch(function(error){
                 console.error(error)
+                self.setState({loading: false, buttonText:'submit'})
                 toast.error(" Fee structure already exist!", {
                     position: toast.POSITION.TOP_RIGHT
-                });
+                });                
             })
         }else{
+            self.setState({loading: true, buttonText:''})
             data.append('fee_items',JSON.stringify(this.props.fee_items))
         
             api.create('/finance/fee/api/create/',data)
@@ -173,9 +176,11 @@ class FeeStructure extends Component {
             })
             .catch(function(error){
                 console.error(error)
+                console.error('server error...')
+                self.setState({loading: false, buttonText:'submit'})
                 toast.error(" Fee structure already exist!", {
                     position: toast.POSITION.TOP_RIGHT
-                });
+                });                
             })
 
         }
@@ -244,7 +249,11 @@ class FeeStructure extends Component {
                             <tfoot>
                                 <tr style={{backgroundColor:"#EEEDED"}}>
                                     <th>
-                                        <button onClick={this.handleSubmit} className="btn btn-primary btn-sm">{this.state.buttonText}</button>
+                                    
+                                        <button onClick={this.handleSubmit} className="btn btn-primary btn-sm">
+                                            {this.state.loading && <Loader type="line-scale" className="custom-loader" />}
+                                            {this.state.buttonText}
+                                        </button>
                                     </th>
                                     <th className="text-center text-bold" colSpan={3}>Total: KES {this.state.total}</th>
                                 </tr>
