@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import ItemList from '../containers/ItemList'
-import ItemForm from '../containers/ItemForm'
+import React, { Component } from 'react';
+import ItemList from '../containers/ItemList';
+import ItemForm from '../containers/ItemForm';
 
 class Comp extends Component {
     constructor(props){
