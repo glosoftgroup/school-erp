@@ -10,6 +10,7 @@ import 'select2/dist/css/select2.css';
 
 import modal from 'bootstrap';
 import { Modal, Button, FormGroup,  ControlLabel, FormControl} from 'react-bootstrap';
+import Alert from '../../../common/Alert';
 
 
 class TopicListComponent extends React.Component {
@@ -155,13 +156,13 @@ class TopicListComponent extends React.Component {
 
             }
             if(totalmarks > 100){
-                alertUser('Should be less than or a hundred', 'bg-danger',null)
+                Alert.error('Should be less than or a hundred')
                 return
             }else if(totalmarks < 50){
-                alertUser('Should more than half percentage', 'bg-danger', null)
+                Alert.error('Should more than half percentage')
                 return
             }else{
-                alertUser('Settings saved successfully', 'bg-success', null)
+                Alert.error('Settings saved successfully')
             }
         }
 
@@ -176,7 +177,7 @@ class TopicListComponent extends React.Component {
         }
 
         if(exams.length == 0){
-            alertUser('No exams Settings', 'bg-danger', null)
+            Alert.error('No exams Settings')
             return
          }
 
