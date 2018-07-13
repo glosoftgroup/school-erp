@@ -53,7 +53,6 @@ class Comp extends Component {
         }else{
             this.onMultiSelectChange2(e)
         }       
-       
         
     }
 
