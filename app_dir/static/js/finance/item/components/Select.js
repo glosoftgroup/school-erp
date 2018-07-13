@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-export class TestSelect extends Component {
+export class ASelect extends Component {
   state = {
     selectedOption: '',
     backspaceRemoves: true,
@@ -38,16 +39,23 @@ export class TestSelect extends Component {
       <div>
         <Select.AsyncCreatable
           multi={true}
-          value={this.state.selectedOption}
-          onChange={this.handleChange}
+          value={this.props.selectedOption}
+          onChange={this.props.handleChange}
           //   onValueClick={this.gotoUser}
           valueKey="id" labelKey="login"
-          loadOptions={this.getUsers}
-          backspaceRemoves={this.state.backspaceRemoves}
+          loadOptions={this.props.getUsers}
+          backspaceRemoves={this.props.backspaceRemoves}
         />
       </div>
     );
   }
 }
 
-export default TestSelect;
+ASelect.propTypes = {
+  selectedOption: PropTypes.string.isRequired,
+  getUsers: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  backspaceRemoves: PropTypes.func.isRequired
+};
+
+export default ASelect;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Filter from './Filter';
-import Test from '../containers/TestSelect';
+// import Test from '../containers/TestSelect';
 import '../css/styles.scss';
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Test />
+        {/* <Test /> */}
         <Filter />
       </div>
     );

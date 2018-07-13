@@ -7,11 +7,10 @@
 import { COURSE_SELECTED } from '../actions/course.js';
 
 export default function (state = null, action) {
-
-    switch (action.type) {
-        case COURSE_SELECTED:
-            return action.payload;
-            break;
-    }
-    return state;
+  switch (action.type) {
+    case COURSE_SELECTED:
+      return action.payload;
+      break;
+  }
+  return state;
 }

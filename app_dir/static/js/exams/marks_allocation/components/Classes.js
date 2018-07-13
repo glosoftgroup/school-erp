@@ -13,82 +13,77 @@ import { connect } from 'react-redux';
 import { setClass } from '../actions/visibilityStatus';
 import LoaderHOC from './HOC/LoaderHOC';
 
-
 class Classes extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-            config:{ stiffness: 120, damping: 20 },
-            classes:[]
-        };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      config: { stiffness: 120, damping: 20 },
+      classes: []
+    };
+  }
 
-    componentWillMount() {
-        this.setState({classes:this.props.classes})
-    }
+  componentWillMount() {
+    this.setState({classes: this.props.classes});
+  }
 
-    goToSubjects = (cls) =>{
-        this.props.setClass(cls)
-        this.props.callBack(null, "subject")
+    goToSubjects = (cls) => {
+      this.props.setClass(cls);
+      this.props.callBack(null, 'subject');
     }
-
 
     render() {
       const {scale, status} = this.props;
       const {classes} = this.state;
-      let animation = status ? Animations[0] : Animations[1]
+      let animation = status ? Animations[0] : Animations[1];
 
       return (
-           <div className="col-md-12 pt-15">
-                  <Motion key={animation.name} defaultStyle={animation.defaultStyle} style={animation.style(this.state.config, status)}>
-                    {
-                      (value) =>
-                            <div className="col-md-12" style={animation.render(value)}>
-                               <table className="table table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
-                                    <thead>
-                                      <tr className="bg-primary">
-                                        <th>Class Name</th>
-                                        <th></th>
-                                      </tr>
-                                    </thead>
-                                    <tbody id="tb">
-                                        {
-                                        Object.keys(classes).length !== 0
-                                        ?
-                                        (classes.map((cls, index) => {
-                                            return (
-                                                <tr key={index}>
-                                                    <td>{cls.name}</td>
-                                                    <td><button className="btn btn-primary" onClick={()=>this.goToSubjects(cls)}>Load Subjects</button></td>
-                                                </tr>
-                                            )
-                                        }))
-                                        :(
-                                            <tr><td colSpan="2" className="text-center">No Classes</td></tr>
-                                        )
-                                    }
+        <div className="col-md-12 pt-15">
+          <Motion key={animation.name} defaultStyle={animation.defaultStyle} style={animation.style(this.state.config, status)}>
+            {
+              (value) =>
+                <div className="col-md-12" style={animation.render(value)}>
+                  <table className="table table-striped table-hover" style={{border: '1px solid #ddd', display: 'nones'}}>
+                    <thead>
+                      <tr className="bg-primary">
+                        <th>Class Name</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="tb">
+                      {
+                        Object.keys(classes).length !== 0
+                          ? (classes.map((cls, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{cls.name}</td>
+                                <td><button className="btn btn-primary" onClick={() => this.goToSubjects(cls)}>Load Subjects</button></td>
+                              </tr>
+                            );
+                          }))
+                          : (
+                            <tr><td colSpan="2" className="text-center">No Classes</td></tr>
+                          )
+                      }
 
-                                    </tbody>
-                               </table>
-                            </div>
-                    }
-                    </Motion>
+                    </tbody>
+                  </table>
+                </div>
+            }
+          </Motion>
 
-
-            </div>
+        </div>
       );
     }
-  }
+}
 
-  const mapStateToProps = state => ({
-        classes:state.see.term.classes
-  })
+const mapStateToProps = state => ({
+  classes: state.see.term.classes
+});
 
-  const matchDispatchToProps = dispatch => (
-        bindActionCreators(
-            {setClass: setClass},
-            dispatch)
-  )
-
+const matchDispatchToProps = dispatch => (
+  bindActionCreators(
+    {setClass: setClass},
+    dispatch)
+);
 
 export default LoaderHOC(connect(mapStateToProps, matchDispatchToProps)(Classes));

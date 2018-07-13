@@ -47,18 +47,18 @@ class FeeItem extends React.Component {
       api.retrieve('/class/api/list')
         .then(data => data.data.results)
         .then(function(data) {
-          self.props.selectCourse(data[0])
-          var option1 = new Option(data[0].name,data[0].id, true);
-          self.refs.course.el.append(option1).trigger('change');            
+          self.props.selectCourse(data[0]);
+          var option1 = new Option(data[0].name, data[0].id, true);
+          self.refs.course.el.append(option1).trigger('change');
         });
 
       // set default academic_year
       api.retrieve('/academic_year/api/list')
         .then(data => data.data.results)
         .then(function(data) {
-          self.props.selectAcademicYear(data[0])
-          var option1 = new Option(data[0].name,data[0].id, true);
-          self.refs.academic_year.el.append(option1).trigger('change');            
+          self.props.selectAcademicYear(data[0]);
+          var option1 = new Option(data[0].name, data[0].id, true);
+          self.refs.academic_year.el.append(option1).trigger('change');
         });
     }
   }
@@ -130,15 +130,15 @@ selectOptions = (url, placeholder) => {
 }
 
 render() {
-  var _options = this.selectOptions('/class/api/list', 'Select Classes')
-  var _academicOptions = this.selectOptions('/academic_year/api/list','Select Academic year')
-  var _termOptions = this.selectOptions('/term/api/list','Select term')
+  var _options = this.selectOptions('/class/api/list', 'Select Classes');
+  var _academicOptions = this.selectOptions('/academic_year/api/list', 'Select Academic year');
+  var _termOptions = this.selectOptions('/term/api/list', 'Select term');
 
   return (
     <div className="row">
       <div className="col-md-12">
-        <div className="panel panel-flat panel-custom">                
-          <div className="panel-body  search-panel"> 
+        <div className="panel panel-flat panel-custom">
+          <div className="panel-body  search-panel">
 
             <div className="col-md-4">
               <label>Academic Year:</label>

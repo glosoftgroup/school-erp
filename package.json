@@ -10,8 +10,8 @@
     "test": "mocha ./app_dir/static/test --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
     "test_react": "mocha ./app_dir/static/test/react/ --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
     "build": "webpack",
-    "lint": "eslint src",
-    "lintfix": "eslint src --fix"
+    "lint": "eslint ./app_dir/static/js/finance",
+    "lintfix": "eslint ./app_dir/static/js/finance --fix"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -90,7 +90,6 @@
     "css-loader": "^0.28.9",
     "enzyme": "^2.9.1",
     "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^17.0.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.7.1",
