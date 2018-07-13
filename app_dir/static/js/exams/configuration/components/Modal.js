@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import LaddaButton, { XL, SLIDE_UP } from 'react-ladda';
 import select2 from 'select2';
 import modal from 'bootstrap';
+import Alert from '../../../common/Alert';
 
 class MiniModal extends React.Component {
   constructor(props) {
@@ -73,7 +74,11 @@ class MiniModal extends React.Component {
 
       axios.post(subjectCreateUrl, data)
         .then(function (response) {
+<<<<<<< HEAD
           alertUser('Data sent successfully');
+=======
+            Alert.success('Data sent successfully')
+>>>>>>> exam-config-fixtures
 
           let newOption = Object.assign({}, {id: response.data.id, name: response.data.name});
           self.props.handleSubjectCallBack(newOption);

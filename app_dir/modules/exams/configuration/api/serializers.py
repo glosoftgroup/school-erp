@@ -133,14 +133,19 @@ class CreateListSerializer(serializers.ModelSerializer):
 
 
 class UpdateSerializer(serializers.ModelSerializer):
+    subjects = serializers.SerializerMethodField()
     class Meta:
         model = Table
         fields = ('id',
                   'subject',
+                  'subjects',
                   'academicyear',
                   'academicclass',
                   'term',
                  )
+
+    def get_subjects(self, obj):
+        return {"id":obj.subject.pk, "name":obj.subject.name}
 
     def update(self, instance, validated_data):
         if validated_data.get('subject'):

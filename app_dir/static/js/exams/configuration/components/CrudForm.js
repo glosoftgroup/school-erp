@@ -11,6 +11,12 @@ import MiniModal from './Modal';
 import select2 from 'select2';
 import {jGrowl} from 'jgrowl';
 import modal from 'bootstrap';
+import Api from '../../../common/Api';
+import Alert from '../../../common/Alert';
+import { 
+    createUrl, redirectUrl, 
+    subjectUrl, academicYearUrl, 
+    academicClassUrl, termUrl } from '../constants/Urls';
 
 class CrudForm extends React.Component {
   constructor(props) {
@@ -67,117 +73,72 @@ class CrudForm extends React.Component {
       $('#term').append(option4).trigger('change');
     }
 
-    $('#subject').select2({
-      width: '100%',
-      formatSelection: function(item) { return item.name; },
-      formatResult: function(item) { return item.name; },
-      ajax: {
-        url: function (params) {
-          return subjectUrl + '?' + params.term;
-        },
-        processResults: function (data) {
-          data = data.results;
-          return {
-            results:
-                            data.map(function(item) {
-                              return {
-                                id: item.id,
-                                text: item.name
-                              };
-                            }
-                            )};
+    componentDidMount(){
+        let self = this
+        /* check if navigated to update url */
+        var updateStatus = (window.location.href).includes("update")
+        if(pk){
+            //subject
+            let subjectData = {"id": objectSubjectId, "text": objectSubject}
+            this.state.subject = objectSubjectId
+            let option = new Option(objectSubject, objectSubjectId, true, true)
+            $('#subject').append(option).trigger('change')
+
+            //academic class
+            let classData = {"id": objectClassId, "text": objectClass}
+            this.state.academicclass = objectClassId
+            let option2 = new Option(objectClass, objectClassId, true, true)
+            $('#academicclass').append(option2).trigger('change')
+
+            //academic year
+            let academicData = {"id": objectAcademicId, "text": objectAcademic}
+            this.state.academicyear = objectAcademicId
+            let option3 = new Option(objectAcademic, objectAcademicId, true, true)
+            $('#academicyear').append(option3).trigger('change')
+
+            //term
+            let termData = {"id": objectAcademicId, "text": objectAcademic}
+            this.state.term = objectTermId
+            let option4 = new Option(objectTerm, objectTermId, true, true)
+            $('#term').append(option4).trigger('change')
         }
-      },
-      debug: true,
-      delay: 250
 
-    }).on('change', function (e) {
-      self.handleInputChange(e);
-    });
+        this.initializeSelect2('#subject', subjectUrl)
+        this.initializeSelect2('#academicyear', academicYearUrl)
+        this.initializeSelect2('#academicclass', academicClassUrl)
+        this.initializeSelect2('#term', termUrl)
 
-    $('#academicyear').select2({
-      width: '100%',
-      formatSelection: function(item) { return item.name; },
-      formatResult: function(item) { return item.name; },
-      ajax: {
-        url: function (params) {
-          return academicYearUrl + '?' + params.term;
-        },
-        processResults: function (data) {
-          data = data.results;
-          return {
-            results:
-                            data.map(function(item) {
-                              return {
-                                id: item.id,
-                                text: item.name
-                              };
-                            }
-                            )};
-        }
-      },
-      debug: true,
-      delay: 250
+    }
 
-    }).on('change', function (e) {
-      self.handleInputChange(e);
-    });
-
-    $('#academicclass').select2({
-      width: '100%',
-      formatSelection: function(item) { return item.name; },
-      formatResult: function(item) { return item.name; },
-      ajax: {
-        url: function (params) {
-          return academicClassUrl + '?' + params.term;
-        },
-        processResults: function (data) {
-          data = data.results;
-          return {
-            results:
-                            data.map(function(item) {
-                              return {
-                                id: item.id,
-                                text: item.class_group
-                              };
-                            }
-                            )};
-        }
-      },
-      debug: true,
-      delay: 250
-
-    }).on('change', function (e) {
-      self.handleInputChange(e);
-    });
-
-    $('#term').select2({
-      width: '100%',
-      formatSelection: function(item) { return item.name; },
-      formatResult: function(item) { return item.name; },
-      ajax: {
-        url: function (params) {
-          return termUrl + '?' + params.term;
-        },
-        processResults: function (data) {
-          data = data.results;
-          return {
-            results:
-                            data.map(function(item) {
-                              return {
-                                id: item.id,
-                                text: item.name
-                              };
-                            }
-                            )};
-        }
-      },
-      debug: true,
-      delay: 250
-
-    }).on('change', function (e) {
-      self.handleInputChange(e);
-    });
+    initializeSelect2 = (id, url) => {
+        self = this
+        $(id).select2({
+            width: '100%',
+            formatSelection: function(item) { return item.name; },
+            formatResult: function(item) { return item.name; },
+            ajax: {
+              url: function (params) {
+                return url + '?' + params.term;
+              },
+              processResults: function (data) {
+                data = data.results;
+                return {
+                  results:
+                    data.map(function(item) {
+                        return {
+                            id: item.id,
+                            text: item.name
+                        };
+                    })
+                };
+              }
+            },
+            debug: true,
+            delay: 250
+      
+          }).on('change', function (e) {
+            self.handleInputChange(e);
+          });
   }
 
     handleInputChange = event => {
@@ -204,34 +165,34 @@ class CrudForm extends React.Component {
     }
 
     addConfigCallBack = (examsFromChild) => {
-      this.setState({config: examsFromChild});
-      alertUser('Settings saved successfully', 'bg-success', null);
+        this.setState({config:examsFromChild})
+        Alert.success('Settings saved successfully')
     }
 
     addTopicCallBack = (topicFromChild) => {
-      let topics = this.state.topics;
-      let found = false;
+        let topics = this.state.topics;
+        let found = false;
 
-      console.log(topicFromChild);
+        console.log(topicFromChild);
 
-      topics.push(topicFromChild);
-      let v = [];
-      for (let i = 0; i < topicFromChild.cat; i++) {
-        v.push(i + 1);
-      }
+        topics.push(topicFromChild);
+        let v = [];
+        for (let i = 0; i < topicFromChild.cat; i++) {
+            v.push(i + 1);
+        }
 
-      let v2 = [];
-      for (let i = 0; i < topicFromChild.assignment; i++) {
-        v2.push(i + 1);
-      }
+        let v2 = [];
+        for (let i = 0; i < topicFromChild.assignment; i++) {
+            v2.push(i + 1);
+        }
 
-      let v3 = [];
-      for (let i = 0; i < topicFromChild.exam; i++) {
-        v3.push(i + 1);
-      }
-      this.setState({topics: topics, catArray: v, assignmentArray: v2, examArray: v3});
-      this.state.errors['topics'] = '';
-      alertUser('Number of exams added successfully', 'bg-success', null);
+        let v3 = []
+        for(let i=0;i<topicFromChild.exam;i++){
+            v3.push(i+1);
+        }
+        this.setState({topics:topics, catArray:v, assignmentArray:v2,examArray:v3})
+        this.state.errors['topics'] = '';
+        Alert.success('Number of exams added successfully')
     }
 
     deleteTopicCallBack = (exam, type) => {
@@ -305,39 +266,52 @@ class CrudForm extends React.Component {
         this.setState({errors: errs});
         return;
       }
+        const data = new FormData()
+        data.append("subject", this.state.subject)
+        data.append("academicyear", this.state.academicyear)
+        data.append("academicclass", this.state.academicclass)
+        data.append("term", this.state.term)
+        data.append("total_marks", this.state.total_marks)
+        data.append("pass_marks", this.state.pass_marks)
+        data.append("is_percentage", this.state.is_percentage)
+        data.append("exams", JSON.stringify(this.state.config))
 
-      const data = new FormData();
-      data.append('subject', this.state.subject);
-      data.append('academicyear', this.state.academicyear);
-      data.append('academicclass', this.state.academicclass);
-      data.append('term', this.state.term);
-      data.append('total_marks', this.state.total_marks);
-      data.append('pass_marks', this.state.pass_marks);
-      data.append('is_percentage', this.state.is_percentage);
-      data.append('exams', JSON.stringify(this.state.config));
+        // axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+        // axios.defaults.xsrfCookieName = 'csrftoken'
 
-      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-      axios.defaults.xsrfCookieName = 'csrftoken';
 
-      if (pk) {
-        axios.put(updateUrl, data)
-          .then(function (response) {
-            alertUser('Data sent successfully', 'bg-success', 'Well Done!');
-            window.location.href = redirectUrl;
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      } else {
-        axios.post(createUrl, data)
-          .then(function (response) {
-            alertUser('Data sent successfully', 'bg-success', 'Well Done!');
-            window.location.href = redirectUrl;
-          })
-          .catch(function (error) {
-            alertUser('Exam Setting already Exists', 'bg-danger', 'Oops! Error Found');
-          });
-      }
+
+        if(pk){
+            Api.update(updateUrl, data)
+            .then(function(response){
+                Alert.success('Data sent successfully', 'Well Done!')
+                window.location.href = redirectUrl;
+            }).catch(function(error){
+                Alert.error(error)
+                console.log(error);
+            })
+            // axios.put(updateUrl,data)
+            // .then(function (response) {
+            //     alertUser('Data sent successfully', 'bg-success','Well Done!')
+            //     window.location.href = redirectUrl;
+            // })
+            // .catch(function (error) {
+            //     console.log(error);
+            // });
+        }else{
+            // axios.post(createUrl,data)
+            Api.create(createUrl, data)
+            .then(function (response) {
+                Alert.success('Data sent successfully', 'Well Done!')
+                window.location.href = redirectUrl;
+            })
+            .catch(function (error) {
+                console.log(error)
+                Alert.error('Exam Setting already Exists')
+
+            });
+        }
+      
     }
 
     showSubjectModal = () => {

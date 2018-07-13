@@ -9,7 +9,13 @@ import select2 from 'select2';
 import 'select2/dist/css/select2.css';
 
 import modal from 'bootstrap';
+<<<<<<< HEAD
 import { Modal, Button, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
+=======
+import { Modal, Button, FormGroup,  ControlLabel, FormControl} from 'react-bootstrap';
+import Alert from '../../../common/Alert';
+
+>>>>>>> exam-config-fixtures
 
 class TopicListComponent extends React.Component {
   constructor(props) {
@@ -141,9 +147,32 @@ class TopicListComponent extends React.Component {
       }
     }
 
+<<<<<<< HEAD
     saveConfig = () => {
       if (this.state.percentage == true) {
         let totalmarks = 0;
+=======
+    saveConfig = () =>{        
+        if(this.state.percentage == true){
+            let totalmarks = 0
+            for (const field in this.refs) {
+                let value = this.refs[field].value
+                totalmarks+=parseInt(value)
+
+            }
+            if(totalmarks > 100){
+                Alert.error('Should be less than or a hundred')
+                return
+            }else if(totalmarks < 50){
+                Alert.error('Should more than half percentage')
+                return
+            }else{
+                Alert.error('Settings saved successfully')
+            }
+        }
+
+        let exams = []
+>>>>>>> exam-config-fixtures
         for (const field in this.refs) {
           let value = this.refs[field].value;
           totalmarks += parseInt(value);
@@ -169,10 +198,17 @@ class TopicListComponent extends React.Component {
         }
       }
 
+<<<<<<< HEAD
       if (exams.length == 0) {
         alertUser('No exams Settings', 'bg-danger', null);
         return;
       }
+=======
+        if(exams.length == 0){
+            Alert.error('No exams Settings')
+            return
+         }
+>>>>>>> exam-config-fixtures
 
       this.props.addConfigCallBack(exams);
       this.props.getPassCallBack(this.state.percentage, this.state.total, this.state.pass);
