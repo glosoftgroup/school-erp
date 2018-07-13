@@ -63,7 +63,7 @@ class CreateListSerializer(serializers.ModelSerializer):
             logger.info(type(value))
             item = Value()
             item.item = instance
-            item.name = str(value)
+            item.name = str(value.get('login'))
             item.save()
 
         return instance

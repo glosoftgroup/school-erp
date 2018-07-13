@@ -7,11 +7,10 @@
 import { DATE_SELECTED} from '../actions/date.js';
 
 export default function (state = null, action) {
-
-    switch (action.type) {
-        case DATE_SELECTED:
-            return action.payload;
-            break;
-    }
-    return state;
+  switch (action.type) {
+    case DATE_SELECTED:
+      return action.payload;
+      break;
+  }
+  return state;
 }

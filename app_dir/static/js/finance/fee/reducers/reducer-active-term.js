@@ -7,11 +7,10 @@
 import { TERM_SELECTED } from '../actions/action-term.js';
 
 export default function (state = null, action) {
-
-    switch (action.type) {
-        case TERM_SELECTED:
-            return action.payload;
-            break;
-    }
-    return state;
+  switch (action.type) {
+    case TERM_SELECTED:
+      return action.payload;
+      break;
+  }
+  return state;
 }
