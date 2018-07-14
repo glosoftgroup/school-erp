@@ -1,5 +1,4 @@
 class Alert {
-
     static notification_theme(message, header, theme){
         return $.jGrowl(
             message,
@@ -9,15 +8,12 @@ class Alert {
             }
         );
     }
-
     static success(message='nothing set', header=null){
         this.notification_theme(message, header,'bg-success')
     }
-
     static error(message='nothing set', header=null) {
         this.notification_theme(message, header, 'bg-danger')
     }
-
     static info(message='nothing set', header=null) {
         this.notification_theme(message, header, 'bg-info')
     }
