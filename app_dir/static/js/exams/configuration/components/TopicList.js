@@ -192,18 +192,24 @@ class TopicListComponent extends React.Component {
       const { config, catArray, assignmentArray, examArray } = this.props;
       const { errors } = this.state;
 
+      const table_style = {  
+            display: "block", 
+            maxHeight: "200px", 
+            overflowY: "auto"
+        }
+
       return (
-           <div className="col-md-12 pt-15">
+           <div className="col-md-6 pt-15">
               <div className="col-md-12">
-                <table className="table-sm table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
+                <table className="col-md-12 table-sm table-striped table-hover" style={{border:"1px solid #ddd", display:"nones"}}>
                         <thead>
-                          <tr className="bg-primary">
+                          <tr className="bg-slate-700">
                             <th>Exams</th>
                             <th>Marks</th>
                             <th>
                                 <div className="checkbox">
                                     <label>
-                                        <input type="checkbox" className="styled control-warning"
+                                        <input type="checkbox" className="control-info"
                                         name="percentage"
                                         checked={this.state.percentage}
                                         value={this.state.percentage}
@@ -215,139 +221,141 @@ class TopicListComponent extends React.Component {
                           </tr>
                         </thead>
                         <tbody id="tb">
-                        <tr className="text-center" style={{display:"none"}}>
-                            <td colSpan="3" className="text-center">
-                                <div className="pace-demo">
-                                    <div className="theme_xbox">
-                                        <div className="pace_progress" data-progress-text="60%" data-progress="60">
+                            <tr className="text-center" style={{display:"none"}}>
+                                <td colSpan="3" className="text-center">
+                                    <div className="pace-demo">
+                                        <div className="theme_xbox">
+                                            <div className="pace_progress" data-progress-text="60%" data-progress="60">
+                                            </div>
+                                            <div className="pace_activity"></div>
                                         </div>
-                                        <div className="pace_activity"></div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        {
-                            assignmentArray.length > 0
-                            ?
-                            (assignmentArray.map((exam, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>Assignment {index+1}</td>
-                                        <td>
-                                            <input type="text" className="form-control"
-                                                name={`assignment_${exam}`}
-                                                ref={`assignment_${exam}`}
-                                                value={this.state["assignment_"+(exam)]?this.state["assignment_"+(exam)]:""}
+                                </td>
+                            </tr>
+                            {
+                                assignmentArray.length > 0
+                                ?
+                                (assignmentArray.map((exam, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>Assignment {index+1}</td>
+                                            <td>
+                                                <input type="text" className="form-control"
+                                                    name={`assignment_${exam}`}
+                                                    ref={`assignment_${exam}`}
+                                                    value={this.state["assignment_"+(exam)]?this.state["assignment_"+(exam)]:""}
+                                                    onChange={this.handleInputChange}
+                                                    onKeyDown={this.onKeyDown}/>
+                                            </td>
+                                            <td>
+                                                <Button className="btn bg-slate-700" type="button"
+                                                    onClick={()=>this.showDeleteTopic(exam, "Assignment "+(index+1), "assignment")}>
+                                                    <i className="icon-x"></i>
+                                                </Button>
+
+                                            </td>
+                                        </tr>
+                                    )
+                                }))
+                                :(
+                                    <tr><td colSpan="2" className="text-center">No Assignments have been set</td></tr>
+                                )
+                            }
+                            {
+
+                                catArray.length > 0
+                                ?
+                                (catArray.map((exam, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>CAT {index+1}</td>
+                                            <td>
+                                                <input type="text" className="form-control"
+                                                name={`cat_${exam}`}
+                                                ref={`cat_${exam}`}
+                                                value={this.state["cat_"+(exam)]?this.state["cat_"+(exam)]:""}
                                                 onChange={this.handleInputChange}
-                                                onKeyDown={this.onKeyDown}/>
-                                        </td>
-                                        <td>
-                                            <Button className="btn btn-primary" type="button"
-                                                onClick={()=>this.showDeleteTopic(exam, "Assignment "+(index+1), "assignment")}>
-                                                DELETE
-                                            </Button>
+                                                onKeyDown={this.onKeyDown}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Button className="btn bg-slate-700" type="button"
+                                                    onClick={()=>this.showDeleteTopic(exam, "CAT "+(index+1), "cat")}>
+                                                    <i className="icon-x"></i>
+                                                </Button>
 
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    )
+                                }))
+                                :(
+                                    <tr><td colSpan="2" className="text-center">No Cats have been set</td></tr>
                                 )
-                            }))
-                            :(
-                                <tr><td colSpan="2" className="text-center">No Assignments have been set</td></tr>
-                            )
-                        }
-                        {
+                            }
+                            {
+                                examArray.length > 0
+                                ?
+                                (examArray.map((exam, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>Exam {index+1}</td>
+                                            <td>
+                                                <input type="text" className="form-control"
+                                                name={`exam_${exam}`}
+                                                ref={`exam_${exam}`}
+                                                value={this.state["exam_"+(exam)]?this.state["exam_"+(exam)]:""}
+                                                onChange={this.handleInputChange}
+                                                onKeyDown={this.onKeyDown}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Button className="btn bg-slate-700" type="button"
+                                                    onClick={()=>this.showDeleteTopic(exam, "Exam "+(index+1),  "exam")}>
+                                                    <i className="icon-x"></i>
+                                                </Button>
 
-                            catArray.length > 0
-                            ?
-                            (catArray.map((exam, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>CAT {index+1}</td>
-                                        <td>
-                                            <input type="text" className="form-control"
-                                            name={`cat_${exam}`}
-                                            ref={`cat_${exam}`}
-                                            value={this.state["cat_"+(exam)]?this.state["cat_"+(exam)]:""}
-                                            onChange={this.handleInputChange}
-                                            onKeyDown={this.onKeyDown}
-                                            />
-                                        </td>
-                                        <td>
-                                            <Button className="btn btn-primary" type="button"
-                                                onClick={()=>this.showDeleteTopic(exam, "CAT "+(index+1), "cat")}>
-                                                DELETE
-                                            </Button>
-
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    )
+                                }))
+                                :(
+                                    <tr><td colSpan="2" className="text-center">No Exams have been set</td></tr>
                                 )
-                            }))
-                            :(
-                                <tr><td colSpan="2" className="text-center">No Cats have been set</td></tr>
-                            )
-                        }
-                        {
-                            examArray.length > 0
-                            ?
-                            (examArray.map((exam, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>Exam {index+1}</td>
-                                        <td>
-                                            <input type="text" className="form-control"
-                                            name={`exam_${exam}`}
-                                            ref={`exam_${exam}`}
-                                            value={this.state["exam_"+(exam)]?this.state["exam_"+(exam)]:""}
-                                            onChange={this.handleInputChange}
-                                            onKeyDown={this.onKeyDown}
-                                            />
-                                        </td>
-                                        <td>
-                                            <Button className="btn btn-primary" type="button"
-                                                onClick={()=>this.showDeleteTopic(exam, "Exam "+(index+1),  "exam")}>
-                                                DELETE
-                                            </Button>
-
-                                        </td>
-                                    </tr>
-                                )
-                            }))
-                            :(
-                                <tr><td colSpan="2" className="text-center">No Exams have been set</td></tr>
-                            )
 
 
-                        }
-                        <tr>
-                            <td className="text-right"><span>Total Marks</span></td>
-                            <td colSpan="2">
-                                <input type="text" className="form-control"
-                                name="total"
-                                value={this.state.total}
-                                onChange={this.dummyHandler}
-                                />
-                            </td>
-                        </tr>
+                            }
+                            <tr>
+                                <td>Total Marks</td>
+                                <td colSpan="2">
+                                    <input type="text" className="form-control"
+                                    name="total"
+                                    value={this.state.total}
+                                    onChange={this.dummyHandler}
+                                    />
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td className="text-right"><span>Pass Marks</span></td>
-                            <td colSpan="2">
-                                <input type="text" className="form-control"
-                                name="pass"
-                                value={this.state.pass}
-                                onChange={this.handlePassChange}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
+                            <tr>
+                                <td>Pass Marks</td>
+                                <td colSpan="2">
+                                    <input type="text" className="form-control"
+                                    name="pass"
+                                    value={this.state.pass}
+                                    onChange={this.handlePassChange}
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
                             <td colSpan="3">
-                                <button type="button" className="btn btn-primary pull-right"
+                                <button type="button" className="btn bg-slate-800 pull-right"
                                     onClick={this.saveConfig}>
                                     Save
                                 </button>
                             </td>
-                        </tr>
-                        </tbody>
+                          </tr>
+                        </tfoot>
                    </table>
                 </div>
 
