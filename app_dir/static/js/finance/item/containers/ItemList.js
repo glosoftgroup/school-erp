@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import {connect} from 'react-redux';
 import Pagination from 'react-js-pagination';
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api';
 // import EditFrom from '../containers/EditForm'
+import EditItem from './EditItem';
 import Modal from '../components/Modal';
 
 import { fetchItems, deleteItem, selectItem } from '../actions/action-items';
@@ -86,7 +88,17 @@ class Comp extends Component {
       this.props.selectItem(obj);
       this.handleEditShow();
     }
-
+    renderItem = (item) => {
+      try {
+        for (const key in item) {
+          if (item.hasOwnProperty(key)) {
+            return (<span key={item[key]}>{item.name}, </span>);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
     render() {
       return (
         <div className="">
@@ -102,6 +114,7 @@ class Comp extends Component {
                   <thead>
                     <tr className="bg-primary">
                       <th>Name</th>
+                      <th>Edit</th>
                       <th>Choices</th>
                       <th>Actions</th>
                     </tr>
@@ -111,17 +124,9 @@ class Comp extends Component {
                       return (
                         <tr key={obj.id}>
                           <td>{obj.name}</td>
+                          <td> <EditItem key={obj.id } /></td>
                           <td>{obj.values.map(item => {
-                            try {
-                              for (const key in item) {
-                                if (item.hasOwnProperty(key)) {
-                                  const element = item[key];
-                                  return (<span key={item[key]}>{item[key]}, </span>);
-                                }
-                              }
-                            } catch (err) {
-                              console.log(err);
-                            }
+                            return this.renderItem(item);
                           })}</td>
 
                           <td >
@@ -191,6 +196,11 @@ class Comp extends Component {
     }
 }
 
+Comp.propTypes = {
+  items: PropTypes.object.isRequired,
+  selectItem: PropTypes.func.isRequired,
+  fetchItems: PropTypes.func.isRequired
+};
 function mapStateToProps(state) {
   return {
     items: state.items
