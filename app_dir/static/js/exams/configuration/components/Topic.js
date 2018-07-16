@@ -19,7 +19,6 @@ class TopicComponent extends React.Component {
       assignment: '',
       cat: '',
       exam: ''
-
     };
 
     this.baseState = Object.assign({}, this.state);
@@ -200,7 +199,6 @@ class TopicComponent extends React.Component {
           </div>
           <div id="addTopicForm">
             <div className="text-left col-md-12">
-
               <button id="add-topic-btn pull-left" type="button"
                 className="btn btn-warning legitRipple"
                 onClick={this.addTopic} disabled={this.state.disabled}>

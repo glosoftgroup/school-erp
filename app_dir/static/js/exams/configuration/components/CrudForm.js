@@ -14,28 +14,30 @@ import modal from 'bootstrap';
 import Api from '../../../common/Api';
 import Alert from '../../../common/Alert';
 import Urls from '../constants/Urls';
+import { Tab, Tabs } from 'react-bootstrap';
 
 class CrudForm extends React.Component {
     constructor(props) {
-      super(props);
-      this.state = {
-        visible:false,
-        subject:'',
-        academicyear:'',
-        academicclass:'',
-        errors:{},
-        topics:[],
-        config:[],
-        showModal:false,
-        term:'',
-        assignmentArray:[],
-        catArray:[],
-        examArray:[],
-        total_marks:'',
-        pass_marks:'',
-        is_percentage:'false',
-        updateStatus:(window.location.href).includes("update")
-      }
+        super(props);
+        this.state = {
+            visible:false,
+            subject:'',
+            academicyear:'',
+            academicclass:'',
+            errors:{},
+            topics:[],
+            config:[],
+            showModal:false,
+            term:'',
+            assignmentArray:[],
+            catArray:[],
+            examArray:[],
+            total_marks:'',
+            pass_marks:'',
+            is_percentage:'false',
+            updateStatus:(window.location.href).includes("update"),
+            key: 1
+        }
 
     }
 
@@ -125,7 +127,7 @@ class CrudForm extends React.Component {
     handleInputChange = event =>{
         const name   =  event.target.name;
         let value    =  event.target.value;
-
+        
         if(isEmpty(value)){
             this.state.errors[name] = "This field is required";
         }else{
@@ -290,165 +292,189 @@ class CrudForm extends React.Component {
         this.setState({showModal: true})
     }
 
+    handleSelect = (key) => {
+        console.log(`selected ${key}`);
+        this.setState({ key });
+    }
+
     render() {
         let _this = this;
-        const { errors } = this.state;
+        const { errors, key } = this.state;
 
-      return (
-      <div>
-        <form encType="multipart/form-data" id="addForm" onSubmit={this.handleSubmit}>
-              <div className="col-md-12">
-                 <div className="col-md-3">
-                    <div className={
-                            classnames("form-group ", 
-                                {"has-error": errors.subject} )}>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <label className="text-bold">Subject Name:
-                                    <span className="text-danger">*</span>
-                                </label>
-                                <div className="input-group">
-                                    <div className="btn-group col-md-12" id="subjects">
-                                        <select name="subject" id="subject"
-                                            className="sel" value={this.state.subject}
-                                                    onChange={this.handleInputChange}>
-                                            <option value="">select subject</option>
-                                        </select>
+        return (
+            <div>
+                <div>
+                    <form encType="multipart/form-data" id="addForm" onSubmit={this.handleSubmit}>
+                
+                        <Tabs
+                            activeKey={key}
+                            onSelect={this.handleSelect}
+                            id="controlled-tab-example"
+                        >
+                            <Tab eventKey={1} title="Tab 1">
+                                <div className="col-md-12">
+                                    <div className="col-md-3">
+                                        <div className={
+                                                classnames("form-group ", 
+                                                    {"has-error": errors.subject} )}>
+                                            <div className="row">
+                                                <div className="col-md-12">
+                                                    <label className="text-bold">Subject Name:
+                                                        <span className="text-danger">*</span>
+                                                    </label>
+                                                    <div className="input-group">
+                                                        <div className="btn-group col-md-12" id="subjects">
+                                                            <select name="subject" id="subject"
+                                                                className="sel" value={this.state.subject}
+                                                                        onChange={this.handleInputChange}>
+                                                                <option value="">select subject</option>
+                                                            </select>
+                                                        </div>
+                                                        {errors.subject && <span className="help-block">{errors.subject }</span>}
+
+                                                        <div className="input-group-btn">
+                                                            <button type="button" className="btn bg-slate-700 btn-icon legitRipple modal-trigger edit-btn"
+                                                                    data-ta="#subject_modal_instance"
+                                                                    data-title="Add New Subject"
+                                                                    data-select="#academicyears"
+                                                                    data-href="subject/api/create/url"
+                                                                    data-cat="name" data-label="Subject Name:"
+                                                                    onClick={this.showSubjectModal}>
+                                                                <i className="icon-plus-circle2"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    {errors.subject && <span className="help-block">{errors.subject }</span>}
+                                    
+                                    <div className="col-md-3">
+                                        <div className={
+                                                classnames("form-group ", 
+                                                    {"has-error": errors.academicclass} )}>
+                                            <div className="row">
+                                                <div className="col-md-12">
+                                                    <label className="text-bold">Academic Class Group:<span className="text-danger">*</span></label>
 
-                                    <div className="input-group-btn">
-                                        <button type="button" className="btn bg-slate-700 btn-icon legitRipple modal-trigger edit-btn"
-                                                data-ta="#subject_modal_instance"
-                                                data-title="Add New Subject"
-                                                data-select="#academicyears"
-                                                data-href="subject/api/create/url"
-                                                data-cat="name" data-label="Subject Name:"
-                                                onClick={this.showSubjectModal}>
-                                            <i className="icon-plus-circle2"></i>
+                                                        <div className="classes" id="academicclasss">
+                                                            <select name="academicclass" id="academicclass"
+                                                                className="sel" value={this.state.academicclass}
+                                                                        onChange={this.handleInputChange}>
+                                                                <option value="">select academic class</option>
+                                                            </select>
+                                                        </div>
+                                                        {errors.academicclass && <span className="help-block">{errors.academicclass }</span>}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-3">
+                                        <div className={
+                                                classnames("form-group ", 
+                                                    {"has-error": errors.term} )}>
+                                            <div className="row">
+                                                <div className="col-md-12">
+                                                    <label className="text-bold">Term:
+                                                        <span className="text-danger">*</span>
+                                                    </label>
+                                                    <div>
+                                                        <div id="terms">
+                                                            <select name="term" id="term"
+                                                                className="sel" value={this.state.term}
+                                                                        onChange={this.handleInputChange}>
+                                                                <option value="">select term</option>
+                                                            </select>
+                                                        </div>
+                                                        {errors.term && <span className="help-block">{errors.term }</span>}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-3">
+                                        <div className={
+                                                classnames("form-group ", 
+                                                    {"has-error": errors.academicyear} )}>
+                                            <div className="row">
+                                                <div className="col-md-12">
+                                                    <label className="text-bold">Academic Year:
+                                                        <span className="text-danger">*</span>
+                                                    </label>
+                                                    <div>
+                                                        <div id="academicyears">
+                                                            <select name="academicyear" id="academicyear"
+                                                                className="sel" value={this.state.academicyear}
+                                                                        onChange={this.handleInputChange}>
+                                                                <option value="">select academic year</option>
+                                                            </select>
+                                                        </div>
+                                                        {errors.academicyear && <span className="help-block">{errors.academicyear }</span>}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div className="col-md-12" style={{"marginTop":10}}>
+                                    <div className="col-md-12">
+                                        <button className="btn btn-primary pull-left" type="button" onClick={()=>this.handleSelect(2)}>
+                                            Next
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div className="col-md-3">
-                    <div className={
-                            classnames("form-group ", 
-                                {"has-error": errors.academicclass} )}>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <label className="text-bold">Academic Class Group:<span className="text-danger">*</span></label>
+                            </Tab>
+                            <Tab eventKey={2} title="Tab 2">
+                                <TopicComponent status={this.state.visible}
+                                                slideToggle={this.slideToggle}
+                                                topics={this.state.topics}
+                                                addTopicCallBack={this.addTopicCallBack}/>
 
-                                    <div className="classes" id="academicclasss">
-                                        <select name="academicclass" id="academicclass"
-                                            className="sel" value={this.state.academicclass}
-                                                    onChange={this.handleInputChange}>
-                                            <option value="">select academic class</option>
-                                        </select>
+                                <div className={classnames({"has-error": errors.academicyear} )}>
+                                    <TopicListComponent topics={this.state.topics}
+                                                deleteTopicCallBack={this.deleteTopicCallBack}
+                                                config={this.state.config}
+                                                catArray={this.state.catArray}
+                                                assignmentArray={this.state.assignmentArray}
+                                                examArray={this.state.examArray}
+                                                addConfigCallBack={this.addConfigCallBack}
+                                                getPassCallBack={this.getPassCallBack}
+                                                />
+                                    <div className="col-md-12">
+                                        <div className="col-md-12">
+                                            {errors.topics && <span className="help-block">
+                                                {errors.topics }</span>
+                                            }
+                                        </div>
                                     </div>
-                                    {errors.academicclass && <span className="help-block">{errors.academicclass }</span>}
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-md-3">
-                    <div className={
-                            classnames("form-group ", 
-                                {"has-error": errors.term} )}>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <label className="text-bold">Term:
-                                    <span className="text-danger">*</span>
-                                </label>
-                                <div>
-                                    <div id="terms">
-                                        <select name="term" id="term"
-                                            className="sel" value={this.state.term}
-                                                    onChange={this.handleInputChange}>
-                                            <option value="">select term</option>
-                                        </select>
-                                    </div>
-                                    {errors.term && <span className="help-block">{errors.term }</span>}
-
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-md-3">
-                    <div className={
-                            classnames("form-group ", 
-                                {"has-error": errors.academicyear} )}>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <label className="text-bold">Academic Year:
-                                    <span className="text-danger">*</span>
-                                </label>
-                                <div>
-                                    <div id="academicyears">
-                                        <select name="academicyear" id="academicyear"
-                                            className="sel" value={this.state.academicyear}
-                                                    onChange={this.handleInputChange}>
-                                            <option value="">select academic year</option>
-                                        </select>
+                                <div className="col-md-12" style={{"marginTop":10}}>
+                                    <div className="col-md-12">
+                                        <button className="btn btn-primary pull-left" type="submit">
+                                            Submit
+                                        </button>
                                     </div>
-                                    {errors.academicyear && <span className="help-block">{errors.academicyear }</span>}
-
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </Tab>
+                        </Tabs>
+                    </form>
                 </div>
 
-              </div>
+                {this.state.showModal ? 
+                    <MiniModal 
+                        handleHideModal={this.handleHideModal} 
+                        handleSubjectCallBack={this.handleSubjectCallBack}
+                    /> : null}
 
-                <TopicComponent status={this.state.visible}
-                                slideToggle={this.slideToggle}
-                                topics={this.state.topics}
-                                addTopicCallBack={this.addTopicCallBack}/>
-
-                <div className={classnames({"has-error": errors.academicyear} )}>
-                    <TopicListComponent topics={this.state.topics}
-                                deleteTopicCallBack={this.deleteTopicCallBack}
-                                config={this.state.config}
-                                catArray={this.state.catArray}
-                                assignmentArray={this.state.assignmentArray}
-                                examArray={this.state.examArray}
-                                addConfigCallBack={this.addConfigCallBack}
-                                getPassCallBack={this.getPassCallBack}
-                                />
-                    <div className="col-md-12">
-                        <div className="col-md-12">
-                            {errors.topics && <span className="help-block">
-                                {errors.topics }</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-12" style={{"marginTop":10}}>
-                    <div className="col-md-12">
-                        <button className="btn btn-primary pull-left" type="submit">
-                            Submit
-                        </button>
-                    </div>
-                </div>
-        </form>
-
-            {this.state.showModal ? 
-                <MiniModal 
-                    handleHideModal={this.handleHideModal} 
-                    handleSubjectCallBack={this.handleSubjectCallBack}
-                /> : null}
-
-          </div>
-      );
-    }
+            </div>
+        );
+        }
   }
 
 
