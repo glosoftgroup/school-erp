@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import Select2 from 'react-select2-wrapper';
+import PropTypes from 'prop-types';
+// import Select2 from 'react-select2-wrapper';
 import { updateFeeItem } from '../actions/action-fee-item';
 
 export class Amount extends Component {
@@ -49,6 +50,10 @@ export class Amount extends Component {
     );
   }
 }
+Amount.propTypes = {
+  updateFeeItem: PropTypes.func.isRequired,
+  instance: PropTypes.object.isRequired
+};
 
 function mapStateToProps(state) {
   return {};

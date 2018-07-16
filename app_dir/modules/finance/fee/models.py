@@ -28,7 +28,8 @@ class FeeStructure(models.Model):
 
     class Meta:
         app_label = 'fee'
-        unique_together = ("academic_year", "course", "term")
+        unique_together = ("academic_year", "course", "term"
+                                                      "")
 
     def save(self, *args, **kwargs):
         self.name = self.academic_year.name +' Term:'+ self.term.name +' Class:'+ self.course.name
@@ -41,6 +42,7 @@ class FeeItem(models.Model):
     fee = models.ForeignKey(FeeStructure, related_name='fee_items', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True)
     choice = JSONField(default={})
+    compulsory = models.BooleanField(default=True)
     amount = models.DecimalField(
         pgettext_lazy('FeeItem field', 'total cost'), default=Decimal(0), max_digits=100, decimal_places=2)
 
