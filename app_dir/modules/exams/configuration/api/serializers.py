@@ -133,19 +133,49 @@ class CreateListSerializer(serializers.ModelSerializer):
 
 
 class UpdateSerializer(serializers.ModelSerializer):
-    subjects = serializers.SerializerMethodField()
+    subject = serializers.SerializerMethodField()
+    academicyear = serializers.SerializerMethodField()
+    academicclass = serializers.SerializerMethodField()
+    term = serializers.SerializerMethodField()
+    exams = serializers.SerializerMethodField()
     class Meta:
         model = Table
         fields = ('id',
                   'subject',
-                  'subjects',
                   'academicyear',
                   'academicclass',
                   'term',
+                  'exams'
                  )
 
-    def get_subjects(self, obj):
-        return {"id":obj.subject.pk, "name":obj.subject.name}
+    def get_subject(self, obj):
+        return {"id": obj.subject.pk, "name": obj.subject.name}
+
+    def get_academicyear(self, obj):
+        return {"id": obj.academicyear.pk, "name": obj.academicyear.name}
+
+    def get_academicclass(self, obj):
+        return {"id": obj.academicclass, "name": "class "+str(obj.academicclass)}
+
+    def get_term(self, obj):
+        return {"id": obj.term.pk, "name": obj.term.name}
+
+    def get_exams(self, obj):
+        try:
+            assignments = Assignment.objects.filter(examId=obj.pk).count()
+        except:
+            assignments = 0
+
+        try:
+            cats = Cat.objects.filter(examId=obj.pk).count()
+        except:
+            cats = 0
+
+        try:
+            exams = Exam.objects.filter(examId=obj.pk).count()
+        except:
+            exams = 0
+        return {"assignments": assignments, "cats": cats, "exams":exams}
 
     def update(self, instance, validated_data):
         if validated_data.get('subject'):
