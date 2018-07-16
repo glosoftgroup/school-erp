@@ -1,0 +1,23 @@
+@import 'popup-form';
+.search-panel{
+    padding: 5px;
+}
+.mini-form {
+    opacity: 0;
+    max-height: 0;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+.showform {
+    opacity: 1;
+    max-height: 120px;
+}
+.togglebtn{
+    transition: all 0.2s;
+    height: auto;
+    display: inline-block;
+}
+.showbutton {
+    border-radius: 100%;
+    height: 50px;
+}

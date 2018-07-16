@@ -7,26 +7,26 @@
   {% if object.name %}
    Edit {{object.name}}
   {% else %}
-    Add Attendance
+    Add Fee Item
   {% endif %}
 {% endblock %}
 
  {% block breadcrumbs %}
-     <li class=""><a href="{% url 'attendance:index' %}" >Attendance</a></li>
+     <li class=""><a href="{% url 'finance_item:index' %}" >Fee item</a></li>
      <li class="active"><a >
          {% if object.name %}
            Edit {{object.name}}
          {% else %}
-            Add Attendance
+            Fee item
          {% endif %}
      </a></li>
  {% endblock %}
 
 
-{% block attendance_student %}active{% endblock %}
+{% block menu_finance_item %}active{% endblock %}
 
 {% block custom_css %}
-{% render_bundle 'attendance' 'css' %}
+{% render_bundle 'finance_item_edit' 'css' %}
 <style>
 html {
   font-size: 14px;
@@ -56,25 +56,17 @@ width:100% !important;
   });
 </script>
 <script>
-var options = [
-  { value: '1', label: 'One' },
-  { value: '2', label: 'Two' }
-];
 
-function logChange(val) {
-  console.log("Selected: " + val);
-}
+
     {% if object.id %}
     var pk = "{{object.id}}";
-    var updateUrl = "{% url 'house:api-update' pk=object.id %}";
     {% else %}
     var pk= false;
     {% endif %}
-    var createUrl = "{% url 'house:api-create-house' %}";
-    var redirectUrl = "{% url 'house:index' %}";
+
     // alertUser
     function alertUser(msg,status='bg-success',header='Well done!')
     { $.jGrowl(msg,{header: header,theme: status}); }
 </script>
-{% render_bundle 'attendance' 'js' %}
+{% render_bundle 'finance_item_edit' 'js' %}
 {% endblock %}

@@ -15,17 +15,18 @@ fields = ('id',
 class ValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Value
-        fields = 'name'
+        fields = ('id', 'name')
 
 
 class TableListSerializer(serializers.ModelSerializer):
     update_url = serializers.HyperlinkedIdentityField(view_name=module+':api-update')
+    update_view_url = serializers.HyperlinkedIdentityField(view_name=module+':update')
     delete_url = serializers.HyperlinkedIdentityField(view_name=module+':api-delete')
     values = serializers.SerializerMethodField()
 
     class Meta:
         model = Table
-        fields = fields + ('values', 'update_url', 'delete_url',)
+        fields = fields + ('values', 'update_view_url', 'update_url', 'delete_url',)
 
     def get_values(self, obj):
         try:
@@ -70,22 +71,23 @@ class CreateListSerializer(serializers.ModelSerializer):
 
 
 class UpdateSerializer(serializers.ModelSerializer):
-    values = serializers.JSONField(write_only=True)
+    vals = serializers.JSONField(write_only=True)
+    values = ValueSerializer(many=True)
 
     class Meta:
         model = Table
-        fields = fields + ('values',)
+        fields = ('id', 'name', 'values', 'vals')
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.save()
         # try:
-        values = validated_data.pop('values')
+        values = validated_data.pop('vals')
         instance.values.all().delete()
         for value in values:
             item = Value()
             item.item = instance
-            item.name = str(value)
+            item.name = str(value.get('name'))
             item.save()
         # except Exception as e:
         #     pass

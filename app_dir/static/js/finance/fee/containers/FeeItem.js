@@ -1,9 +1,8 @@
 import React from 'react';
-// import axios from 'axios';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-// import DatePicker from 'react-datepicker';
+import PropTypes from 'prop-types';
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api';
 import ItemList from '../containers/ItemList';
@@ -11,7 +10,6 @@ import {selectAcademicYear} from '../actions/academic-year';
 import {selectDate} from '../actions/date';
 import { selectTerm } from '../actions/action-term';
 import {selectCourse} from '../actions/course';
-// import 'react-datepicker/dist/react-datepicker.css';
 import '../css/popover.scss';
 
 class FeeItem extends React.Component {
@@ -165,7 +163,7 @@ render() {
             <div className="col-md-4">
               <label>Class:</label>
               <div className="form-group">
-                <Select2 ref="course"
+                <Select2 ref='course'
                   onChange = {this.handleInputChange}
                   name = 'course'
                   value = {this.state.course}
@@ -180,6 +178,13 @@ render() {
   );
 }
 }
+
+FeeItem.propTypes = {
+  selectDate: PropTypes.func.isRequired,
+  selectTerm: PropTypes.func.isRequired,
+  selectCourse: PropTypes.func.isRequired,
+  selectAcademicYear: PropTypes.func.isRequired
+};
 
 function mapStateToProps(state) {
   return {};

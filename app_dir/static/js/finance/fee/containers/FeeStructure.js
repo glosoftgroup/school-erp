@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import api from '../api/Api';
 import { selectTerm } from '../actions/action-term';
@@ -9,6 +10,7 @@ import { selectAcademicYear } from '../actions/academic-year';
 import { addFeeItem, deleteFeeItem } from '../actions/action-fee-item';
 import ItemChoices from './Choices';
 import ItemAmount from './Amount';
+import Compulsory from './Compulsory';
 import '../css/styles.scss';
 
 class FeeStructure extends Component {
@@ -22,7 +24,8 @@ class FeeStructure extends Component {
       buttonText: 'submit',
       loading: false,
       showHideBtn: 'hidden',
-      updateJson: {}
+      updateJson: {},
+      loadingText: 'loading....'
     };
   }
 
@@ -30,14 +33,18 @@ class FeeStructure extends Component {
     this.getTotal(nextProps.fee_items);
 
     // ensure you update fee item onces and items are set
-
-    if (this.state.updateJson !== 'undefined') {
-      if (Object.keys(nextProps.items).length > 0 && Object.keys(this.state.updateJson).length > 0) {
-        this.prepareFeeItem(nextProps.items, this.state.updateJson);
-        // reset updateJson
-        this.setState({updateJson: {}});
+    setTimeout(() => {
+      if (this.state.updateJson !== 'undefined') {
+        if (Object.keys(nextProps.items).length > 0 && Object.keys(this.state.updateJson).length > 0) {
+          this.prepareFeeItem(nextProps.items, this.state.updateJson);
+          // reset updateJson
+          this.setState({updateJson: {}});
+        }
       }
-    }
+      setTimeout(() => {
+        this.setState({loadingText: 'No data Found'});
+      }, 1000);
+    }, 2000);
   }
 
     prepareFeeItem = (allItems, items) => {
@@ -54,7 +61,11 @@ class FeeStructure extends Component {
           // append amount
           var copy = { ...item, amount: obj.amount };
           if (obj.choice.choice) {
-            copy = { ...copy, value: obj.choice.choice};
+            copy = {
+              ...copy,
+              value: obj.choice.choice,
+              compulsory: obj.compulsory
+            };
           }
           this.props.addFeeItem(copy);
         }
@@ -74,11 +85,11 @@ class FeeStructure extends Component {
             self.props.selectAcademicYear(payload);
 
             // set term
-            var payload = {id: data.data.term};
+            payload = {id: data.data.term};
             self.props.selectTerm(payload);
 
             // set course
-            var payload = {id: data.data.course};
+            payload = {id: data.data.course};
             self.props.selectCourse(payload);
 
             self.setState({updateJson: data.data.fee_items});
@@ -109,12 +120,13 @@ class FeeStructure extends Component {
     }
 
     formatNumber = (n, c, d, t) => {
-      var c = isNaN(c = Math.abs(c)) ? 2 : c,
-        d = d === undefined ? '.' : d,
-        t = t === undefined ? ',' : t,
-        s = n < 0 ? '-' : '',
-        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
-        j = (j = i.length) > 3 ? j % 3 : 0;
+      c = isNaN(c = Math.abs(c)) ? 2 : c;
+      d = d === undefined ? '.' : d;
+      t = t === undefined ? ',' : t;
+      var s = n < 0 ? '-' : '';
+      var j;
+      var i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c)));
+      j = (j = i.length) > 3 ? j % 3 : 0;
       return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
     };
 
@@ -206,6 +218,7 @@ class FeeStructure extends Component {
                   <thead>
                     <tr className="bg-primary">
                       <th className="col-sm-1">Item</th>
+                      <th className="col-sm-1">Compulsory</th>
                       <th className="col-sm-1">Choice</th>
                       <th className="col-sm-1">Amount</th>
                     </tr>
@@ -220,6 +233,7 @@ class FeeStructure extends Component {
                                             &nbsp;{this.formatText(obj.name)}
                             </span>
                           </td>
+                          <td><Compulsory instance={obj}/></td>
                           <td><ItemChoices instance={obj}/></td>
                           <td >
                             <ItemAmount instance={obj} />
@@ -229,11 +243,11 @@ class FeeStructure extends Component {
                     })
                     }
                     {this.props.fee_items.length === 0 &&
-                                    <tr>
-                                      <td colSpan='4' className="text-center">
-                                        <h4>No data Found</h4>
-                                      </td>
-                                    </tr>
+                      <tr>
+                        <td colSpan='4' className="text-center">
+                          <h4>{this.state.loadingText}</h4>
+                        </td>
+                      </tr>
                     }
 
                   </tbody>
@@ -254,7 +268,16 @@ class FeeStructure extends Component {
       );
     }
 }
-
+FeeStructure.propTypes = {
+  items: PropTypes.array.isRequired,
+  fee_items: PropTypes.array.isRequired,
+  deleteFeeItem: PropTypes.func.isRequired,
+  course: PropTypes.object,
+  term: PropTypes.object,
+  academic_year: PropTypes.object,
+  addFeeItem: PropTypes.func.isRequired,
+  selectAcademicYear: PropTypes.func
+};
 function mapStateToProps(state) {
   return {
     academic_year: state.academic_year,

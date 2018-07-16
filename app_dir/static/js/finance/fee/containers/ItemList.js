@@ -30,6 +30,7 @@ class ItemList extends Component {
 
   addToStructure = (obj) => {
     // var obj = Object.assign([obj])
+    obj.compulsory = true;
     this.props.addFeeItem(obj);
   }
 
@@ -72,7 +73,10 @@ class ItemList extends Component {
     );
   }
 }
-
+ItemList.propTypes = {
+  addFeeItem: PropTypes.func.isRequired,
+  items: PropTypes.array.isRequired
+};
 function mapStateToProps(state) {
   return {
     items: state.items,
