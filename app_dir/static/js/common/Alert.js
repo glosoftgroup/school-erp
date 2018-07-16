@@ -17,6 +17,9 @@ class Alert {
     static info(message='nothing set', header=null) {
         this.notification_theme(message, header, 'bg-info')
     }
+    static warning(message='nothing set', header=null) {
+        this.notification_theme(message, header, 'bg-orange-400')
+    }
 }
 
 export default Alert
