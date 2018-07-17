@@ -19,7 +19,6 @@ class TopicComponent extends React.Component {
       assignment: '',
       cat: '',
       exam: ''
-
     };
 
     this.baseState = Object.assign({}, this.state);
@@ -100,15 +99,15 @@ class TopicComponent extends React.Component {
     render() {
       const { errors } = this.state;
       return (
-        <div className={this.props.status == true ? 'col-md-12 animated slideInDown' : 'col-md-12 animate slideOutUp'} id="topic-div"
+        <div className={this.props.status == true ? 'col-md-6 animated slideInDown' : 'col-md-6 animate slideOutUp'} id="topic-div"
         >
           <div className="row">
             <div className="col-md-12">
               <h6 className="col-md-12">Check revelant exams and input the number of exams</h6>
             </div>
 
-            <div className="col-md-4">
-              <div className="col-md-6">
+            <div className="col-md-12">
+              <div className="col-md-4">
                 <div className="form-group pt-15s">
                   <div className="checkbox">
                     <label>
@@ -137,7 +136,7 @@ class TopicComponent extends React.Component {
               </div>
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-12">
               <div className="col-md-4">
                 <div className="form-group pt-15s">
                   <div className="checkbox">
@@ -167,7 +166,7 @@ class TopicComponent extends React.Component {
               </div>
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-12">
               <div className="col-md-4">
                 <div className="form-group pt-15s">
                   <div className="checkbox">
@@ -200,9 +199,8 @@ class TopicComponent extends React.Component {
           </div>
           <div id="addTopicForm">
             <div className="text-left col-md-12">
-
               <button id="add-topic-btn pull-left" type="button"
-                className="btn btn-warning legitRipple"
+                className="btn bg-slate-800 legitRipple"
                 onClick={this.addTopic} disabled={this.state.disabled}>
                                     Add Configuration
                 <i className="icon-arrow-right14 position-right"></i>

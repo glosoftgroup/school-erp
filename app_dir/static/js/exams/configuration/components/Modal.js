@@ -20,8 +20,6 @@ class MiniModal extends React.Component {
       }
     }
 
-
-
     componentDidMount(){
         const element = ReactDOM.findDOMNode(this);
         $(element).modal('show');
@@ -30,7 +28,6 @@ class MiniModal extends React.Component {
 
     validateInput = (data) =>  {
         let errs = {};
-
         if(Validator.isEmpty(data.subject)){
             errs.subject = "This field is required";
         }
@@ -44,7 +41,6 @@ class MiniModal extends React.Component {
     handleInputChange = (event) => {
         const name   =  event.target.name;
         let value    =  event.target.value;
-
         if(isEmpty(value)){
             this.state.errors[name] = "This field is required";
         }else{
@@ -80,10 +76,8 @@ class MiniModal extends React.Component {
         axios.post(subjectCreateUrl, data)
         .then(function (response) {
             Alert.success('Data sent successfully')
-
             let newOption = Object.assign({}, {id:response.data.id, name:response.data.name})
             self.props.handleSubjectCallBack(newOption)
-
             $(ReactDOM.findDOMNode(self)).modal('hide')
         })
         .catch(function (error) {

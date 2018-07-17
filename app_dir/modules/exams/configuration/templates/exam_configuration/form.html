@@ -90,37 +90,17 @@
 <!--<script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js' %}"></script>-->
 <script type="text/javascript" src="{% static 'js/core/libraries/jquery.validate.min.js' %} "></script>
 <script type="text/javascript" src="{% static 'js/plugins/forms/styling/uniform.min.js' %}"></script>
-<script>
-
-   {% if object.id %}
-        var pk = "{{object.id}}";
-        var updateUrl = "{% url 'exam_configuration:api-update' pk=object.id %}";
-
-        var v = "{{object.get_json_data}}";
-        var objectTopics =JSON.parse(v.replace(/&quot;/g, '"'));
-
-        var objectSubject = "{{object.subject}}";
-        var objectSubjectId = "{{object.subject.id}}";
-
-        var objectClass = "{{object.academicclass.class_group}}";
-        var objectClassId = "{{object.academicclass.id}}";
-
-        var objectAcademic = "{{object.academicyear.name}}";
-        var objectAcademicId = "{{object.academicyear.id}}";
-
-        var objectTerm = "{{object.term.name}}";
-        var objectTermId = "{{object.term.id}}";
-    {% else %}
-        var pk= false;
-        var objectTopics = [];
-    {% endif %}
-
-</script>
 {% render_bundle 'configuration' 'js' %}
 <script>
         $(".styled, .multiselect-container input").uniform({
             radioClass: 'choice'
         });
+
+        $(".control-info").uniform({
+            radioClass: 'choice',
+            wrapperClass: 'border-white text-white'
+        });
+
         $(".control-percentage").uniform({
             radioClass: 'choice',
             wrapperClass: 'border-warning-600 text-warning-800'
