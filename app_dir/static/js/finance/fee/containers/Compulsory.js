@@ -17,10 +17,12 @@ export class Compulsory extends Component {
   componentDidMount = () => {
     var condition = this.props.instance;
     let classNames = '';
+    console.warn(condition.compulsory);
+    console.error('sdfsdfsdfsfsdfsdffdf')
     if (condition.compulsory) {
       classNames = 'checked';
+      this.setState({classNames, value: condition.compulsory});
     }
-    this.setState({classNames, value: condition.compulsory});
   }
 
   isNumeric = (n) => {

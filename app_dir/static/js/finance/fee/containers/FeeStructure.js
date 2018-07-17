@@ -59,12 +59,11 @@ class FeeStructure extends Component {
         // add fee item
         if (item.id === obj.choice.id) {
           // append amount
-          var copy = { ...item, amount: obj.amount };
+          var copy = { ...item, amount: obj.amount, compulsory: obj.compulsory };
           if (obj.choice.choice) {
             copy = {
               ...copy,
-              value: obj.choice.choice,
-              compulsory: obj.compulsory
+              value: obj.choice.choice
             };
           }
           this.props.addFeeItem(copy);

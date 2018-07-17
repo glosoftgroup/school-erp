@@ -7,9 +7,9 @@
 import { ACADEMIC_YEAR_SELECTED } from '../actions/academic-year.js';
 
 export default function (state = null, action) {
-  switch (action.type) {
+    switch (action.type) {
     case ACADEMIC_YEAR_SELECTED:
-      return action.payload;
-  }
-  return state;
+        return action.payload;
+    }
+    return state;
 }
