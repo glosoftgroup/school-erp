@@ -24,6 +24,7 @@ class ItemSerializer(serializers.ModelSerializer):
                 'id',
                 'name',
                 'amount',
+                'compulsory',
                 'choice')
 
 
@@ -91,6 +92,7 @@ class CreateListSerializer(serializers.ModelSerializer):
                 pass
             del fee_item['values']
             del fee_item['update_url']
+            del fee_item['update_view_url']
             del fee_item['delete_url']
             del fee_item['_id']
             logger.info(fee_item)
@@ -127,6 +129,7 @@ class UpdateSerializer(serializers.ModelSerializer):
             try:
                 del fee_item['update_url']
                 del fee_item['delete_url']
+                del fee_item['update_view_url']
                 del fee_item['_id']
                 del fee_item['values']
                 del fee_item['value']

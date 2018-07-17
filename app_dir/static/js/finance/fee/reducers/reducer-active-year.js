@@ -4,13 +4,12 @@
  * */
 
 // "state = null" is set so that we don't throw an error when app first boots up
-import { ACADEMIC_YEAR_SELECTED} from '../actions/academic-year.js';
+import { ACADEMIC_YEAR_SELECTED } from '../actions/academic-year.js';
 
 export default function (state = null, action) {
   switch (action.type) {
     case ACADEMIC_YEAR_SELECTED:
       return action.payload;
-      break;
   }
   return state;
 }

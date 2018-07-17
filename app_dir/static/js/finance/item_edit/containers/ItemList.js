@@ -41,6 +41,7 @@ class Comp extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+
     this.filterContent();
   }
 
@@ -93,7 +94,7 @@ class Comp extends Component {
       try {
         for (const key in item) {
           if (item.hasOwnProperty(key)) {
-            return (<span key={item[key]}>{item.name} <b className="text-primary">|</b> </span>);
+            return (<span key={item[key]}>{item.name}, </span>);
           }
         }
       } catch (err) {
