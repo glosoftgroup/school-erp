@@ -7,9 +7,9 @@
 import { COURSE_SELECTED } from '../actions/course.js';
 
 export default function (state = null, action) {
-  switch (action.type) {
+    switch (action.type) {
     case COURSE_SELECTED:
-      return action.payload;
-  }
-  return state;
+        return action.payload;
+    }
+    return state;
 }

@@ -14,6 +14,7 @@ fields = ('id',
           'academic_year',
           'course',
           'term',
+          'compulsory_amount',
           'amount')
 
 
@@ -125,6 +126,7 @@ class UpdateSerializer(serializers.ModelSerializer):
         instance.fee_items.all().delete()
         for fee_item in fee_items:
             fee_item['id'] = None
+            logger.info(fee_item.get('compulsory'))
             fee_item['name'] = re.sub(r'\d', '', fee_item['name']).replace('[.]','')
             try:
                 del fee_item['update_url']

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import Pagination from 'react-js-pagination';
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api';
@@ -20,16 +21,15 @@ class Comp extends Component {
       deleteUrl: 'url',
       item: {},
       pageSizes: [
-        { 'text': '5', 'id': '5'},
-        { 'text': '10', 'id': '10'},
-        { 'text': '20', 'id': '20'}
+        { 'text': '5', 'id': '5' },
+        { 'text': '10', 'id': '10' },
+        { 'text': '20', 'id': '20' }
       ]
     };
   }
 
   componentWillMount() {
     // fetch items
-    var self = this;
     this.props.fetchItems();
   }
 
@@ -72,7 +72,7 @@ class Comp extends Component {
     }
 
     handleEditShow =() => {
-      this.setState({ edit: true});
+      this.setState({ edit: true });
     }
 
     deleteItem = () => {
@@ -138,12 +138,12 @@ class Comp extends Component {
                       );
                     })
                     }
-                    {this.props.items.length === 0 &&
-                                <tr>
-                                  <td colSpan='3' className="text-center">
-                                    <h4>No data Found</h4>
-                                  </td>
-                                </tr>
+                    {this.props.items.results.length === 0 &&
+                      <tr>
+                        <td colSpan='5' className="text-center">
+                          <h4>No data Found</h4>
+                        </td>
+                      </tr>
                     }
 
                   </tbody>
@@ -182,6 +182,13 @@ class Comp extends Component {
       );
     }
 }
+
+Comp.propTypes = {
+  fetchItems: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  selectItem: PropTypes.func.isRequired,
+  items: PropTypes.object.isRequired
+};
 
 function mapStateToProps(state) {
   return {

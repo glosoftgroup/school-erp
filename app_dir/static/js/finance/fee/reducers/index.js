@@ -9,13 +9,13 @@ import FeeStructureReducer from './reducer-fee-structure';
 import FeeItemsReducer from './reducer-fee-items';
 
 const allReducers = combineReducers({
-  academic_year: AcademicYearReducer,
-  date: DateReducer,
-  fees: FeeStructureReducer,
-  fee_items: FeeItemsReducer,
-  course: CourseReducer,
-  items: ItemReducer,
-  term: ActiveTermReducer
+    academic_year: AcademicYearReducer,
+    date: DateReducer,
+    fees: FeeStructureReducer,
+    fee_items: FeeItemsReducer,
+    course: CourseReducer,
+    items: ItemReducer,
+    term: ActiveTermReducer
 });
 
 export default allReducers;

@@ -1,9 +1,9 @@
 import { SET_ACADEMICS } from '../actions/academics';
 
 export default function clases(state = [], action = {}) {
-  switch(action.type) {   
+    switch (action.type) {
     case SET_ACADEMICS:
-      return action.payload;
+        return action.payload;
     default: return state;
-  }
-}
+    }
+};

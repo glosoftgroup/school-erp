@@ -23,6 +23,9 @@ class FeeStructure(models.Model):
     amount = models.DecimalField(max_digits=125, decimal_places=2, default=Decimal(0),
                                  verbose_name=pgettext_lazy('FeeStructure field', 'amount')
                                  )
+    compulsory_amount = models.DecimalField(max_digits=125, decimal_places=2, default=Decimal(0),
+                                 verbose_name=pgettext_lazy('FeeStructure field', 'amount')
+                                 )
     name = models.CharField(max_length=100, blank=True)
     attributes = HStoreField(default={}, blank=True)
 
@@ -48,6 +51,13 @@ class FeeItem(models.Model):
 
     class Meta:
         app_label = 'fee'
+
+    def save(self, *args, **kwargs):
+        total = sum([ n.amount for n in self.fee.fee_items.filter(compulsory=True) ])
+        self.name = total + Decimal(self.amount)
+        self.fee.compulsory_amount = total
+        self.fee.save()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

@@ -8,9 +8,9 @@
 import { DATE_SELECTED } from '../actions/date.js';
 
 export default function (state = null, action) {
-  switch (action.type) {
+    switch (action.type) {
     case DATE_SELECTED:
-      return action.payload;
-  }
-  return state;
+        return action.payload;
+    }
+    return state;
 }
