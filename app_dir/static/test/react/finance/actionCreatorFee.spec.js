@@ -3,10 +3,21 @@
 import expect from 'expect';
 import {
     addFeeItem, deleteFeeItem, updateFeeItem,
+    selectAcademicYear,
+    ACADEMIC_YEAR_SELECTED,
     ADD_FEE_ITEM, FEE_ITEM_DELETED, FEE_ITEM_UPDATED
 } from '../../../js/finance/fee/actions';
 
 describe('[FINANCE >> Fee structure] Action Creators', () => {
+    // add action
+    var func = selectAcademicYear({});
+    it('has type ACADEMIC_YEAR_SELECTED', () => {
+        expect(func.type).toEqual(ACADEMIC_YEAR_SELECTED);
+    });
+
+    it('puts in ACADEMIC_YEAR_SELECTED payload', () => {
+        expect(func.payload).toEqual({});
+    });
     // add action
     var funParent = addFeeItem({});
     it('has type ADD_FEE_ITEM', () => {
