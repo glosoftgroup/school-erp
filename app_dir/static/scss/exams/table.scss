@@ -1,0 +1,15 @@
+.fixed_header{
+    width: 100%;
+    border:1px solid #ddd;
+}
+
+.fixed_header tbody{
+  display:block;
+  width: 100%;
+  overflow-y: auto;
+  height: 150px;
+}
+
+.fixed_header thead tr {
+   display: block;
+}
