@@ -5,6 +5,7 @@ import {
     selectItems, selectItem, deleteItem, fetchItems,
     SET_ITEMS, ITEM_DELETED, ITEM_SELECTED
 } from '../../../js/finance/item/actions';
+
 require("babel-core/register");
 require("babel-polyfill");
 
@@ -24,6 +25,7 @@ describe('[FINANCE >> Fee Item] Action Creators', () => {
     it('has type ITEM_SELECTED', () => {
         expect(item.type).toEqual(ITEM_SELECTED);
     });
+
     it('selects item from state', () => {
         expect(item.payload).toEqual({id: 12});
     });
