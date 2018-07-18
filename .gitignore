@@ -37,6 +37,7 @@ build/
 node
 node-*
 node_modules/
+coverage/
 .idea/
 .idea/workspace.xml
 .DS_Store
