@@ -3,12 +3,12 @@ import { SET_ITEMS, ADD_ITEM } from '../actions/action-items';
 const initialState = [];
 
 export default (state = initialState, action) => {
-  switch (action.type) {
+    switch (action.type) {
     case ADD_ITEM:
-      return { ...state };
+        return { ...state };
     case SET_ITEMS:
-      return action.payload;
+        return action.payload;
     default:
-      return state;
-  }
+        return state;
+    }
 };

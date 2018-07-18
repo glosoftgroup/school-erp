@@ -63,6 +63,7 @@ THIRD_PARTY_APPS = (
     'webpack_loader',
     'bootstrap3',
     'versatileimagefield',
+    'graphene_django',
 )
 
 LOCAL_APPS = (
@@ -399,3 +400,4 @@ VERSATILEIMAGEFIELD_SETTINGS = {
     # here: https://optimus.io/support/progressive-jpeg/
     'progressive_jpeg': False
 }
+
