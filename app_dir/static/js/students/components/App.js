@@ -15,57 +15,55 @@ import '../css/tabs.scss'
 
 class CrudForm extends React.Component {
     constructor(props) {
-      super(props);
-      this.state = {
-          name: '',
-          step:1,
-          disable:true
-      }; 
+        super(props);
+        this.state = {
+            name: '',
+            step: 1,
+            disable: true
+        };
     }
-    componentDidMount(){
-        if(!pk){
-            this.editable()
+    componentDidMount() {
+        if (!pk) {
+            this.editable();
         }
     }
-    componentWillReceiveProps(nextProps){
-        if(nextProps.student.id){
-           this.setState({disable:false}) 
-        }       
-    } 
-    
-    navigate = (step)=>{
-        if(!this.state.disable){
-            let tab = Object.assign({'id':step})
-            this.props.selectStep(tab)
-        }else{
-            toast.error("Sorry! Add student bio details to proceed.", {
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.student.id) {
+            this.setState({disable: false});
+        }
+    }
+    navigate = (step) => {
+        if (!this.state.disable) {
+            let tab = Object.assign({ 'id': step });
+            this.props.selectStep(tab);
+        } else {
+            toast.error('Sorry! Add student bio details to proceed.', {
                 position: toast.POSITION.TOP_RIGHT
-              });
+            });
         }
         
     }
 
-    editable=()=>{
-        let editable = Object.assign({'editable':true})
-        this.props.selectEditable(editable)
+    editable = () => {
+        let editable = Object.assign({ 'editable': true });
+        this.props.selectEditable(editable);
     }
 
-    render(){
+    render() {
         var inputProps = {
             disabled: this.state.disable
         };
-        return(
+        return (
             <div className="row panel panel-default">
                 <ToastContainer />
 
                 <div className="col-md-2">
                     {(() => {
-                            switch (this.props.editable.editable) {
-                                case true:   return ;
-                                 
-                                default:      return <button onClick={()=>{this.editable()}} className="mt-20 btn btn-sm bg-primary">Edit</button>
-                                ;
-                            }
+                        switch (this.props.editable.editable) {
+                        case true: return;
+                            default: return <button onClick={() => { this.editable()} } className="mt-20 btn btn-sm bg-primary">Edit</button>
+                            ;
+                        }
                     })()}
                     <ImagePreview/>
                 </div>
@@ -81,10 +79,8 @@ class CrudForm extends React.Component {
                                 <div onClick={()=>{this.navigate(4)}} className={classnames("tab-btn ", {"tab-active": this.props.step.id == 4} )}> Financial Details</div>
                                 
                             </div>
-                           <div className="ilive-preview">
-                               <Tabs/>
-                               
-                               
+                            <div className="ilive-preview">
+                                <Tabs/>
                             </div>
                             {/* /tabs */}
                         </div>
