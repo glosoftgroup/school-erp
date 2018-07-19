@@ -9,7 +9,7 @@ class ImagePreview extends React.Component {
     }
 
     componentDidMount() {
-        if(pk){
+        if (pk) {
             this.setState({imagePreviewUrl:this.props.student.image})
         }
     }

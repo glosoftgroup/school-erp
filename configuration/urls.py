@@ -2,6 +2,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from graphene_django.views import GraphQLView
 from app_dir.api.schema import schema
+from django.views.decorators.csrf import csrf_exempt
 
 from app_dir.core.views import test_celery
 from app_dir.core.views import index, home
@@ -37,7 +38,7 @@ urlpatterns = [
     url(r'^exams/marks/allocation/', include(marks_allocations_urls, namespace='marks_allocation')),
     url(r'^finance/item/', include(finance_item_urls, namespace="finance_item")),
     url(r'^finance/fee/', include(finance_fee_urls, namespace="fee")),
-    url(r'^graphql', GraphQLView.as_view(graphiql=True, schema=schema)),
+    url(r'^graphql', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
     url(r'^house/', include(house_urls, namespace='house')),
     url(r'^parent/', include(parent_urls, namespace='parent')),
     url(r'^room/', include(room_urls, namespace='room')),
