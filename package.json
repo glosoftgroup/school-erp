@@ -14,6 +14,11 @@
     "lintfix": "eslint ./app_dir/static/js/finance --fix"
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.2.5",
+    "apollo-client": "^2.3.5",
+    "apollo-link": "^1.2.2",
+    "apollo-link-error": "^1.1.0",
+    "apollo-link-http": "^1.5.4",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^3.3.7",
@@ -22,6 +27,8 @@
     "create-react-class": "^15.6.3",
     "daterangepicker": "^2.1.27",
     "es6-promise": "^4.2.4",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
     "highcharts": "^5.0.14",
     "jgrowl": "^1.4.6",
     "jquery": "^3.3.1",
@@ -37,6 +44,7 @@
     "pdfjs-dist": "^1.9.622",
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
+    "react-apollo": "^2.1.9",
     "react-bootstrap": "^0.32.1",
     "react-datepicker": "^1.2.2",
     "react-dom": "^15.6.1",
