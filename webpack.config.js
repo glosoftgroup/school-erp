@@ -27,7 +27,9 @@ module.exports = {
         'room': './app_dir/static/js/room/',
         'site': './app_dir/static/js/site/',
         'stream': './app_dir/static/js/academics/stream/',
-        'student': './app_dir/static/js/students/',
+        'student': './app_dir/static/js/students/create',
+        'student_fee': './app_dir/static/js/students/fee_list',
+        'student_view': './app_dir/static/js/students_view/',
         'term': './app_dir/static/js/term/',
         'marks_allocation': './app_dir/static/js/exams/marks_allocation/',
         'users': './app_dir/static/js/users/'

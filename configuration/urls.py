@@ -22,6 +22,7 @@ from app_dir.modules.room.urls import urlpatterns as room_urls
 from app_dir.modules.parent.urls import urlpatterns as parent_urls
 from app_dir.modules.site.urls import urlpatterns as site_urls
 from app_dir.modules.student.urls import urlpatterns as student_urls
+from app_dir.modules.student.student_fee.urls import urlpatterns as student_fee_urls
 from app_dir.modules.term.urls import urlpatterns as term_urls
 from app_dir.modules.users.user.urls import urlpatterns as users_urls
 from app_dir.modules.workload.class_allocation.urls import urlpatterns as class_allocation_urls
@@ -46,6 +47,7 @@ urlpatterns = [
     url(r'^stream/', include(stream_urls, namespace='stream')),
     url(r'^subject/', include(subject_urls, namespace='subject')),
     url(r'^student/', include(student_urls, namespace='student')),
+    url(r'^student/fee/', include(student_fee_urls, namespace='student_fee')),
     url(r'^term/', include(term_urls, namespace='term')),
     url(r'^test_celery', test_celery, name='test_celery'),
     url(r'^users/', include(users_urls, namespace='users')),
