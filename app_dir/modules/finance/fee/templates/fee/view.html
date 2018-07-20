@@ -1,0 +1,52 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+  {% if object.name %}
+   Edit {{object.name}}
+  {% else %}
+    Add Fees Structure
+  {% endif %}
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class=""><a href="{% url 'fee:index' %}" >Fee Structure</a></li>
+     <li class="active"><a >
+         {% if object.name %}
+           Edit {{object.name}}
+         {% else %}
+            Add Fees Structure
+         {% endif %}
+     </a></li>
+ {% endblock %}
+
+
+
+{% block menu_finance_item %}active{% endblock %}
+
+{% block custom_css %}
+{% render_bundle 'fee' 'css' %}
+
+ {% endblock %}
+
+{% block content %}
+ <div class="row animated " id="root">
+
+ </div>
+
+<input type="hidden" class="pageUrls"
+  data-listurl="{% url 'attendance:api-list-attendance' %}"
+>
+{% endblock%}
+{% block custom_js %}
+<script>
+    var pk = false;
+    {% if object.pk %}
+       pk= "{{object.pk}}"
+    {% endif %}
+</script>
+{% render_bundle 'fee' 'js' %}
+
+{% endblock %}

@@ -71,7 +71,7 @@ class ImagePreview extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div class="thumbnail caption text-center">
+                <div className="thumbnail caption text-center">
                     {!!this.props.student.first_name &&
                         <h6 className="text-semibold text-center no-margin">
                         {this.props.student.first_name}&nbsp;

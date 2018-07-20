@@ -3,10 +3,10 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import UpdateView
 
 from .api.views import *
-from .models import FeeStructure as Table
+from .models import Fee as Table
 
 # global variable
-module = 'fee'
+module = 'student_fee'
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name=module+"/list.html"), name="index"),
     url(r'^api/create/$', CreateAPIView.as_view(), name='api-create'),

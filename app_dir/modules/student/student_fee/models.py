@@ -10,16 +10,16 @@ from app_dir.modules.academics.classes.models import Class
 from app_dir.modules.term.models import Term
 
 
-class FeeStructure(models.Model):
+class Fee(models.Model):
     academic_year = models.ForeignKey(
-        AcademicYear, related_name='fee_year', blank=True, null=True,
-        verbose_name=pgettext_lazy('FeeStructure field', 'academic year'))
+        AcademicYear, related_name='student_fee_year', blank=True, null=True,
+        verbose_name=pgettext_lazy('Fee field', 'academic year'))
     course = models.ForeignKey(
-        Class, related_name='fee_class', blank=True, null=True,
-        verbose_name=pgettext_lazy('FeeStructure field', 'class'))
+        Class, related_name='student_fee_class', blank=True, null=True,
+        verbose_name=pgettext_lazy('Fee field', 'class'))
     term = models.ForeignKey(
-        Term, related_name='fee_term', blank=True, null=True,
-        verbose_name=pgettext_lazy('FeeStructure field', 'term'))
+        Term, related_name='student_fee_term', blank=True, null=True,
+        verbose_name=pgettext_lazy('Fee field', 'term'))
     amount = models.DecimalField(max_digits=125, decimal_places=2, default=Decimal(0),
                                  verbose_name=pgettext_lazy('FeeStructure field', 'amount')
                                  )
@@ -30,9 +30,8 @@ class FeeStructure(models.Model):
     attributes = HStoreField(default={}, blank=True)
 
     class Meta:
-        app_label = 'fee'
-        unique_together = ("academic_year", "course", "term"
-                                                      "")
+        app_label = 'student_fee'
+        # unique_together = ("academic_year", "course", "term"
 
     def save(self, *args, **kwargs):
         self.name = self.academic_year.name +' Term:'+ self.term.name +' Class:'+ self.course.name
@@ -41,8 +40,8 @@ class FeeStructure(models.Model):
         return self.name
 
 
-class FeeItem(models.Model):
-    fee = models.ForeignKey(FeeStructure, related_name='fee_items', on_delete=models.CASCADE)
+class Item(models.Model):
+    fee = models.ForeignKey(Fee, related_name='student_fee_items', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True)
     choice = JSONField(default={})
     compulsory = models.BooleanField(default=True)
@@ -54,7 +53,6 @@ class FeeItem(models.Model):
 
     def save(self, *args, **kwargs):
         total = sum([ n.amount for n in self.fee.fee_items.filter(compulsory=True) ])
-        # self.name = total + Decimal(self.amount)
         self.fee.compulsory_amount = total
         self.fee.save()
         super().save(*args, **kwargs)
