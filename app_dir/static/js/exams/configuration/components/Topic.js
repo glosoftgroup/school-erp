@@ -3,6 +3,8 @@ import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 import classnames from 'classnames';
 import { PropTypes } from 'prop-types';
+import Urls from '../constants/Urls';
+import Api from '../../../common/Api';
 
 class TopicComponent extends React.Component {
     constructor(props) {
@@ -15,9 +17,31 @@ class TopicComponent extends React.Component {
             disabled: true,
             assignment: '',
             cat: '',
-            exam: ''
+            exam: '',
+            updateStatus: (window.location.href).includes('update')
         };
         this.baseState = Object.assign({}, this.state);
+    }
+
+    componentWillMount () {
+        var self = this;
+        console.log('status is ' + self.state.updateStatus);
+        if (self.state.updateStatus) {
+            Api.retrieve(Urls.updateUrl()).then(function(response) {
+                console.log(response.data);
+                console.log(typeof response.data.exam_settings.assignments);
+                self.setState({
+                    assignment: response.data.exam_settings.assignments,
+                    cat: response.data.exam_settings.cats,
+                    exam: response.data.exam_settings.exams,
+                    assignmentstatus: true,
+                    catstatus: true,
+                    examstatus: true
+                });
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
     }
 
     resetForm = () => {
@@ -28,7 +52,7 @@ class TopicComponent extends React.Component {
     handleInputChange = event => {
         const name = event.target.name;
         let value = event.target.value;
-        let errors = {...this.state};
+        let { errors } = this.state;
 
         if (isEmpty(value)) {
             errors[name] = 'This field is required';
@@ -47,12 +71,6 @@ class TopicComponent extends React.Component {
     validateInput = (data) => {
         let errs = {};
 
-        if (Validator.isEmpty(data.assignment)) {
-            errs.assignment = 'This field is required';
-        }
-        if (Validator.isEmpty(data.cat)) {
-            errs.cat = 'This field is required';
-        }
         if (Validator.isEmpty(data.exam)) {
             errs.exam = 'This field is required';
         }
