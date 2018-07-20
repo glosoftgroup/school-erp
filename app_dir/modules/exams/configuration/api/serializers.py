@@ -137,7 +137,9 @@ class UpdateSerializer(serializers.ModelSerializer):
     academicyear = serializers.SerializerMethodField()
     academicclass = serializers.SerializerMethodField()
     term = serializers.SerializerMethodField()
+    exam_settings = serializers.SerializerMethodField()
     exams = serializers.SerializerMethodField()
+
     class Meta:
         model = Table
         fields = ('id',
@@ -145,6 +147,7 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'academicyear',
                   'academicclass',
                   'term',
+                  'exam_settings',
                   'exams'
                  )
 
@@ -160,21 +163,41 @@ class UpdateSerializer(serializers.ModelSerializer):
     def get_term(self, obj):
         return {"id": obj.term.pk, "name": obj.term.name}
 
+    def get_exam_settings(self, obj):
+        try:
+            assignments = str(Assignment.objects.filter(examId=obj.pk).count())
+        except:
+            assignments = "0"
+
+        try:
+            cats = str(Cat.objects.filter(examId=obj.pk).count())
+        except:
+            cats = "0"
+
+        try:
+            exams = str(Exam.objects.filter(examId=obj.pk).count())
+        except:
+            exams = "0"
+        return {"assignments": assignments, "cats": cats, "exams":exams}
+
     def get_exams(self, obj):
         try:
-            assignments = Assignment.objects.filter(examId=obj.pk).count()
+            assignments_query = Assignment.objects.filter(examId=obj.pk)
+            assignments = [{"id": i.pk, "name":i.name, "marks": i.marks} for i in assignments_query]
         except:
-            assignments = 0
+            assignments = None
 
         try:
-            cats = Cat.objects.filter(examId=obj.pk).count()
+            cats_query = Cat.objects.filter(examId=obj.pk)
+            cats = [{"id": i.pk, "name": i.name, "marks": i.marks} for i in cats_query]
         except:
-            cats = 0
+            cats = None
 
         try:
-            exams = Exam.objects.filter(examId=obj.pk).count()
+            exams_query = Exam.objects.filter(examId=obj.pk)
+            exams = [{"id": i.pk, "name": i.name, "marks": i.marks} for i in exams_query]
         except:
-            exams = 0
+            exams = None
         return {"assignments": assignments, "cats": cats, "exams":exams}
 
     def update(self, instance, validated_data):
@@ -188,6 +211,9 @@ class UpdateSerializer(serializers.ModelSerializer):
             instance.term = validated_data.get('term')
         if validated_data.get('percentage'):
             instance.percentage = validated_data.get('percentage')
+        print ('******************')
+        print (validated_data)
+        print ('******************')
 
         instance.save()
         return instance
