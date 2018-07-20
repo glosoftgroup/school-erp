@@ -1,0 +1,61 @@
+
+$primary-color: #2196F3;
+$white-color: #fff;
+$border-color: #ddd;
+$primary-font: #000;
+.custom-tab{
+  &:after {
+    content: '',
+  }
+  background-color: transparent;
+  font-size: 12px;
+  color: #000;
+  cursor: pointer;
+  display: block;
+  position: relative;
+  border: 1px solid $border-color;
+  border-bottom: none;
+  transition: all 1.4s cubic-bezier(0.42, 0, 0.58, 1);  
+}
+.tab-btn{
+  padding: 10px 1px; 
+  -webkit-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	transition: all 1s ease; 
+}
+
+.parent-form{
+  transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+}
+.active-tab {
+  color: $primary-color;
+  //background-color:  $primary-color;  
+  font-weight: 700;
+  &:after {
+    content: '';
+    background: #ffd6d6;
+    width: 0%;
+    height: 40px;
+    position: absolute;
+    z-index: -2;
+    top: 30px;
+    left: 25px;
+    transition: all ease-out 0.3s;
+	}
+  &:hover { color:$primary-color; }
+  &:focus { color:$primary-color; }
+}
+.active-tab:after {
+  background-color: #7986cb;
+}
+.btn-group{
+  margin-bottom: 0px;  
+}
+.btn-group-justified{
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+   box-shadow: 0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+}
+.navbar-default .navbar-nav>.active>a:after {
+    background-color: #7986cb;
+}

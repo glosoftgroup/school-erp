@@ -260,7 +260,8 @@ class CrudForm extends React.Component {
             Api.update(Urls.updateUrl(), data)
                 .then(function(response) {
                     Alert.success('Data sent successfully', 'Well Done!');
-                    window.location.href = Urls.redirectUrl();
+                    console.log(response);
+                    // window.location.href = Urls.redirectUrl();
                 }).catch(function(error) {
                     Alert.error(error);
                     console.log(error);
