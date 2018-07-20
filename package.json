@@ -7,7 +7,7 @@
   "license": "Proprietary",
   "scripts": {
     "jest": "jest",
-    "test": "mocha ./app_dir/static/test --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
+    "test": "mocha ./app_dir/static/test --compilers js:babel-register --require ignore-styles --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
     "test_react": "mocha ./app_dir/static/test/react/ --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
     "build": "webpack",
     "lint": "eslint ./app_dir/static/js/finance",
@@ -111,6 +111,7 @@
     "expect": "^22.4.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",
+    "ignore-styles": "^5.0.1",
     "jest": "^22.4.3",
     "jest-serializer-vue": "^0.3.0",
     "jsdom": "^11.6.2",
