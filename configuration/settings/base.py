@@ -87,6 +87,7 @@ LOCAL_APPS = (
     'app_dir.modules.users.user',
     'app_dir.modules.site',
     'app_dir.modules.student',
+    'app_dir.modules.student.student_fee',
     'app_dir.modules.term',
     'app_dir.modules.workload.class_allocation',
 )

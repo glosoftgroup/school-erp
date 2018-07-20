@@ -36,5 +36,9 @@ urlpatterns = [
         permission_required('student.change_student', login_url='core:not_found')
         (UpdateView.as_view(template_name="student/form.html", model=Table, fields=['id', 'first_name', 'last_name'])),
         name='update'),
+    url(r'^update/view/(?P<pk>[0-9]+)/$',
+        permission_required('student.change_student', login_url='core:not_found')
+        (UpdateView.as_view(template_name="student/view.html", model=Table, fields=['id', 'first_name', 'last_name'])),
+        name='update-view'),
 ]
 

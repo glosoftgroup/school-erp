@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import AcademicYears from '../components/AcademicYears';
 
 export class FinacialDetails extends Component {
   static propTypes = {
-      prop: PropTypes
+      data: PropTypes.object.isRequired
+  }
+
+  renderAcademic () {
+      return (
+          <div>
+              { this.props.data ?
+                  this.props.data.allFeeStructure.map((obj, key) => {
+                      return (<div key={key} className="badge badge-primary">2018-2019</div>);
+                  })
+                  : 'xxxxxx' }
+          </div>
+      );
   }
 
   render() {
@@ -13,7 +26,8 @@ export class FinacialDetails extends Component {
               <div className="title text-bold">Academic Year(s)</div>
               <div className="scrollable-tabs">
                   <div className="tab-item">
-                      <div className="badge badge-primary">2018-2019</div>
+                      <AcademicYears items={this.props.data} />
+                      {/* {this.renderAcademic()} */}
                   </div>
               </div>
               <div className="fee-structure">

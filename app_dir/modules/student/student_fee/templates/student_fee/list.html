@@ -1,0 +1,34 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+  Fees Structure
+{% endblock %}
+
+ {% block breadcrumbs %}
+     <li class="active"><a>Fees Structure </a></li>
+ {% endblock %}
+
+
+{% block menu_finance_fee %}active{% endblock %}
+
+{% block custom_css %}
+{% render_bundle 'fee_list' 'css' %}
+
+ {% endblock %}
+
+{% block content %}
+ <div class="row animated " id="root">
+
+ </div>
+
+<input type="hidden" class="pageUrls"
+  data-listurl="{% url 'attendance:api-list-attendance' %}"
+>
+{% endblock%}
+{% block custom_js %}
+{% render_bundle 'fee_list' 'js' %}
+
+{% endblock %}

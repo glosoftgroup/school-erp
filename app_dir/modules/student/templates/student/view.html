@@ -1,0 +1,77 @@
+{% extends "dashboard/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+{% if not object.id %}
+Add student
+{% else %}
+Edit {{object.first_name}} details - Student
+{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+<li class=""><a href="{% url 'student:index' %}">Student</a></li>
+<li class="active">{{form.first_name.value}}</li>
+{% endblock %}
+
+
+{% block menu_student %}active{% endblock %}
+
+{% block custom_css %}
+{% render_bundle 'student_view' 'css' %}
+<style>
+html {
+  font-size: 14px;
+}
+.select2{
+width:100% !important;
+}
+</style>
+{% endblock %}
+{% block content %}
+<!--house details-->
+
+<div id="root"></div>
+
+
+<!--./house details-->
+{% endblock %}
+
+{% block custom_js %}
+<script src="{% static 'js/plugins/forms/styling/uniform.min.js' %}"></script>
+<script>
+    var csrfmiddlewaretoken  = jQuery("[name=csrfmiddlewaretoken]").val();
+    var dynamicData = {};
+    var updateUrl = null;
+    var updateOfficialDetailsUrl = null;
+    var getOfficialDetailsUrl = null;
+
+    var getAcademicYearsUrl = "{% url 'academic_year:api-list' %}";
+    var getCourseUrl = "{% url 'classes:api-list' %}";
+    var getStreamUrl = "{% url 'stream:api-list' %}";
+    var createOfficialDetailsUrl = "{% url 'student:api-create-official' %}";
+
+
+    {% if object.id %}
+    var pk = "{{object.id}}";
+    updateUrl = "{% url 'student:api-update' pk=object.id %}";
+    updateOfficialDetailsUrl = "{% url 'student:api-update-official' pk=object.id %}";
+    getOfficialDetailsUrl = "{% url 'student:api-list-official' pk=object.id %}";
+    {% else %}
+    var pk= false;
+    {% endif %}
+    var createUrl = "{% url 'student:api-create' %}";
+    var redirectUrl = "{% url 'student:index' %}";
+    // alertUser
+    function alertUser(msg,status='bg-success', header='Well done!')
+    { $.jGrowl(msg,{header: header,theme: status}); }
+    // File input
+    $(".file-styled").uniform({
+        fileButtonClass: 'action btn bg-pink-400'
+    });
+</script>
+<script src="{% static 'dist/student_view.bundle.js' %}"></script>
+<!--{ render_bundle 'student_view' 'js' %}-->
+{% endblock %}
