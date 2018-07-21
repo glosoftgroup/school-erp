@@ -10,7 +10,7 @@ export const HERO_QUERY = gql`
     id, amount, course {
       id, name
     }, feeItems {
-      id, name, amount, compulsory
+      id, name, amount, compulsory, choice
     } term {
       id, name
     } academicYear {

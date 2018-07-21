@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import FeeForm from '../containers/FeeForm';
 
 export class AcademicYears extends Component {
   static propTypes = {
@@ -47,24 +48,7 @@ export class AcademicYears extends Component {
   render() {
       return (
           <div>
-              <div className="col-md-6">
-                  <h2>Compulsory Items</h2>
-                  {this.state.compulsory.map((value, index) => {
-                      return (
-                          <div key={index}>
-                              {value.name}
-                          </div>);
-                  })}
-              </div>
-              <div className="col-md-6">
-                  <h2>Optional items</h2>
-                  {this.state.optional.map((value, index) => {
-                      return (
-                          <div key={index}>
-                              {value.name}
-                          </div>);
-                  })}
-              </div>
+              <FeeForm compulsory={this.state.compulsory} optional={this.state.optional}/>
           </div>
       );
   }
