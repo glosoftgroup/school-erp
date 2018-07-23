@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-// import Select2 from 'react-select2-wrapper';
-import { updateFeeItem } from '../actions/action-fee-item';
 
 export class Compulsory extends Component {
     constructor(props) {
@@ -18,7 +15,7 @@ export class Compulsory extends Component {
       var condition = this.props.instance;
       let classNames = '';
       if (condition.compulsory) {
-          classNames = 'checked';
+          classNames = 'checked disabled hidden';
           this.setState({classNames, value: condition.compulsory});
       }
   }
@@ -39,20 +36,20 @@ export class Compulsory extends Component {
           value, classNames
       });
 
-      var instance = { ...this.props.instance };
-      instance.compulsory = value;
-      this.props.updateFeeItem(instance);
+      //   var instance = { ...this.props.instance };
+      this.props.handleInputChange(event, this.props.instance);
   }
   render() {
       return (
           <div>
               <label className="checkbox-inline">
-                  <div className="checker">
+                  <div className={'checker ' + this.state.classNames}>
                       <span className={this.state.classNames}>
                           <input
+                              { ...this.props.instance.compulsory && 'disbled="disabled"' }
                               name="value"
                               onChange={this.handleInputChange}
-                              checked={this.state.value}
+                              checked={this.value}
                               className="styled" type="checkbox" />
                       </span>
                   </div>
@@ -63,17 +60,12 @@ export class Compulsory extends Component {
   }
 }
 Compulsory.propTypes = {
-    updateFeeItem: PropTypes.func.isRequired,
-    instance: PropTypes.object.isRequired
+    instance: PropTypes.object.isRequired,
+    handleInputChange: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
     return {};
 }
-// Get actions and pass them as props
-function matchDispatchToProps(dispatch) {
-    return bindActionCreators({
-        updateFeeItem: updateFeeItem
-    }, dispatch);
-}
-export default connect(mapStateToProps, matchDispatchToProps)(Compulsory);
+
+export default connect(mapStateToProps)(Compulsory);

@@ -54,9 +54,9 @@ class Comp extends React.Component{
 
     tabNavigator =(back)=>{
         var num;
-        if(back){
+        if (back) {
             num = this.props.step.id -= 1
-        }else{
+        } else {
             num = this.props.step.id += 1
         }
         var back = Object.assign({'id':num})
@@ -110,14 +110,10 @@ class Comp extends React.Component{
                 <div className="col-md-6 text-right">
 
                 {this.props.parents.length !== 0 &&
-                 (() => {
-                    switch (this.props.editable.editable) {
-                        case true:   return <button onClick={this.handleSubmit} id="add-room-btn" type="submit" className="btn btn-sm btn-primary legitRipple">
+                  <button onClick={this.handleSubmit} id="add-room-btn" type="submit" className="btn btn-sm btn-primary legitRipple">
                                             {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>
-                                        </button>;
-                        default:      return "";
-                    }
-                })()}                    
+                                        </button>                       
+                }                    
                 
                 
                 </div>
@@ -131,17 +127,17 @@ class Comp extends React.Component{
 
 function mapStateToProps(state) {
     return {
-        editable:state.editable,
+        editable: state.editable,
         student: state.activeStudent,
         parents: state.parents,
         step: state.step
-    }
+    };
 }
 
 // Get actions and pass them as props to to UserList
-function matchDispatchToProps(dispatch){
+function matchDispatchToProps(dispatch) {
     return bindActionCreators({
-        selectParent:selectParent,
+        selectParent: selectParent,
         parentDeleted: parentDeleted,
         saveStudent: saveStudent,
         selectStep: selectStep
