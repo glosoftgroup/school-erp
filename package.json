@@ -11,7 +11,7 @@
     "test_react": "mocha ./app_dir/static/test/react/ --compilers js:babel-register --require ./app_dir/static/test/helpers.js --require ./app_dir/static/test/dom.js --recursive",
     "build": "webpack",
     "lint": "eslint ./app_dir/static/js/finance",
-    "lintfix": "eslint ./app_dir/static/js/finance --fix"
+    "lintfix": "eslint ./app_dir/static/js/finance --fix --ext .js"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.2.5",

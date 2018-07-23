@@ -10,7 +10,7 @@ export const HERO_QUERY = gql`
     id, amount, course {
       id, name
     }, feeItems {
-      id, name, amount, compulsory
+      id, name, amount, compulsory, choice
     } term {
       id, name
     } academicYear {
@@ -21,7 +21,7 @@ export const HERO_QUERY = gql`
 `;
 
 const App = ({ episode }) => (
-    <Query query={HERO_QUERY} >
+    <Query query={HERO_QUERY} variables={{id: 1}}>
         {result => {
             const { loading, error, data } = result;
 
