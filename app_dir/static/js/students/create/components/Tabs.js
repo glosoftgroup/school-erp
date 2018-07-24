@@ -42,7 +42,7 @@ class Comp extends React.Component {
                     <Parent />
                 }
                 {this.props.step.id === 4 &&
-                    <FeeStructure episode={23} />
+                    <FeeStructure year={this.props.student.academic_year} />
                 }
             </div>);
     }

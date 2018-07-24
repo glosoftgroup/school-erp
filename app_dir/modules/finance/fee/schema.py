@@ -34,13 +34,15 @@ class FeeItemType(DjangoObjectType):
 
 
 class Query(object):
-    all_fee_structure = graphene.List(FeeStructureType)
+    all_fee_structure = graphene.List(FeeStructureType, year=graphene.String(),)
     all_fee_item = graphene.List(FeeItemType)
     all_classes = graphene.List(ClassType)
     all_academic_year = graphene.List(AcademicYearType)
     all_terms = graphene.List(TermType)
 
-    def resolve_all_fee_structure(self, info, **kwargs):
+    def resolve_all_fee_structure(self, info, year=None, **kwargs):
+        if year:
+            return Table.objects.filter(academic_year__name=year)
         return Table.objects.all()
 
     def resolve_all_terms(self, info, **kwargs):
