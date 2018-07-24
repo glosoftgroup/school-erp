@@ -10,7 +10,9 @@ import Compulsory from './Compulsory';
 export class FeeForm extends Component {
   static propTypes = {
       compulsory: PropTypes.array.isRequired,
-      optional: PropTypes.array.isRequired
+      optional: PropTypes.array.isRequired,
+      student: PropTypes.object.isRequired,
+      academics: PropTypes.object
   }
 
   constructor(props) {
@@ -30,11 +32,7 @@ export class FeeForm extends Component {
               compulsory,
               optional
           });
-          console.warn(this.props.optional)
-          console.warn('did mount')
       }, 2000);
-      
-      
   }
 
   handleInputChange = (event, obj) => {
@@ -69,13 +67,28 @@ export class FeeForm extends Component {
 
       // add edited object
       optional.push(found);
-      console.log(optional)
       this.setState({optional});
   }
 
   render() {
       return (
-          <div className="table-responsive">
+          <div className="table-responsive col-md-4">
+              <div className="title">
+                  <h6>
+                      <span className="text-primary text-bold">
+                        Academic Year:&nbsp;&nbsp;
+                      </span>
+                      {this.props.student.academic_year}&nbsp;&nbsp;&nbsp;&nbsp;
+                      <span className="text-primary text-bold">
+                        Class:&nbsp;&nbsp;
+                      </span>
+                      {this.props.student.course}&nbsp;&nbsp;&nbsp;&nbsp;
+                      <span className="text-primary text-bold">
+                        Term:&nbsp;&nbsp;
+                      </span>
+                      {this.props.student.term}
+                  </h6>
+              </div>
               <table className="table table-xs">
                   <thead>
                       <tr className="bg-primary">
@@ -120,12 +133,20 @@ export class FeeForm extends Component {
                       })}
                   </tbody>
               </table>
+              <div className={'pull-right'}> 
+                  <button className="btn btn-primary">
+                      Submit
+                  </button>
+              </div>
           </div>
       );
   }
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+    student: state.activeStudent,
+    academics: state.academics
+});
 
 const mapDispatchToProps = {};
 

@@ -11,7 +11,9 @@ export class FinacialDetails extends Component {
   render() {
       return (
           <div className="maincontainer">
-              <FeeStructure items={this.props.data} />
+              {this.props.data.allFeeStructure.map((value, index) => {
+                  return <FeeStructure key={index} items={this.props.data} />;
+              })}
           </div>
       );
   }
