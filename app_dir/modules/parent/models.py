@@ -16,6 +16,8 @@ class Parent(models.Model):
         pgettext_lazy('Parent field', 'email'), blank=True, default='', max_length=128)
     mobile = models.CharField(
         pgettext_lazy('Parent field', 'mobile'), blank=True, default='', max_length=128)
+    relation = models.CharField(
+        pgettext_lazy('Parent field', 'relation'), blank=True, default='', max_length=128)
 
     description = models.TextField(
         verbose_name=pgettext_lazy('Parent field', 'description'), blank=True, null=True)

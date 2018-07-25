@@ -26,11 +26,10 @@ export class AcademicYears extends Component {
 
       // get academic details from student details
       const year = this.props.student.academic_year;
-      const course = this.props.student.course;
 
       // find students fee structure
       const fee = data.find(value => {
-          return value.academicYear.name === year && value.course.name === course;
+          return value.academicYear.name === year;
       });
 
       let compulsory = [];
