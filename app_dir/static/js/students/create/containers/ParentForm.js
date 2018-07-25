@@ -16,6 +16,7 @@ class Comp extends React.Component {
             mobile: '',
             description: '',
             email: '',
+            relation: '',
             buttonText: 'add',
             loading: false,
             parent: '',
@@ -37,11 +38,10 @@ class Comp extends React.Component {
             this.setState({
                 [e.target.name]: e.target.value
             });
-        } 
-        
+        }
     }
-   
-    handleSubmit =(event)=> {
+
+    handleSubmit =(event) => {
         event.preventDefault();
 
         // validate
@@ -51,6 +51,7 @@ class Comp extends React.Component {
         if (this.state.middle_name === '') errors.middle_name = 'Field required';
         if (this.state.last_name === '') errors.last_name = 'Field required';
         if (this.state.mobile === '') errors.mobile = 'Field required';
+        // if (this.state.relation === '') errors.mobile = 'Field required';
 
         this.setState({errors: errors});
 
@@ -62,7 +63,7 @@ class Comp extends React.Component {
             const data = new FormData(event.target);
 
             // create admissions
-            api.create('/parent/api/create/',data)
+            api.create('/parent/api/create/', data)
                 .then(function (response) {
                     alertUser('Data sent successfully');
                     self.setState({
@@ -114,18 +115,23 @@ class Comp extends React.Component {
 
                     <div className="col-md-6">
                         <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                                 <label className="text-bold">Mobile:<span className="text-danger">*</span></label>
                                 <input value={this.state.mobile} onChange={this.onChange} required className="form-control" name="mobile" id="mobile" placeholder="Mobile No." type="text"/>
                                 <span className="help-block text-warning">{this.state.errors.mobile}</span>
                             </div>
 
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                                 <label className="text-bold">Email:</label>
                                 <input value={this.state.email} onChange={this.onChange}  className="form-control" name="email" id="email" placeholder="email@example.com" type="text"/>
                                 <span className="help-block text-warning">{this.state.errors.email}</span>
                             </div>
-                            <div className="text-right col-md-4">
+                            <div className="col-md-3">
+                                <label className="text-bold">Relation:</label>
+                                <input value={this.state.relation} onChange={this.onChange} className="form-control" name="relation" id="relation" placeholder="parent/gurdian/sibling" type="text"/>
+                                <span className="help-block text-warning">{this.state.errors.relation}</span>
+                            </div>
+                            <div className="text-right col-md-2">
                                 <label className="text-bold">&nbsp;&nbsp;</label>
                                 <button id="add-instance-btn" type="submit" className="btn btn-primary legitRipple">
                                     {this.state.buttonText}<i className="icon-arrow-right14 position-right"></i>

@@ -20,7 +20,8 @@ class Comp extends React.Component {
     }
 
     static propTypes = {
-        step: PropTypes.object.isRequired
+        step: PropTypes.object.isRequired,
+        student: PropTypes.object
     }
 
     componentWillReceiveProps(nextProps) {

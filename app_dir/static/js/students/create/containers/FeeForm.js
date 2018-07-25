@@ -72,7 +72,7 @@ export class FeeForm extends Component {
 
   render() {
       return (
-          <div className="table-responsive col-md-4">
+          <div className="table-responsive col-md-">
               <div className="title">
                   <h6>
                       <span className="text-primary text-bold">
