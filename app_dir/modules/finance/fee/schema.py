@@ -54,7 +54,7 @@ class Query(object):
     def resolve_all_classes(self, info, **kwargs):
         return Class.objects.all()
 
-    def resolve_all_classes(self, info, **kwargs):
+    def resolve_all_academic_year(self, info, **kwargs):
         return AcademicYear.objects.all()
 
     def resolve_all_fee_item(self, info, **kwargs):

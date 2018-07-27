@@ -1,16 +1,24 @@
 from rest_framework import generics
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.contrib.auth import get_user_model
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import pagination
+from rest_framework.response import Response
 from .pagination import PostLimitOffsetPagination
 
 from app_dir.modules.finance.fee.models import FeeStructure as Table
+from app_dir.modules.term.models import Term
+from app_dir.modules.finance.fee.models import FeeItem as Item
 from .serializers import (
     CreateListSerializer,
     TableListSerializer,
     UpdateSerializer
      )
+
+from structlog import get_logger
+
+logger = get_logger(__name__)
 
 
 class CreateAPIView(generics.CreateAPIView):
@@ -20,6 +28,45 @@ class CreateAPIView(generics.CreateAPIView):
 
 class DestroyView(generics.DestroyAPIView):
     queryset = Table.objects.all()
+
+
+class ListFeeAPIView(APIView):
+    def get(self, request, format=None):
+        terms = []
+        items = []
+        term_query = Term.objects.all()
+        year = '2017-2018'
+        for term in term_query:
+            terms.append({'name': term.name})
+
+        for item in Item.objects.filter(fee__academic_year__name=year):
+            t = []
+            for term in term_query:
+                amount = Item.objects.filter(fee__academic_year__name=year, fee__term=term, pk=item.pk)
+                try:
+                    amount = amount.first().amount
+                except:
+                    amount = 0
+                t.append({'term': term.name, 'amount': amount})
+            found = []
+            name = item.name + '-' + item.choice.get('name')
+            found = [items.remove(i) for i in filter(lambda found: found['name'] == name, items)]
+            f = [i for i in filter(lambda found: found['name'] == name, items)]
+
+            logger.info(type(found))
+            logger.info(len(found))
+            logger.info(found)
+            logger.info('hurt you')
+            if not len(found):
+                items.append({
+                    'name': item.name + '-' + item.choice.get('name'),
+                    'terms': t
+                })
+        results = {
+            'results': {'terms': terms, 'items': items}
+        }
+
+        return Response(results)
 
 
 class ListAPIView(generics.ListAPIView):
