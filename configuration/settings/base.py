@@ -79,6 +79,7 @@ LOCAL_APPS = (
     'app_dir.modules.attendance',
     'app_dir.modules.exams.configuration',
     'app_dir.modules.exams.marks_allocation',
+    'app_dir.modules.exams.exam_type',
     'app_dir.modules.finance.fee',
     'app_dir.modules.finance.item',
     'app_dir.modules.house',
