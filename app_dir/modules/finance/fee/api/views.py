@@ -32,39 +32,9 @@ class DestroyView(generics.DestroyAPIView):
 
 class ListFeeAPIView(APIView):
     def get(self, request, format=None):
-        terms = []
-        items = []
-        term_query = Term.objects.all()
-        year = '2017-2018'
-        for term in term_query:
-            terms.append({'name': term.name})
-
-        for item in Item.objects.filter(fee__academic_year__name=year):
-            t = []
-            for term in term_query:
-                amount = Item.objects.filter(fee__academic_year__name=year, fee__term=term, pk=item.pk)
-                try:
-                    amount = amount.first().amount
-                except:
-                    amount = 0
-                t.append({'term': term.name, 'amount': amount})
-            found = []
-            name = item.name + '-' + item.choice.get('name')
-            found = [items.remove(i) for i in filter(lambda found: found['name'] == name, items)]
-            f = [i for i in filter(lambda found: found['name'] == name, items)]
-
-            logger.info(type(found))
-            logger.info(len(found))
-            logger.info(found)
-            logger.info('hurt you')
-            if not len(found):
-                items.append({
-                    'name': item.name + '-' + item.choice.get('name'),
-                    'terms': t
-                })
-        results = {
-            'results': {'terms': terms, 'items': items}
-        }
+        year = self.request.GET.get('year')
+        course = self.request.GET.get('course')
+        results = Item.objects.get_fee_summary(year, course)
 
         return Response(results)
 
