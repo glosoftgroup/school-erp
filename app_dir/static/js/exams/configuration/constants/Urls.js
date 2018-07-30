@@ -1,39 +1,40 @@
+/* eslint one-var: 0 */
 class Urls {
-    static createUrl(){
-        return "/exams/configuration/api/create/";
+    static createUrl() {
+        return '/exams/configuration/api/create/';
     }
     static updateUrl() {
-        let url = "/exams/configuration/api/update/",
-            updateStatus = (window.location.href).includes("update"),
-            update_url = null;
-        if(updateStatus){
+        let url = '/exams/configuration/api/update/',
+            updateStatus = (window.location.href).includes('update'),
+            updateUrl = null;
+        if (updateStatus) {
             /* split the href to get an array without the '/' */
-            let location_array = (window.location.href).split(/[/]/);
+            let locationArray = (window.location.href).split(/[/]/);
             /* remove the blank elements in the array */
-            let Stripped_location_array = location_array.filter(function(string) {
-                    return string != ""
-                });
+            let StrippedLocationArray = locationArray.filter(function(string) {
+                return string !== '';
+            });
             /* get the last item which is the id */
-            let updateId = Stripped_location_array[Stripped_location_array.length-1]
-            update_url = url+updateId+"/";
+            let updateId = StrippedLocationArray[StrippedLocationArray.length - 1];
+            updateUrl = url + updateId + '/';
         }
-        return update_url;
+        return updateUrl;
     }
     static redirectUrl() {
-        return "/exams/configuration/";
+        return '/exams/configuration/';
     }
     static subjectUrl() {
-        return "/subject/api/list/";
+        return '/subject/api/list/';
     }
     static academicYearUrl() {
-        return "/academic_year/api/list/";
+        return '/academic_year/api/list/';
     }
     static academicClassUrl() {
-        return "/class/api/list/groups/";
+        return '/class/api/list/groups/';
     }
     static termUrl() {
-        return "/term/api/list/";
+        return '/term/api/list/';
     }
 }
 
-export default Urls
+export default Urls;

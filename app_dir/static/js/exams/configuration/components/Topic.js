@@ -25,11 +25,8 @@ class TopicComponent extends React.Component {
 
     componentWillMount () {
         var self = this;
-        console.log('status is ' + self.state.updateStatus);
         if (self.state.updateStatus) {
             Api.retrieve(Urls.updateUrl()).then(function(response) {
-                console.log(response.data);
-                console.log(typeof response.data.exam_settings.assignments);
                 self.setState({
                     assignment: response.data.exam_settings.assignments,
                     cat: response.data.exam_settings.cats,

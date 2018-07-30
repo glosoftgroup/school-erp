@@ -19,6 +19,7 @@ module.exports = {
         'configuration': './app_dir/static/js/exams/configuration/',
         'curriculum': './app_dir/static/js/academics/curriculum/',
         'dashboard': './app_dir/static/js/',
+        'exam_type': './app_dir/static/js/exams/exam_type/',
         'finance_item': './app_dir/static/js/finance/item/',
         'finance_item_edit': './app_dir/static/js/finance/item_edit/',
 
