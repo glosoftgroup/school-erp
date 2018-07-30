@@ -1,14 +1,13 @@
 import React from 'react';
-// import axios from 'axios';
-// import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
-// import map from 'lodash/map';
-// import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import 'select2/dist/css/select2.css';
 import { Modal, Button } from 'react-bootstrap';
 import Alert from '../../../common/Alert';
+import Urls from '../constants/Urls';
+import Api from '../../../common/Api';
 import '../../../../scss/exams/table.scss';
+import ExamType from './ExamType';
 
 class TopicListComponent extends React.Component {
     constructor(props) {
@@ -22,8 +21,22 @@ class TopicListComponent extends React.Component {
             total: '0',
             pass: '0',
             errors: {},
-            percentage: false
+            percentage: false,
+            updateStatus: (window.location.href).includes('update')
         };
+    }
+
+    componentWillMount () {
+        var self = this;
+        if (self.state.updateStatus) {
+            Api.retrieve(Urls.updateUrl()).then(function(response) {
+                console.log('in the topic list');
+                console.log(response.data);
+                console.log(typeof response.data.exam_settings.assignments);
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -56,18 +69,6 @@ class TopicListComponent extends React.Component {
         this.setState({ show: false, showDelete: false });
     }
 
-    handleShow = () => {
-        this.setState({ show: true });
-    }
-
-    showDeleteTopic = (exam, name, type) => {
-        this.setState({
-            showDelete: true,
-            examDetail: exam,
-            examName: name,
-            examType: type});
-    }
-
     deleteTopic = () => {
         delete this.state[this.state.examType + '_' + this.state.examDetail];
         this.props.deleteTopicCallBack(this.state.examDetail, this.state.examType);
@@ -81,11 +82,11 @@ class TopicListComponent extends React.Component {
             this.setState({percentage: !this.state.percentage});
             if (!this.state.percentage) {
                 let exams = [];
-                for (const field in this.refs) {
-                    if (this.refs[field].value !== 0) {
+                for (const field in ExamType.refs) {
+                    if (ExamType.refs[field].value !== 0) {
                         let ex = {};
-                        ex['name'] = this.refs[field].name;
-                        ex['value'] = this.refs[field].value;
+                        ex['name'] = ExamType.refs[field].name;
+                        ex['value'] = ExamType.refs[field].value;
                         exams.push(ex);
                     }
                 }
@@ -115,7 +116,7 @@ class TopicListComponent extends React.Component {
         }
     }
 
-    handlePassChange = event => {
+    handlePassMarkChange = event => {
         const name = event.target.name;
         let value = event.target.value;
         let val = parseInt(value);
@@ -143,10 +144,14 @@ class TopicListComponent extends React.Component {
     }
 
     saveConfig = () => {
+
+        console.log('*** ExamType.refs ***');
+        console.log(ExamType.refs);
+        console.log('*** ExamType.refs ***');
         if (this.state.percentage === true) {
             let totalmarks = 0;
-            for (const field in this.refs) {
-                let value = this.refs[field].value;
+            for (const field in ExamType.refs) {
+                let value = ExamType.refs[field].value;
                 totalmarks += parseInt(value);
             }
 
@@ -162,11 +167,11 @@ class TopicListComponent extends React.Component {
         }
 
         let exams = [];
-        for (const field in this.refs) {
-            if (this.refs[field].value !== 0) {
+        for (const field in ExamType.refs) {
+            if (ExamType.refs[field].value !== 0) {
                 let ex = {};
-                ex['name'] = this.refs[field].name;
-                ex['value'] = this.refs[field].value;
+                ex['name'] = ExamType.refs[field].name;
+                ex['value'] = ExamType.refs[field].value;
                 exams.push(ex);
             }
         }
@@ -221,87 +226,43 @@ class TopicListComponent extends React.Component {
                                     </div>
                                 </td>
                             </tr>
+
                             {
                                 assignmentArray.length > 0 ? (assignmentArray.map((exam, index) => {
                                     return (
-                                        <tr key={index}>
-                                            <td>Assignment {index + 1}</td>
-                                            <td>
-                                                <input type="text" className="form-control"
-                                                    name={`assignment_${exam}`}
-                                                    ref={`assignment_${exam}`}
-                                                    value={this.state['assignment_' + (exam)] ? this.state['assignment_' + (exam)] : ''}
-                                                    onChange={this.handleInputChange}
-                                                    onKeyDown={this.onKeyDown}/>
-                                            </td>
-                                            <td>
-                                                <Button className="btn bg-slate-700" type="button"
-                                                    onClick={() => this.showDeleteTopic(exam, 'Assignment ' + (index + 1), 'assignment')}>
-                                                    <i className="icon-x"></i>
-                                                </Button>
-
-                                            </td>
-                                        </tr>
+                                        <ExamType key={index} exam={exam} index={index}
+                                            type='assignment'
+                                            handleInputChange={this.handleInputChange}
+                                            onKeyDown={this.onKeyDown}
+                                        />
                                     );
-                                })) : (
-                                    <tr><td colSpan="2" className="text-left">No Assignments have been set</td></tr>
-                                )
+                                })) : (<tr><td colSpan="3" className="text-left">No Assignments have been set</td></tr>)
                             }
-                            {
 
+                            {
                                 catArray.length > 0 ? (catArray.map((exam, index) => {
                                     return (
-                                        <tr key={index}>
-                                            <td>CAT {index + 1}</td>
-                                            <td>
-                                                <input type="text" className="form-control"
-                                                    name={`cat_${exam}`}
-                                                    ref={`cat_${exam}`}
-                                                    value={this.state['cat_' + (exam)] ? this.state['cat_' + (exam)] : ''}
-                                                    onChange={this.handleInputChange}
-                                                    onKeyDown={this.onKeyDown}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Button className="btn bg-slate-700" type="button"
-                                                    onClick={() => this.showDeleteTopic(exam, 'CAT ' + (index + 1), 'cat')}>
-                                                    <i className="icon-x"></i>
-                                                </Button>
-
-                                            </td>
-                                        </tr>
+                                        <ExamType key={index} exam={exam} index={index}
+                                            type='cat'
+                                            handleInputChange={this.handleInputChange}
+                                            onKeyDown={this.onKeyDown}
+                                        />
                                     );
-                                })) : (
-                                    <tr><td colSpan="2" className="text-left">No Cats have been set</td></tr>
-                                )
+                                })) : (<tr><td colSpan="3" className="text-left">No Cats have been set</td></tr>)
                             }
+
                             {
                                 examArray.length > 0 ? (examArray.map((exam, index) => {
                                     return (
-                                        <tr key={index}>
-                                            <td>Exam {index + 1}</td>
-                                            <td>
-                                                <input type="text" className="form-control"
-                                                    name={`exam_${exam}`}
-                                                    ref={`exam_${exam}`}
-                                                    value={this.state['exam_' + (exam)] ? this.state['exam_' + (exam)] : ''}
-                                                    onChange={this.handleInputChange}
-                                                    onKeyDown={this.onKeyDown}
-                                                />
-                                            </td>
-                                            <td>
-                                                <Button className="btn bg-slate-700" type="button"
-                                                    onClick={() => this.showDeleteTopic(exam, 'Exam ' + (index + 1), 'exam')}>
-                                                    <i className="icon-x"></i>
-                                                </Button>
-
-                                            </td>
-                                        </tr>
+                                        <ExamType key={index} exam={exam} index={index}
+                                            type='exam'
+                                            handleInputChange={this.handleInputChange}
+                                            onKeyDown={this.onKeyDown}
+                                        />
                                     );
-                                })) : (
-                                    <tr><td colSpan="2" className="text-left">No Exams have been set</td></tr>
-                                )
+                                })) : (<tr><td colSpan="3" className="text-left">No Exams have been set</td></tr>)
                             }
+
                         </tbody>
                     </table>
                 </div>
@@ -325,7 +286,7 @@ class TopicListComponent extends React.Component {
                                     <input type="text" className="form-control"
                                         name="pass"
                                         value={this.state.pass}
-                                        onChange={this.handlePassChange}
+                                        onChange={this.handlePassMarkChange}
                                     />
                                 </td>
                             </tr>
