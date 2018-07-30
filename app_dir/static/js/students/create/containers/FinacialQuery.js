@@ -5,23 +5,28 @@ import gql from 'graphql-tag';
 import FinacialDetails from './FinacialDetails';
 
 export const HERO_QUERY = gql`
-{
-  allFeeStructure {
-    id, amount, course {
-      id, name
-    }, feeItems {
-      id, name, amount, compulsory
-    } term {
-      id, name
-    } academicYear {
-      id, name
-   }, 
-  }
+query DashboardQuery(
+    $year: String!
+) {
+    allFeeStructure(year:$year) {
+        name feeItems {
+          id, name, choice, compulsory, amount
+        }
+        course {
+            id, name            
+        }
+        term {
+          id, name
+        }
+        academicYear {
+           id, name
+        }
+    }
 }
 `;
 
-const App = ({ episode }) => (
-    <Query query={HERO_QUERY} >
+const App = ({ year }) => (
+    <Query query={HERO_QUERY} variables={{year}}>
         {result => {
             const { loading, error, data } = result;
 

@@ -16,6 +16,7 @@ class TableListSerializer(serializers.ModelSerializer):
                   'first_name',
                   'middle_name',
                   'last_name',
+                  'relation',
                   'description',
                   'mobile',
                   'email',
@@ -34,10 +35,10 @@ class CreateListSerializer(serializers.ModelSerializer):
                   'first_name',
                   'middle_name',
                   'last_name',
+                  'relation',
                   'description',
                   'mobile',
-                  'email',
-                 )
+                  'email',)
 
     def create(self, validated_data):
         instance = Table()
@@ -51,6 +52,8 @@ class CreateListSerializer(serializers.ModelSerializer):
             instance.mobile = validated_data.get('mobile')
         if validated_data.get('email'):
             instance.email = validated_data.get('email')
+        if validated_data.get('relation'):
+            instance.relation = validated_data.get('relation')
         if validated_data.get('description'):
             instance.description = validated_data.get('description')
         instance.save()
@@ -65,6 +68,7 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'first_name',
                   'middle_name',
                   'last_name',
+                  'relation',
                   'description',
                   'mobile',
                   'email',
@@ -77,6 +81,7 @@ class UpdateSerializer(serializers.ModelSerializer):
         instance.mobile = validated_data.get('mobile', instance.mobile)
         instance.email = validated_data.get('email', instance.email)
         instance.description = validated_data.get('description', instance.description)
+        instance.relation = validated_data.get('relation', instance.relation)
 
         instance.save()
         return instance
