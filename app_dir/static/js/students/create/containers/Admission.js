@@ -163,15 +163,7 @@ class Admission extends React.Component{
                 <div className="form-group">
                     <label className="col-lg-3 control-label">Admission No.:</label>
                     <div className="col-lg-9">
-                        {(() => {
-                            switch (this.props.editable.editable) {
-                                case true:   return <input value={this.state.adm_no} name="adm_no" onChange={this.onSelectChange} className="form-control" placeholder="adm no." type="text"/>
-                                ;
-                                case false: return <span>{this.state.adm_no}</span>;
-                                
-                                default:      return "";
-                            }
-                        })()}
+                        <input value={this.state.adm_no} name="adm_no" onChange={this.onSelectChange} className="form-control" placeholder="adm no." type="text"/>                               
                         
                         <span className="help-block text-warning">{this.state.errors.adm_no}</span>
                     </div>
@@ -180,25 +172,17 @@ class Admission extends React.Component{
                 <div className="form-group">
                     <label className="col-lg-3 control-label">Class.:</label>
                     <div className="col-lg-9">
-                    {(() => {
-                            switch (this.props.editable.editable) {
-                                case true:   return <Select2
-                                                    data={this.props.courses}
-                                                    onChange={this.onSelectChange}
-                                                    value={ this.state.course }
-                                                    name="course"
-                                                    options={{
-                                                        formatSelection: this.format,
-                                                        formatResult: this.format,
-                                                        placeholder: 'Select class',
-                                                    }}
-                                                />;
-                                case false: return <span>{this.props.student.course}</span>;
-                                
-                                default:      return "";
-                            }
-                    })()}
-                    
+                    <Select2
+                        data={this.props.courses}
+                        onChange={this.onSelectChange}
+                        value={ this.state.course }
+                        name="course"
+                        options={{
+                            formatSelection: this.format,
+                            formatResult: this.format,
+                            placeholder: 'Select class',
+                        }}
+                    />
                     <span className="help-block text-warning">{this.state.errors.course}</span>
                     </div>
                 </div>
@@ -206,25 +190,17 @@ class Admission extends React.Component{
                  <div className="form-group">
                     <label className="col-lg-3 control-label"> Academic Year.:</label>
                     <div className="col-lg-9">
-                    {(() => {
-                            switch (this.props.editable.editable) {
-                                case true:   return <Select2
-                                                        data={this.props.academics}
-                                                        onChange={this.onSelectChange}
-                                                        value={ this.state.academic_year }
-                                                        name="academic_year"
-                                                        options={{
-                                                            formatSelection: this.format,
-                                                            formatResult: this.format,
-                                                            placeholder: 'Select class',
-                                                        }}
-                                                    />;
-                                case false: return <span>{this.props.student.academic_year}</span>;
-                                
-                                default:      return "";
-                            }
-                    })()}
-                    
+                    <Select2
+                        data={this.props.academics}
+                        onChange={this.onSelectChange}
+                        value={ this.state.academic_year }
+                        name="academic_year"
+                        options={{
+                            formatSelection: this.format,
+                            formatResult: this.format,
+                            placeholder: 'Select class',
+                        }}
+                        />
                     <span className="help-block text-warning">{this.state.errors.academic_year}</span>
                     </div>
                 </div>
@@ -232,23 +208,15 @@ class Admission extends React.Component{
                  <div className="form-group">
                     <label className="col-lg-3 control-label">House.:</label>
                     <div className="col-lg-9">
-                    {(() => {
-                            switch (this.props.editable.editable) {
-                                case true:   return  <Select2
-                                                        data={this.props.houses}
-                                                        onChange={this.onSelectChange}
-                                                        value={ this.state.house }
-                                                        name="house"
-                                                        options={{
-                                                            placeholder: 'Select house',
-                                                        }}
-                                                    />;
-                                case false: return <span>{this.props.student.house}</span>;
-                                
-                                default:      return "";
-                            }
-                    })()}
-                   
+                    <Select2
+                        data={this.props.houses}
+                        onChange={this.onSelectChange}
+                        value={ this.state.house }
+                        name="house"
+                        options={{
+                            placeholder: 'Select house',
+                        }}
+                    />
                     </div>
                 </div>
 
@@ -259,16 +227,10 @@ class Admission extends React.Component{
                         </button>
                     </div>
                     <div className="col-md-6 text-right">
-                    {(() => {
-                            switch (this.props.editable.editable) {
-                                case true:   return  <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
+                    <button id="add-room-btn" type="submit" className="btn btn-primary legitRipple">
                                 {!!this.state.loading && <Loader type="line-scale" className="custom-loader" />}{this.state.buttonText}
                    
-                                </button>;
-                                 
-                                default:      return "";
-                            }
-                    })()}
+                                </button>
                         
                     </div>
                     

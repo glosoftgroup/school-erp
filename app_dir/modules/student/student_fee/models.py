@@ -8,9 +8,13 @@ from django.utils.translation import pgettext_lazy
 from app_dir.modules.academics.academic_year.models import AcademicYear
 from app_dir.modules.academics.classes.models import Class
 from app_dir.modules.term.models import Term
-
+from app_dir.modules.student.models import Student
 
 class Fee(models.Model):
+    student = models.ForeignKey(
+        Student, related_name='student_fee', blank=True, null=True,
+        verbose_name=pgettext_lazy('Fee field', 'student'))
+
     academic_year = models.ForeignKey(
         AcademicYear, related_name='student_fee_year', blank=True, null=True,
         verbose_name=pgettext_lazy('Fee field', 'academic year'))

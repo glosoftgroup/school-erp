@@ -27,7 +27,7 @@
 {% block menu_finance_item %}active{% endblock %}
 
 {% block custom_css %}
-{% render_bundle 'fee' 'css' %}
+{% render_bundle 'fee_view' 'css' %}
 
  {% endblock %}
 
@@ -47,6 +47,6 @@
        pk= "{{object.pk}}"
     {% endif %}
 </script>
-{% render_bundle 'fee' 'js' %}
+{% render_bundle 'fee_view' 'js' %}
 
 {% endblock %}

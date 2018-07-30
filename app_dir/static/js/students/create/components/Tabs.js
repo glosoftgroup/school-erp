@@ -20,7 +20,8 @@ class Comp extends React.Component {
     }
 
     static propTypes = {
-        step: PropTypes.object.isRequired
+        step: PropTypes.object.isRequired,
+        student: PropTypes.object
     }
 
     componentWillReceiveProps(nextProps) {
@@ -42,7 +43,7 @@ class Comp extends React.Component {
                     <Parent />
                 }
                 {this.props.step.id === 4 &&
-                    <FeeStructure episode={23} />
+                    <FeeStructure year={this.props.student.academic_year} />
                 }
             </div>);
     }

@@ -10,9 +10,9 @@ import FormToggleStatus from './reducer-form-status';
  * */
 
 const allReducers = combineReducers({
-  item: ActiveItemReducer,
-  items: ItemsReducer,
-  toggler: FormToggleStatus
+    item: ActiveItemReducer,
+    items: ItemsReducer,
+    toggler: FormToggleStatus
 });
 
 export default allReducers;

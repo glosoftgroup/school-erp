@@ -3,20 +3,20 @@ import Filter from './Filter';
 import '../css/styles.scss';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: ''
-    };
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: ''
+        };
+    }
 
-  render() {
-    return (
-      <div>
-        <Filter/>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <Filter/>
+            </div>
+        );
+    }
 }
 
 export default App;

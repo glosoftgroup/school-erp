@@ -6,4 +6,5 @@ COPY . /usr/src/app
 # Install dependencies
 RUN yarn
 
+CMD ["eslint", " ./app_dir/static/js/finance ", "--fix --ext .js"]
 CMD ["node", "./node_modules/webpack/bin/webpack.js", "--watch"]
