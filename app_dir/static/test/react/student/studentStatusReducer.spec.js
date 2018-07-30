@@ -1,11 +1,11 @@
-import expect from 'expect'
+import expect from 'expect';
 
-import activeStudentReducer from '../../../js/students/reducers/reducer-active-student';
-import countriesReducer from '../../../js/students/reducers/reducer-countries';
-import religionsReducer from '../../../js/students/reducers/reducer-religions';
-import imageReducer from '../../../js/students/reducers/reducer-image';
-import admissionReducer from '../../../js/students/reducers/reducer-admission';
-import parentReducer from '../../../js/students/reducers/reducer-parents'
+import activeStudentReducer from '../../../js/students/create/reducers/reducer-active-student';
+import countriesReducer from '../../../js/students/create/reducers/reducer-countries';
+import religionsReducer from '../../../js/students/create/reducers/reducer-religions';
+import imageReducer from '../../../js/students/create/reducers/reducer-image';
+import admissionReducer from '../../../js/students/create/reducers/reducer-admission';
+import parentReducer from '../../../js/students/create/reducers/reducer-parents';
 
 describe('[STUDENT] StudentReducers', () => {
   it('should set selected student obj ', () => {

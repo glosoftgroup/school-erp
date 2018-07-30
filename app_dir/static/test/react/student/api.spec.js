@@ -1,5 +1,5 @@
 
-import api from '../../../js/students/api/Api'
+import api from '../../../js/students/create/api/Api';
 
 describe('Api http methods class', () => {
     it('Should return an array', () => {
