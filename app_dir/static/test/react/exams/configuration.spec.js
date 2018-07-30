@@ -3,6 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import Topic from '../../../js/exams/configuration/components/Topic';
+import ExamType from '../../../js/exams/configuration/components/ExamType';
 
 describe('[EXAMS] Exam Configuration', () => {
     describe('Topic', () => {
@@ -26,6 +27,13 @@ describe('[EXAMS] Exam Configuration', () => {
             expect(wrapper.find('button').prop('disabled')).toEqual(true);
             simulateInputOnchange(wrapper);
             expect(wrapper.find('button').prop('disabled')).toEqual(false);
+        });
+    });
+
+    describe('ExamType', () => {
+        const wrapper = shallow(<ExamType/>);
+        it('Topic should have 1 button', () => {
+            expect(wrapper.find('button').length).toEqual(1);
         });
     });
 });

@@ -35,6 +35,7 @@ class ExamConfiguration(models.Model):
     def __str__(self):
         return self.academicyear.name
 
+
 class Assignment(models.Model):
     examId = models.ForeignKey(ExamConfiguration, related_name='assignment',
                                on_delete=models.CASCADE, null=True, blank=True)
@@ -46,6 +47,7 @@ class Assignment(models.Model):
     def __str__(self):
         return self.name
 
+
 class Cat(models.Model):
     examId = models.ForeignKey(ExamConfiguration, related_name='cat',
                                on_delete=models.CASCADE, null=True, blank=True)
@@ -56,6 +58,7 @@ class Cat(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Exam(models.Model):
     examId = models.ForeignKey(ExamConfiguration, related_name='exam',
