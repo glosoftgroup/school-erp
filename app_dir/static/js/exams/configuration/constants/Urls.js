@@ -35,6 +35,9 @@ class Urls {
     static termUrl() {
         return '/term/api/list/';
     }
+    static examTypeUrl() {
+        return '/exam/type/api/list/';
+    }
 }
 
 export default Urls;
