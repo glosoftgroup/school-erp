@@ -1,17 +1,17 @@
 /* eslint-env jest */
 
 import expect from 'expect';
-import {STUDENT_SELECTED, selectStudent} from '../../../js/students/actions/actions';
-import { SET_ACADEMICS, setAcademics } from '../../../js/students/actions/academics'
-import { SET_CLASSES, setClasses } from '../../../js/students/actions/classes'
-import { ADMISSION_SELECTED, selectAdmission } from '../../../js/students/actions/admissions'
+import {STUDENT_SELECTED, selectStudent} from '../../../js/students/create/actions/actions';
+import { SET_ACADEMICS, setAcademics } from '../../../js/students/create/actions/academics'
+import { SET_CLASSES, setClasses } from '../../../js/students/create/actions/classes'
+import { ADMISSION_SELECTED, selectAdmission } from '../../../js/students/create/actions/admissions'
 import {
     PARENT_DELETED, ADD_PARENT,
     SET_PARENTS, PARENT_SELECTED, 
     selectParents,
     selectParent, parentDeleted,
     addParent 
-} from '../../../js/students/actions/parents';
+} from '../../../js/students/create/actions/parents';
 
 describe('[STUDENT] Action Creators', () => {
     // add parent

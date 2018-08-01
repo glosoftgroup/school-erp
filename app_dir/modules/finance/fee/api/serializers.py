@@ -34,12 +34,13 @@ class TableListSerializer(serializers.ModelSerializer):
     course_name = serializers.SerializerMethodField()
     term_name = serializers.SerializerMethodField()
     update_url = serializers.HyperlinkedIdentityField(view_name=module+':update')
+    update_view_url = serializers.HyperlinkedIdentityField(view_name=module+':update-view')
     delete_url = serializers.HyperlinkedIdentityField(view_name=module+':api-delete')
     fee_items = ItemSerializer(many=True)
 
     class Meta:
         model = Table
-        fields = fields + ('course_name', 'term_name', 'academic_name', 'update_url', 'delete_url', 'fee_items',)
+        fields = fields + ('course_name', 'term_name', 'academic_name', 'update_view_url', 'update_url', 'delete_url', 'fee_items',)
 
     def get_academic_name(self, obj):
         try:
