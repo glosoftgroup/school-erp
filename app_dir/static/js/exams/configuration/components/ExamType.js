@@ -14,9 +14,6 @@ class ExamType extends React.Component {
         };
     }
 
-    componentWillMount () {
-    }
-
     handleInputChange = (event) => {
         this.props.handleInputChange(event);
         const name = event.target.name;
