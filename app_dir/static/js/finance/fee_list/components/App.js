@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Filter from './Filter';
+import Filter from '../containers/ItemFilter';
+import ItemList from '../containers/ItemList';
 import '../css/styles.scss';
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
         return (
             <div>
                 <Filter/>
+                <ItemList />
             </div>
         );
     }

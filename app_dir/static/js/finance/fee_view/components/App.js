@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import FeeItem from '../containers/FeeItem';
 import FeeStructure from '../containers/FeeStructure';
+import '../css/styles.scss';
 
 class App extends Component {
     render() {
         return (
             <div className="row">
-                <div className="col-md-6">
-                    <FeeItem/>
-                </div>
-                <div className="col-md-6">
+                <div className="col-md-12">
                     <FeeStructure />
                 </div>
             </div>

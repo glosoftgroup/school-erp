@@ -87,6 +87,9 @@ class Comp extends Component {
         this.props.selectItem(obj);
         this.handleEditShow();
     }
+    goTo = (url) => {
+        window.location.href = url;
+    }
 
     render() {
         return (
@@ -112,10 +115,10 @@ class Comp extends Component {
                                     {this.props.items.results.map(obj => {
                                         return (
                                             <tr key={obj.id}>
-                                                <td>{obj.academic_name}</td>
-                                                <td>{obj.course_name}</td>
-                                                <td>{obj.term_name}</td>
-                                                <td>{obj.amount}</td>
+                                                <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{obj.academic_name}</td>
+                                                <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{obj.course_name}</td>
+                                                <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{obj.term_name}</td>
+                                                <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{obj.amount}</td>
                                                 <td >
                                                     <ul className="icons-list">
                                                         <li className="dropdown">
@@ -123,9 +126,15 @@ class Comp extends Component {
                                                 Actions<span className="caret"></span>
                                                             </button>
                                                             <ul className="dropdown-menu-xs dropdown-menu">
-                                                                <li><a href={obj.update_url}>
-                                                                    <i className="icon-pencil"></i> Edit
-                                                                </a>
+                                                                <li>
+                                                                    <a href={obj.update_view_url}>
+                                                                        <i className="icon-eye"></i> View
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href={obj.update_url}>
+                                                                        <i className="icon-pencil"></i> Edit
+                                                                    </a>
                                                                 </li>
                                                                 <li>
                                                                     <a onClick={() => { this.handleShow(obj.delete_url, obj); }} href="javascript:;"><i className="icon-trash-alt"></i> Delete</a>

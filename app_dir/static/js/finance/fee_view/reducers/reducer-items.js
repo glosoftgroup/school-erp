@@ -1,6 +1,11 @@
 import { SET_ITEMS, ADD_ITEM } from '../actions/action-items';
 
-const initialState = [];
+const initialState = {
+    results: {
+        terms: [],
+        items: []
+    }
+};
 
 export default (state = initialState, action) => {
     switch (action.type) {

@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
-import { Modal, Popover, Tooltip, Button, OverlayTrigger } from 'react-bootstrap';
+import React from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+
 class Comp extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -9,15 +11,13 @@ class Comp extends React.Component {
         };
     }
 
+    static propTypes = {
+        show: PropTypes.bool.isRequired,
+        deleteInstance: PropTypes.func.isRequired,
+        handleClose: PropTypes.func.isRequired
+    }
+
     render() {
-        const popover = (
-            <Popover id="modal-popover" title="popover">
-          very popover. such engagement
-            </Popover>
-        );
-
-        const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
-
         return (
             <div>
                 <Modal show={this.props.show} onHide={this.props.handleClose}>
