@@ -19,7 +19,10 @@ urlpatterns = [
         UpdateView.as_view(template_name=module+"/form.html", model=Table, fields=['id', 'name']),
         name='update'),
     url(r'^update/view/(?P<pk>[0-9]+)/$',
-        UpdateView.as_view(template_name=module+"/view.html", model=Table, fields=['id', 'name']),
+        UpdateView.as_view(
+            template_name=module+"/view.html",
+            model=Table,
+            fields=['id', 'name', 'course', 'academic_year']),
         name='update-view'),
 ]
 

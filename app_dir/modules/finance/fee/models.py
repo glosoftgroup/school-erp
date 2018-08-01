@@ -92,17 +92,17 @@ class FeeItemManager(BaseUserManager):
         # [terms.append({'name': term.name}) for term in term_query]
         for tm in term_query:
             total = 0
-            for single in tm.fee_term.filter(academic_year__name=year, course=course):
+            for single in tm.fee_term.filter(academic_year__pk=year, course__pk=course):
                 total += sum([one.amount for one in single.fee_items.all()])
 
             terms.append({'name': tm.name, 'amount': total})
 
-        for item in self.filter(fee__academic_year__name=year, fee__course=course):
+        for item in self.filter(fee__academic_year__pk=year, fee__course__pk=course):
             name, t = item.name + '-' + item.choice.get('name'), []
             if item.compulsory:
                 name += '*'
             for term in term_query:
-                amount = self.filter(fee__academic_year__name=year, fee__term=term, fee__course=course, pk=item.pk)
+                amount = self.filter(fee__academic_year__pk=year, fee__term=term, fee__course__pk=course, pk=item.pk)
                 try:
                     amount = amount.first().amount
                 except:

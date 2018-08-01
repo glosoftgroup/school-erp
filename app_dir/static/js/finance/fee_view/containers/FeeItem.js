@@ -7,7 +7,6 @@ export class FeeItem extends Component {
     }
     render() {
         return (
-            
             <tr>
                 {this.props.data.compulsory &&
                 <td>{this.props.data.name}</td>}
@@ -18,7 +17,6 @@ export class FeeItem extends Component {
                         {!!obj.amount && <span className="">{obj.amount}</span>}
                     </td>;
                 })}
-                
             </tr>
         );
     }

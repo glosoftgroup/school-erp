@@ -15,9 +15,10 @@
      <li class=""><a href="{% url 'fee:index' %}" >Fee Structure</a></li>
      <li class="active"><a >
          {% if object.name %}
-           Edit {{object.name}}
+           {{object.academic_year.name}} -
+           {{object.course.name}}
          {% else %}
-            Add Fees Structure
+             Fees Structure
          {% endif %}
      </a></li>
  {% endblock %}
@@ -43,8 +44,13 @@
 {% block custom_js %}
 <script>
     var pk = false;
+    var academicYear, course;
     {% if object.pk %}
        pk= "{{object.pk}}"
+       academicYear= "{{object.academic_year.pk}}"
+       academicYearName= "{{object.academic_year.name}}"
+       courseName= "{{object.course.name}}"
+       course= "{{object.course.id}}"
     {% endif %}
 </script>
 {% render_bundle 'fee_view' 'js' %}

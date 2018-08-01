@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FeeStructure from '../containers/FeeStructure';
+import '../css/styles.scss';
 
 class App extends Component {
     render() {

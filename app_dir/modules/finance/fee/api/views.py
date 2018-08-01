@@ -71,6 +71,10 @@ class ListAPIView(generics.ListAPIView):
             queryset_list = queryset_list.filter(created__icontains=self.request.GET.get('date'))
 
         query = self.request.GET.get('q')
+        year = self.request.GET.get('year')
+        course = self.request.GET.get('course')
+        queryset_list = queryset_list.filter(academic_year__pk=int(year)) if year else queryset_list
+        queryset_list = queryset_list.filter(course__pk=course) if course else queryset_list
         if query:
             queryset_list = queryset_list.filter(
                 Q(academic_year__name__icontains=query) |
