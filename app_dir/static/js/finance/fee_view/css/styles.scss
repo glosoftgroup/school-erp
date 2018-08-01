@@ -17,3 +17,18 @@ label {
 .text-big {
   font-size: 17px;
 }
+
+.bold-title {
+  font-size: 27px;
+  font-weight: bolder
+}
+
+@media print {
+  .bold-title {
+    font-size: 27px;
+    font-weight: 700
+  }
+  body{
+    -webkit-print-color-adjust:exact;
+  }
+}

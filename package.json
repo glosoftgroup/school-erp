@@ -54,7 +54,7 @@
     "react-motion": "^0.5.2",
     "react-paginate": "^5.2.2",
     "react-redux": "^5.0.7",
-    "react-select": "^1.2.1",
+    "react-select": "^2.0.0",
     "react-select-2": "^2.0.11",
     "react-select2-wrapper": "^1.0.4-beta6",
     "react-tabs": "^2.2.1",

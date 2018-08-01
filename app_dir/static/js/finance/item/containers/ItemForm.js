@@ -3,8 +3,8 @@
 import React, { Component } from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+import CreatableSelect from 'react-select/lib/Creatable';
+// import 'react-select/dist/react-select.css';
 import classnames from 'classnames';
 import { ToastContainer, toast } from 'react-toastify';
 import api from '../api/Api';
@@ -193,7 +193,7 @@ class Comp extends Component {
                                           <span className="help-block text-warning">{this.state.errors.name}</span>
                                       </td>
                                       <td>
-                                          <Select.AsyncCreatable
+                                          <CreatableSelect
                                               multi={true}
                                               value={this.state.selectedOption}
                                               onChange={this.handleSelectChange}
