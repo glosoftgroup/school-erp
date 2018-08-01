@@ -139,6 +139,7 @@ class UpdateSerializer(serializers.ModelSerializer):
     term = serializers.SerializerMethodField()
     exam_settings = serializers.SerializerMethodField()
     exams = serializers.SerializerMethodField()
+    exam_types = serializers.SerializerMethodField()
 
     class Meta:
         model = Table
@@ -148,7 +149,8 @@ class UpdateSerializer(serializers.ModelSerializer):
                   'academicclass',
                   'term',
                   'exam_settings',
-                  'exams'
+                  'exams',
+                  'exam_types'
                  )
 
     def get_subject(self, obj):
@@ -199,6 +201,9 @@ class UpdateSerializer(serializers.ModelSerializer):
         except:
             exams = None
         return {"assignments": assignments, "cats": cats, "exams":exams}
+
+    def get_exam_types(self, obj):
+        return []
 
     def update(self, instance, validated_data):
         if validated_data.get('subject'):

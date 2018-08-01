@@ -38,7 +38,7 @@ export default function items(state = initial, action = {}) {
     case CHECK_INPUT_ERRORS:
         const { errs, isValid } = validateInput(state);
         if (!isValid) {
-            var newState = Object.assign({}, state, {errors: errs});
+            var newState = Object.assign({}, state, { errors: errs });
             return { ...state, ...newState };
         }
         return state;
