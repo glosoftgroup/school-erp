@@ -1,4 +1,4 @@
-import { SET_ITEMS, ADD_ITEM, ITEM_DELETED } from '../actions/action-items.js';
+import { SET_ITEMS, ADD_ITEM, ITEM_DELETED } from '../actions';
 
 const initial = {
     'links': {
