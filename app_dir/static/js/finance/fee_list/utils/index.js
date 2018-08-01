@@ -8,6 +8,6 @@ export const getUsers = (input, url) => {
     return Api.retrieve(`${url}?q=${input}`)
         .then((response) => response.data.results)
         .then((json) => {
-            return { options: json };
+            return json;
         });
 }
