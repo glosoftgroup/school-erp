@@ -122,6 +122,7 @@ class ItemForm extends Component {
                       self.setState({
                           loading: false,
                           buttonText: 'submit',
+                          selectedOption: [],
                           name: '',
                           update_url: response.data.update_url
                       });

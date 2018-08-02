@@ -72,7 +72,7 @@ class FeeStructure(models.Model):
                                  verbose_name=pgettext_lazy('FeeStructure field', 'amount')
                                  )
     name = models.CharField(max_length=100, blank=True)
-    attributes = HStoreField(default={}, blank=True)
+    attributes = HStoreField(default={}, blank=True, null=True)
     objects = FeeStructureManager()
 
     class Meta:
