@@ -112,7 +112,6 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",
     "ignore-styles": "^5.0.1",
-    "jest": "^22.4.3",
     "jest-serializer-vue": "^0.3.0",
     "jsdom": "^11.6.2",
     "mocha": "^3.5.3",
