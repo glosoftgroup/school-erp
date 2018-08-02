@@ -1,30 +1,51 @@
 /* eslint no-unused-expressions: 0 */
-import {jGrowl} from 'jgrowl';
+import { toast } from 'react-toastify';
+import './css/styles.scss';
 
 class Alert {
-    constructor() {
-        try { jGrowl; } catch (error) {};
+    /*
+    * React-tTastify
+    * Import: import { ToastContainer, toast } from 'react-toastify';
+    * Css: import './css/styles.scss';
+    * Usage: (import and Call the <ToastContainer /> at the main parent component
+    *         or in the calling component e.g)
+    *   class App extends React.Component{
+    *       render(){
+    *           return (
+    *               <div>
+    *                   <SampleComponent>
+    *                   <ToastContainer />
+    *               </div>
+    *           );
+    *       }
+    *   }
+    *  Using Alert.js
+    *   import Alert from '../common/Alert';
+    *
+    *   handleAlert = () => {
+    *       Alert.success('my message');
+    *   }
+    *
+    */
+    static notificationTheme(message, theme) {
+        return toast(message, {
+            type: theme,
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: true,
+            hideProgressBar: true
+        });
     }
-    static notificationTheme(message, header, theme) {
-        return $.jGrowl(
-            message,
-            {
-                header: header,
-                theme: theme
-            }
-        );
+    static success(message = 'nothing set') {
+        this.notificationTheme(message, 'success');
     }
-    static success(message = 'nothing set', header = null) {
-        this.notificationTheme(message, header, 'bg-success');
+    static error(message = 'nothing set') {
+        this.notificationTheme(message, 'danger');
     }
-    static error(message = 'nothing set', header = null) {
-        this.notificationTheme(message, header, 'bg-danger');
+    static info(message = 'nothing set') {
+        this.notificationTheme(message, 'info');
     }
-    static info(message = 'nothing set', header = null) {
-        this.notificationTheme(message, header, 'bg-info');
-    }
-    static warning(message = 'nothing set', header = null) {
-        this.notificationTheme(message, header, 'bg-orange-400');
+    static warning(message = 'nothing set') {
+        this.notificationTheme(message, 'warning');
     }
 }
 

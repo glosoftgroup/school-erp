@@ -58,8 +58,7 @@ class Select extends React.Component {
                                     id: item.id,
                                     text: (id.includes('academicclass')) ? 'class ' + item.class_group : item.name
                                 };
-                            }
-                            )
+                            })
                     };
                 }
             },
@@ -79,7 +78,7 @@ class Select extends React.Component {
         self.setState({ selectName: value });
         let data = {
             [name]: value,
-            errors: errors
+            errors
         };
         self.props.handleSelectInputChange(data);
     }

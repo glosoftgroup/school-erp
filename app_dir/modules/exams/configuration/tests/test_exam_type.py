@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import ExamType
+from app_dir.modules.exams.exam_type.models import ExamType
 
 
 class ExamTypeTest(TestCase):
