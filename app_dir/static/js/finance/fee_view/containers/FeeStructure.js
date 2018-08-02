@@ -111,7 +111,7 @@ export class FeeStrucuture extends Component {
                           </tbody>
                           <tfoot>
                               <tr className="active">
-                                  <th>&nbsp;</th>
+                                  <th className="text-indigo text-bold">Fee Total</th>
                                   {this.props.items.results.terms.map((obj, index) => {
                                       return <th className="text-indigo text-bold text-right" key={index}>{formatNumber(obj.amount, 2, '.', ',')}</th>;
                                   })}
