@@ -52,7 +52,7 @@ class UserTest(TestCase):
 
 class UserViewTest(TestCase):
     def test_view_with_no_users(self):
-        self.client.login(email="admin@example.com", password="admin123")
+        self.client.login(email="sky@sky.com", password="12345!@#$%")
         response = self.client.get(reverse('users:user-list'))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(response.context['users'], [])
