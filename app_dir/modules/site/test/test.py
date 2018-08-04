@@ -1,4 +1,4 @@
-from ..models import Term as Table
+from ..models import SiteSettings as Table
 from django.test import TestCase
 from django.urls import reverse
 
