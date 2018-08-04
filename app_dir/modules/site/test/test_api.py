@@ -1,14 +1,15 @@
-from app_dir.modules.term.models import Term as Table
-from app_dir.modules.users.user.models import User
-from django.test import TestCase, Client
+from ..models import SiteSettings as Table
+from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.core.urlresolvers import reverse
-from rest_framework.test import force_authenticate
 import json
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 global module
-module = 'term'
+module = 'site'
 
 
 # Define this after the ModelTestCase

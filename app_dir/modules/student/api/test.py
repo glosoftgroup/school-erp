@@ -55,7 +55,7 @@ class ViewTestCase(TestCase):
             reverse('student:api-delete', kwargs={'pk': self.pk}),
             self.instance_data,
         )
-        self.assertEqual(api_update.data, status.HTTP_302_FOUND)
+        self.assertEqual(api_update.status_code, status.HTTP_302_FOUND)
 
     def test_api_list(self):
         self.assertEqual(self.api_list.status_code, status.HTTP_302_FOUND)
