@@ -4,13 +4,15 @@ import {connect} from 'react-redux';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+// import Select from 'react-select';
+import Async from 'react-select/lib/Async';
+
+// import 'react-select/dist/react-select.css';
 import { fetchItems } from '../actions';
 
 import { getUsers } from '../utils';
 
-class Comp extends Component {
+class ItemFilter extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -61,7 +63,6 @@ class Comp extends Component {
             console.log(`Selected: ${course.name}`);
         }
         this.filterContent(this.state.search, this.state.academicYear.id, course.id);
-
     }
 
     toggleBackspaceRemoves () {
@@ -71,16 +72,16 @@ class Comp extends Component {
     }
 
     getUsers = (input) => {
-        if (!input) {
-            return Promise.resolve({ options: [] });
-        }
+        // if (!input) {
+        //     return Promise.resolve({ options: [] });
+        // }
         return getUsers(input, '/academic_year/api/list/');
     }
 
     getCourse = (input, url) => {
-        if (!input) {
-            return Promise.resolve({ options: [] });
-        }
+        // if (!input) {
+        //     return Promise.resolve({ options: [] });
+        // }
         return getUsers(input, '/class/api/list/');
     }
 
@@ -113,26 +114,27 @@ class Comp extends Component {
 
                         <div className="col-md-3">
                             <label>Academic Year</label>
-                            <Select.Async
-                                // multi={true}
+                            <Async
+                                isClearable={true}
                                 label={'academicYear'}
                                 value={this.state.academicYear}
                                 onChange={this.handleSelectChange}
-                                //   onValueClick={this.gotoUser}
-                                valueKey="id" labelKey="name"
+                                getOptionLabel={({name}) => name}
+                                getOptionValue={({id}) => id}
                                 loadOptions={this.getUsers}
-                                backspaceRemoves={this.state.backspaceRemoves}
                             />
 
                         </div>
                         <div className="col-md-3">
                             <label>Class</label>
-                            <Select.Async
-                                // multi={true}
+                            <Async
+                                isClearable={true}
+                                cacheOptions
+                                placeholder={'Search class'}
                                 value={this.state.course}
                                 onChange={this.handleSelectCourseChange}
-                                //   onValueClick={this.gotoUser}
-                                valueKey="id" labelKey="name"
+                                getOptionLabel={({name}) => name}
+                                getOptionValue={({id}) => id}
                                 loadOptions={this.getCourse}
                                 backspaceRemoves={this.state.backspaceRemoves}
                             />
@@ -160,4 +162,4 @@ function matchDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(Comp);
+export default connect(mapStateToProps, matchDispatchToProps)(ItemFilter);

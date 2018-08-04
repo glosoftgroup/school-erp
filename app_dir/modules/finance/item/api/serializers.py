@@ -64,7 +64,7 @@ class CreateListSerializer(serializers.ModelSerializer):
             logger.info(type(value))
             item = Value()
             item.item = instance
-            item.name = str(value.get('login'))
+            item.name = str(value.get('value'))
             item.save()
 
         return instance
@@ -87,7 +87,7 @@ class UpdateSerializer(serializers.ModelSerializer):
         for value in values:
             item = Value()
             item.item = instance
-            item.name = str(value.get('name'))
+            item.name = str(value.get('value'))
             item.save()
         # except Exception as e:
         #     pass

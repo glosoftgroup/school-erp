@@ -6,10 +6,11 @@ import Pagination from 'react-js-pagination';
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api';
 import Modal from '../components/Modal';
+import formatNumber from '../../../common/NumberFormatter';
 
 import { fetchItems, deleteItem, selectItem } from '../actions/action-items';
 
-class Comp extends Component {
+class ItemList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -118,7 +119,7 @@ class Comp extends Component {
                                                 <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{obj.academic_name}</td>
                                                 <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{obj.course_name}</td>
                                                 <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{obj.term_name}</td>
-                                                <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{obj.amount}</td>
+                                                <td className="cursor-pointer" onClick={() => this.goTo(obj.update_view_url)}>{formatNumber(obj.amount, 2, '.', ',')}</td>
                                                 <td >
                                                     <ul className="icons-list">
                                                         <li className="dropdown">
@@ -192,7 +193,7 @@ class Comp extends Component {
     }
 }
 
-Comp.propTypes = {
+ItemList.propTypes = {
     fetchItems: PropTypes.func.isRequired,
     deleteItem: PropTypes.func.isRequired,
     selectItem: PropTypes.func.isRequired,
@@ -213,4 +214,4 @@ function matchDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(Comp);
+export default connect(mapStateToProps, matchDispatchToProps)(ItemList);

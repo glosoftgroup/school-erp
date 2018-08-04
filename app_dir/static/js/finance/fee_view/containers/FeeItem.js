@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import formatNumber from '../../../common/NumberFormatter';
 
 export class FeeItem extends Component {
     static propTypes = {
@@ -14,7 +15,7 @@ export class FeeItem extends Component {
                 this.props.data.terms.map((obj, index) => {
                     return <td className="text-right" key={index}>
                         {!obj.amount && <span className="">--</span>}
-                        {!!obj.amount && <span className="">{obj.amount}</span>}
+                        {!!obj.amount && <span className="">{formatNumber(obj.amount, 2, '.', ',')}</span>}
                     </td>;
                 })}
             </tr>

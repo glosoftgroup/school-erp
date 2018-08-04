@@ -3,8 +3,7 @@
 import React, { Component } from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+import CreatableSelect from 'react-select/lib/Creatable';
 import classnames from 'classnames';
 import { ToastContainer, toast } from 'react-toastify';
 import api from '../api/Api';
@@ -39,7 +38,10 @@ class Comp extends Component {
             })
             .then(function(data) {
                 let name = data.name;
-                let selectedOption = data.values;
+                let selectedOption = [];
+                data.values.map(value => {
+                    selectedOption.push({label: value.name, value: value.name});
+                });
                 self.setState({name, selectedOption});
             })
             .catch(function(error) { console.log(error); });
@@ -60,7 +62,7 @@ class Comp extends Component {
       return fetch(`https://api.github.com/search/users?q=${input}`)
           .then((response) => response.json())
           .then((json) => {
-              return { options: json.items };
+              return json.items;
           });
   }
   toggleBackspaceRemoves () {
@@ -129,7 +131,12 @@ class Comp extends Component {
                                           <span className="help-block text-warning">{this.state.errors.name}</span>
                                       </td>
                                       <td>
-                                          <Select.AsyncCreatable
+                                          <CreatableSelect
+                                              isMulti={true}
+                                              value={this.state.selectedOption}
+                                              onChange={this.handleSelectChange}
+                                          />
+                                          {/* <Select.AsyncCreatable
                                               multi={true}
                                               value={this.state.selectedOption}
                                               onChange={this.handleSelectChange}
@@ -137,7 +144,7 @@ class Comp extends Component {
                                               valueKey="id" labelKey="name"
                                               loadOptions={this.getUsers}
                                               backspaceRemoves={this.state.backspaceRemoves}
-                                          />
+                                          /> */}
                                       </td>
                                       <td>
                                           <button onClick={this.handleSubmit} className="btn btn-xs btn-primary legitRipple">

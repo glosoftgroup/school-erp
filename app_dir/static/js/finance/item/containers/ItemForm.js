@@ -3,15 +3,14 @@
 import React, { Component } from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+import CreatableSelect from 'react-select/lib/Creatable';
+// import 'react-select/dist/react-select.css';
 import classnames from 'classnames';
 import { ToastContainer, toast } from 'react-toastify';
 import api from '../api/Api';
-import { fetchItems } from '../actions/action-items';
-import { toggleStatus } from '../actions/action-form-status';
+import { fetchItems, toggleStatus } from '../actions/';
 
-class Comp extends Component {
+class ItemForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -123,6 +122,7 @@ class Comp extends Component {
                       self.setState({
                           loading: false,
                           buttonText: 'submit',
+                          selectedOption: [],
                           name: '',
                           update_url: response.data.update_url
                       });
@@ -193,14 +193,10 @@ class Comp extends Component {
                                           <span className="help-block text-warning">{this.state.errors.name}</span>
                                       </td>
                                       <td>
-                                          <Select.AsyncCreatable
-                                              multi={true}
+                                          <CreatableSelect
+                                              isMulti={true}
                                               value={this.state.selectedOption}
                                               onChange={this.handleSelectChange}
-                                              //   onValueClick={this.gotoUser}
-                                              valueKey="id" labelKey="login"
-                                              loadOptions={this.getUsers}
-                                              backspaceRemoves={this.state.backspaceRemoves}
                                           />
                                       </td>
                                       <td>
@@ -236,4 +232,4 @@ function matchDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(Comp);
+export default connect(mapStateToProps, matchDispatchToProps)(ItemForm);
