@@ -42,7 +42,7 @@ export const fetchItems = (params = {}) => {
             }
         }
 
-        api.retrieve('/finance/fee/api/list/?' + url)
+        api.retrieve('/student/fee/api/list/?' + url)
             .then(data => dispatch(selectItems(data.data)));
     };
 };

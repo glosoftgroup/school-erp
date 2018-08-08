@@ -4,10 +4,7 @@ import {connect} from 'react-redux';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
-// import Select from 'react-select';
 import Async from 'react-select/lib/Async';
-
-// import 'react-select/dist/react-select.css';
 import { fetchItems } from '../actions';
 
 import { getUsers } from '../utils';

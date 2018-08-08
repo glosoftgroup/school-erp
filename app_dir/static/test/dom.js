@@ -3,7 +3,7 @@ var exposedProperties = ['window', 'navigator', 'document'];
 
 const { JSDOM } = jsdom;
 
-const {document }  = (new JSDOM('')).window;
+const {document }  = (new JSDOM('',{ url: "https://localhost/",})).window;
 
 global.document = document;
 global.testUrl = 'http://localhost/';
