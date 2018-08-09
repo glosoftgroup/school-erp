@@ -69,16 +69,10 @@ class ItemFilter extends Component {
     }
 
     getUsers = (input) => {
-        // if (!input) {
-        //     return Promise.resolve({ options: [] });
-        // }
         return getUsers(input, '/academic_year/api/list/');
     }
 
     getCourse = (input, url) => {
-        // if (!input) {
-        //     return Promise.resolve({ options: [] });
-        // }
         return getUsers(input, '/class/api/list/');
     }
 

@@ -5,8 +5,6 @@ import {connect} from 'react-redux';
 import Pagination from 'react-js-pagination';
 import Select2 from 'react-select2-wrapper';
 import api from '../api/Api';
-// import EditFrom from '../containers/EditForm'
-// import EditItem from './EditItem';
 import Modal from '../components/Modal';
 
 import { fetchItems, deleteItem, selectItem } from '../actions/action-items';
