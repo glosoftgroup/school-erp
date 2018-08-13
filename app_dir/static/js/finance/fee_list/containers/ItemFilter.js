@@ -4,10 +4,7 @@ import {connect} from 'react-redux';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
-// import Select from 'react-select';
 import Async from 'react-select/lib/Async';
-
-// import 'react-select/dist/react-select.css';
 import { fetchItems } from '../actions';
 
 import { getUsers } from '../utils';
@@ -72,16 +69,10 @@ class ItemFilter extends Component {
     }
 
     getUsers = (input) => {
-        // if (!input) {
-        //     return Promise.resolve({ options: [] });
-        // }
         return getUsers(input, '/academic_year/api/list/');
     }
 
     getCourse = (input, url) => {
-        // if (!input) {
-        //     return Promise.resolve({ options: [] });
-        // }
         return getUsers(input, '/class/api/list/');
     }
 
