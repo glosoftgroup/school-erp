@@ -4,7 +4,8 @@ const initial = {
     'amount': 7,
     'academic_year': 1,
     'term': '',
-    'fee_items': []
+    'fee_items': [],
+    'results': {'terms': []}
 };
 export default function(state = initial, action = {}) {
     switch (action.type) {

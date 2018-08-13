@@ -3,10 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Async from 'react-select/lib/Async';
 import { getUsers } from '../utils';
+import { fetchItems, selectCourse, fetchFeeItems } from '../actions';
 
 export class FeeItem extends Component {
   static propTypes = {
-      prop: PropTypes
+      fetchItems: PropTypes.func.isRequired,
+      fetchFeeItems: PropTypes.func.isRequired,
+      courses: PropTypes.object.isRequired,
+      selectCourse: PropTypes.func.isRequired,
+      course: PropTypes.object
   }
 
   constructor(props) {
@@ -25,16 +30,41 @@ export class FeeItem extends Component {
           course: ''
       };
   }
-  handleSelectCourseChange = (course) => {
-      this.setState({ course });
-      // selectedOption can be null when the `x` (close) button is clicked
-      if (course) {
-          console.log(`Selected: ${course.name}`);
-      }
+
+  componentDidMount() {
+      this.props.fetchItems();
+      this.props.fetchFeeItems();
+  }
+
+  handleSelectYearChange = (academicYear) => {
+      this.setState({ academicYear }, () => {
+          this.fetchStructure(academicYear.id, this.state.course.id);
+      });
+  }
+
+  selectCourse = (value) => {
+      this.props.selectCourse({id: value});
+      this.fetchStructure(this.state.academicYear.id, value);
   }
 
   getCourse = (input, url) => {
-      return getUsers(input, '/class/api/list/');
+      return getUsers(input, '/academic_year/api/list/');
+  }
+
+  fetchStructure = (year = null, course = null) => {
+      var params = {year, course};
+      if (!year) {
+          params.year = this.state.academicYear.id;
+      } else {
+          params.year = year;
+      }
+      if (!course && course !== 0) {
+          params.course = this.state.course;
+      } else {
+          params.course = course;
+      }
+      console.warn(params);
+      this.props.fetchFeeItems(params);
   }
 
   render() {
@@ -49,9 +79,9 @@ export class FeeItem extends Component {
                               <Async
                                   isClearable={true}
                                   cacheOptions
-                                  placeholder={'Search class'}
+                                  placeholder={'Search academic year'}
                                   value={this.state.course}
-                                  onChange={this.handleSelectCourseChange}
+                                  onChange={this.handleSelectYearChange}
                                   getOptionLabel={({name}) => name}
                                   getOptionValue={({id}) => id}
                                   loadOptions={this.getCourse}
@@ -61,14 +91,17 @@ export class FeeItem extends Component {
                           <div className="col-md-9">
                               <label className="course__label text-center">Select Class</label>
                               <div className="course__list text-center">
-                                  <div className="course__list__item label label-primary">
-                                   class 9
-                                  </div>
-                                  <div className="course__list__item label label-primary">
-                                   class 2
-                                  </div>
-                                  <div className="course__list__item label label-primary">
-                                   class 2
+                                  <div className="btn-group" data-toggle="buttons">
+                                      {this.props.courses.results.map((value, index) => {
+                                          return (
+                                              <label
+                                                  key={index}
+                                                  onClick={() => this.selectCourse(index)}
+                                                  className="btn btn-primary course_btn">
+                                                  <input type="radio" name="options" id="option1"/> {value.class_group}
+                                              </label>
+                                          );
+                                      })}
                                   </div>
                               </div>
                           </div>
@@ -82,11 +115,12 @@ export class FeeItem extends Component {
 }
 
 const mapStateToProps = (state) => ({
-
+    courses: state.courses,
+    course: state.course
 });
 
 const mapDispatchToProps = {
-
+    fetchItems, selectCourse, fetchFeeItems
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeeItem);
