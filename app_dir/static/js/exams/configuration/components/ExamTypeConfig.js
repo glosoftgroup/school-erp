@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
-import { checkInputErrors } from '../actions';
+import { checkInputErrors, addExamAndValue } from '../actions';
 import Api from '../../../common/Api';
 import Alert from '../../../common/Alert';
 import Urls from '../constants/Urls';
@@ -18,7 +18,9 @@ class ExamTypeConfig extends React.Component {
             disabled: true,
             examTypes: [],
             spanChecked: '',
-            updateStatus: (window.location.href).includes('update')
+            updateStatus: (window.location.href).includes('update'),
+            exams: {},
+            test: []
         };
     }
 
@@ -31,10 +33,9 @@ class ExamTypeConfig extends React.Component {
                 self.setState({examTypes: results}, () => {
                     if (results) {
                         results.map((exam, index) => {
-                            let exm = `${'exam_' + index}`;
                             let checked = `${'exam_' + index + '_checked'}`;
                             let value = 0;
-                            self.setState({[exm]: value, [checked]: ''});
+                            self.setState({[exam.name]: value, [checked]: ''});
                         });
                     }
                 });
@@ -53,12 +54,21 @@ class ExamTypeConfig extends React.Component {
         this.setState({ [spanId]: checkedValue });
     }
     handleInputChange = (event) => {
+        let self = this;
+        let examName = event.target.getAttribute('data-name');
         let name = event.target.name;
         let value = event.target.value;
-        let errors = { ...this.state.errors };
+        let errors = { ...self.state.errors };
         errors[name] = (!isEmpty(value) && !Validator.isFloat(value)) ? 'Only numbers required' : '';
 
-        this.setState({ [name]: value, errors });
+        let exms = {...self.state.exams, [examName]: value ? value : '0'};
+        self.setState({
+            [examName]: value,
+            exams: exms,
+            errors
+        });
+
+        self.props.addExamAndValue({exams: exms});
     }
     navigateToTab = (tabId) => {
         let self = this;
@@ -94,7 +104,8 @@ class ExamTypeConfig extends React.Component {
                         <label>
                             <input type="text" className="form-control"
                                 name={'exam_' + index}
-                                value={this.state[('exam_' + index)] ? this.state[('exam_' + index)] : ''}
+                                data-name={exam.name}
+                                value={this.state[exam.name] ? this.state[exam.name] : ''}
                                 disabled={this.state[('exam_' + index + '_checked')] === '' ? true : false}
                                 onChange={this.handleInputChange}
                             />
@@ -153,7 +164,8 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        checkInputErrors
+        checkInputErrors,
+        addExamAndValue
     }, dispatch);
 };
 
