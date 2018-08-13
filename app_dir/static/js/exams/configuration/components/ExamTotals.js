@@ -19,6 +19,10 @@ class ExamTotals extends React.Component {
         };
     }
 
+    checkboxToggle = () => {
+        this.setState({percentage: !this.state.percentage});
+    }
+
     dummyHandler = (event) => {
         console.log(event);
     }
@@ -32,7 +36,7 @@ class ExamTotals extends React.Component {
                             name="percentage"
                             checked={this.state.percentage}
                             value={this.state.percentage}
-                            onClick={this.dummyHandler}/>
+                            onClick={this.checkboxToggle}/>
                             use percentage calculations for students marks (%)
                     </label>
                 </div>
