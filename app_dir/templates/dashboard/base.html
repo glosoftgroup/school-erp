@@ -221,6 +221,9 @@
                                         <li class="{% block menu_student %}{% endblock %}">
                                           <a href="{% url 'student:index' %}">Students Admission</a>
                                         </li>
+                                        <li class="{% block menu_student_fee %}{% endblock %}">
+                                          <a href="{% url 'student_fee:index' %}">Students Fees</a>
+                                        </li>
                                         <li class="hidden {% block attendance_student %}{% endblock %}">
                                           <a href="{% url 'attendance:index' %}">Attendance</a>
                                         </li>

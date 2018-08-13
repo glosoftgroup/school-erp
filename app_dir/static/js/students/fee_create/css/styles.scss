@@ -1,0 +1,20 @@
+
+label {
+  font-weight: 700;
+}
+
+.course__list {
+  margin-top: 8px !important;
+}
+
+.course__list__item {
+   overflow: auto;
+   margin-left: 6px;
+   cursor: pointer;
+   font-weight: bold;
+}
+
+.course__label {
+  text-align: center;
+  width: 100%;
+}
