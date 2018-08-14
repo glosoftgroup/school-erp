@@ -59,7 +59,7 @@ class ExamTypeConfig extends React.Component {
         let name = event.target.name;
         let value = event.target.value;
         let errors = { ...self.state.errors };
-        errors[name] = (!isEmpty(value) && !Validator.isFloat(value)) ? 'Only numbers required' : '';
+        errors[name] = (!isEmpty(value) && !Validator.isFloat(value)) ? 'Only numbers required' : (parseFloat(value) > 10 ? 'should be below 10' : '');
 
         let exms = {...self.state.exams, [examName]: value ? value : '0'};
         self.setState({
