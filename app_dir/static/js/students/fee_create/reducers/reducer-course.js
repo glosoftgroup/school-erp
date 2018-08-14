@@ -1,7 +1,7 @@
 import { SET_COURSES } from '../actions';
 
 const initialState = {
-
+    results: []
 };
 
 export default (state = initialState, action) => {

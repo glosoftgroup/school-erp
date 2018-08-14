@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FeeItem from '../containers/FeeItem';
 import '../css/styles.scss';
-// import FeeStructure from '../containers/FeeStructure';
+import ItemList from '../containers/ItemList';
 
 class App extends Component {
     render() {
@@ -11,7 +11,7 @@ class App extends Component {
                     <FeeItem/>
                 </div>
                 <div className="col-md-6">
-                    {/* <FeeStructure /> */}
+                    <ItemList />
                 </div>
             </div>
         );

@@ -12,7 +12,6 @@ import { fetchItems, fetchSettings } from '../actions';
 /** Components */
 import FeeItem from './FeeItem';
 import FeeItemOptional from './FeeItemOptional';
-import { DIRECTIVE } from 'graphql/language/kinds';
 
 export class FeeStrucuture extends Component {
   static propTypes = {
