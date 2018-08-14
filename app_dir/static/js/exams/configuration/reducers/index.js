@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 
 import SelectChangeReducer from './reducer-select';
+import ExamConfig from './reducer-add-config';
 
 /*
  * We combine all reducers into a single object before updated data is dispatched (sent)
@@ -10,7 +11,8 @@ import SelectChangeReducer from './reducer-select';
  * */
 
 const allReducers = combineReducers({
-    selectData: SelectChangeReducer
+    selectData: SelectChangeReducer,
+    ExamConfig
 });
 
 export default allReducers;
