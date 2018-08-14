@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+/** Components */
+import CompulsoryRow from './CompulsoryRow';
+import OptionalRow from './OptionalRow';
+
 export class ItemList extends Component {
   static propTypes = {
       feeStructure: PropTypes.object.isRequired
@@ -17,17 +21,27 @@ export class ItemList extends Component {
                               <th>Name</th>
                               {/* set terms */}
                               {this.props.feeStructure.results.terms.map((value, index) => {
-                                  return (<th key={index}><span>Term: {value.name}</span></th>);
+                                  return (<th key={index} className="text-right"><span>Term: {value.name}</span></th>);
                               })}
                           </tr>
                       </thead>
                       <tbody>
-                          <tr>
-                              <td>Item Name</td>
-                              <td>200</td>
-                              <td>300</td>
-                              <td>400</td>
+                          <tr className="active">
+                              <td colSpan={4} className="text-bold text-primary">
+                               Compulsory
+                              </td>
                           </tr>
+                          {this.props.feeStructure.results.items.map((items, index) => {
+                              return <CompulsoryRow key={index} data={items}/>;
+                          })}
+                          <tr className="active">
+                              <td colSpan={4} className="text-bold text-primary">
+                               Optional
+                              </td>
+                          </tr>
+                          {this.props.feeStructure.results.items.map((items, index) => {
+                              return <OptionalRow key={index} data={items}/>;
+                          })}
                       </tbody>
                   </table>
               </div>
